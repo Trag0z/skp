@@ -1,0 +1,133 @@
+<HTML><HEAD>
+<TITLE>&lt;typeinfo&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;typeinfo&gt;"></A><CODE>&lt;typeinfo&gt;</CODE></H1><HR>
+
+<P>Include the standard header <B><CODE>&lt;typeinfo&gt;</CODE></B>
+to define several types associated with the type-identification operator
+<B><A NAME="typeid"></A><CODE>typeid</CODE></B>,
+which yields information about both static and dynamic types.</P>
+
+<PRE>namespace std {
+class <B><A HREF="#type_info">type_info</A></B>;
+class <B><A HREF="#bad_cast">bad_cast</A></B>;
+class <B><A HREF="#bad_typeid">bad_typeid</A></B>;
+}  // namespace std</PRE>
+
+<H2><A NAME="bad_cast"></A><CODE>bad_cast</CODE></H2>
+
+<PRE>class <B>bad_cast</B>
+    : public <A HREF="exceptio.html#exception">exception</A>
+    {  // reports an exception
+    };</PRE>
+
+<P>The class describes an exception thrown to indicate that a
+<B><A NAME="dynamic_cast"></A>dynamic cast</B> expression,
+of the form:</P>
+
+<PRE>dynamic_cast&lt;type&gt;(expression)</PRE>
+
+<P>generated a null pointer to initialize a reference.
+The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE>
+is an implementation-defined
+<A HREF="lib_over.html#C_string">C string</A>.
+None of the member functions throw any exceptions.</P>
+
+<H2><A NAME="bad_typeid"></A><CODE>bad_typeid</CODE></H2>
+
+<PRE>class <B>bad_typeid</B>
+    : public <A HREF="exceptio.html#exception">exception</A>
+    {  // reports a bad typeid
+    };</PRE>
+
+<P>The class describes an exception thrown to indicate that a
+<A HREF="#typeid"><CODE>typeid</CODE></A> operator encountered a
+null pointer. The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE>
+is an implementation-defined
+<A HREF="lib_over.html#C_string">C string</A>.
+None of the member functions throw any exceptions.</P>
+
+<H2><A NAME="type_info"></A><CODE>type_info</CODE></H2>
+
+<PRE>class <B>type_info</B> {
+public:
+    virtual <B>~type_info</B>();
+    <B>type_info</B>(const type_info&amp; right) = delete; <B>[added with C++11]</B>
+    type_info&amp; <B>operator=</B>(const type_info&amp; right) = delete; <B>[added with C++11]</B>
+
+    size_t <B><A HREF="#type_info__hash_code">hash_code</A></B>() const; <B>[added with C++11]</B>
+    bool <B><A HREF="#type_info__before">before</A></B>(const type_info&amp; right) const noexcept;
+    const char *<B><A HREF="#type_info__name">name</A></B>() const noexcept;
+
+    bool <B><A HREF="#type_info__operator22">operator==</A></B>(const type_info&amp; right) const noexcept;
+    bool <B><A HREF="#type_info__operator!2">operator!=</A></B>(const type_info&amp; right) const noexcept;
+    };</PRE>
+
+<P>The class describes type information generated
+within the program by the implementation. Objects of this class effectively
+store a pointer to a
+<B><A NAME="names_for_types"></A>name</B> for the type,
+and an encoded value suitable for comparing two types for equality or
+<B><A NAME="collating_order_for_types"></A>collating order</B>.
+The names, encoded values, and collating order for types
+are all unspecified and may differ between program executions.</P>
+
+<P>An expression of the form <CODE>typeid Ty</CODE> is the <I>only</I> way to
+construct a (temporary) <CODE>typeinfo</CODE> object. The class has only
+a private copy constructor. Since the assignment operator is also
+private, you cannot copy or assign objects of class <CODE>typeinfo</CODE>
+either.</P>
+
+<H3><A NAME="type_info__before"></A><CODE>type_info::before</CODE></H3>
+
+<PRE>bool <B>before</B>(const type_info&amp; right) const noexcept;</PRE>
+
+<P>The member function returns a nonzero value if <CODE>*this</CODE>
+precedes <CODE>right</CODE> in the
+<A HREF="#collating_order_for_types">collating order</A> for types.</P>
+
+<H3><A NAME="type_info__hash_code"></A><CODE>type_info::hash_code</CODE></H3>
+
+<PRE>size_t <B>hash_code</B>() const; <B>[added with C++11]</B></PRE>
+
+<P>The member function defines a
+<A HREF="functio2.html#hash_function">hash function</A>, suitable for mapping values of type
+<CODE>typeinfo</CODE> to a distribution of index values.</P>
+
+<H3><A NAME="type_info__name"></A><CODE>type_info::name</CODE></H3>
+
+<PRE>const char *<B>name</B>() const noexcept;</PRE>
+
+<P>The member function returns a
+<A HREF="lib_over.html#C_string">C string</A> which specifies the
+<A HREF="#names_for_types">name</A> of the type.</P>
+
+<H3><A NAME="type_info__operator!2"></A><CODE>type_info::operator!=</CODE></H3>
+
+<PRE>bool <B>operator!=</B>(const type_info&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>!(*this
+<A HREF="#type_info__operator22">==</A> right)</CODE>.</P>
+
+<H3><A NAME="type_info__operator22"></A><CODE>type_info::operator==</CODE></H3>
+
+<PRE>bool <B>operator==</B>(const type_info&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns a nonzero value if <CODE>*this</CODE>
+and <CODE>right</CODE> represent the same type.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

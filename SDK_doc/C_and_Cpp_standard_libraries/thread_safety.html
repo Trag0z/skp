@@ -1,0 +1,129 @@
+<HTML><HEAD>
+<TITLE>Thread Safety -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="Thread_Safety"></A>Thread Safety</H1><HR>
+
+<P>The C++ Standard says nothing about multithreaded environments;
+nevertheless most nontrivial operating systems support some form
+of threading. In such an environment, it is important to know
+what operations are safe on data that is shared between two
+or more threads, what operations are unsafe, and what you can
+do to make unsafe operations safe.</P>
+
+<P>The Dinkum C++11 Libraries can be built either as
+multithreaded or single-threaded. The former is, of course,
+the most robust; but the latter can be smaller and faster
+in an environment where thread safety is never an issue,
+because all threading code is omitted.
+The setup scripts that select the active library, and
+optionally build it, have the options <B><CODE>MT</CODE></B>,
+to select a multithreaded library, and <B><CODE>NO_MT</CODE></B>,
+to select a single-threaded library. Multithreaded is the
+usual default.</P>
+
+<P>The following descriptions apply only to multithreaded
+libraries.</P>
+
+<H2>Standard C Input/Output</H2>
+
+<P>In the Standard C Library, all input/output is mediated
+by objects of type
+<CODE><B><A HREF="stdio.html#FILE">FILE</A></B></CODE>. Atomic
+operations on these objects, such as calls to
+<CODE><A HREF="stdio.html#getc">getc</A></CODE> and
+<CODE><A HREF="stdio.html#putc">putc</A></CODE>,
+are protected against simultaneous access from different threads.
+Thus, you can safely share <CODE>FILE</CODE> objects across
+threads without worrying about loss of integrity. But you
+might not like the way file accesses interleave, so you
+typically need additional thread locks at the appropriate
+level of granularity.</P>
+
+<P>If you want changes to the file to be reflected after
+each atomic write, you must change the definition of the
+macro <CODE><B>_FILE_OP_LOCKS</B></CODE> from <CODE>0</CODE>
+to <CODE>1</CODE> in all copies of the internal header
+<CODE>&lt;yvals.h&gt;</CODE>, then rebuild the libraries.
+Since this disables quite a bit of file buffering, your
+program may well run slower. And you might still not
+like the way the atomic writes interleave; but you do
+have tighter control over file modifications with this
+option.</P>
+
+<H2>Standard C++ Input/Output</H2>
+
+<P>In the Standard C++ Library, all input/output is mediated
+by <B><A NAME="iostream_object"></A>iosrteam objects</B> of template types
+<CODE><A HREF="istream.html#basic_istream">basic_istream</A></CODE>,
+<CODE><A HREF="istream.html#basic_iostream">basic_iostream</A></CODE>, and
+<CODE><A HREF="ostream.html#basic_ostream">basic_ostream</A></CODE>.
+Atomic operations on these objects, such as extractions and insertions,
+are protected against simultaneous access from different threads.
+They are also synchronized with operations directly on
+the <CODE>FILE</CODE> object that underlies each iostream object.
+(In this implementation
+there is no need to call the iostream member function
+<CODE><A HREF="ios.html#ios_base__sync_with_stdio">sync_with_stdio</A></CODE>
+to ensure such synchronization, nor is there any performance benefit
+in disabling it.)
+Thus, you can safely share iostream objects across
+threads without worrying about loss of integrity. But once again you
+might not like the way file accesses interleave, so you
+typically need additional thread locks at the appropriate
+level of granularity.</P>
+
+<P>If you want changes to the file to be reflected after
+each atomic write, you must change the definition of the
+macro <CODE><B>_IOSTREAM_OP_LOCKS</B></CODE> from <CODE>0</CODE>
+to <CODE>1</CODE> in all copies of the internal header
+<CODE>&lt;yvals.h&gt;</CODE>, then rebuild the libraries.
+Since this disables quite a bit of file buffering, your
+program may well run slower. And you might still not
+like the way the atomic writes interleave; but you do
+have tighter control over file modifications with this
+option.</P>
+
+<H2>Containers</H2>
+
+<P>For the <B><A NAME="container_objects"></A>container objects</B>
+defined in the Standard C++ Library, such as
+<B><A HREF="lib_cont.html">STL Containers</A></B>
+and objects of template class
+<CODE><A HREF="string2.html#basic_string">basic_string</A></CODE>,
+this implementation
+follows the widely adopted practices spelled out for
+<A HREF="http://www.sgi.com/tech/stl/thread_safety.html">SGI STL</A>:</P>
+
+<UL>
+<LI>Multiple threads can safely read the same container object.
+(There are no unprotected mutable subobjects within a container
+object.)</LI>
+
+<LI>Two threads can safely manipulate different container objects
+of the same type. (There are no unprotected shared static objects
+within a container type.)</LI>
+
+<LI>You must protect against simultaneous access to a container
+object if at least one thread is modifying the object. (The
+obvious synchronization primitives, such as those in the Dinkum
+Threads Library, will not be subverted by the container object.)</LI>
+</UL>
+
+<P>Thus, no attempt is made to ensure that atomic operations
+on container objects are thread safe; but it is easy enough
+to make shared container objects that are thread safe
+at the appropriate level of granularity.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

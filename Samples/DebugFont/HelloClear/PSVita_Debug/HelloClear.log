@@ -1,0 +1,17 @@
+﻿Der Buildvorgang wurde am 24.10.2019 14:27:18 gestartet.
+     1>Projekt "H:\SKP\Samples\DebugFont\HelloClear\HelloClear.vcxproj" auf Knoten "2", Build Ziel(e).
+     1>ClCompile:
+         main.cpp
+         psp2snc.exe -D_DEBUG -o PSVita_Debug\main.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\DebugFont\HelloClear\main.cpp
+     1>H:\SKP\Samples\DebugFont\HelloClear\main.cpp(631,5): warning 178: function "destroyGxmData" was declared but never referenced
+         
+     1>H:\SKP\Samples\DebugFont\HelloClear\main.cpp(660,4): warning 178: function "shutdownGxm" was declared but never referenced
+         
+       Link:
+         C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\bin\psp2ld.exe -o "H:\SKP\Samples\DebugFont\PSVita_Debug\HelloClear.self" -L"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\lib" --start-group PSVita_Debug\clear_f_gxp.obj PSVita_Debug\clear_v_gxp.obj PSVita_Debug\main.o "-lSceGxm_stub" "-lSceCtrl_stub" "-lSceDisplay_stub" "-lSceDbg_stub" "-lSceDbgFont" --end-group
+         HelloClear.vcxproj -> H:\SKP\Samples\DebugFont\PSVita_Debug\HelloClear.self
+     1>Die Erstellung des Projekts "H:\SKP\Samples\DebugFont\HelloClear\HelloClear.vcxproj" ist abgeschlossen, Build Ziel(e).
+
+Build erfolgreich.
+
+Verstrichene Zeit 00:00:00.77

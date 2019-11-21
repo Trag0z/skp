@@ -1,0 +1,201 @@
+<HTML><HEAD>
+<TITLE>&lt;mspace.h&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;mspace.h&gt;"></A><CODE>&lt;mspace.h&gt;</CODE></H1>
+
+<P>[non-standard]</P><HR>
+
+<P>Types:</P>
+<P><B><CODE><A HREF="#mspace">mspace</A></CODE></B></P>
+
+<P>Functions:</P>
+<P><B><CODE><A HREF="#mspace_calloc">mspace_calloc</A>
+&middot; <A HREF="#mspace_create">mspace_create</A>
+&middot; <A HREF="#mspace_create_with_flag">mspace_create_with_flag</A>
+&middot; <A HREF="#mspace_destroy">mspace_destroy</A>
+&middot; <A HREF="#mspace_free">mspace_free</A>
+&middot; <A HREF="#mspace_is_heap_empty">mspace_is_heap_empty</A>
+&middot; <A HREF="#mspace_malloc">mspace_malloc</A>
+&middot; <A HREF="#mspace_malloc_stats">mspace_malloc_stats</A>
+&middot; <A HREF="#mspace_malloc_stats_fast">mspace_malloc_stats_fast</A>
+&middot; <A HREF="#mspace_malloc_usable_size">mspace_malloc_usable_size</A>
+&middot; <A HREF="#mspace_memalign">mspace_memalign</A>
+&middot; <A HREF="#mspace_realloc">mspace_realloc</A>
+&middot; <A HREF="#mspace_reallocalign">mspace_reallocalign</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the header <B><CODE>&lt;mspace.h&gt;</CODE></B> to use the memory management functions that can manage an arbitrary number of independent heap areas.</P>
+<P>The user beforehand allocates the memory area by using a system call etc.
+Among the memory management functions is an initialization function which makes
+the memory area given by the user available as a heap area.
+The initialized heap area is managed by the memory management function as an <EM>mspace</EM>, and
+each mspace is treated as an independent heap area.
+When allocating a memory from the heap area,
+mspace-specific functions must be used instead of usual malloc etc.
+An argument of type <A HREF="#mspace"><CODE>mspace</CODE></A> is used to choose the heap area.</P>
+<P>The functions related mspace listed below are all multi-thread safe.</P>
+
+<H2><A NAME="mspace"></A><CODE>mspace</CODE></H2>
+
+<PRE>typedef <I>o-type</I> <B>mspace</B>;</PRE>
+
+<P>The type is an object type <CODE><I>o-type</I></CODE> which is used to identify the heap area.</P>
+
+<H2><A NAME="mspace_create"></A><CODE>mspace_create</CODE></H2>
+
+<PRE>mspace <B>mspace_create</B>(void *base, size_t capacity);</PRE>
+
+<P>The function initializes the memory area starting from address <CODE>base</CODE> with size <CODE>capacity</CODE> as a heap area and returns an mspace.
+The mspace is used to identify the heap area.
+When the function is called, the address specified by <CODE>base</CODE> must be valid,
+and the successive area from <CODE>base</CODE> to <CODE>(base + capacity)</CODE> must be accessible.</P>
+<P>When initializing an mspace, total 640 bytes are used as management areas. If the areas cannot be allocated, this function returns a null pointer.</P>
+
+<H2><A NAME="mspace_create_with_flag"></A><CODE>mspace_create_with_flag</CODE></H2>
+
+<PRE>mspace <B>mspace_create_with_flag</B>(void *base, size_t capacity, unsigned int flag);</PRE>
+
+<P>The function is same as <A HREF="#mspace_create"><CODE>mspace_create</CODE></A> except that it can enable the feature of detecting buffer overruns of the allocated memory areas.
+The behavior of mspace is affected by flag <CODE>flag</CODE> as follows:</P>
+<UL>
+<LI>0<BR>
+Disable the feature of detecting buffer overruns.
+The behavior is same as using <CODE>mspace_create</CODE>.</LI>
+<LI><CODE>SCE_LIBC_MSPACE_DETECT_OVERRUN</CODE><BR>
+Enable the feature of detecting buffer overruns.</LI>
+</UL>
+
+<P>Buffer overrun detection is performed in <A HREF="#mspace_free"><CODE>mspace_free</CODE></A>, <A HREF="#mspace_realloc"><CODE>mspace_realloc</CODE></A>, and <A HREF="#mspace_reallocalign"><CODE>mspace_reallocalign</CODE></A>.
+If detected, <A HREF="stdlib.html#abort"><CODE>abort</CODE></A> is invoked.</P>
+
+<H2><A NAME="mspace_destroy"></A><CODE>mspace_destroy</CODE></H2>
+
+<PRE>int <B>mspace_destroy</B>(mspace msp);</PRE>
+
+<P>The function destroys the heap area which was created as the mspace <CODE>msp</CODE>.
+If the call of this function succeeds, 0 is returned.
+Otherwise 1 is returned.</P>
+
+<H2><A NAME="mspace_malloc"></A><CODE>mspace_malloc</CODE></H2>
+
+<PRE>void *<B>mspace_malloc</B>(mspace msp, size_t size);</PRE>
+
+<P>The function allocates an object of size <CODE>size</CODE> from mspace <CODE>msp</CODE>, and returns the address of the object if successful; otherwise, it returns a null pointer. The values stored in the object are indeterminate. The return value can be safely converted to an object pointer of any type whose size is not greater than <CODE>size</CODE>. The allocated object is guaranteed to be 16-byte aligned. </P>
+
+<P>Even if <CODE>size</CODE> is zero, the function allocates a space, but the program cannot use it.</P>
+
+<H2><A NAME="mspace_free"></A><CODE>mspace_free</CODE></H2>
+
+<PRE>void <B>mspace_free</B>(mspace msp, void *ptr);</PRE>
+
+<P>If <CODE>ptr</CODE> is not a null pointer, the function deallocates the object whose address is <CODE>ptr</CODE>; otherwise, it does nothing. You can deallocate only objects that you first allocate by calling <A HREF="#mspace_calloc"><CODE>mspace_calloc</CODE></A>, <A HREF="#mspace_malloc"><CODE>mspace_malloc</CODE></A>, <A HREF="#mspace_memalign"><CODE>mspace_memalign</CODE></A>, <A HREF="#mspace_realloc"><CODE>mspace_realloc</CODE></A>, or <A HREF="#mspace_reallocalign"><CODE>mspace_reallocalign</CODE></A> with the same mspace as this function.</P>
+
+<P>If <CODE>ptr</CODE> was not allocated, allocated from other mspace, or already freed, then <A HREF="#mspace_free"><CODE>mspace_free</CODE></A> will cause the current program to abort.</P>
+
+<H2><A NAME="mspace_calloc"></A><CODE>mspace_calloc</CODE></H2>
+
+<PRE>void *<B>mspace_calloc</B>(mspace msp, size_t nelem, size_t size);</PRE>
+
+<P>The function allocates an array object from mspace <CODE>msp</CODE>. It contains <CODE>nelem</CODE> elements each of size <CODE>size</CODE>. This function stores zeros in all bytes of the array, and returns the address of the first element of the array if successful; otherwise, it returns a null pointer. The return value can be safely converted to an object pointer of any type whose size in bytes is not greater than <CODE>size</CODE>. The allocated object is guaranteed to be 16-byte aligned.</P>
+
+<P>Even if <CODE>nelem</CODE> or <CODE>size</CODE> is zero, the function allocates a space, but the program cannot use it.</P>
+
+<H2><A NAME="mspace_memalign"></A><CODE>mspace_memalign</CODE></H2>
+
+<PRE>void *<B>mspace_memalign</B>(mspace msp, size_t boundary, size_t size);</PRE>
+
+<P>The function allocates <CODE>size</CODE> bytes from mspace <CODE>msp</CODE> and returns a pointer to the allocated memory. The memory block returned will be aligned on a multiple of <CODE>boundary</CODE>, if it is a power of two. Otherwise, the nearest greater power will be used. 16 bytes alignment is guaranteed by normal <A HREF="#mspace_malloc"><CODE>mspace_malloc</CODE></A> calls, so you should not call <A HREF="#mspace_memalign"><CODE>mspace_memalign</CODE></A> with <CODE>boundary</CODE> 16 or less.</P>
+
+<P>Even if <CODE>size</CODE> is zero, the function allocates a space, but the program cannot use it.</P>
+
+<H2><A NAME="mspace_realloc"></A><CODE>mspace_realloc</CODE></H2>
+
+<PRE>void *<B>mspace_realloc</B>(mspace msp, void *ptr, size_t size);</PRE>
+
+<P>The function allocates an object of size <CODE>size</CODE> from mspace <CODE>msp</CODE>, possibly obtaining initial stored values from the object whose address is <CODE>ptr</CODE>. It returns the address of the new object if successful; otherwise, it returns a null pointer. The return value can be safely converted to an object pointer of any type whose size is not greater than <CODE>size</CODE>.</P>
+
+<P>If <CODE>ptr</CODE> is not a null pointer, it must be the address of an existing object that was first allocated by calling <A HREF="#mspace_calloc"><CODE>mspace_calloc</CODE></A>, <A HREF="#mspace_malloc"><CODE>mspace_malloc</CODE></A>, <A HREF="#mspace_memalign"><CODE>mspace_memalign</CODE></A>, <A HREF="#mspace_realloc"><CODE>mspace_realloc</CODE></A>, or <A HREF="#mspace_reallocalign"><CODE>mspace_reallocalign</CODE></A> with the same mspace as <A HREF="#mspace_realloc"><CODE>mspace_realloc</CODE></A>. If the existing object is not larger than the newly allocated object, <A HREF="#mspace_realloc"><CODE>mspace_realloc</CODE></A> copies the entire existing object to the initial part of the allocated object. (The values stored in the remainder of the object are indeterminate.) Otherwise, the function copies only the initial part of the existing object that fits in the allocated object. If <A HREF="#mspace_realloc"><CODE>mspace_realloc</CODE></A> succeeds in allocating a new object, it deallocates the existing object. Otherwise, the existing object is left unchanged.</P>
+
+<P>If <CODE>ptr</CODE> is a null pointer, the function does not store initial values in the newly created object. Even if <CODE>size</CODE> is zero, the function allocates a space, but the program cannot use it.</P>
+
+<P>If <CODE>ptr</CODE> was not allocated, allocated from other mspace, or already freed, then <A HREF="#mspace_realloc"><CODE>mspace_realloc</CODE></A> will cause the current program to abort.</P>
+
+<H2><A NAME="mspace_reallocalign"></A><CODE>mspace_reallocalign</CODE></H2>
+
+<PRE>void *<B>mspace_reallocalign</B>(mspace msp, void *ptr, size_t size, size_t boundary);</PRE>
+
+<P>The function is similar to function <A HREF="#mspace_realloc"><CODE>mspace_realloc</CODE></A>, except memory address of allocated object is aligned by <CODE>boundary</CODE>. The function allocates an object of size <CODE>size</CODE>, possibly obtaining initial stored values from the object whose address is <CODE>ptr</CODE> if <CODE>ptr</CODE> is aligned by <CODE>boundary</CODE>. It returns the address of the new object if successful; otherwise, it returns a null pointer. The return value can be safely converted to an object pointer of any type whose size is not greater than <CODE>size</CODE>.</P>
+
+<P>If <CODE>ptr</CODE> is not a null pointer, it must be the address of an existing object that was first allocated by calling <A HREF="#mspace_calloc"><CODE>mspace_calloc</CODE></A>, <A HREF="#mspace_malloc"><CODE>mspace_malloc</CODE></A>, <A HREF="#mspace_memalign"><CODE>mspace_memalign</CODE></A>, <A HREF="#mspace_realloc"><CODE>mspace_realloc</CODE></A>, or <A HREF="#mspace_reallocalign"><CODE>mspace_reallocalign</CODE></A>. If the existing object is not larger than the newly allocated object, <A HREF="#mspace_reallocalign"><CODE>mspace_reallocalign</CODE></A> copies the entire existing object to the initial part of the allocated object. (The values stored in the remainder of the object are indeterminate.) Otherwise, the function copies only the initial part of the existing object that fits in the allocated object. If <A HREF="#mspace_reallocalign"><CODE>mspace_reallocalign</CODE></A> succeeds in allocating a new object, it deallocates the existing object. Otherwise, the existing object is left unchanged.</P>
+
+<P>If <CODE>ptr</CODE> is a null pointer, the function does not store initial values in the newly created object. If <CODE>boundary</CODE> is not a power of two, the nearest greater power will be used. Also, even if <CODE>size</CODE> is zero, the function allocates a space, but the program cannot use it.</P>
+
+<P>If <CODE>ptr</CODE> was not allocated, allocated from other mspace, or already freed, then <A HREF="#mspace_reallocalign"><CODE>mspace_reallocalign</CODE></A> will cause the current program to abort.</P>
+
+<H2><A NAME="mspace_malloc_stats"></A><CODE>mspace_malloc_stats</CODE></H2>
+
+<PRE>int <B>mspace_malloc_stats</B>(mspace msp, struct malloc_managed_size *mmsize);</PRE>
+
+<P>This function obtains the information about the size of the mspace <CODE>msp</CODE>. Furthermore, this function checks the memory areas for memory management. If only the information about the size of the mspace is necessary, use <A HREF="#mspace_malloc_stats_fast"><CODE>mspace_malloc_stats_fast</CODE></A>. The information includes the maximum size of the mspace <CODE>msp</CODE>, the current size of it, the maximum number of bytes allocated via <A HREF="#mspace_malloc"><CODE>mspace_malloc</CODE></A> (or <A HREF="#mspace_realloc"><CODE>mspace_realloc</CODE></A>, etc), and the current number of bytes allocated but not yet freed. Note that this is the number of bytes allocated, not the number requested. It will be larger than the number requested because of alignment and bookkeeping overhead.</P>
+
+<P>The values will be returned via the specified data structure <A HREF="stdlib.html#malloc_managed_size"><CODE>malloc_managed_size</CODE></A>. If <CODE>mmsize</CODE> is a null pointer, the values will be discarded.</P>
+
+<P>When initializing an mspace, total 640 bytes are used as management areas.
+The members <CODE>max_inuse_size</CODE> and <CODE>current_inuse_size</CODE> of the structure <A HREF="stdlib.html#malloc_managed_size"><CODE>malloc_managed_size</CODE></A> contain this size respectively.
+Therefore, these values are greater than zero even when no objects are allocated.
+Please use <A HREF="#mspace_is_heap_empty"><CODE>mspace_is_heap_empty</CODE></A> in order to decide whether or not the heap area created as the mspace <CODE>msp</CODE> is empty.</P>
+
+<P>It takes time depending on the number of allocated memory areas to check the memory areas for memory management of mspace. If the area has a problem, the function call will fail.</P>
+
+<P>This function returns 0 on success. Otherwise it returns 1.</P>
+
+<H2><A NAME="mspace_malloc_stats_fast"></A><CODE>mspace_malloc_stats_fast</CODE></H2>
+
+<PRE>int <B>mspace_malloc_stats_fast</B>(mspace msp, struct malloc_managed_size *mmsize);</PRE>
+
+<P>This function returns the information about the size of the mspace faster than <CODE><A HREF="#mspace_malloc_stats">mspace_malloc_stats</A></CODE> via <CODE>mmsize</CODE>. If <CODE>mmsize</CODE> is a null pointer, the information will be discarded.</P>
+<P>As for the returned information, this function is equivalent to <CODE><A HREF="#mspace_malloc_stats">mspace_malloc_stats</A></CODE>, if the function is called in the same timing.</P>
+
+<P>When initializing an mspace, total 640 bytes are used as management areas.
+The members <CODE>max_inuse_size</CODE> and <CODE>current_inuse_size</CODE> of the structure <A HREF="stdlib.html#malloc_managed_size"><CODE>malloc_managed_size</CODE></A> contain this size respectively.
+Therefore, these values are greater than zero even when no objects are allocated.
+Please use <A HREF="#mspace_is_heap_empty"><CODE>mspace_is_heap_empty</CODE></A> in order to decide whether or not the heap area created as the mspace <CODE>msp</CODE> is empty.</P>
+
+<P>Unlike <CODE><A HREF="#mspace_malloc_stats">mspace_malloc_stats</A></CODE>, this function does not check the memory area for memory management. To check it, use <CODE><A HREF="#mspace_malloc_stats">mspace_malloc_stats</A></CODE>.</P>
+
+<P>This function returns 0 on success. Otherwise it returns 1.</P>
+
+<H2><A NAME="mspace_malloc_usable_size"></A><CODE>mspace_malloc_usable_size</CODE></H2>
+
+<PRE>size_t <B>mspace_malloc_usable_size</B>(void* p);</PRE>
+
+<P>This function returns the number of bytes you can actually use in an allocated
+  chunk, which may be more than you requested (although often not)
+  due to alignment and minimum size constraints. You can use this
+  many bytes without worrying about overwriting other allocated
+  objects. This is not a particularly great programming practice.
+  <CODE>mspace_malloc_usable_size</CODE> can be more useful in debugging and assertions,
+  for example:</P>
+<PRE>p = mspace_malloc(msp, n);
+assert(mspace_malloc_usable_size(p) >= 256);</PRE>
+
+<H2><A NAME="mspace_is_heap_empty"></A><CODE>mspace_is_heap_empty</CODE></H2>
+
+<PRE>int <B>mspace_is_heap_empty</B>(mspace msp);</PRE>
+
+<P>If the heap area created as the mspace <CODE>msp</CODE> is empty (No memory is allocated via <A HREF="#mspace_malloc"><CODE>mspace_malloc</CODE></A> etc.), 1 is returned.
+Otherwise 0 is returned.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+&copy; 2014 Sony Computer Entertainment Inc. All rights reserved.</I></P>
+
+</BODY></HTML>

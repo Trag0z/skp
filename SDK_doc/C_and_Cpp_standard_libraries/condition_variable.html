@@ -1,0 +1,449 @@
+<HTML><HEAD>
+<TITLE>&lt;condition_variable&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;condition_variable&gt;"></A><CODE>&lt;condition_variable&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P><B><CODE><A HREF="#condition_variable">condition_variable</A>
+&middot; <A HREF="#condition_variable_any">condition_variable_any</A>
+&middot; <A HREF="#cv_status">cv_status</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the standard header <B><CODE>&lt;condition_variable&gt;</CODE></B>
+to define the classes <CODE>condition_variable</CODE> and
+<CODE>condition_variable_any</CODE> to create objects that can wait for a
+condition to become true.</P>
+
+<P>Code that waits for a condition variable must also use a mutex; before
+calling any of the functions that wait for the condition variable the calling
+thread must lock the mutex, and when the called function returns the mutex
+will be locked. During the time that the thread is blocked waiting for the
+condition to become true the mutex is not locked. When more than one thread is
+waiting for the same condition variable, all of the waiting threads must use
+the same mutex object. If they don't, the result is unpredictable.</P>
+
+<P>Objects of type <CODE>condition_variable_any</CODE> can be used with a
+mutex of any type that meets the requirements for a
+<A HREF="mutex2.html#mutex_type">mutex type</A>,
+except that the type does not have to provide the member function
+<CODE>try_lock</CODE>. Objects of type <CODE>condition_variable</CODE> can
+only be used with a mutex of type
+<CODE>unique_lock&lt;mutex&gt;</CODE>. Objects of this type can be
+faster than objects of type
+<CODE>condition_variable_any&lt;unique_lock&lt;mutex&gt;&gt;</CODE>.</P>
+
+<P>To wait for an event, first lock the mutex, then call one of the
+<A HREF="#wait">wait</A> member functions on the condition variable. The
+<CODE>wait</CODE> call will block until another thread signals the condition
+variable.</P>
+
+<P><B><A NAME="spurious"></A>Spurious wakeups</B> occur when threads waiting
+for condition variables become unblocked without appropriate notifications.
+Code that waits for a condition to become true should explicitly check that
+condition when returning from a wait function to recognize such spurious
+wakeups. This is usually done with a loop:</P>
+
+<PRE>while (condition is false)
+    wait for condition variable;</PRE>
+
+<P>The classes <CODE>condition_variable_any</CODE> and
+<CODE>condition_variable</CODE> have three member functions to
+<B><A NAME="wait"></A>wait</B> for a condition:</P>
+
+<UL>
+<LI><CODE>wait</CODE> -- waits for an unbounded time period;</LI>
+<LI><CODE>wait_until</CODE> -- waits until a specified time is reached;</LI>
+<LI><CODE>wait_for</CODE> -- waits for a designated time interval.</LI>
+</UL>
+
+<P>Each of these functions has two overloaded versions. One simply waits; it
+can wake up <A HREF="#spurious">spuriously</A>. The other takes an additional
+template argument that defines a predicate; it won't wake up until the
+predicate is true.</P>
+
+<P>The classes have two member functions to notify a condition variable that its condition is true:</P>
+
+<UL>
+<LI><CODE>notify_one</CODE> -- wakes up one of the threads that is waiting for the condition variable;</LI>
+<LI><CODE>notify_all</CODE> -- wakes up all of the threads that are waiting for the condition variable.</LI>
+</UL>
+
+<PRE>namespace std {
+enum class <B><A HREF="#cv_status">cv_status</A></B>;
+class <B><A HREF="#condition_variable">condition_variable</A></B>;
+class <B><A HREF="#condition_variable_any">condition_variable_any</A></B>;
+void <B><A HREF="#notify_all_at_thread_exit">notify_all_at_thread_exit</A></B>(condition_variable&amp; cond,
+    unique_lock&lt;mutex&gt; lock);
+
+}   // namespace std</PRE>
+
+<H2><CODE><A NAME="condition_variable"></A>condition_variable</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#condition_variable__condition_variable">condition_variable</A>
+&middot; <A HREF="#condition_variable__~condition_variable">~condition_variable</A>
+&middot; <A HREF="#condition_variable__notify_all">notify_all</A>
+&middot; <A HREF="#condition_variable__notify_one">notify_one</A>
+&middot; <A HREF="#condition_variable__native_handle">native_handle</A>
+&middot; <A HREF="#condition_variable__native_handle_type">native_handle_type</A>
+&middot; <A HREF="#condition_variable__wait">wait</A>
+&middot; <A HREF="#condition_variable__wait_for">wait_for</A>
+&middot; <A HREF="#condition_variable__wait_until">wait_until</A>
+</CODE></B></P>
+<HR>
+
+<PRE>class <B>condition_variable</B>
+    {
+public:
+    <B><A HREF="#condition_variable__condition_variable">condition_variable</A></B>();
+    ~<B><A HREF="#condition_variable__condition_variable">condition_variable</A></B>();
+
+    <B>condition_variable</B>(const condition_variable&amp;) = delete;
+    condition_variable&amp; <B>operator=</B>(const condition_variable&amp;) = delete;
+
+    void <B><A HREF="#condition_variable__notify_one">notify_one</A></B>() noexcept;
+    void <B><A HREF="#condition_variable__notify_all">notify_all</A></B>() noexcept;
+
+    void <B><A HREF="#condition_variable__wait">wait</A></B>(unique_lock&lt;mutex&gt;&amp; lock);
+    template&lt;class Predicate&gt;
+        void <B><A HREF="#condition_variable__wait">wait</A></B>(unique_lock&lt;mutex&gt;&amp; lock, Predicate pred);
+
+    template&lt;class Rep, class Period&gt;
+        cv_status <B><A HREF="#condition_variable__wait_for">wait_for</A></B>(
+            unique_lock&lt;mutex&gt;&amp; lock,
+            const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);
+    template&lt;class Rep, class Period, class Predicate&gt;
+        bool <B><A HREF="#condition_variable__wait_for">wait_for</A></B>(
+            unique_lock&lt;mutex&gt;&amp; lock,
+            const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time,
+            Predicate pred);
+
+    template&lt;class Clock, class Duration&gt;
+        cv_status <B><A HREF="#condition_variable__wait_until">wait_until</A></B>(
+            unique_lock&lt;mutex&gt;&amp; lock,
+            const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);
+    template&lt;class Clock, class Duration, class Predicate&gt;
+        bool <B><A HREF="#condition_variable__wait_until">wait_until</A></B>(
+            unique_lock&lt;mutex&gt;&amp; lock,
+            const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time,
+            Predicate pred);
+
+    typedef <I>see below</I> <B><A HREF="#condition_variable__native_handle_type">native_handle_type</A></B>;
+    native_handle_type <B><A HREF="#condition_variable__native_handle">native_handle</A></B>();
+    };</PRE>
+
+<P>Use the class <CODE>condition_variable</CODE> to wait for an event when you
+have a mutex of type <CODE>unique_lock&lt;mutex&gt;</CODE>.</P>
+
+<H3><CODE><A NAME="condition_variable__condition_variable"></A>condition_variable::condition_variable</CODE></H3>
+
+<PRE><B>condition_variable</B>();</PRE>
+
+<P>The constructor constructs an object of type
+<CODE>condition_variable</CODE>. If the object cannot be constructed because
+there is not enough memory available, the constructor throws an object of type
+<CODE>system_error</CODE> with an error code of
+<CODE>not_enough_memory</CODE>. If the object cannot be constructed because
+some other resource is not available, the constructor throws an object of type
+<CODE>system_error</CODE> with an error code of
+<CODE>resource_unavailable_try_again</CODE>.</P>
+
+<H3><CODE><A NAME="condition_variable__~condition_variable"></A>condition_variable::~condition_variable</CODE></H3>
+
+<PRE><B>~condition_variable</B>();</PRE>
+
+<P>The destructor cleans up any resources used by the object.</P>
+
+<H3><CODE><A NAME="condition_variable__notify_all"></A>condition_variable::notify_all</CODE></H3>
+
+<PRE>void <B>notify_all</B>() noexcept;</PRE>
+
+<P>The member function unblocks all threads that are waiting for this
+object.</P>
+
+<H3><CODE><A NAME="condition_variable__notify_one"></A>condition_variable::notify_one</CODE></H3>
+
+<PRE>void <B>notify_one</B>() noexcept;</PRE>
+
+<P>The member function unblocks one of the threads that is waiting for this
+object.</P>
+
+<H3><CODE><A NAME="condition_variable__native_handle"></A>condition_variable::native_handle</CODE></H3>
+
+<PRE>native_handle_type <B>native_handle</B>();</PRE>
+
+<P>The member function returns an object of type
+<CODE>native_handle_type</CODE> that can be used in implementation-specific
+ways.</P>
+
+<H3><CODE><A NAME="condition_variable__native_handle_type"></A>condition_variable::native_handle_type</CODE></H3>
+
+<PRE>typedef <I>h-type</I> <B>native_handle_type</B>;</PRE>
+
+<P>The typedef is a synonym for an implementation-specific type that can be
+used in implementation-specific ways.</P>
+
+<P>In
+this implementation,
+it is a synonym for <CODE>cnd_t</CODE> and can be used as an argument to any
+of the <CODE>cnd_XXX</CODE> functions other than <CODE>cnd_create</CODE> and
+<CODE>cnd_destroy</CODE>.</P>
+
+<H3><CODE><A NAME="condition_variable__wait"></A>condition_variable::wait</CODE></H3>
+
+<PRE>void <B>wait</B>(unique_lock&lt;mutex&gt;&amp; lock);
+template&lt;class Predicate&gt;
+    void <B>wait</B>(unique_lock&lt;mutex&gt;&amp; lock, Predicate pred);</PRE>
+
+<P>The first member function blocks until the <CODE>condition_variable</CODE>
+object is signaled by a call to <CODE>notify_one</CODE> or
+<CODE>notify_all</CODE>, but it can wake up
+<A HREF="#spurious">spuriously</A>.</P>
+
+<P>The second member function effectively executes the following code:</P>
+
+<PRE>while (!pred())
+    wait(lock);</PRE>
+
+<H3><CODE><A NAME="condition_variable__wait_for"></A>condition_variable::wait_for</CODE></H3>
+
+<PRE>template&lt;class Rep, class Period&gt;
+    cv_status <B>wait_for</B>(
+        unique_lock&lt;mutex&gt;&amp; lock,
+        const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);
+template&lt;class Rep, class Period, class Predicate&gt;
+    bool <B>wait_for</B>(
+        unique_lock&lt;mutex&gt;&amp; lock,
+        const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time,
+        Predicate pred);</PRE>
+
+<P>The first member function blocks until the <CODE>condition_variable</CODE>
+object is signaled by a call to <CODE>notify_one</CODE> or
+<CODE>notify_all</CODE> or until the time interval <CODE>Rel_time</CODE> has
+elapsed, but it can wake up
+<A HREF="#spurious">spuriously</A>.
+It returns <CODE>cv_status::timeout</CODE> if the wait
+terminated because the specified time elapsed,
+otherwise <CODE>cv_status::no_timeout</CODE>.</P>
+
+<P>The second member function effectively executes the following code:</P>
+
+<PRE>while (!pred())
+    if (wait_for(lock, Rel_time) == cv_status::timeout)
+        return pred();
+return true;</PRE>
+
+<H3><CODE><A NAME="condition_variable__wait_until"></A>condition_variable::wait_until</CODE></H3>
+
+<PRE>template&lt;class Clock, class Duration&gt;
+    cv_status <B>wait_until</B>(
+        unique_lock&lt;mutex&gt;&amp; lock,
+        const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);
+template&lt;class Clock, class Duration, class Predicate&gt;
+    bool <B>wait_until</B>(
+        unique_lock&lt;mutex&gt;&amp; lock,
+        const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time,
+        Predicate pred);</PRE>
+
+<P>The first member function blocks until the <CODE>condition_variable</CODE>
+object is signaled by a call to <CODE>notify_one</CODE> or
+<CODE>notify_all</CODE> or until the time <CODE>Abs_time</CODE>, but it can
+wake up
+<A HREF="#spurious">spuriously</A>.
+It returns <CODE>cv_status::timeout</CODE> if the wait
+terminated because the specified time elapsed,
+otherwise <CODE>cv_status::no_timeout</CODE>.
+If <CODE>lock</CODE> has not been locked by the calling thread, the function
+throws an object of type <CODE>system_error</CODE> with an error code of
+<CODE>operation_not_permitted</CODE>. Otherwise, it calls
+<CODE>lock.unlock()</CODE> before blocking and calls <CODE>lock.lock()</CODE>
+after unblocking.</P>
+
+<P>The second member function effectively executes the following code:</P>
+
+<PRE>while (!pred())
+    if (wait_until(lock, Abs_time) == cv_status::timeout)
+        return pred();
+return true;</PRE>
+
+<H2><CODE><A NAME="condition_variable_any"></A>condition_variable_any</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#condition_variable_any__condition_variable_any">condition_variable_any</A>
+&middot; <A HREF="#condition_variable_any__~condition_variable_any">~condition_variable_any</A>
+&middot; <A HREF="#condition_variable_any__notify_all">notify_all</A>
+&middot; <A HREF="#condition_variable_any__notify_one">notify_one</A>
+&middot; <A HREF="#condition_variable_any__wait">wait</A>
+&middot; <A HREF="#condition_variable_any__wait_for">wait_for</A>
+&middot; <A HREF="#condition_variable_any__wait_until">wait_until</A>
+</CODE></B></P>
+<HR>
+
+
+<PRE>class <B>condition_variable_any</B>
+    {
+public:
+    <B><A HREF="#condition_variable_any__condition_variable_any">condition_variable_any</A></B>();
+    ~<B><A HREF="#condition_variable_any__condition_variable_any">condition_variable_any</A></B>();
+
+    <B>condition_variable_any</B>(const condition_variable_any&amp;) = delete;
+    condition_variable_any&amp; <B>operator=</B>(const condition_variable_any&amp;) = delete;
+
+    void <B><A HREF="#condition_variable_any__notify_one">notify_one</A></B>() noexcept;
+    void <B><A HREF="#condition_variable_any__notify_all">notify_all</A></B>() noexcept;
+
+    template&lt;class Lock&gt;
+        void <B><A HREF="#condition_variable_any__wait">wait</A></B>(Lock&amp; lock);
+    template&lt;class Lock, class Predicate&gt;
+        void <B><A HREF="#condition_variable_any__wait">wait</A></B>(Lock&amp; lock, Predicate pred);
+
+    template&lt;class Lock, class Rep, class Period&gt;
+        void <B><A HREF="#condition_variable_any__wait_for">wait_for</A></B>(
+            Lock&amp; lock,
+            const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);
+    template&lt;class Lock, class Rep, class Period, class Predicate&gt;
+        void <B><A HREF="#condition_variable_any__wait_for">wait_for</A></B>(
+            Lock&amp; lock,
+            const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time,
+            Predicate pred);
+
+    template&lt;class Lock, class Clock, class Duration&gt;
+        void <B><A HREF="#condition_variable_any__wait_until">wait_until</A></B>(
+            Lock&amp; lock,
+            const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);
+    template&lt;class Lock, class Clock, class Duration, class Predicate&gt;
+        void <B><A HREF="#condition_variable_any__wait_until">wait_until</A></B>(
+            Lock&amp; lock,
+            const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time,
+            Predicate pred);
+    };</PRE>
+
+<P>Use the class <CODE>condition_variable_any</CODE> to wait for an event with any mutex type.</P>
+
+<H3><CODE><A NAME="condition_variable_any__condition_variable_any"></A>condition_variable_any::condition_variable_any</CODE></H3>
+
+<PRE><B>condition_variable_any</B>();</PRE>
+
+<P>The constructor constructs an object of type
+<CODE>condition_variable_any</CODE>.</P>
+
+<H3><CODE><A NAME="condition_variable_any__~condition_variable_any"></A>condition_variable_any::~condition_variable_any</CODE></H3>
+
+<PRE><B>~condition_variable_any</B>();</PRE>
+
+<P>The destructor cleans up any resources used by the object.</P>
+
+<H3><CODE><A NAME="condition_variable_any__notify_all"></A>condition_variable_any::notify_all</CODE></H3>
+
+<PRE>void <B>notify_all</B>() noexcept;</PRE>
+
+<P>The member function unblocks all threads that are waiting for this
+object.</P>
+
+<H3><CODE><A NAME="condition_variable_any__notify_one"></A>condition_variable_any::notify_one</CODE></H3>
+
+<PRE>void <B>notify_one</B>() noexcept;</PRE>
+
+<P>The member function unblocks one of the threads that is waiting for this
+object.</P>
+
+<H3><CODE><A NAME="condition_variable_any__wait"></A>condition_variable_any::wait</CODE></H3>
+
+<PRE>template&lt;class Lock&gt;
+    void <B>wait</B>(Lock&amp; lock);
+template&lt;class Lock, class Predicate&gt;
+    void <B>wait</B>(Lock&amp; lock, Predicate pred);</PRE>
+
+<P>The first member function blocks until the <CODE>condition_variable</CODE>
+object is signaled by a call to <CODE>notify_one</CODE> or
+<CODE>notify_all</CODE>, but it can wake up
+<A HREF="#spurious">spuriously</A>.</P>
+
+<P>The second member function effectively executes the following code:</P>
+
+<PRE>while (!pred())
+    wait(lock);</PRE>
+
+<H3><CODE><A NAME="condition_variable_any__wait_for"></A>condition_variable_any::wait_for</CODE></H3>
+
+<PRE>template&lt;class Lock, class Rep, class Period&gt;
+    void <B>wait_for</B>(
+        Lock&amp; lock, const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);
+template&lt;class Lock, class Rep, class Period, class Predicate&gt;
+    void <B>wait_for</B>(
+        Lock&amp; lock, const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time,
+        Predicate pred);</PRE>
+
+<P>The first member function blocks until the
+<CODE>condition_variable_any</CODE> object is signaled by a call to
+<CODE>notify_one</CODE> or <CODE>notify_all</CODE> or until the time interval
+<CODE>Rel_time</CODE> has elapsed, but it can wake up
+<A HREF="#spurious">spuriously</A>. It returns <CODE>false</CODE> if the wait
+terminated because the specified time elapsed, otherwise <CODE>true</CODE>.</P>
+
+<P>The second member function effectively executes the following code:</P>
+
+<PRE>while (!pred())
+    if (!wait_for(lock, Rel_time))
+        return pred();
+return true;</PRE>
+
+<H3><CODE><A NAME="condition_variable_any__wait_until"></A>condition_variable_any::wait_until</CODE></H3>
+
+<PRE>template&lt;class Lock, class Clock, class Duration&gt;
+    void <B>wait_until</B>(
+        Lock&amp; lock, const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);
+template&lt;class Lock, class Clock, class Duration, class Predicate&gt;
+    void <B>wait_until</B>(
+        Lock&amp; lock, const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time,
+        Predicate pred);</PRE>
+
+<P>The first member function blocks until the
+<CODE>condition_variable_any</CODE> object is signaled by a call to
+<CODE>notify_one</CODE> or <CODE>notify_all</CODE> or until the time
+<CODE>Abs_time</CODE>, but it can wake up
+<A HREF="#spurious">spuriously</A>. It returns <CODE>false</CODE> if the wait
+terminated because the specified time elapsed, otherwise
+<CODE>true</CODE>.</P>
+
+<P>The second member function effectively executes the following code:</P>
+
+<PRE>while (!pred())
+    if !(wait_until(lock, Abs_time))
+        return pred();
+return true;</PRE>
+
+<H2><CODE><A NAME="cv_status"></A>cv_status</CODE></H2>
+
+<PRE>enum class <B>cv_status</B> {
+    <B><A NAME="no_timeout"></A>no_timeout</B>,
+    <B><A NAME="timeout"></A>timeout</B>
+    };</PRE>
+
+<P>The scoped enumeration supplies symbolic names for the return
+values of some member functions of template class
+<CODE><A HREF="#condition_variable__condition_variable">condition_variable</A></CODE>.</P>
+
+<H2><CODE><A NAME="notify_all_at_thread_exit"></A>notify_all_at_thread_exit</CODE></H2>
+
+<PRE>void <B>notify_all_at_thread_exit</B>(condition_variable&amp; cond,
+    unique_lock&lt;mutex&gt; lock);</PRE>
+
+<P>The function registers <CODE>cond</CODE> for release at thread exit,
+using lock <CODE>lock</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

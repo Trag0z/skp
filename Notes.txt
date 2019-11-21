@@ -1,0 +1,32 @@
+a = touchX
+b = touchY
+
+
+p1 = T^-1 * {a, b, 0.9, 1}
+p2 = T^-1 * {a, b, 0.1, 1}
+
+q = p1 - alpha * p2 - p1	// Strahlenform
+q = p - alpha * d
+
+<q - o, n> = 0 
+<(p - alpha * d) * o, n> = 0
+<p - o + alpha * d, n> = 0
+<p - o, n> + <alpha * d, n> = 0
+<p - o, n> + alpha <d, n> = 0
+alpha = <o - p, n> / <d - n>	// Warum hier o - p und nicht umgekehrt? Wegen Äquivalenzumformung - <p - o, n>?
+
+State machine touch controls:
+
+  ->Start
+ |    |
+ |    |	 Touch punkt und Vektor	
+ |    V
+  --Touched
+      |
+	  |  Bewegung
+	  V
+	Rotierend
+	  |
+	  |  Loslassen
+	  V
+	Einrastend

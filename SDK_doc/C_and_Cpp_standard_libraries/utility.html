@@ -1,0 +1,522 @@
+<HTML><HEAD>
+<TITLE>&lt;utility&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;utility&gt;"></A><CODE>&lt;utility&gt;</CODE></H1><HR>
+
+<P><B><CODE><A HREF="#operator!2">operator!=</A>
+&middot; <A HREF="#operator22">operator==</A>
+&middot; <A HREF="#operator&lt;">operator&lt;</A>
+&middot; <A HREF="#operator&lt;2">operator&lt;=</A>
+&middot; <A HREF="#operator&gt;">operator&gt;</A>
+&middot; <A HREF="#operator&gt;2">operator&gt;=</A>
+&middot; <A HREF="#pair">pair</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#get">get</A>
+&middot; <A HREF="#make_pair">make_pair</A>
+&middot; <A HREF="#tuple_element">tuple_element</A>
+&middot; <A HREF="#tuple_size">tuple_size</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#declval">declval</A>
+&middot; <A HREF="#forward">forward</A>
+&middot; <A HREF="#move">move</A>
+&middot; <A HREF="#move_if_noexcept">move_if_noexcept</A>
+&middot; <A HREF="#piecewise_construct">piecewise_construct</A>
+&middot; <A HREF="#piecewise_construct_t">piecewise_construct_t</A>
+&middot; <A HREF="#swap">swap</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the <A HREF="index.html#STL">STL</A>
+standard header <B><CODE>&lt;utility&gt;</CODE></B>
+to define several templates of general use
+throughout the Standard Template Library.</P>
+
+<P>Four template operators --
+<CODE>operator!=</CODE>,
+<CODE>operator&lt;=</CODE>,
+<CODE>operator&gt;</CODE>, and
+<CODE>operator&gt;=</CODE> -- define a
+<B><A NAME="total_ordering"></A>total ordering</B>
+on pairs of operands of the same type, given definitions of
+<CODE>operator==</CODE> and <CODE>operator&lt;</CODE>.</P>
+
+<P>These template operators are defined in the
+<B><CODE><A NAME="rel_ops"></A>rel_ops</CODE></B> namespace,
+nested within the <CODE>std</CODE> namespace.
+If you wish to make use of these template operators,
+write the declaration:</P>
+
+<PRE>using namespace std::rel_ops;</PRE>
+
+<P>which promotes the template operators into the current namespace.</P>
+
+<PRE>namespace std {
+        // TEMPLATE CLASSES
+template&lt;class T, class Ty2&gt;
+    struct <B><A HREF="#pair">pair</A></B>;
+
+struct <B><A HREF="#piecewise_construct_t">piecewise_construct_t</A></B>; <B>[added with C++11]</B>
+constexpr piecewise_construct_t <B><A HREF="#piecewise_construct">piecewise_construct</A></B> =
+    piecewise_construct_t(); <B>[added with C++11]</B>
+
+        // TEMPLATE FUNCTIONS
+template&lt;class Ty1, class Ty2&gt;
+    pair&lt;Ty1x, Ty2x&gt; <B><A HREF="#make_pair">make_pair</A></B>(Ty1 val1, Ty2 val2); <B>[replaced with C++11]</B>
+template&lt;class Ty1, class Ty2&gt;
+    pair&lt;Ty1x, Ty2x&gt; <B><A HREF="#make_pair">make_pair</A></B>(Ty1&amp;&amp; val1, Ty2&amp;&amp; val2); <B>[added with C++11]</B>
+
+template&lt;class Ty1, class Ty2&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(const pair&lt;Ty, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);
+template&lt;class Ty1, class Ty2&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(const pair&lt;Ty, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);
+template&lt;class Ty1, class Ty2&gt;
+    bool <B><A HREF="#operator&lt;">operator&lt;</A></B>(const pair&lt;Ty, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);
+template&lt;class Ty1, class Ty2&gt;
+    bool <B><A HREF="#operator&gt;">operator&gt;</A></B>(const pair&lt;Ty1, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);
+template&lt;class Ty1, class Ty2&gt;
+    bool <B><A HREF="#operator&lt;2">operator&lt;=</A></B>(const pair&lt;Ty1, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);
+template&lt;class Ty1, class Ty2&gt;
+    bool <B><A HREF="#operator&gt;2">operator&gt;=</A></B>(const pair&lt;Ty1, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);
+
+template&lt;class Ty&gt; <B>[added with C++11]</B>
+    void <B><A HREF="#swap">swap</A></B>(Ty&amp; left, Ty&amp; right)
+        noexcept(is_nothrow_move_constructible&lt;Ty&gt;::value
+            &amp;&amp; is nothrow_move_assignable&lt;Ty&gt;::value);
+template&lt;class Ty, size_t N&gt; <B>[added with C++11]</B>
+    void <B><A HREF="#swap">swap</A></B>(Ty (&amp;left)[N], Ty (&amp;right)[N])
+        noexcept(noexcept(swap(*left, *right)));
+template&lt;class Ty1, class Ty2&gt; <B>[added with C++11]</B>
+    void <B><A HREF="#swap">swap</A></B>(pair&lt;Ty1, Ty2&gt;&amp; left,
+        pair&lt;Ty1, Ty2&gt;&amp; right);
+            noexcept(noexcept(Left.swap(_Right)))
+
+template&lt;class Ty&gt;
+    typename add_rvalue_reference&lt;Ty&gt;::type
+        <B><A HREF="#declval">declval</A></B>() noexcept; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    Ty&amp;&amp; <B><A HREF="#forward">forward</A></B>(
+        typename remove_reference&lt;Ty&gt;::type&amp; right); <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    Ty&amp;&amp; <B><A HREF="#forward">forward</A></B>(
+        typename remove_reference&lt;Ty&gt;::type&amp;&amp; right) noexcept; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    typename remove_reference&lt;Ty&gt;::type&amp;&amp;
+        <B><A HREF="#move">move</A></B>(Ty&amp;&amp; right) noexcept; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+	typename conditional&lt;!has_nothrow_move_constructor&lt;Ty&gt;::value
+		&amp;&amp; has_copy_constructor&lt;Ty&gt;::value,
+			const Ty&amp;, Ty&amp;&amp;&gt;::type
+	<B><A HREF="#move_if_noexcept">move_if_noexcept</A></B>(Ty&amp; right) noexcept; <B>[added with C++11]</B>
+
+template&lt;int Idx, class T1, class T2&gt;  <B>[added with C++11]</B>&nbsp;
+    <I>RI</I>&amp; <B><A HREF="#get">get</A></B>(pair&lt;T1, T2&gt;&amp; pr) noexcept;
+template&lt;int Idx, class T1, class T2&gt;  <B>[added with C++11]</B>
+    const <I>RI</I>&amp; <B><A HREF="#get">get</A></B>(const pair&lt;T1, T2&gt;&amp; pr) noexcept;
+template&lt;int Idx, class T1, class T2&gt;  <B>[added with C++11]</B>&nbsp;
+    <I>RI</I>&amp;&amp; <B><A HREF="#get">get</A></B>(pair&lt;T1, T2&gt;&amp;&amp; pr) noexcept;
+
+
+template&lt;class T1, class T2&gt;  <B>[added with C++11]</B>
+    struct <B><A HREF="#tuple_element">tuple_element</A></B>&lt;0, pair&lt;T1, T2&gt; &gt;;
+template&lt;class T1, class T2&gt;  <B>[added with C++11]</B>
+    struct <B><A HREF="#tuple_element">tuple_element</A></B>&lt;1, pair&lt;T1, T2&gt; &gt;;
+
+template&lt;class T1, class T2&gt;  <B>[added with C++11]</B>
+    struct <B><A HREF="#tuple_size">tuple_size</A></B>&lt;pair&lt;T1, T2&gt; &gt;;
+    namespace tr1 {
+using std::get; using std::tuple_element; <B>[added with C++11]</B>
+using std::tuple_size;
+    } // namespace tr1
+
+    namespace rel_ops {
+    template&lt;class Ty&gt;
+        bool <B><A HREF="#operator!2">operator!=</A></B>(const Ty&amp; left, const Ty&amp; right);
+    template&lt;class Ty&gt;
+        bool <B><A HREF="#operator&lt;2">operator&lt;=</A></B>(const Ty&amp; left, const Ty&amp; right);
+    template&lt;class Ty&gt;
+        bool <B><A HREF="#operator&gt;">operator&gt;</A></B>(const Ty&amp; left, const Ty&amp; right);
+    template&lt;class Ty&gt;
+        bool <B><A HREF="#operator&gt;2">operator&gt;=</A></B>(const Ty&amp; left, const Ty&amp; right);
+    }  // namespace rel_ops
+}  // namespace std</PRE>
+
+<H2><CODE><A NAME="declval"></A>declval</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    typename add_rvalue_reference&lt;Ty&gt;::type
+        <B>declval</B>() noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The template function has no definition. You use it
+to specify unevaluated operands of type <CODE>Ty</CODE>, as in:</P>
+
+<PRE>template&lt;class To, class From&gt;
+    decltype(static_cast&lt;To&gt;(declval&lt;From&gt;()))
+        convert(From&amp;&amp;);</PRE>
+
+<P>which participates in overload resolution only if an expression of
+type <CODE>From</CODE> can be explicitly converted to a value of
+type <CODE>To</CODE>.</P>
+
+<H2><CODE><A NAME="forward"></A>forward</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty&amp;&amp; <B>forward</B>(
+        typename remove_reference&lt;Ty&gt;::type&amp; right); <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    Ty&amp;&amp; <B>forward</B>(
+        typename remove_reference&lt;Ty&gt;::type&amp;&amp; right) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The template function returns <CODE>right</CODE> as an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.
+If the second form is instantiated with an lvalue reference type,
+the program is ill-formed.</P>
+
+<H2><CODE><A NAME="get"></A>get</CODE></H2>
+
+<PRE>template&lt;int Idx, class T1, class T2&gt;  <B>[added with C++11]</B>&nbsp;
+    <I>RI</I>&amp; <B>get</B>(pair&lt;T1, T2&gt;&amp; pr) noexcept;
+template&lt;int Idx, class T1, class T2&gt;  <B>[added with C++11]</B>
+    const <I>RI</I>&amp; <B>get</B>(const pair&lt;T1, T2&gt;&amp; pr) noexcept;
+template&lt;int Idx, class T1, class T2&gt;  <B>[added with C++11]</B>&nbsp;
+    <I>RI</I>&amp;&amp; <B>get</B>(pair&lt;T1, T2&gt;&amp;&amp; pr) noexcept;</PRE>
+
+
+<P>The template functions each return a reference,
+called <CODE><I>RI</I></CODE> here, to an
+element of its <CODE>pair</CODE> argument. If the value of <CODE>Idx</CODE>
+is 0 the functions return <CODE>pr.first</CODE> and if the value of <CODE>Idx</CODE>
+is 1 the functions return <CODE>pr.second</CODE>.
+If the corresponding type <CODE>Ti</CODE> is a reference type,
+all functions return <CODE>Ti</CODE>; otherwise the first
+function returns <CODE>Ti&amp;</CODE>,
+the second function returns <CODE>const Ti&amp;</CODE>,
+and the third function returns <CODE>Ti&amp;&amp;</CODE>.</P>
+
+<H2><A NAME="make_pair"></A><CODE>make_pair</CODE></H2>
+
+<PRE>template&lt;class Ty1, class Ty2&gt;
+    pair&lt;Ty1x, Ty2x&gt; <B>make_pair</B>(Ty1 val1, Ty2 val2); <B>[replaced with C++11]</B>
+template&lt;class Ty1, class Ty2&gt;
+    pair&lt;Ty1x, Ty2x&gt; <B>make_pair</B>(Ty1&amp;&amp; val1, Ty2&amp;&amp; val2); <B>[added with C++11]</B></PRE>
+
+<P>The template function returns
+<CODE><A HREF="#pair">pair</A>&lt;Ty1x, Ty2x&gt;(val1, val2)</CODE>,
+where <CODE>Ty1x</CODE> is determined from <CODE>Ty1</CODE> as follows:</P>
+
+<UL>
+<LI>If <CODE>Ty1</CODE> is
+<CODE><A HREF="functio2.html#reference_wrapper">reference_wrapper</A>&lt;X&gt;</CODE>,
+<CODE>Ty1x</CODE> is <CODE>X&amp;</CODE>.</LI>
+
+<LI>Otherwise, beginning with <B>C++11</B>, <CODE>Ty1x</CODE> is
+<CODE>decay&lt;Ty1&gt;::type</CODE>.</LI>
+
+<LI>Otherwise, <CODE>Ty1x</CODE> is <CODE>Ty1</CODE>.</LI>
+</UL>
+
+<P><CODE>Ty2x</CODE> is similarly determined from <CODE>Ty2</CODE>.</P>
+
+<H2><CODE><A NAME="move"></A>move</CODE></H2>
+
+<PRE>template&lt;class T&gt;
+    typename remove_reference&lt;T&gt;::type&amp;&amp;
+        <B>move</B>(T&amp;&amp; right) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The template function returns <CODE>right</CODE> as an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>,
+whether or not <CODE>T</CODE> is a reference type.</P>
+
+<H2><CODE><A NAME="move_if_noexcept"></A>move_if_noexcept</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+	typename conditional&lt;!is_nothrow_move_constructible&lt;Ty&gt;::value
+		&amp;&amp; is_copy_constructible&lt;Ty&gt;::value,
+			const Ty&amp;, Ty&amp;&amp;&gt;::type
+	<B>move_if_noexcept</B>(Ty&amp; right) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The template function returns
+<CODE><A HREF="#move">move</A>(right)</CODE>.</P>
+
+<H2><A NAME="operator!2"></A><CODE>operator!=</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>operator!=</B>(const Ty&amp; left, const Ty&amp; right);
+template&lt;class Ty1, class Ty2&gt;
+    bool <B>operator!=</B>(const pair&lt;Ty1, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);</PRE>
+
+<P>The template function returns <CODE>!(left == right)</CODE>.</P>
+
+<H2><A NAME="operator22"></A><CODE>operator==</CODE></H2>
+
+<PRE>template&lt;class Ty1, class Ty2&gt;
+    bool <B>operator==</B>(const pair&lt;Ty1, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);</PRE>
+
+<P>The template function returns
+<CODE>left.<A HREF="#pair__first">first</A> == right.first &amp;&amp;
+left.<A HREF="#pair__second">second</A> == right.second</CODE>.</P>
+
+<H2><A NAME="operator&lt;"></A><CODE>operator&lt;</CODE></H2>
+
+<PRE>template&lt;class Ty1, class Ty2&gt;
+    bool <B>operator&lt;</B>(const pair&lt;Ty1, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);</PRE>
+
+<P>The template function returns
+<CODE>left.<A HREF="#pair__first">first</A> &lt; right.first ||
+!(right.first &lt; left.first) &amp;&amp;
+left.<A HREF="#pair__second">second</A> &lt; right.second</CODE>.</P>
+
+<H2><A NAME="operator&lt;2"></A><CODE>operator&lt;=</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>operator&lt;=</B>(const Ty&amp; left, const Ty&amp; right);
+template&lt;class Ty1, class Ty2&gt;
+    bool <B>operator&lt;=</B>(const pair&lt;Ty1, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);</PRE>
+
+<P>The template function returns <CODE>!(right &lt; left)</CODE>.</P>
+
+<H2><A NAME="operator&gt;"></A><CODE>operator&gt;</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>operator&gt;</B>(const Ty&amp; left, const Ty&amp; right);
+template&lt;class Ty1, class Ty2&gt;
+    bool <B>operator&gt;</B>(const pair&lt;Ty1, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);</PRE>
+
+<P>The template function returns <CODE>right &lt; left</CODE>.</P>
+
+<H2><A NAME="operator&gt;2"></A><CODE>operator&gt;=</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>operator&gt;=</B>(const Ty&amp; left, const Ty&amp; right);
+template&lt;class Ty1, class Ty2&gt;
+    bool <B>operator&gt;=</B>(const pair&lt;Ty1, Ty2&gt;&amp; left,
+        const pair&lt;Ty1, Ty2&gt;&amp; right);</PRE>
+
+<P>The template function returns <CODE>!(left &lt; right)</CODE>.</P>
+
+<H2><A NAME="pair"></A><CODE>pair</CODE></H2>
+
+<PRE>template&lt;class Ty1, class Ty2&gt;
+    struct <B>pair</B> {
+    Ty1 <B>first</B>;
+    Ty2 <B>second</B>;
+
+    typedef Ty1 <B><A HREF="#pair__first_type">first_type</A></B>;
+    typedef Ty2 <B><A HREF="#pair__second_type">second_type</A></B>
+
+    <B>pair</B>(const pair&amp;) = default;
+    <B>pair</B>(pair&amp;&amp;) = default;
+    constexpr <B><A HREF="#pair__pair">pair</A></B>();
+    <B><A HREF="#pair__pair">pair</A></B>(const Ty1&amp; val1, const Ty2&amp; val2);
+    template&lt;class Other1, class Other2&gt; <B>[added with C++11]</B>&nbsp;
+        <B><A HREF="#pair__pair">pair</A></B>(Other1&amp;&amp; val1, Other2&amp;&amp; val2)
+            noexcept(is_nothrow_constructible&lt;Ty1, Other1&amp;&amp;&gt;::value
+                &amp;&amp; is_nothrow_constructible&lt;Ty2, Other2&amp;&amp;&gt;::value);
+    template&lt;class Other1, class Other2&gt; <B>[added with C++11]</B>&nbsp;
+        <B><A HREF="#pair__pair">pair</A></B>(const pair&lt;Other1, Other2&gt;&amp; right);
+    template&lt;class Other1, class Other2&gt; <B>[added with C++11]</B>&nbsp;
+        <B><A HREF="#pair__pair">pair</A></B>(pair&lt;Other1, Other2&gt;&amp;&amp; right)
+            noexcept(is_nothrow_constructible&lt;Ty1, Other1&amp;&amp;&gt;::value
+                &amp;&amp; is_nothrow_constructible&lt;Ty2, Other2&amp;&amp;&gt;::value);
+    template&lt;class... Types1, class... Types2&gt; <B>[added with C++11]</B>&nbsp;
+        <B><A HREF="#pair__pair">pair</A></B>(piecewise_construct_t,
+            tuple&lt;Types1...&gt; val1, tuple&lt;Types2...&gt; val2)
+            noexcept(is_nothrow_constructible&lt;Ty1, Types1...&amp;&amp;&gt;::value
+                &amp;&amp; is_nothrow_constructible&lt;Ty2, Types2...&amp;&amp;&gt;::value);
+
+    pair&amp; <B><A HREF="#pair__operator2">operator=</A></B>(const pair&amp; right);
+    pair&amp; <B><A HREF="#pair__operator2">operator=</A></B>(pair&amp;&amp; right)
+        noexcept(is_nothrow_move_assignable&lt;Ty1&gt;::value
+            &amp;&amp; is_nothrow_move_assignable&lt;Ty2&gt;::value); <B>[added with C++11]</B>
+    template&lt;class Other1, class Other2&gt; <B>[added with C++11]</B>
+        pair&amp; <B><A HREF="#pair__operator2">operator=</A></B>(const pair&lt;Other1, Other2&gt;&amp; right);
+    template&lt;class Other1, class Other2&gt; <B>[added with C++11]</B>
+        pair&amp; <B><A HREF="#pair__operator2">operator=</A></B>(pair&lt;Other1, Other2&gt;&amp;&amp; right);
+
+    void <B><A HREF="#pair__swap">swap</A></B>(pair&amp; right)
+        noexcept(noexcept(swap(first, right.first))
+            &amp;&amp; noexcept(swap(second, right.second)));</PRE>
+
+<P>The template class stores a pair of objects,
+<B><A NAME="pair__first"></A><CODE>first</CODE></B>,
+of type <CODE>Ty1</CODE>, and
+<B><A NAME="pair__second"></A><CODE>second</CODE></B>,
+of type <CODE>Ty2</CODE>.</P>
+
+<H3><A NAME="pair__first_type"></A><CODE>pair::first_type</CODE></H3>
+
+<PRE>typedef Ty1 <B>first_type</B>;</PRE>
+
+<P>The type definition
+is the same as the template parameter <CODE>Ty1</CODE></P>
+
+<H3><A NAME="pair__operator2"></A><CODE>pair::operator=</CODE></H3>
+
+<PRE>pair&amp; <B>operator=</B>(const pair&amp; right);
+pair&amp; <B>operator=</B>(pair&amp;&amp; right)
+    noexcept(is_nothrow_move_assignable&lt;Ty1&gt;::value
+        &amp;&amp; is_nothrow_move_assignable&lt;Ty2&gt;::value); <B>[added with C++11]</B>
+template&lt;class Other1, class Other2&gt; <B>[added with C++11]</B>
+    pair&amp; <B>operator=</B>(const pair&lt;Other1, Other2&gt;&amp; right);
+template&lt;class Other1, class Other2&gt; <B>[added with C++11]</B>
+    pair&amp; <B>operator=</B>(pair&lt;Other1, Other2&gt;&amp;&amp; right);</PRE>
+
+<P>All assignment operators store <CODE>right.first</CODE> in <CODE>first</CODE>
+and <CODE>right.second</CODE> in <CODE>second</CODE>, then return <CODE>*this</CODE>.</P>
+
+<H3><A NAME="pair__pair"></A><CODE>pair::pair</CODE></H3>
+
+<PRE><B>pair</B>(const pair&amp;) = default;
+<B>pair</B>(pair&amp;&amp;) = default;
+constexpr <B>pair</B>();
+<B>pair</B>(const Ty1&amp; val1, const Ty2&amp; val2);
+template&lt;class Other1, class Other2&gt; <B>[added with C++11]</B>&nbsp;
+    <B>pair</B>(Other1&amp;&amp; val1, Other2&amp;&amp; val2)
+        noexcept(is_nothrow_constructible&lt;Ty1, Other1&amp;&amp;&gt;::value
+            &amp;&amp; is_nothrow_constructible&lt;Ty2, Other2&amp;&amp;&gt;::value);
+template&lt;class Other1, class Other2&gt; <B>[added with C++11]</B>&nbsp;
+    <B>pair</B>(const pair&lt;Other1, Other2&gt;&amp; right);
+template&lt;class Other1, class Other2&gt; <B>[added with C++11]</B>&nbsp;
+    <B>pair</B>(pair&lt;Other1, Other2&gt;&amp;&amp; right)
+        noexcept(is_nothrow_constructible&lt;Ty1, Other1&amp;&amp;&gt;::value
+            &amp;&amp; is_nothrow_constructible&lt;Ty2, Other2&amp;&amp;&gt;::value);
+template&lt;class... Types1, class... Types2&gt; <B>[added with C++11]</B>&nbsp;
+    <B>pair</B>(piecewise_construct_t,
+        tuple&lt;Types1...&gt; val1, tuple&lt;Types2...&gt; val2)
+        noexcept(is_nothrow_constructible&lt;Ty1, Types1...&amp;&amp;&gt;::value
+            &amp;&amp; is_nothrow_constructible&lt;Ty2, Types2...&amp;&amp;&gt;::value);</PRE>
+
+<P>The first (copy) constructor initializes <CODE>first</CODE>
+to <CODE>right.first</CODE> and <CODE>second</CODE> to <CODE>right.second</CODE>.
+The second (move) constructor initializes <CODE>first</CODE>
+by moving <CODE>right.first</CODE> and <CODE>second</CODE>
+by moving <CODE>right.second</CODE>.
+The third (default) constructor initializes
+<CODE>first</CODE> to <CODE>Ty1()</CODE> and <CODE>second</CODE>
+to <CODE>Ty2()</CODE>.</P>
+
+<P>The fourth and fifth constructors initialize
+<CODE>first</CODE> to <CODE>val1</CODE> and <CODE>second</CODE>
+to <CODE>val2</CODE>.
+The fifth constructor participates in overload resolution only if
+<CODE>is_convertible&lt;Other1, Ty1&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A> and
+<CODE>is_convertible&lt;Other2, Ty2&gt;</CODE>
+holds true.</P>
+
+<P>The sixth and seventh constructors initialize
+<CODE>first</CODE> to <CODE>right.first</CODE> and <CODE>second</CODE>
+to <CODE>right.second</CODE>.</P>
+
+<P>The last constructor initializes <CODE>first</CODE> to
+<CODE>Ty1(val1...)</CODE> and <CODE>second</CODE> to <CODE>Ty2(val2...)</CODE>.</P>
+
+<H3><A NAME="pair__second_type"></A><CODE>pair::second_type</CODE></H3>
+
+<PRE>typedef Ty2 <B>second_type</B>;</PRE>
+
+<P>The type definition
+is the same as the template parameter <CODE>Ty1</CODE></P>
+
+<H3><A NAME="pair__swap"></A><CODE>pair::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(pair&amp; right)
+    noexcept(noexcept(swap(first, right.first))
+        &amp;&amp; noexcept(swap(second, right.second)));</PRE>
+
+<P>The member function swaps <CODE>first</CODE> with <CODE>right.first</CODE>
+and <CODE>second</CODE> with <CODE>right.second</CODE>.</P>
+
+<H2><CODE><A NAME="piecewise_construct"></A>piecewise_construct</CODE></H2>
+
+<PRE>constexpr piecewise_construct_t <B>piecewise_construct</B> =
+    piecewise_construct_t(); <B>[added with C++11]</B></PRE>
+
+<P>The object is used as a function argument to match the parameter type
+<CODE><A HREF="#piecewise_construct_t">piecewise_construct_t</A></CODE>.</P>
+
+<H2><CODE><A NAME="piecewise_construct_t"></A>piecewise_construct_t</CODE></H2>
+
+<PRE>struct <B>piecewise_construct_t</B> {}; <B>[added with C++11]</B></PRE>
+
+<P>The struct is used as a function parameter to indicate that two
+<CODE><A HREF="tuple.html#tuple">tuple</A></CODE> arguments follow in
+a constructor for template class
+<CODE><A HREF="#pair">pair</A></CODE>.</P>
+
+<H2><CODE><A NAME="swap"></A>swap</CODE></H2>
+
+<PRE>template&lt;class Ty&gt; <B>[added with C++11]</B>
+    void <B>swap</B>(Ty&amp; left, Ty&amp; right)
+        noexcept(is_nothrow_move_constructible&lt;Ty&gt;::value
+            &amp;&amp; is nothrow_move_assignable&lt;Ty&gt;::value);
+template&lt;class Ty, size_t N&gt; <B>[added with C++11]</B>
+    void <B>swap</B>(Ty (&amp;left)[N], Ty (&amp;right)[N])
+        noexcept(noexcept(swap(*left, *right)));
+template&lt;class Ty1, class Ty2&gt; <B>[added with C++11]</B>
+    void <B>swap</B>(pair&lt;Ty1, Ty2&gt;&amp; left,
+        pair&lt;Ty1, Ty2&gt;&amp; right);
+            noexcept(noexcept(Left.swap(_Right)))</PRE>
+
+<P>The template function leaves the value originally stored in
+<CODE>right</CODE> subsequently stored in <CODE>left</CODE>,
+and the value originally stored in <CODE>left</CODE>
+subsequently stored in <CODE>right</CODE>.
+Note that the first two template functions are also declared in
+<CODE><A HREF="algorith.html">&lt;algorithm&gt;</A></CODE>.</P>
+
+<H2><CODE><A NAME="tuple_element"></A>tuple_element</CODE></H2>
+
+<PRE>template&lt;class T1, class T2&gt;  <B>[added with C++11]</B>
+    struct <B>tuple_element</B>&lt;0, pair&lt;T1, T2&gt; &gt; {
+        typedef T1 type;
+    };
+template&lt;class T1, class T2&gt;  <B>[added with C++11]</B>
+    struct <B>tuple_element</B>&lt;1, pair&lt;T1, T2&gt; &gt; {
+        typedef T2 type;
+    };</PRE>
+
+<P>The templates are specializations of the template class
+<A HREF="tuple.html#tuple_element">tuple_element</A>.
+Each has a nested typedef <CODE>type</CODE> that is a synonym for
+the type of the corresponding <CODE>pair</CODE> element.</P>
+
+<H2><CODE><A NAME="tuple_size"></A>tuple_size</CODE></H2>
+
+<PRE>template&lt;class T1, class T2&gt;  <B>[added with C++11]</B>
+    struct <B>tuple_size</B>&lt;pair&lt;T1, T2&gt; &gt; {
+        static const unsigned value = 2;
+    };</PRE>
+
+<P>The template is a specialization of the template class
+<A HREF="tuple.html#tuple_size">tuple_size</A>. It
+has a member <CODE>value</CODE> that is an integral
+constant expression whose value is 2.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. Portions derived from work
+<A HREF="crit_hp.html">copyright</A> &copy; 1994
+by Hewlett-Packard Company. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

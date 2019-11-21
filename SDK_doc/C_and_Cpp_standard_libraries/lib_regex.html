@@ -1,0 +1,1249 @@
+<HTML><HEAD>
+<TITLE>Regular Expressions -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="Regular_Expressions"></A>Regular Expressions</H1><HR>
+
+<P><B>
+<A HREF="#Regular_Expression_Grammar">Regular Expression Grammar</A>
+&middot; <A HREF="#Grammar_Summary">Grammar Summary</A>
+&middot; <A HREF="#Semantic_Details">Semantic Details</A>
+&middot; <A HREF="#Matching_and_Searching">Matching and Searching</A>
+&middot; <A HREF="#Replacement_Text">Replacement Text</A>
+</B></P>
+
+<P>A <B><A NAME="regular_expression"></A>regular expression</B> is a sequence
+of characters that can match one or more target sequences of characters,
+according to a regular expression grammar. This
+implementation supports
+the following regular expression grammars:</P>
+
+<UL>
+<LI><B><A NAME="BRE"></A>BRE</B> -- Basic Regular Expressions,
+defined by the <B><A NAME="POSIX_part_1"></A>POSIX Standard, Part 1</B>
+(ISO/IEC 9945-1:2003)</LI>
+
+<LI><B><A NAME="ERE"></A>ERE</B> -- Extended Regular Expressions,
+also defined by the POSIX Standard, Part 1</LI>
+
+<LI><B><A NAME="ECMAScript"></A>ECMAScript</B> --
+ECMAScript regular exprssions, as defined by the
+<B>ECMAScript Language Specification</B> (Ecma-262)</LI>
+
+<LI><B><A NAME="awk"></A>awk</B> -- regular expressions
+as used in the <I>awk</I> utility,
+defined by the <B><A NAME="POSIX_part_3"></A>POSIX Standard, Part 3</B>
+(ISO/IEC 9945-3:2003)</LI>
+
+<LI><B><A NAME="grep"></A>grep</B> -- regular expressions
+as used in the <I>grep</I> utility,
+also defined by the POSIX Standard, Part 3</LI>
+
+<LI><B><A NAME="egrep"></A>egrep</B> -- regular expressions
+as used in the <I>grep</I> utility with the <I>-E</I> option,
+also defined by the POSIX Standard, Part 3</LI>
+</UL>
+
+<P>This document describes each of these grammars as provided in
+this implementation. Most
+of the differences between the grammars are in the regular expression
+features that are supported. When features are not supported by all of
+the grammars the text describing those features lists the grammars that
+support them. In some cases the differences between the grammars are in the
+syntax used to describe a feature (for example, <I>BRE</I> and <I>grep</I>
+require a backslash in front of a left parenthesis that marks the beginning
+of a group and the others do not). In these cases the differences are
+described as part of the description of the feature.</P>
+
+<HR>
+
+<H2><A NAME="Regular_Expression_Grammar"></A>Regular Expression Grammar</H2>
+
+<H3><A NAME="Element"></A>Element</H3>
+
+<P>An <B><A NAME="element"></A>element</B> can be any of the following:</P>
+
+<UL>
+<LI>An <B><A HREF="#ordinary_character">ordinary character</A></B>,
+which matches the same character in the target sequence</LI>
+<LI>A <B><A HREF="#wildcard_character">wildcard character</A></B>, '<B>.</B>',
+which matches any character in the target sequence except a newline</LI>
+<LI>A <B><A HREF="#bracket_expression">bracket expression</A></B>, of the form
+&quot;<B>[</B><I>expr</I><B>]</B>&quot;,
+which matches a character or a
+<B><A NAME="collation_element"></A>collation element</B> in the target
+sequence that is also in the set defined by the expression <I>expr</I>,
+or of the form &quot;<B>[^</B><I>expr</I><B>]</B>&quot;, which matches
+a character or a collation element in the target sequence that is not
+in the set defined by the expression <I>expr</I>. The expression <I>expr</I>
+can consist of any combination of any number of each of the following.</LI>
+
+<UL>
+<LI>An <B><A HREF="#individual_character">individual character</A></B>, which
+adds that character to the set defined by <I>expr</I>.</LI>
+<LI>A <B><A HREF="#character_range">character range</A></B>, of the form
+&quot;<I>ch1</I><B>-</B><I>ch2</I>&quot;,
+which adds all of the characters represented by values in the closed
+range [<I>ch1</I>, <I>ch2</I>] to the set defined by <I>expr</I>.</LI>
+<LI>A <B><A HREF="#character_class">character class</A></B>, of the form
+&quot;<B>[:</B><I>name</I><B>:]</B>&quot;,
+which adds all of the characters in the named class to the set defined by
+<I>expr</I>.</LI>
+<LI>An <B><A HREF="#equivalence_class">equivalence class</A></B>, of the form
+&quot;<B>[=</B><I>elt</I><B>=]</B>&quot;,
+which adds the collating elements that are equivalent to <I>elt</I> to the set
+defined by <I>expr</I>.</LI>
+<LI>A <B><A HREF="#collating_symbol">collating symbol</A></B>, of the form
+&quot;<B>[.</B><I>elt</I><B>.]</B>&quot;,
+which adds the collation element <I>elt</I> to the set defined by
+<I>expr</I>.</LI>
+</UL>
+
+<LI>An <B><A HREF="#anchor">anchor</A></B>, either '<B>^</B>' or '<B>$</B>',
+which matches the beginning or the end of the target sequence, respectively</LI>
+<LI>A <B><A HREF="#capture_group">capture group</A></B>, of the form
+&quot;<B>( <A HREF="#subexpression">subexpression</A> )</B>&quot;, or
+&quot;<B>\( <A HREF="#subexpression">subexpression</A> \)</B>&quot; in
+<I>BRE</I> and <I>grep</I>, which matches the sequence of characters in the
+target sequence that is matched by the pattern between the delimiters</LI>
+<LI>An <B><A HREF="#identity_escape">identity escape</A></B>, of the form
+&quot;<B>\<I>k</I></B>&quot;, which matches the character <I>k</I> in
+the target sequence</LI>
+</UL>
+
+<P>Examples:</P>
+
+<UL>
+<LI><B>&quot;a&quot;</B> matches the target sequence &quot;a&quot; but none
+of the target sequences &quot;B&quot;, &quot;b&quot;, or &quot;c&quot;.</LI>
+<LI><B>&quot;.&quot;</B> matches all of the target sequences &quot;a&quot;,
+&quot;B&quot;, &quot;b&quot;, and &quot;c&quot;.</LI>
+<LI><B>&quot;[b-z]&quot;</B> matches the target sequences &quot;b&quot;
+and &quot;c&quot; but does not match the target sequence &quot;a&quot;
+or the target sequence &quot;B&quot;.</LI>
+<LI><B>&quot;[:lower:]&quot;</B> matches the target sequences &quot;a&quot;,
+&quot;b&quot;, and &quot;c&quot; but does not match the target
+sequence &quot;B&quot;.</LI>
+<LI><B>&quot;(a)&quot;</B> matches the target sequence &quot;a&quot;
+and associates capture group 1 with the subsequence &quot;a&quot;,but does not
+match any of the target sequences &quot;B&quot;, &quot;b&quot;,
+or &quot;c&quot;.</LI>
+</UL>
+
+<P>In <I>ECMAScript</I>, <I>BRE</I>, and <I>grep</I> an element can also be:</P>
+
+<UL>
+<LI>a <B><A HREF="#back_reference">back reference</A></B>,
+of the form &quot;<B>\<I>dd</I></B>&quot; where <I>dd</I> represents a
+decimal value N, which matches a sequence of characters in the target
+sequence that is the same as the sequence of characters matched by the Nth
+<B><A HREF="#capture_group">capture group</A></B>.</LI>
+</UL>
+
+<P>For example:</P>
+
+<UL>
+<LI><B>&quot;(a)\1&quot;</B> matches the target sequence "aa" because the first
+(and only) capture group matches the initial sequence &quot;a&quot; and
+the \1 then matches the final sequence &quot;a&quot;.</LI>
+</UL>
+
+<P>In <I>ECMAScript</I>, an element can also be any of the following:</P>
+
+<UL>
+<LI>A <B><A HREF="#non-capture_group">non-capture group</A></B>, of the form
+&quot;<B>(?: <A HREF="#subexpression">subexpression</A> )</B>&quot;, which
+matches the sequence of characters in the target sequence that is matched
+by the pattern between the delimiters</LI>
+<LI>a limited <B><A HREF="#file_format_escape">file format escape</A></B>,
+of the form
+&quot;<B>\f</B>&quot;,
+&quot;<B>\n</B>&quot;,
+&quot;<B>\r</B>&quot;,
+&quot;<B>\t</B>&quot;, or
+&quot;<B>\v</B>&quot;; these match a form feed, newline, carriage return,
+horizontal tab, and vertical tab, respectively, in the target sequence.</LI>
+<LI>A <B><A HREF="#positive_assert">positive assert</A></B>,
+of the form &quot;<B>(?= <A HREF="#subexpression">subexpression</A> )</B>&quot;,
+which matches the sequence of characters in the target sequence that is
+matched by the pattern between the delimiters, but does not change the
+match position in the target sequence.</LI>
+<LI>A <B><A HREF="#negative_assert">negative assert</A></B>,
+of the form &quot;<B>(?! <A HREF="#subexpression">subexpression</A> )</B>&quot;,
+which matches any sequence of characters in the target sequence that
+does not match the pattern between the delimiters,
+and does not change the match position in the target sequence.</LI>
+<LI>A <B><A HREF="#hexadecimal_escape_sequence">hexadecimal escape sequence</A></B>,
+of the form &quot;<B>\x<I>hh</I></B>&quot;, which matches a character in the
+target sequence whose representation is the value represented by the two
+hexadecimal digits <I>hh</I>.</LI>
+<LI>A <B><A HREF="#unicode_escape_sequence">unicode escape sequence</A></B>,
+of the form &quot;<B>\u<I>hhhh</I></B>&quot;, which matches a character in
+the target sequence whose representation is the value represented by the
+four hexadecimal digits <I>hhhh</I>.</LI>
+<LI>A <B><A HREF="#control_escape_sequence">control escape sequence</A></B>,
+of the form &quot;<B>\c<I>k</I></B>&quot;, which matches the control
+character named by the character <I>k</I>.</LI>
+<LI>A <B><A HREF="#word_boundary_assert">word boundary assert</A></B>,
+of the form &quot;<B>\b</B>&quot;, which matches if the current position
+in the target sequence is immediately after a
+<B><A HREF="#word_boundary">word boundary</A></B>.</LI>
+<LI>A <B><A HREF="#negative_word_boundary_assert">negative word boundary assert</A></B>,
+of the form &quot;<B>\B</B>&quot;, which matches if the current position in the
+target sequence is not immediately after a
+<B><A HREF="#word_boundary">word boundary</A></B>.</LI>
+<LI>A <B><A HREF="#dsw_character_escape">dsw character escape</A></B>, of
+the form
+&quot;<B>\d</B>&quot;,
+&quot;<B>\D</B>&quot;,
+&quot;<B>\s</B>&quot;,
+&quot;<B>\S</B>&quot;,
+&quot;<B>\w</B>&quot;,
+&quot;<B>\W</B>&quot;,
+which provides a short name for a character class.</LI>
+</UL>
+
+<P>For example:</P>
+
+<UL>
+<LI><B>&quot;(?:a)&quot;</B> matches the target sequence &quot;a&quot;, but
+&quot;(?:a)\1&quot; is invalid, because there is no capture group 1.</LI>
+<LI><B>&quot;(?=a)a&quot;</B> matches the target sequence &quot;a&quot;. The
+positive assert matches the initial sequence &quot;a&quot; in the target
+sequence and the final &quot;a&quot; in the regular expression matches the
+initial sequence &quot;a&quot; in the target sequence.</LI>
+<LI><B>&quot;(?!a)a&quot;</B> does not match the target sequence
+&quot;a&quot;.</LI>
+<LI><B>&quot;a\b.&quot;</B> matches the target sequence &quot;a~&quot;
+but does not match the target sequence &quot;ab&quot;.</LI>
+<LI><B>&quot;a\B.&quot;</B> matches the target sequence &quot;ab&quot;
+but does not match the target sequence &quot;a~&quot;.</LI>
+</UL>
+
+<P>In <I>awk</I>, an element can also be one of the following:</P>
+
+<UL>
+<LI>A <B><A HREF="#file_format_escape">file format escape</A></B>, of the form
+&quot;<B>\\</B>&quot;,
+&quot;<B>\a</B>&quot;,
+&quot;<B>\b</B>&quot;,
+&quot;<B>\f</B>&quot;,
+&quot;<B>\n</B>&quot;,
+&quot;<B>\r</B>&quot;,
+&quot;<B>\t</B>&quot;, or
+&quot;<B>\v</B>&quot;; these match a backslash, alert, backspace, form feed,
+newline, carriage return, horizontal tab, and vertical tab, respectively,
+in the target sequence.</LI>
+<LI>An <B><A HREF="#octal_escape_sequence">octal escape sequence</A></B>,
+of the form &quot;<B>\</B><I>ooo</I>&quot;, which matches a character in
+the target sequence whose representation is the value represented by the
+one, two, or three octal digits <I>ooo</I>.</LI>
+</UL>
+
+<H3><A NAME="Repetition"></A>Repetition</H3>
+
+<P>Any element other than a <B><A HREF="#positive_assert">positive assert</A></B>,
+a <B><A HREF="#negative_assert">negative assert</A></B>, or an
+<B><A HREF="#anchor">anchor</A></B> can be followed by a
+<B><A NAME="repetition_count"></A>repetition count</B>.
+The most general form of repetition count takes the form
+&quot;<B>{<I>min</I>,<I>max</I>}</B>&quot;,
+or &quot;<B>\{<I>min</I>,<I>max</I>\}</B>&quot; in <I>BRE</I> and <I>grep</I>.
+An element followed by this form of repetition count matches at least <I>min</I>
+and no more than <I>max</I> successive occurrences of a sequence that matches
+the element.</P>
+
+<P>For example:</P>
+
+<UL>
+<LI><B>&quot;a{2,3}&quot;</B> matches the target sequence &quot;aa&quot; and
+the target sequence &quot;aaa&quot;, but not the target sequence &quot;a&quot;
+or the target sequence &quot;aaaa&quot;.</LI>
+</UL>
+
+<P>A repetition count can also take one of the following forms:</P>
+
+<UL>
+<LI>&quot;<B>{<I>min</I>}</B>&quot;, or &quot;<B>\{<I>min</I>\}</B>&quot;
+in <I>BRE</I> and <I>grep</I>, which is equivalent to
+&quot;{<I>min</I>,<I>min</I>}&quot;.</LI>
+<LI>&quot;<B>{<I>min</I>,}</B>&quot;, or &quot;<B>\{<I>min</I>,\}</B>&quot;
+in <I>BRE</I> and <I>grep</I>, which is equivalent to
+&quot;{<I>min</I>,unbounded}&quot;.</LI>
+<LI>&quot;<B>*</B>&quot;, which is equivalent to &quot;{0,unbounded}&quot;.</LI>
+</UL>
+
+<P>Examples:</P>
+
+<UL>
+<LI><B>&quot;a{2}&quot;</B> matches the target sequence &quot;aa&quot; but
+not the target sequence &quot;a&quot; or the target sequence &quot;aaa&quot;.</LI>
+<LI><B>&quot;a{2,}&quot;</B> matches the target sequence &quot;aa&quot;, the
+target sequence &quot;aaa&quot;, and so on, but does not match the target
+sequence &quot;a&quot;.</LI>
+<LI><B>&quot;a*&quot;</B> matches the target sequence &quot;&quot;, the target
+sequence &quot;a&quot;, the target sequence &quot;aa&quot;, and so on.</LI>
+</UL>
+
+<P>For all grammars except <I>BRE</I> and <I>grep</I>, a repetition count can
+also take one of the following forms:</P>
+
+<UL>
+<LI>&quot;<B>?</B>&quot;, which is equivalent to &quot;{0,1}&quot;.</LI>
+<LI>&quot;<B>+</B>&quot;, which is equivalent to &quot;{1,unbounded}&quot;.</LI>
+</UL>
+
+<P>Examples:</P>
+
+<UL>
+<LI><B>&quot;a?&quot;</B> matches the target sequence &quot;&quot; and the target
+sequence &quot;a&quot;, but not the target sequence &quot;aa&quot;.</LI>
+<LI><B>&quot;a+&quot;</B> matches the target sequence &quot;a&quot;, the target
+sequence &quot;aa&quot;, and so on, but not the target sequence
+&quot;&quot;.</LI>
+</UL>
+
+<P>Finally, in <I>ECMAScript</I>, all of the preceding forms of repetition
+count can be followed by the character '<B>?</B>', which designates a
+<A HREF="#non-greedy">non-greedy</A> repetition.</P>
+
+<H3><A NAME="Concatenation"></A>Concatenation</H3>
+
+<P>Regular expression elements, with our without
+<A HREF="#repetition_count">repetition counts</A>, can be concatenated to
+form longer regular expressions. Such an expression matches a target
+sequence that is a concatenation of sequences matched by the individual
+elements.</P>
+
+<P>For example:</P>
+
+<UL>
+<LI><B>&quot;a{2,3}b&quot;</B> matches the target sequence &quot;aab&quot; and
+the target sequence &quot;aaab&quot;, but does not match the target sequence
+&quot;ab&quot; or the target sequence &quot;aaaab&quot;.</LI>
+</UL>
+
+<H3><A NAME="Alternation"></A>Alternation</H3>
+
+<P>For all regular expression grammars except <I>BRE</I> and <I>grep</I>, a
+concatenated regular expression can be followed by the character '<B>|</B>'
+and another concatenated regular expression, which can be followed by
+another '|' and another concatenated regular expression, and so on. Such an
+expression matches any target sequence that matches one or more of the
+concatenated regular expressions. When more than one of the concatenated regular
+expressions matches the target sequence, <I>ECMAScript</I> chooses the first of
+the concatenated regular expressions that matches the sequence as the
+match (<B><A HREF="#first_match">first match</A></B>); the other regular
+expression grammars choose the one that results in the
+<B><A HREF="#longest_match">longest match</A></B>.</P>
+
+<P>For example:</P>
+
+<UL>
+<LI><B>&quot;ab|cd&quot;</B> matches the target sequence &quot;ab&quot; and
+the target sequence &quot;cd&quot;, but does not match the target sequence
+&quot;abd&quot; or the target sequence &quot;acd&quot;.</LI>
+</UL>
+
+<P>In <I>grep</I> and <I>egrep</I>, a newline character ('<B>\n</B>') can
+be used to separate alternations.</P>
+
+<H3><A NAME="Subexpression"></A>Subexpression</H3>
+
+<P>A <B><A NAME="subexpression"></A>subexpression</B> is a
+<B><A NAME="concatenation"></A>concatenation</B>
+in <I>BRE</I> and <I>grep</I>, or an
+<B><A NAME="alternation"></A>alternation</B> in
+the other regular expression grammars.</P>
+
+<H2><A NAME="Grammar_Summary"></A>Grammar Summary</H2>
+
+<TABLE ALIGN="LEFT" BORDER="1">
+<CAPTION>Elements Used in Different Grammars</CAPTION>
+<TR>
+ <TH>Element</TH>
+ <TH>BRE</TH>
+ <TH>ERE</TH>
+ <TH>ECMA</TH>
+ <TH>grep</TH>
+ <TH>egrep</TH>
+ <TH>awk</TH>
+</TR>
+<TR>
+ <TD><A HREF="#alternation">alternation</A> using '|'</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#alternation">alternation</A> using '\n'</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#anchor">anchor</A></TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#back_reference">back reference</A></TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#bracket_expression">bracket expression</A></TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#capture_group">capture group</A> using &quot;()&quot;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#capture_group">capture group</A> using &quot;\(\)&quot;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#control_escape_sequence">control escape sequence</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#dsw_character_escape">dsw character escape</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#file_format_escape">file format escape</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#hexadecimal_escape_sequence">hexadecimal escape sequence</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#identity_escape">identity escape</A></TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#negative_assert">negative assert</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#negative_word_boundary_assert">negative word boundary assert</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#non-capture_group">non-capture group</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#non-greedy">non-greedy</A> repetition</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#octal_escape_sequence">octal escape sequence</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#ordinary_character">ordinary character</A></TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#positive_assert">positive assert</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#Repetition">repetition</A> using "{}"</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#Repetition">repetition</A> using "\{\}"</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#Repetition">repetition</A> using '*'</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#Repetition">repetition</A> using '?' and '+'</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#unicode_escape_sequence">unicode escape sequence</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+<TR>
+ <TD><A HREF="#wildcard_character">wildcard character</A></TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">+</TD>
+</TR>
+<TR>
+ <TD><A HREF="#word_boundary_assert">word boundary assert</A></TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">+</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+ <TD ALIGN="CENTER">&nbsp;</TD>
+</TR>
+</TABLE>
+<BR CLEAR="ALL"><BR>
+
+<H2><A NAME="Semantic_Details"></A>Semantic Details</H2>
+
+<H3>Anchor</H3>
+<P>An <B><A NAME="anchor"></A>anchor</B> matches a position in the target
+string and not a character. A <B>'^'</B> matches the beginning of the
+target string, and a <B>'$'</B> matches the end of the target string.</P>
+
+
+<H3>Back Reference</H3>
+<P>A <B><A NAME="back_reference"></A>back reference</B> is a backslash followed
+by a decimal value N. It matches the contents of the
+Nth <A HREF="#capture_group">capture group</A>.
+The value of <CODE>N</CODE> must not be greater than the number of capture
+groups that precede the back reference. In <I>BRE</I> and <I>grep</I> the value
+of N is determined by the decimal digit that follows the backslash. In
+<I>ECMAScript</I> the value of N is determined by all of the decimal digits
+that immediately follow the backslash. Thus, in <I>BRE</I> and <I>grep</I> the
+value of N is never greater than 9, even if the regular expression has more
+than nine capture groups.
+In <I>ECMAScript</I> the value of N is unbounded.</P>
+
+<P>Examples:</P>
+
+<UL>
+<LI><B>&quot;((a+)(b+))(c+)\3&quot;</B> matches the target sequence
+&quot;aabbbcbbb&quot;. The back reference &quot;\3&quot; matches the
+text in the third capture group, that is, the &quot;(b+)&quot;. It
+does not match the target sequence
+&quot;aabbbcbb&quot;.</LI>
+<LI><B>&quot;(a)\2&quot;</B> is not valid.</LI>
+<LI><B>&quot;(b(((((((((a))))))))))\10&quot;</B> has a different meaning
+in <I>BRE</I> and in <I>ECMAScript</I>. In <I>BRE</I> the back reference
+is &quot;\1&quot;. It matches the contents of the first capture group (i.e.
+the one beginning with &quot;(b&quot; and ending with the final &quot;)&quot;
+preceding the back reference), and
+the final '0' matches the ordinary character '0'. In <I>ECMAScript</I> the
+back reference is &quot;\10&quot;. It matches the tenth capture group (i.e.
+the innermost one).</LI>
+</UL>
+
+<H3>Bracket Expression</H3>
+<P>A <B><A NAME="bracket_expression"></A>bracket expression</B> defines a set
+of characters and <B><A HREF="#collating_element">collating elements</A></B>.
+If the bracket expression begins with the character <B>'^'</B> the match
+succeeds if none of the elements in the set matches the current character in
+the target sequence. Otherwise, the match succeeds if any of the elements
+in the set matches the current character in the target sequence.</P>
+
+<P>The set of characters can be defined by listing any combination of
+<B><A HREF="#individual_character">individual characters</A></B>,
+<B><A HREF="#character_range">character ranges</A></B>,
+<B><A HREF="#character_class">character classes</A></B>,
+<B><A HREF="#equivalence_class">equivalence classes</A></B>, and
+<B><A HREF="#collating_symbol">collating symbols</A></B>.</P>
+
+<H3>Capture Group</H3>
+<P>A <B><A NAME="capture_group"></A>capture group</B> marks its contents
+as a single unit in the regular expression grammar and labels the target
+text that matches its contents. The label associated with each capture group
+is a number, determined by counting the left parentheses marking capture
+groups up to and including the left parenthesis marking the current
+capture group. In this implementation, the maximum number of capture
+groups is 31.</P>
+
+<P>Examples:</P>
+
+<UL>
+<LI><B>&quot;ab+&quot;</B> matches the target sequence &quot;abb&quot; but
+not the target sequence &quot;abab&quot;.</LI>
+<LI><B>&quot;(ab)+&quot;</B> does not match the target sequence &quot;abb&quot;
+but matches the target sequence &quot;abab&quot;.</LI>
+<LI><B>&quot;((a+)(b+))(c+)&quot;</B> matches the target sequence
+&quot;aabbbc&quot; and associates capture group 1 with the subsequence
+&quot;aabbb&quot;, capture group 2 with the subsequence &quot;aa&quot;,
+capture group 3 with &quot;bbb&quot;, and capture group 4 with the
+subsequence &quot;c&quot;.</LI>
+</UL>
+
+<H3>Character Class</H3>
+<P>A <B><A NAME="character_class"></A>character class</B> in a bracket
+expression adds all the characters in the named class to the character
+set defined by the bracket expression. To create a character class, use
+&quot;[:&quot; followed by the name of the class followed by &quot;:]&quot;.
+Internally, names of character classes are recognized by calling
+<CODE>id = traits.lookup_classname</CODE>.
+A character <CODE>ch</CODE> belongs to such a class if
+<CODE>traits.isctype(ch, id)</CODE> returns true. The default
+<CODE>regex_traits</CODE> template supports the following class names:</P>
+
+<UL>
+<LI><B>&quot;alnum&quot;</B> -- lowercase letters, uppercase letters,
+and digits;</LI>
+<LI><B>&quot;alpha&quot;</B> -- lowercase letters and uppercase letters;</LI>
+<LI><B>&quot;blank&quot;</B> -- space or tab;</LI>
+<LI><B>&quot;cntrl&quot;</B> -- the
+<A HREF="#file_format_escape">file format escape</A> characters;</LI>
+<LI><B>&quot;digit&quot;</B> -- digits;</LI>
+<LI><B>&quot;graph&quot;</B> -- lowercase letters, uppercase letters,
+digits, and punctuation;</LI>
+<LI><B>&quot;lower&quot;</B> -- lowercase letters;</LI>
+<LI><B>&quot;print&quot;</B> -- lowercase letters, uppercase letters,
+digits, punctuation, and space;</LI>
+<LI><B>&quot;punct&quot;</B> -- punctuation;</LI>
+<LI><B>&quot;space&quot;</B> -- space;</LI>
+<LI><B>&quot;upper&quot;</B> -- uppercase characters;</LI>
+<LI><B>&quot;xdigit&quot;</B> -- digits, 'a', 'b', 'c', 'd', 'e', 'f',
+'A', 'B', 'C', 'D', 'E', 'F';</LI>
+<LI><B>&quot;d&quot;</B> -- same as digit;</LI>
+<LI><B>&quot;s&quot;</B> -- same as space;</LI>
+<LI><B>&quot;w&quot;</B> -- same as alnum.</LI>
+</UL>
+
+<H3>Character Range</H3>
+<P>A <B><A NAME="character_range"></A>character range</B> in a bracket
+expression adds all the characters in the range to the character set
+defined by the bracket expression. To create a character range put the
+character '-' between the first and last characters in the range. This
+puts all the characters whose numeric value is greater than or equal to
+the numeric value of the first character and less than or equal to the
+numeric value of the last character into the set. Note that this set of
+added characters depends on the platform-specific representation of characters.
+If the character '-' occurs at the beginning or end of a bracket expression
+or as the first or last character of a character range it represents itself.</P>
+
+<P>Examples:</P>
+
+<UL>
+<LI><B>&quot;[0-7]&quot;</B> represents the set of characters { '0', '1',
+'2', '3', '4', '5', '6', '7' }. It matches the target sequences
+&quot;0&quot;, &quot;1&quot;, etc., but not &quot;a&quot;.</LI>
+<LI><B>&quot;[h-k]&quot;</B> represents the set of characters { 'h', 'i',
+'j', 'k' } on systems that use the ASCII character encoding; it matches
+the target sequences &quot;h&quot;, &quot;i&quot;, etc., but not
+&quot;\x8A&quot; or &quot;0&quot;.</LI>
+<LI><B>&quot;[h-k]&quot;</B> represents the set of characters { 'h', 'i',
+'\x8A', '\x8B', '\x8C', '\x8D', '\x8E', '\x8F', '\x90', 'j', 'k' } on
+systems that use the EBCDIC character encoding ('h' is encoded as 0x88
+and 'k' is encoded as 0x92). It matches the target sequences
+&quot;h&quot;, &quot;i&quot;, &quot;\x8A&quot;, etc., but not &quot;0&quot;.</LI>
+<LI><B>&quot;[-0-24]&quot;</B> represents the set of characters { '-', '0',
+'1', '2', '4' }.</LI>
+<LI><B>&quot;[0-2-]&quot;</B> represents the set of characters { '0', '1',
+'2', '-' }.</LI>
+<LI><B>&quot;[+--]&quot;</B> on systems that use ASCII represents the set of
+characters { '+', ',', '-' }.</LI>
+</UL>
+
+<P>When using
+<B><A NAME="locale-sensitive_ranges"></A>locale-sensitive ranges</B>, however,
+the characters in a range are determined by the collation rules for the
+locale. Characters that collate after the first character in the definition
+of the range and before the last character in the definition of the range
+are in the set, as are the two end characters.</P>
+
+<H3>Collating Element</H3>
+<P>A <B><A NAME="collating_element"></A>collating element</B> is a
+multi-character sequence that is treated as a single character.
+It can contain any characters except '.', '=', or ':'.</P>
+
+<H3>Collating Symbol</H3>
+<P>A <B><A NAME="collating_symbol"></A>collating symbol</B> in a bracket
+expression adds a <B><A HREF="#collating_element">collating element</A></B>
+to the set defined by the bracket expression. To create a collating symbol,
+use &quot;[.&quot; followed by the collating element followed by
+&quot;.]&quot;.</P>
+
+<H3>Control Escape Sequence</H3>
+<P>A <B><A NAME="control_escape_sequence"></A>control escape sequence</B> is
+a backslash followed by the letter 'c' followed by one of the letters 'a'
+through 'z' or 'A' through 'Z'. It matches the ASCII control character named
+by that letter.</P>
+
+<P>For example,</P>
+
+<UL>
+<LI><B>&quot;\ci&quot;</B> matches the target sequence &quot;\x09&quot;,
+because &lt;ctrl-i&gt; has the value 0x09.</LI>
+</UL>
+
+<H3><A NAME="dsw_character_escape"></A>DSW Character Escape</H3>
+<P>A dsw character escape is
+a short name for a character class.</P>
+
+<TABLE ALIGN="LEFT" BORDER="1">
+<TR>
+ <TH>Escape Sequence</TH>
+ <TH>Equivalent Named Class</TH>
+ <TH>Default Named Class</TH>
+</TR>
+<TR>
+ <TD ALIGN="CENTER">&quot;<B>\d</B>&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[[:d:]]&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[[:digit:]]&quot;</TD>
+</TR>
+<TR>
+ <TD ALIGN="CENTER">&quot;<B>\D</B>&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[^[:d:]]&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[^[:digit:]]&quot;</TD>
+</TR>
+<TR>
+ <TD ALIGN="CENTER">&quot;<B>\s</B>&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[[:s:]]&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[[:space:]]&quot;</TD>
+</TR>
+<TR>
+ <TD ALIGN="CENTER">&quot;<B>\S</B>&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[^[:s:]]&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[^[:space:]]&quot;</TD>
+</TR>
+<TR>
+ <TD ALIGN="CENTER">&quot;<B>\w</B>&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[[:w:]]&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[a-zA-Z0-9_]&quot;*</TD>
+</TR>
+<TR>
+ <TD ALIGN="CENTER">&quot;<B>\W</B>&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[^[:w:]]&quot;</TD>
+ <TD ALIGN="CENTER">&quot;[^a-zA-Z0-9_]&quot;*</TD>
+</TR>
+<TR>
+ <TD ALIGN="LEFT" COLSPAN="3">*ASCII character set</TD>
+</TR>
+</TABLE>
+<BR CLEAR="ALL"><BR>
+
+
+<H3>Equivalence Class</H3>
+<P>An <B><A NAME="equivalence_class"></A>equivalence class</B> in a
+bracket expression adds all the characters and
+<B><A HREF="#collating_element">collating elements</A></B> that are
+equivalent to the collating element in the equivalence class definition
+to the set defined by the bracket expression. To create an equivalence class,
+use &quot;[=&quot; followed by a collating element followed by &quot;=]&quot;.
+Internally, two collating elements <CODE>elt1</CODE> and <CODE>elt2</CODE>
+are equivalent if
+<CODE>traits.transform_primary(elt1.begin(), elt1.end()) ==
+traits.transform_primary(elt2.begin(), elt2.end())</CODE>.</P>
+
+<H3>File Format Escape</H3>
+<P>A <B><A NAME="file_format_escape"></A>file format escape</B> consists
+of the usual C language character escape sequences, &quot;\\&quot;,
+&quot;\a&quot;, &quot;\b&quot;, &quot;\f&quot;, &quot;\n&quot;, &quot;\r&quot;,
+&quot;\t&quot;, &quot;\v&quot;, with their usual meanings, namely, backslash,
+alert, backspace, form feed, newline, carriage return, horizontal tab, and
+vertical tab, respectively. In <I>ECMAScript</I> &quot;\a&quot; is not allowed.
+(&quot;\\&quot; is allowed, but technically
+it's an identity escape, not a file format escape).</P>
+
+<H3>Hexadecimal Escape Sequence</H3>
+<P>A <B><A NAME="hexadecimal_escape_sequence"></A>hexadecimal escape sequence</B>
+is a backslash followed by the letter 'x' followed by two hexadecimal digits
+(0-9a-fA-F). It matches a character in the target sequence with the value
+specified by the two digits.</P>
+
+<P>For example,</P>
+
+<UL>
+<LI><B>&quot;\x41&quot;</B> matches the target sequence &quot;A&quot; when
+the ASCII character encoding is used.</LI>
+</UL>
+
+<H3>Identity Escape</H3>
+<P>An <B><A NAME="identity_escape"></A>identity escape</B> is a backslash
+followed by a single character. It matches that character. It is needed
+when the character has a special meaning; using the identity escape removes
+the special meaning.</P>
+
+<P>For example,</P>
+
+<UL>
+<LI><B>&quot;a*&quot;</B> matches the target sequence &quot;aaa&quot; but
+does not match the target sequence &quot;a*&quot;</LI>
+<LI><B>&quot;a\*&quot;</B> does not match the target sequence
+&quot;aaa&quot; but does match the target sequence &quot;a*&quot;</LI>
+</UL>
+
+<P>The set of characters allowed in an identity escape depends on
+the regular expression grammar.</P>
+
+<UL>
+<LI><I>BRE</I>, <I>grep</I> -- { '(', ')', '{', '}', '.', '[', '\', '*',
+'^', '$' }.</LI>
+<LI><I>ERE</I>, <I>egrep</I> -- { '(', ')', '{', '}', '.', '[', '\', '*', '^',
+'$', '+', '?', '|' }.</LI>
+<LI><I>awk</I> -- <I>ERE</I> plus { '"', '/' }.</LI>
+<LI><I>ECMAScript</I> -- all characters except those that can be part of an
+identifier. Roughly speaking, this is letters, digits, '$', '_', and
+unicode escape sequences. For full details see the
+<A HREF="#ECMAScript">ECMAScript Language Specification</A>.</LI>
+</UL>
+
+<H3>Individual Character</H3>
+<P>An <B><A NAME="individual_character"></A>individual character</B> in a
+bracket expression adds that character to the character set defined by the
+bracket expression. A '^' anywhere other than at the beginning of a bracket
+expression represents itself.</P>
+
+<P>Examples:</P>
+
+<UL>
+<LI><B>&quot;[abc]&quot;</B> matches the target sequences &quot;a&quot;,
+&quot;b&quot;, and &quot;c&quot; but not the sequence &quot;d&quot;.</LI>
+<LI><B>&quot;[^abc]&quot;</B> matches the target sequence &quot;d&quot;,
+but not &quot;a&quot;, &quot;b&quot;, or &quot;c&quot;.</LI>
+<LI><B>&quot;[a^bc]&quot;</B> matches the target sequences &quot;a&quot;,
+&quot;b&quot;, &quot;c&quot;, and &quot;^&quot; but not the sequence
+&quot;d&quot;.</LI>
+</UL>
+
+<P>In all the regular expression grammars except <I>ECMAScript</I> if a ']'
+is the first character following the opening '[' or the first character
+following an initial '^' it represents itself.</P>
+
+<P>Examples:</P>
+
+<UL>
+<LI><B>&quot;[]a&quot;</B> is invalid, because there is no ']' to end the
+bracket expression.</LI>
+<LI><B>&quot;[]abc]&quot;</B> matches the target sequences &quot;a&quot;,
+&quot;b&quot;, &quot;c&quot;, and &quot;]&quot; but not the sequence
+&quot;d&quot;.</LI>
+<LI><B>&quot;[^]abc]&quot;</B> matches the target sequence &quot;d&quot;,
+but not &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, or &quot;]&quot;.</LI>
+</UL>
+
+<P>In <I>ECMAScript</I> use '\]' to represent the character ']' in a bracket
+expression.</P>
+
+<P>Examples:</P>
+
+<UL>
+<LI><B>&quot;[]a&quot;</B> matches the target sequence &quot;a&quot; because
+the bracket expression is empty.</LI>
+<LI><B>&quot;[\]abc]&quot;</B> matches the target sequences &quot;a&quot;,
+&quot;b&quot;, &quot;c&quot;, and &quot;]&quot; but not the sequence
+&quot;d&quot;.</LI>
+</UL>
+
+<H3>Negative Assert</H3>
+<P>A <B><A NAME="negative_assert"></A>negative assert</B> matches
+anything but its contents; it does not consume any characters in the
+target sequence.</P>
+
+<P>For example,</P>
+
+<UL>
+<LI><B>&quot;(?!aa)(a*)&quot;</B> matches the target sequence
+&quot;a&quot; and associates capture group 1 with the subsequence
+&quot;a&quot;. It does not match the target sequence &quot;aa&quot; or the
+target sequence &quot;aaa&quot;.</LI>
+</UL>
+
+<H3>Negative Word Boundary Assert</H3>
+<P>A <B><A NAME="negative_word_boundary_assert"></A>negative word boundary assert</B>
+matches if the current position in the target string is not immediately after a
+<B><A HREF="#word_boundary">word boundary</A></B>.</P>
+
+<H3>Non-capture Group</H3>
+<P>A <B><A NAME="non-capture_group"></A>non-capture group</B>
+marks its contents as a single unit in the regular expression grammar, but
+does not label the target text.</P>
+
+<P>For example,</P>
+
+<UL>
+<LI><B>&quot;(a)(?:b)*(c)</B> matches the target text &quot;abbc&quot; and
+associates capture group 1 with the subsequence &quot;a&quot; and capture
+group 2 with the subsequence &quot;c&quot;.</LI>
+</UL>
+
+<H3>Non-greedy Repetition</H3>
+<P>A <B><A NAME="non-greedy"></A>non-greedy</B> repetition consumes
+the shortest subsequence of the target sequence that matches the pattern.
+A <B><A NAME="greedy"></A>greedy</B> repetition consumes the longest.</P>
+
+<P>For example,</P>
+
+<UL>
+<LI><B>&quot;(a+)(a*b)&quot;</B> matches the target sequence &quot;aaab&quot;.
+When using a non-greedy repetition it associates
+capture group 1 with the subsequence &quot;a&quot; at the
+beginning of the target sequence and capture group 2 with the subsequence
+&quot;aab&quot; at the end of the target sequence. When using a greedy match
+it associates capture group 1 with the subsequence &quot;aaa&quot; and
+capture group 2 with the subsequence &quot;b&quot;.</LI>
+</UL>
+
+<H3>Octal Escape Sequence</H3>
+<P>An <B><A NAME="octal_escape_sequence"></A>octal escape sequence</B>
+is a backslash followed by one, two, or three octal digits (0-7).
+It matches a character in the target sequence with the value specified by those
+digits. If all the digits are '0' the sequence is invalid.</P>
+
+<P>For example,</P>
+
+<UL>
+<LI><B>&quot;\101&quot;</B> matches the target sequence &quot;A&quot; when
+the ASCII character encoding is used.</LI>
+</UL>
+
+<H3>Ordinary Character</H3>
+<P>An <B><A NAME="ordinary_character"></A>ordinary character</B> is any
+valid character that doesn't have a special meaning in the current grammar.</P>
+
+<P>In <I>ECMAScript</I> the characters that have special meanings are:</P>
+
+<PRE>    ^  $  \  .  *  +  ?  (  )  [  ]  {  }  |</PRE>
+
+<P>In <I>BRE</I> and <I>grep</I> the characters that have special meanings are:</P>
+
+<PRE>    .   [   \</PRE>
+
+<P>In addition, the following characters have special meanings when used in
+a particular context:</P>
+
+<UL>
+<LI><B>'*'</B> has a special meaning in all cases except when it
+is the first character in a regular expression or the first character following
+an initial '^' in a regular expression and when it is the first
+character of a capture group or the first character following an initial
+'^' in a capture group.</LI>
+<LI><B>'^'</B> has a special meaning when it is the first character of a
+regular expression.</LI>
+<LI><B>'$'</B> has a special meaning when it is the last character of a
+regular expression.</LI>
+</UL>
+
+<P>In <I>ERE</I>, <I>egrep</I>, and <I>awk</I>  the following characters have
+special meanings:</P>
+
+<PRE>    .   [   \   (   *   +   ?   {   |</PRE>
+
+<P>In addition, the following characters have special meanings when used in
+a particular context.</P>
+
+<UL>
+<LI><B>')'</B> has a special meaning when it matches a preceding '('.</LI>
+<LI><B>'^'</B> has a special meaning when it is the first character of a
+regular expression.</LI>
+<LI><B>'$'</B> has a special meaning when it is the last character of a
+regular expression.</LI>
+</UL>
+
+<P>An ordinary character matches the same character in the target sequence.
+By default this means that the match succeeds if the two characters are
+represented by the same value. In a
+<B><A NAME="case-insensitive"></A>case-insensitive</B> match two
+characters <CODE>ch0</CODE> and <CODE>ch1</CODE> match
+if <CODE>traits.translate_nocase(ch0) == traits.translate_nocase(ch1)</CODE>.
+In a <B><A NAME="locale-sensitive"></A>locale-sensitive</B> match
+two characters <CODE>ch0</CODE> and <CODE>ch1</CODE> match if
+<CODE>traits.translate(ch0) == traits.translate(ch1)</CODE>.</P>
+
+<H3>Positive Assert</H3>
+<P>A <B><A NAME="positive_assert"></A>positive assert</B> matches its
+contents, but does not consume any characters in the target sequence.</P>
+
+<P>Examples:</P>
+
+<UL>
+<LI><B>&quot;(?=aa)(a*)&quot;</B> matches the target sequence &quot;aaaa&quot;
+and associates capture group 1 with the subsequence &quot;aaaa&quot;.</LI>
+<LI>In contrast, <B>&quot;(aa)(a*)&quot;</B> matches the target sequence
+&quot;aaaa&quot; and associates capture group 1 with the subsequence
+&quot;aa&quot; at the beginning of the target sequence and capture group 2
+with the subsequence &quot;aa&quot; at the end of the target sequence.</LI>
+<LI><B>&quot;(?=aa)(a)|(a)&quot;</B> matches the target sequence &quot;a&quot;
+and associates capture group 1 with an empty sequence (because the positive
+assert failed) and capture group 2 with the subsequence &quot;a&quot;.
+It also matches the target sequence &quot;aa&quot; and associates
+capture group 1 with the subsequence &quot;aa&quot; and capture group 2
+with an empty sequence.</LI>
+</UL>
+
+<H3>Unicode Escape Sequence</H3>
+<P>A <B><A NAME="unicode_escape_sequence"></A>unicode escape sequence</B>
+is a backslash followed by the letter 'u' followed by four
+hexadecimal digits (0-9a-fA-F). It matches a character in the target sequence
+with the value specified by the four digits.</P>
+
+<P>For example,</P>
+
+<UL>
+<LI><B>&quot;\u0041&quot;</B> matches the target sequence &quot;A&quot; when
+the ASCII character encoding is used.</LI>
+</UL>
+
+<H3>Wildcard Character</H3>
+<P>A <B><A NAME="wildcard_character"></A>wildcard character</B> matches any
+character in the target expression except a newline.</P>
+
+<H3>Word Boundary</H3>
+<P>A <B><A NAME="word_boundary"></A>word boundary</B> occurs in the following
+situations:</P>
+
+<UL>
+<LI>the current character is at the beginning of the target sequence and
+the current character is one of the <B>word characters</B> <I>A-Za-z0-9_</I></LI>
+<LI>the current character position is past the end of the target sequence
+and the last character in the target sequence is one of the <B>word characters</B></LI>
+<LI>the current character is one of the <B>word characters</B> and the
+preceding character is not</LI>
+<LI>the current character is not one of the <B>word characters</B> and the
+preceding character is.</LI>
+</UL>
+
+<H3>Word Boundary Assert</H3>
+<P>A <B><A NAME="word_boundary_assert"></A>word boundary assert</B>
+matches if the current position in the target string is immediately after a
+<B><A HREF="#word_boundary">word boundary</A></B>.</P>
+
+<H2><A NAME="Matching_and_Searching"></A>Matching and Searching</H2>
+
+<P>For a regular expression to <B><A NAME="match"></A>match</B> a target
+sequence, the entire regular expression must match the entire target
+sequence.</P>
+
+<P>For example:</P>
+
+<UL>
+<LI>the regular expression <B>&quot;bcd&quot;</B> matches the target sequence
+&quot;bcd&quot; but does not match the target sequence &quot;abcd&quot; nor
+the target sequence &quot;bcde&quot;.</LI>
+</UL>
+
+<P>For a regular expression <B><A NAME="search"></A>search</B> to succeed
+there must be a subsequence somewhere in the target sequence that matches
+the regular expression. The search ordinarily finds the leftmost matching
+subsequence.</P>
+
+<P>Examples:</P>
+
+<UL>
+<LI>A search for the regular expression <B>&quot;bcd&quot;</B> in the target
+sequence &quot;bcd&quot; succeeds and matches the entire sequence; the same
+search in the target sequence &quot;abcd&quot; also succeeds and matches the
+last three characters; the same search in the target sequence &quot;bcde&quot;
+also succeeds, and matches the first three characters.</LI>
+<LI>A search for the regular expression <B>&quot;bcd&quot;</B> in the target
+sequence &quot;bcdbcd&quot; succeeds and matches the first three characters.</LI>
+</UL>
+
+<P>If there is more than one subsequence that matches at some position in the
+target sequence there are two ways to choose the matching pattern.
+<B><A NAME="first_match"></A>First match</B> chooses the subsequence that was
+found first when matching the regular expression.
+<B><A NAME="longest_match"></A>Longest match</B> chooses the longest
+subsequence from the ones that match at that point. If there is more than one
+subsequence with the maximal length, longest match chooses the subsequence that
+was found first.</P>
+
+<P>For example:</P>
+
+<UL>
+<LI>a search for the regular expression <B>&quot;b|bc&quot;</B> in the target
+sequence &quot;abcd&quot; matches the subsequence &quot;b&quot; with first
+match, because the left-hand term of the alternation matched that subsequence
+and there was no need to try the right-hand term of the alternation; the same
+search matches &quot;bc&quot; with longest match, because &quot;bc&quot; is
+longer than &quot;b&quot;.</LI>
+</UL>
+
+<P>For example, with a partial match:</P>
+
+<UL>
+<LI><B>&quot;ab&quot;</B> matches the target sequence &quot;a&quot; but not
+&quot;ac&quot;.</LI>
+</UL>
+
+<H2><A NAME="Replacement_Text"></A>Replacement Text</H2>
+
+<TABLE ALIGN="LEFT" BORDER="1">
+<CAPTION>Specifying Replacement Text for ECMAScript and sed</CAPTION>
+<TR>
+ <TH><A NAME="ECMAScript_format_rules"></A>ECMAScript format rules</TH>
+ <TH><A NAME="sed_format_rules"></A>sed format rules</TH>
+ <TH>Replacement text</TH>
+</TR>
+<TR>
+ <TD>&quot;<B>$&amp;</B>&quot;</TD>
+ <TD>&quot;<B>&amp;</B>&quot;</TD>
+ <TD>The character sequence that matched the entire regular expression
+ (<CODE>[match[0].first, match[0].second)</CODE>)</TD>
+</TR>
+<TR>
+ <TD>&quot;<B>$$</B>&quot;</TD>
+ <TD>&nbsp;</TD>
+ <TD>&quot;$&quot;</TD>
+</TR>
+<TR>
+ <TD>&nbsp;</TD>
+ <TD>&quot;<B>\&amp;</B>&quot;</TD>
+ <TD>&quot;&amp;&quot;</TD>
+</TR>
+<TR>
+ <TD>&quot;<B>$`</B>&quot; (dollar sign followed by back quote)</TD>
+ <TD>&nbsp;</TD>
+ <TD>The character sequence that precedes the subsequence that matched
+ the regular expression (<CODE>[match.prefix().first, match.prefix().second)</CODE>)</TD>
+</TR>
+<TR>
+ <TD>&quot;<B>$'</B>&quot; (dollar sign followed by forward quote)</TD>
+ <TD>&nbsp;</TD>
+ <TD>The character sequence that follows the subsequence that matched
+ the regular expression (<CODE>[match.suffix().first, match.suffix().second)</CODE>)</TD>
+</TR>
+<TR>
+ <TD>&quot;<B>$n</B>&quot;</TD>
+ <TD>&quot;<B>\n</B>&quot;</TD>
+ <TD>The character sequence that matched the <CODE>n<SUP>th</SUP></CODE>
+ (<CODE>0 &lt;= n &lt;= 9</CODE>)
+ capture group (<CODE>[match[n].first, match[n].second)</CODE></TD>
+</TR>
+<TR>
+ <TD>&nbsp;</TD>
+ <TD>&quot;<B>\\n</B>&quot;</TD>
+ <TD>&quot;\n&quot;</TD>
+</TR>
+<TR>
+ <TD>&quot;<B>$nn</B>&quot;</TD>
+ <TD>&nbsp;</TD>
+ <TD>The character sequence that matched the <CODE>nn<SUP>th</SUP></CODE>
+ (<CODE>10 &lt;= nn &lt;= 99</CODE>)
+ capture group (<CODE>[match[nn].first, match[nn].second)</CODE></TD>
+</TR>
+</TABLE>
+<BR CLEAR="ALL"><BR>
+
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by Dinkumware, Ltd. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

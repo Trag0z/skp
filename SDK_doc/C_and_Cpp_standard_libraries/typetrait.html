@@ -1,0 +1,1756 @@
+<HTML><HEAD>
+<TITLE>&lt;type_traits&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;type_traits&gt;"></A><CODE>&lt;type_traits&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P><B><CODE><A HREF="#add_const">add_const</A>
+&middot; <A HREF="#add_cv">add_cv</A>
+&middot; <A HREF="#add_pointer">add_pointer</A>
+&middot; <A HREF="#add_lvalue_reference">add_lvalue_reference</A>
+&middot; <A HREF="#add_reference">add_reference</A>
+&middot; <A HREF="#add_rvalue_reference">add_rvalue_reference</A>
+&middot; <A HREF="#add_volatile">add_volatile</A>
+&middot; <A HREF="#aligned_storage">aligned_storage</A>
+&middot; <A HREF="#aligned_union">aligned_union</A>
+&middot; <A HREF="#alignment_of">alignment_of</A>
+&middot; <A HREF="#common_type">common_type</A>
+&middot; <A HREF="#conditional">conditional</A>
+&middot; <A HREF="#decay">decay</A>
+&middot; <A HREF="#enable_if">enable_if</A>
+&middot; <A HREF="#extent">extent</A>
+&middot; <A HREF="#false_type">false_type</A>
+&middot; <A HREF="#integral_constant">integral_constant</A>
+&middot; <A HREF="#make_signed">make_signed</A>
+&middot; <A HREF="#make_unsigned">make_unsigned</A>
+&middot; <A HREF="#rank">rank</A>
+&middot; <A HREF="#remove_all_extents">remove_all_extents</A>
+&middot; <A HREF="#remove_const">remove_const</A>
+&middot; <A HREF="#remove_cv">remove_cv</A>
+&middot; <A HREF="#remove_extent">remove_extent</A>
+&middot; <A HREF="#remove_pointer">remove_pointer</A>
+&middot; <A HREF="#remove_reference">remove_reference</A>
+&middot; <A HREF="#remove_volatile">remove_volatile</A>
+&middot; <A HREF="#result_of">result_of</A>
+&middot; <A HREF="#true_type">true_type</A>
+&middot; <A HREF="#underlying_type">underlying_type</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#has_copy_assign">has_copy_assign</A>
+&middot; <A HREF="#has_copy_constructor">has_copy_constructor</A>
+&middot; <A HREF="#has_default_constructor">has_default_constructor</A>
+&middot; <A HREF="#has_move_assign">has_move_assign</A>
+&middot; <A HREF="#has_move_constructor">has_move_constructor</A>
+&middot; <A HREF="#has_nothrow_assign">has_nothrow_assign</A>
+&middot; <A HREF="#has_nothrow_constructor">has_nothrow_constructor</A>
+&middot; <A HREF="#has_nothrow_copy">has_nothrow_copy</A>
+&middot; <A HREF="#has_nothrow_copy_assign">has_nothrow_copy_assign</A>
+&middot; <A HREF="#has_nothrow_copy_constructor">has_nothrow_copy_constructor</A>
+&middot; <A HREF="#has_nothrow_default_constructor">has_nothrow_default_constructor</A>
+&middot; <A HREF="#has_nothrow_move_assign">has_nothrow_move_assign</A>
+&middot; <A HREF="#has_nothrow_move_constructor">has_nothrow_move_constructor</A>
+&middot; <A HREF="#has_trivial_assign">has_trivial_assign</A>
+&middot; <A HREF="#has_trivial_constructor">has_trivial_constructor</A>
+&middot; <A HREF="#has_trivial_copy">has_trivial_copy</A>
+&middot; <A HREF="#has_trivial_copy_assign">has_trivial_copy_assign</A>
+&middot; <A HREF="#has_trivial_copy_constructor">has_trivial_copy_constructor</A>
+&middot; <A HREF="#has_trivial_default_constructor">has_trivial_default_constructor</A>
+&middot; <A HREF="#has_trivial_destructor">has_trivial_destructor</A>
+&middot; <A HREF="#has_trivial_move_assign">has_trivial_move_assign</A>
+&middot; <A HREF="#has_trivial_move_constructor">has_trivial_move_constructor</A>
+&middot; <A HREF="#has_virtual_destructor">has_virtual_destructor</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#is_abstract">is_abstract</A>
+&middot; <A HREF="#is_arithmetic">is_arithmetic</A>
+&middot; <A HREF="#is_array">is_array</A>
+&middot; <A HREF="#is_assignable">is_assignable</A>
+&middot; <A HREF="#is_base_of">is_base_of</A>
+&middot; <A HREF="#is_class">is_class</A>
+&middot; <A HREF="#is_compound">is_compound</A>
+&middot; <A HREF="#is_const">is_const</A>
+&middot; <A HREF="#is_constructible">is_constructible</A>
+&middot; <A HREF="#is_convertible">is_convertible</A>
+&middot; <A HREF="#is_copy_assignable">is_copy_assignable</A>
+&middot; <A HREF="#is_copy_constructible">is_copy_constructible</A>
+&middot; <A HREF="#is_default_constructible">is_default_constructible</A>
+&middot; <A HREF="#is_destructible">is_destructible</A>
+&middot; <A HREF="#is_move_assignable">is_move_assignable</A>
+&middot; <A HREF="#is_move_constructible">is_move_constructible</A>
+&middot; <A HREF="#is_empty">is_empty</A>
+&middot; <A HREF="#is_enum">is_enum</A>
+&middot; <A HREF="#is_floating_point">is_floating_point</A>
+&middot; <A HREF="#is_function">is_function</A>
+&middot; <A HREF="#is_fundamental">is_fundamental</A>
+&middot; <A HREF="#is_integral">is_integral</A>
+&middot; <A HREF="#is_literal_type">is_literal_type</A>
+&middot; <A HREF="#is_lvalue_reference">is_lvalue_reference</A>
+&middot; <A HREF="#is_member_function_pointer">is_member_function_pointer</A>
+&middot; <A HREF="#is_member_object_pointer">is_member_object_pointer</A>
+&middot; <A HREF="#is_member_pointer">is_member_pointer</A>
+&middot; <A HREF="#is_nothrow_assignable">is_nothrow_assignable</A>
+&middot; <A HREF="#is_nothrow_constructible">is_nothrow_constructible</A>
+&middot; <A HREF="#is_nothrow_copy_assignable">is_nothrow_copy_assignable</A>
+&middot; <A HREF="#is_nothrow_copy_constructible">is_nothrow_copy_constructible</A>
+&middot; <A HREF="#is_nothrow_default_constructible">is_nothrow_default_constructible</A>
+&middot; <A HREF="#is_nothrow_destructible">is_nothrow_destructible</A>
+&middot; <A HREF="#is_nothrow_move_assignable">is_nothrow_move_assignable</A>
+&middot; <A HREF="#is_nothrow_move_constructible">is_nothrow_move_constructible</A>
+&middot; <A HREF="#is_object">is_object</A>
+&middot; <A HREF="#is_pod">is_pod</A>
+&middot; <A HREF="#is_pointer">is_pointer</A>
+&middot; <A HREF="#is_polymorphic">is_polymorphic</A>
+&middot; <A HREF="#is_reference">is_reference</A>
+&middot; <A HREF="#is_rvalue_reference">is_rvalue_reference</A>
+&middot; <A HREF="#is_same">is_same</A>
+&middot; <A HREF="#is_scalar">is_scalar</A>
+&middot; <A HREF="#is_signed">is_signed</A>
+&middot; <A HREF="#is_standard_layout">is_standard_layout</A>
+&middot; <A HREF="#is_trivial">is_trivial</A>
+&middot; <A HREF="#is_trivially_assignable">is_trivially_assignable</A>
+&middot; <A HREF="#is_trivially_constructible">is_trivially_constructible</A>
+&middot; <A HREF="#is_trivially_copyable">is_trivially_copyable</A>
+&middot; <A HREF="#is_trivially_copy_assignable">is_trivially_copy_assignable</A>
+&middot; <A HREF="#is_trivially_copy_constructible">is_trivially_copy_constructible</A>
+&middot; <A HREF="#is_trivially_default_constructible">is_trivially_default_constructible</A>
+&middot; <A HREF="#is_trivially_destructible">is_trivially_destructible</A>
+&middot; <A HREF="#is_trivially_move_assignable">is_trivially_move_assignable</A>
+&middot; <A HREF="#is_trivially_move_constructible">is_trivially_move_constructible</A>
+&middot; <A HREF="#is_union">is_union</A>
+&middot; <A HREF="#is_unsigned">is_unsigned</A>
+&middot; <A HREF="#is_void">is_void</A>
+&middot; <A HREF="#is_volatile">is_volatile</A>
+</CODE></B></P>
+
+<HR>
+
+<P>Include the standard
+header <B><CODE>&lt;type_traits&gt;</CODE></B> to define several templates
+that provide compile-time constants giving information about the properties
+of their type arguments.</P>
+
+<PRE>namespace std {
+    // HELPER CLASSES
+template&lt;class Ty, Ty v&gt;
+    struct <B><A HREF="#integral_constant">integral_constant</A></B>;
+typedef integral_constant&lt;bool, false&gt; <B><A HREF="#false_type">false_type</A></B>;
+typedef integral_constant&lt;bool, true&gt; <B><A HREF="#true_type">true_type</A></B>;
+
+    // TYPE CATEGORIES
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_void">is_void</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_integral">is_integral</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_floating_point">is_floating_point</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_array">is_array</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_pointer">is_pointer</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_member_object_pointer">is_member_object_pointer</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_member_function_pointer">is_member_function_pointer</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_enum">is_enum</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_union">is_union</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_class">is_class</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_function">is_function</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_arithmetic">is_arithmetic</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_fundamental">is_fundamental</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_object">is_object</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_scalar">is_scalar</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_compound">is_compound</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_member_pointer">is_member_pointer</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_reference">is_reference</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_lvalue_reference">is_lvalue_reference</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_rvalue_reference">is_rvalue_reference</A></B>; <B>[added with C++11]</B>
+
+    // TYPE PROPERTIES
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_signed">is_signed</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_unsigned">is_unsigned</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_const">is_const</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_volatile">is_volatile</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_pod">is_pod</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_empty">is_empty</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_polymorphic">is_polymorphic</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_abstract">is_abstract</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_standard_layout">is_standard_layout</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_literal_type">is_literal_type</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_trivial">is_trivial</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_trivially_copyable">is_trivially_copyable</A></B>; <B>[added with C++11]</B>
+
+template&lt;class Ty, class... Args&gt;
+    struct <B><A HREF="#is_constructible">is_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_default_constructible">is_default_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_copy_constructible">is_copy_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_move_constructible">is_move_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class T0, class From&gt;
+    struct <B><A HREF="#is_assignable">is_assignable</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_copy_assignable">is_copy_assignable</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_move_assignable">is_move_assignable</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_destructible">is_destructible</A></B>; <B>[added with C++11]</B>
+
+template&lt;class Ty, class... Args&gt;
+    struct <B><A HREF="#is_nothrow_constructible">is_nothrow_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_nothrow_default_constructible">is_nothrow_default_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_nothrow_copy_constructible">is_nothrow_copy_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_nothrow_move_constructible">is_nothrow_move_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class T0, class From&gt;
+    struct <B><A HREF="#is_nothrow_assignable">is_nothrow_assignable</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_nothrow_copy_assignable">is_nothrow_copy_assignable</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_nothrow_move_assignable">is_nothrow_move_assignable</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_nothrow_destructible">is_nothrow_destructible</A></B>; <B>[added with C++11]</B>
+
+template&lt;class Ty, class... Args&gt;
+    struct <B><A HREF="#is_trivially_constructible">is_trivially_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_trivially_default_constructible">is_trivially_default_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_trivially_copy_constructible">is_trivially_copy_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_trivially_move_constructible">is_trivially_move_constructible</A></B>; <B>[added with C++11]</B>
+template&lt;class T0, class From&gt;
+    struct <B><A HREF="#is_trivially_assignable">is_trivially_assignable</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_trivially_copy_assignable">is_trivially_copy_assignable</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_trivially_move_assignable">is_trivially_move_assignable</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#is_trivially_destructible">is_trivially_destructible</A></B>; <B>[added with C++11]</B>
+
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_default_constructor">has_default_constructor</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_copy_constructor">has_copy_constructor</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_copy_assign">has_copy_assign</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_move_assign">has_move_assign</A></B>; <B>[removed in final C++11, not recommended]</B>
+
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_nothrow_constructor">has_nothrow_constructor</A></B>; <B>[removed with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_nothrow_default_constructor">has_nothrow_default_constructor</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_nothrow_copy">has_nothrow_copy</A></B>; <B>[removed with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_nothrow_copy_constructor">has_nothrow_copy_constructor</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_nothrow_move_constructor">has_nothrow_move_constructor</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_nothrow_assign">has_nothrow_assign</A></B>; <B>[removed with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_nothrow_copy_assign">has_nothrow_copy_assign</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_nothrow_move_assign">has_nothrow_move_assign</A></B>; <B>[removed in final C++11, not recommended]</B>
+
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_trivial_constructor">has_trivial_constructor</A></B>; <B>[removed with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_trivial_default_constructor">has_trivial_default_constructor</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_trivial_copy">has_trivial_copy</A></B>; <B>[removed with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_trivial_copy_constructor">has_trivial_copy_constructor</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_trivial_move_constructor">has_trivial_move_constructor</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_trivial_assign">has_trivial_assign</A></B>; <B>[removed with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_trivial_copy_assign">has_trivial_copy_assign</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_trivial_move_assign">has_trivial_move_assign</A></B>; <B>[removed in final C++11, not recommended]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_trivial_destructor">has_trivial_destructor</A></B>; <B>[removed with C++11]</B>
+
+template&lt;class Ty&gt;
+    struct <B><A HREF="#has_virtual_destructor">has_virtual_destructor</A></B>;
+
+template&lt;class Ty&gt;
+    struct <B><A HREF="#alignment_of">alignment_of</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#rank">rank</A></B>;
+template&lt;class Ty, unsigned I = 0&gt;
+    struct <B><A HREF="#extent">extent</A></B>;
+
+    // TYPE COMPARISONS
+template&lt;class Ty1, class Ty2&gt;
+    struct <B><A HREF="#is_same">is_same</A></B>;
+template&lt;class From, class To&gt;
+    struct <B><A HREF="#is_convertible">is_convertible</A></B>;
+template&lt;class Base, class Derived&gt;
+    struct <B><A HREF="#is_base_of">is_base_of</A></B>;
+
+    // CONST-VOLATILE MODIFICATIONS
+template&lt;class Ty&gt;
+    struct <B><A HREF="#remove_const">remove_const</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#remove_volatile">remove_volatile</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#remove_cv">remove_cv</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#add_const">add_const</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#add_volatile">add_volatile</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#add_cv">add_cv</A></B>;
+
+    // REFERENCE MODIFICATIONS
+template&lt;class Ty&gt;
+    struct <B><A HREF="#remove_reference">remove_reference</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#add_reference">add_reference</A></B>; <B>[removed with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#add_lvalue_reference">add_lvalue_reference</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#add_rvalue_reference">add_rvalue_reference</A></B>; <B>[added with C++11]</B>
+
+    // ARRAY MODIFICATIONS
+template&lt;class Ty&gt;
+    struct <B><A HREF="#remove_extent">remove_extent</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#remove_all_extents">remove_all_extents</A></B>;
+
+    // POINTER MODIFICATIONS
+template&lt;class Ty&gt;
+    struct <B><A HREF="#remove_pointer">remove_pointer</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#add_pointer">add_pointer</A></B>;
+
+    // TYPE DETERMINATIONS
+template&lt;class Ty&gt;
+    struct <B><A HREF="#result_of">result_of</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#decay">decay</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#make_signed">make_signed</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#make_unsigned">make_unsigned</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#aligned_storage">aligned_storage</A></B>;
+template&lt;size_t Len, class... Types&gt;
+    struct <B><A HREF="#aligned_union">aligned_union</A></B>; <B>[added with C++11]</B>
+template&lt;class... Types&gt;
+    struct <B><A HREF="#common_type">common_type</A></B>; <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    struct <B><A HREF="#underlying_type">underlying_type</A></B>; <B>[added with C++11]</B>
+
+    // TYPE TESTS
+template&lt;bool, class Ty = void&gt;
+    struct <B><A HREF="#enable_if">enable_if</A></B>; <B>[added with C++11]</B>
+template&lt;bool, class Ty1, class Ty2&gt;
+    struct <B><A HREF="#conditional">conditional</A></B>; <B>[added with C++11]</B>
+
+    namespace tr1 {
+using std::add_const; using std::add_cv; <B>[added with C++11]</B>
+using std::add_pointer; using std::add_reference;
+using std::add_volatile; using std::aligned_storage;
+using std::alignment_of; using std::extent; using std::false_type;
+using std::has_move_constructor; using std::has_nothrow_assign;
+using std::has_nothrow_constructor; using std::has_nothrow_copy;
+using std::has_nothrow_default_constructor; using std::has_trivial_assign;
+using std::has_trivial_constructor; using std::has_trivial_copy;
+using std::has_trivial_destructor; using std::has_virtual_destructor;
+using std::integral_constant; using std::is_abstract;
+using std::is_arithmetic; using std::is_array;
+using std::is_base_of; using std::is_class; using std::is_compound;
+using std::is_const; using std::is_convertible;
+using std::is_empty; using std::is_enum; using std::is_floating_point;
+using std::is_function; using std::is_fundamental; using std::is_integral;
+using std::is_member_function_pointer; using std::is_member_object_pointer;
+using std::is_member_pointer; using std::is_object; using std::is_pod;
+using std::is_pointer; using std::is_polymorphic; using std::is_reference;
+using std::is_same; using std::is_scalar; using std::is_signed;
+using std::is_union; using std::is_unsigned; using std::is_void;
+using std::is_volatile; using std::rank; using std::remove_all_extents;
+using std::remove_const; using std::remove_cv; using std::remove_extent;
+using std::remove_pointer; using std::remove_reference;
+using std::remove_volatile; using std::result_of;
+using std::true_type;
+    } // namespace tr1
+}  // namespace std</PRE>
+
+<P>A <B><A NAME="type_predicate"></A>type predicate</B> is a template taking
+one or more type arguments. When a type predicate
+<B><A NAME="holds_true"></A>holds true</B> it is publicly derived, directly or
+indirectly, from <A HREF="#true_type">true_type</A>. When a type predicate
+<B><A NAME="holds_false"></A>holds false</B> it is publicly derived, directly or
+indirectly, from <CODE><A HREF="#false_type">false_type</A></CODE>.</P>
+
+<P>A <B><A NAME="type_modifier"></A>type modifier</B> is a template taking
+one or more template arguments and having the following member:</P>
+
+<UL>
+<LI><CODE>typedef <B><I><A NAME="modified-type"></A>modified-type</I></B> <B>type</B>;</CODE></LI>
+</UL>
+
+<P>A <B><A NAME="type_query"></A>type query</B> is a template taking one or more
+template arguments. A type query is publicly derived, directly or indirectly,
+from <CODE>integral_constant&lt;size_t, <I>value</I>&gt;</CODE>; it
+<B><A NAME="holds_the_value"></A>holds the value</B> passed as the argument
+<CODE>value</CODE>.</P>
+
+<H2><CODE><A NAME="add_const"></A>add_const</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>add_const</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is <CODE>Ty</CODE>
+if <CODE>Ty</CODE> is a reference, a function, or a const-qualified type,
+otherwise <CODE>const Ty</CODE>.</P>
+
+<H2><CODE><A NAME="add_cv"></A>add_cv</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>add_cv</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds the <A HREF="#modified-type">modified-type</A>
+<CODE><A HREF="#add_volatile">add_volatile</A>&lt;
+<A HREF="#add_const">add_const</A>&lt;Ty&gt; &gt;</CODE>.</P>
+
+<H2><CODE><A NAME="add_pointer"></A>add_pointer</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>add_pointer</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds the <A HREF="#modified-type">modified-type</A>
+<CODE>Ty1*</CODE> if <CODE>Ty</CODE> is of the form <CODE>Ty1[N]</CODE>
+or <CODE>Ty1&amp;</CODE>, otherwise <CODE>Ty*</CODE>.</P>
+
+<H2><CODE><A NAME="add_lvalue_reference"></A>add_lvalue_reference</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>add_lvalue_reference</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is <CODE>Ty</CODE>
+if <CODE>Ty</CODE> is an lvalue reference,
+otherwise <CODE>typename remove_reference&lt;Ty&gt;::type&amp;</CODE>.</P>
+
+<H2><CODE><A NAME="add_reference"></A>add_reference</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>add_reference</B>; <B>[removed with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is <CODE>Ty</CODE>
+if <CODE>Ty</CODE> is an lvalue reference,
+otherwise <CODE>typename remove_reference&lt;Ty&gt;::type&amp;</CODE>.</P>
+
+<H2><CODE><A NAME="add_rvalue_reference"></A>add_rvalue_reference</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>add_rvalue_reference</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is <CODE>Ty</CODE>
+if <CODE>Ty</CODE> is an lvalue reference,
+otherwise <CODE>typename remove_reference&lt;Ty&gt;::type&amp;&amp;</CODE>.</P>
+
+<H2><CODE><A NAME="add_volatile"></A>add_volatile</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>add_volatile</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is <CODE>Ty</CODE>
+if <CODE>Ty</CODE> is a reference, a function, or a volatile-qualified type,
+otherwise <CODE>volatile Ty</CODE>.</P>
+
+<H2><CODE><A NAME="aligned_storage"></A>aligned_storage</CODE></H2>
+
+<PRE>template&lt;size_t Len, size_t Align&gt;
+    struct <B>aligned_storage</B> {
+        typedef <I>aligned-type</I> type;
+        };</PRE>
+
+<P>The nested typedef <CODE>type</CODE> is a synonym for a POD type with
+alignment <CODE>Align</CODE> and size <CODE>Len</CODE>. <CODE>Align</CODE>
+must be equal to <CODE>alignment_of&lt;Ty1&gt;::value</CODE> for some type
+<CODE>Ty1</CODE>.</P>
+
+<H2><CODE><A NAME="aligned_union"></A>aligned_union</CODE></H2>
+
+<PRE>template&lt;size_t Len, class... Types&gt;
+    struct <B>aligned_union</B>; <B>[added with C++11]</B></PRE>
+
+<P>The nested typedef <CODE>type</CODE> is a synonym for a union
+that effectively contains the members:</P>
+
+<PRE>union {
+    aligned_storage&lt;Len, Types...&gt;;
+    };</PRE>
+
+<P>If <CODE>Types</CODE> is empty, it is taken as <CODE>char</CODE>.</P>
+
+<H2><CODE><A NAME="alignment_of"></A>alignment_of</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>alignment_of</B>;</PRE>
+
+<P>The <A HREF="#type_query">type query</A>
+<A HREF="#holds_the_value">holds the value</A> of the alignment of the
+type <CODE>Ty</CODE>.</P>
+
+<H2><CODE><A NAME="common_type"></A>common_type</CODE></H2>
+
+<PRE>template&lt;class... Types&gt;
+    struct <B>common_type</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is:</P>
+
+<UL>
+<LI><CODE>Types</CODE>, if the template parameter pack has exactly one argument</LI>
+
+<LI>the type of the expression <CODE>decltype(true ? Tgen() : Ugen())</CODE>,
+where <CODE>Tgen()</CODE> is an imaginary function returning a value of type
+<CODE>T&amp;&amp;</CODE> and <CODE>Ugen()</CODE> is an imaginary function
+returning a value of type <CODE>U&amp;&amp;</CODE>, if the template parameter
+pack has exactly two arguments <CODE>T</CODE> and <CODE>U</CODE></LI>
+
+<LI>the type of the expression <CODE>common_type&lt;typename
+common_type&lt;T, U&gt;::type, V...&gt;::type</CODE>, if the parameter pack
+has more than two arguments; the types <CODE>T</CODE> and <CODE>U</CODE>
+are the first two type arguments, respectively, and <CODE>V...</CODE>
+is a parameter pack holding the remainder of the arguments
+in the parameter pack.</LI>
+</UL>
+
+<H2><CODE><A NAME="conditional"></A>conditional</CODE></H2>
+
+<PRE>template&lt;bool pred, class Ty1, class Ty2&gt;
+    struct <B>conditional</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is either:</P>
+
+<UL>
+<LI><CODE>Ty1</CODE>, if <CODE>pred</CODE> is true</LI>
+
+<LI><CODE>Ty2</CODE>, if <CODE>pred</CODE> is false</LI>
+</UL>
+
+<H2><CODE><A NAME="decay"></A>decay</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>decay</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is defined
+in the following stages:</P>
+
+<UL>
+<LI>The type <CODE>U</CODE> is defined as
+<CODE><A HREF="#remove_reference">remove_reference</A>&lt;Ty&gt;::type</CODE>.</LI>
+
+<LI>If <CODE><A HREF="#is_array">is_array</A>&lt;U&gt;</CODE>
+<A HREF="#holds_true">holds true</A>,
+the modified-type <CODE>type</CODE> is
+<CODE><A HREF="#remove_extent">remove_extent</A>&lt;U&gt;::type *</CODE>.</LI>
+
+<LI>Otherwise, if
+<CODE><A HREF="#is_function">is_function</A>&lt;U&gt;</CODE> holds true,
+the modified-type <CODE>type</CODE> is
+<CODE><A HREF="#add_pointer">add_pointer</A>&lt;U&gt;::type</CODE>.</LI>
+
+<LI>Otherwise, the modified-type <CODE>type</CODE> is
+<CODE><A HREF="#remove_cv">remove_cv</A>&lt;U&gt;::type</CODE>.</LI>
+</UL>
+
+<H2><CODE><A NAME="enable_if"></A>enable_if</CODE></H2>
+
+<PRE>template&lt;bool pred, class Ty = void&gt;
+    struct <B>enable_if</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is either:</P>
+
+<UL>
+<LI><CODE>Ty</CODE>, if <CODE>pred</CODE> is true</LI>
+
+<LI>not defined, if <CODE>pred</CODE> is false</LI>
+</UL>
+
+<H2><CODE><A NAME="extent"></A>extent</CODE></H2>
+
+<PRE>template&lt;class Ty, unsigned I = 0&gt;
+    struct <B>extent</B>;</PRE>
+
+<P>The <A HREF="#type_query">type query</A>
+<A HREF="#holds_the_value">holds the value</A> of the number of elements in
+the <CODE>I<SUP>th</SUP></CODE> bound of objects of type <CODE>Ty</CODE>.
+If <CODE>Ty</CODE> is not an array type or its rank is less than <CODE>I</CODE>,
+or if <CODE>I</CODE> is zero and <CODE>Ty</CODE> is of type &quot;array of unknown
+bound of <CODE>U</CODE>&quot;, it holds the value 0.
+</P>
+
+<H2><CODE><A NAME="false_type"></A>false_type</CODE></H2>
+
+<PRE>typedef integral_constant&lt;bool, false&gt; <B>false_type</B>;</PRE>
+
+<P>The type is a synonym for a specialization of the template
+<CODE>integral_constant</CODE>.</P>
+
+<H2><CODE><A NAME="has_copy_assign"></A>has_copy_assign</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_copy_assign</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a copy assignment operator,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_copy_constructor"></A>has_copy_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_copy_constructor</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a copy constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_default_constructor"></A>has_default_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_default_constructor</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a default constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_move_assign"></A>has_move_assign</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_move_assign</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a move assignment operator,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_move_constructor"></A>has_move_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_move_constructor</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a move constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_nothrow_assign"></A>has_nothrow_assign</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_nothrow_assign</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a <A HREF="#nothrow">nothrow</A> copy assignment operator,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>A <B><A NAME="nothrow"></A>nothrow</B> function is a function that has
+an empty throw specifier, or a function which the compiler can otherwise
+determine will not throw an exception.</P>
+
+<H2><CODE><A NAME="has_nothrow_constructor"></A>has_nothrow_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_nothrow_constructor</B>; <B>[removed with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a <A HREF="#nothrow">nothrow</A> default constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_nothrow_copy"></A>has_nothrow_copy</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_nothrow_copy</B>; <B>[removed with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a <A HREF="#nothrow">nothrow</A> copy constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_nothrow_copy_assign"></A>has_nothrow_copy_assign</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_nothrow_copy_assign</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a <A HREF="#nothrow">nothrow</A> copy assignment operator,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_nothrow_copy_constructor"></A>has_nothrow_copy_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_nothrow_copy_constructor</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+only <A HREF="#nothrow">nothrow</A> copy constructors,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_nothrow_default_constructor"></A>has_nothrow_default_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_nothrow_default_constructor</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a <A HREF="#nothrow">nothrow</A> default constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_nothrow_move_assign"></A>has_nothrow_move_assign</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_nothrow_move_assign</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a <A HREF="#nothrow">nothrow</A> move assignment operator,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_nothrow_move_constructor"></A>has_nothrow_move_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_nothrow_move_constructor</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> has
+a <A HREF="#nothrow">nothrow</A> move constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_trivial_assign"></A>has_trivial_assign</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_trivial_assign</B>; <B>[removed with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has a trivial copy assignment operator,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>A <B>copy assignment operator</B> for a class <CODE>Ty</CODE> is <B>trivial</B> if:</P>
+
+<UL>
+<LI>it is implicitly declared</LI>
+<LI>the class <CODE>Ty</CODE> has no virtual functions</LI>
+<LI>the class <CODE>Ty</CODE> has no virtual bases</LI>
+<LI>all the direct bases of the class <CODE>Ty</CODE> have trivial copy assignment operators</LI>
+<LI>the classes of all the non-static data members of class type have trivial copy assignment operators</LI>
+<LI>the classes of all the non-static data members of type array of class have trivial copy assignment operators</LI>
+</UL>
+
+<H2><CODE><A NAME="has_trivial_constructor"></A>has_trivial_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_trivial_constructor</B>; <B>[removed with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has a trivial constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>A <B>constructor</B> for a class <CODE>Ty</CODE> is <B>trivial</B> if:</P>
+
+<UL>
+<LI>it is an implicitly declared default constructor</LI>
+<LI>the class <CODE>Ty</CODE> has no virtual functions</LI>
+<LI>the class <CODE>Ty</CODE> has no virtual bases</LI>
+<LI>all the direct bases of the class <CODE>Ty</CODE> have trivial constructors</LI>
+<LI>the classes of all the non-static data members of class type have trivial constructors</LI>
+<LI>the classes of all the non-static data members of type array of class have trivial constructors</LI>
+</UL>
+
+<H2><CODE><A NAME="has_trivial_copy"></A>has_trivial_copy</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_trivial_copy</B>; <B>[removed with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has a trivial copy constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>A <B>copy constructor</B> for a class <CODE>Ty</CODE> is <B>trivial</B> if:</P>
+
+<UL>
+<LI>it is implicitly declared</LI>
+<LI>the class <CODE>Ty</CODE> has no virtual functions</LI>
+<LI>the class <CODE>Ty</CODE> has no virtual bases</LI>
+<LI>all the direct bases of the class <CODE>Ty</CODE> have trivial copy constructors</LI>
+<LI>the classes of all the non-static data members of class type have trivial copy constructors</LI>
+<LI>the classes of all the non-static data members of type array of class have trivial copy constructors</LI>
+</UL>
+
+<H2><CODE><A NAME="has_trivial_copy_assign"></A>has_trivial_copy_assign</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_trivial_copy_assign</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has all trivial copy assignment operators,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_trivial_copy_constructor"></A>has_trivial_copy_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_trivial_copy_constructor</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has only trivial copy constructors,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>A <B>copy constructor</B> for a class <CODE>Ty</CODE> is <B>trivial</B> if:</P>
+
+<UL>
+<LI>it is implicitly declared</LI>
+<LI>the class <CODE>Ty</CODE> has no virtual functions</LI>
+<LI>the class <CODE>Ty</CODE> has no virtual bases</LI>
+<LI>all the direct bases of the class <CODE>Ty</CODE> have trivial copy constructors</LI>
+<LI>the classes of all the non-static data members of class type have trivial copy constructors</LI>
+<LI>the classes of all the non-static data members of type array of class have trivial copy constructors</LI>
+</UL>
+
+<H2><CODE><A NAME="has_trivial_default_constructor"></A>has_trivial_default_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_trivial_default_constructor</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has a trivial constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>A <B>default constructor</B> for a class <CODE>Ty</CODE> is <B>trivial</B> if:</P>
+
+<UL>
+<LI>it is an implicitly declared default constructor</LI>
+<LI>the class <CODE>Ty</CODE> has no virtual functions</LI>
+<LI>the class <CODE>Ty</CODE> has no virtual bases</LI>
+<LI>all the direct bases of the class <CODE>Ty</CODE> have trivial constructors</LI>
+<LI>the classes of all the non-static data members of class type have trivial constructors</LI>
+<LI>the classes of all the non-static data members of type array of class have trivial constructors</LI>
+</UL>
+
+<H2><CODE><A NAME="has_trivial_destructor"></A>has_trivial_destructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_trivial_destructor</B>; <B>[removed with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has a trivial destructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>A <B>destructor</B> for a class <CODE>Ty</CODE> is <B>trivial</B> if:</P>
+
+<UL>
+<LI>it is an implicitly declared destructor</LI>
+<LI>all the direct bases of the class <CODE>Ty</CODE> have trivial destructors</LI>
+<LI>the classes of all the non-static data members of class type have trivial destructors</LI>
+<LI>the classes of all the non-static data members of type array of class have trivial destructors</LI>
+</UL>
+
+<H2><CODE><A NAME="has_trivial_move_assign"></A>has_trivial_move_assign</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_trivial_move_assign</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has all trivial move assignment operators,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_trivial_move_constructor"></A>has_trivial_move_constructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_trivial_move_constructor</B>; <B>[removed in final C++11, not recommended]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has a trivial move constructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="has_virtual_destructor"></A>has_virtual_destructor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>has_virtual_destructor</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has a virtual destructor,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+
+<H2><CODE><A NAME="integral_constant"></A>integral_constant</CODE></H2>
+
+<PRE>template&lt;class Ty, Ty v&gt;
+    struct <B>integral_constant</B> {
+    static constexpr Ty <B>value</B> = v;
+    typedef Ty <B>value_type</B>;
+    typedef integral_constant&lt;Ty, v&gt; <B>type</B>;
+
+    constexpr operator value_type() const;
+    };</PRE>
+
+<P>The template class, when specialized with an integral type and a value of
+that type, represents an object that holds a constant of that integral
+type with the specified value. <CODE>operator value_type()</CODE>
+returns <CODE>value</CODE>.</P>
+
+<H2><CODE><A NAME="is_abstract"></A>is_abstract</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_abstract</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a class that has at least one pure virtual function,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_arithmetic"></A>is_arithmetic</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_arithmetic</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+an arithmetic type, that is, an <A HREF="#integral_type">integral type</A>
+or a <A HREF="#floating_point_type">floating point type</A>,
+or a <CODE>cv-qualified</CODE> form of one of them,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_array"></A>is_array</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_array</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+an array type,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_assignable"></A>is_assignable</CODE></H2>
+
+<PRE>template&lt;class To, class From&gt;
+    struct <B>is_assignable</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> only if the unevaluated operand:</P>
+
+<PRE>declval&lt;To&gt;() = declval&lt;From&gt;()</PRE>
+
+<P>is well formed.</P>
+
+<H2><CODE><A NAME="is_base_of"></A>is_base_of</CODE></H2>
+
+<PRE>template&lt;class Base, class Derived&gt;
+    struct <B>is_base_of</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Base</CODE> is
+a base class of the type <CODE>Derived</CODE>,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_class"></A>is_class</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_class</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a type defined as a <CODE>class</CODE> or a <CODE>struct</CODE>,
+or a <CODE>cv-qualified</CODE> form of one of them,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_compound"></A>is_compound</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_compound</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_false">holds false</A> if the type <CODE>Ty</CODE> is
+a scalar type (that is, if <CODE><A HREF="#is_scalar">is_scalar</A>&lt;Ty&gt;</CODE>
+<A HREF="#holds_true">holds true</A>),
+otherwise it <A HREF="#holds_true">holds true</A>.
+Thus, the predicate holds true
+if <CODE>Ty</CODE> is an array type, a function type, a pointer to <CODE>void</CODE> or
+an object or a function, a reference, a class, a union, an enumeration, or
+a pointer to non-static class member,
+or a <CODE>cv-qualified</CODE> form of one of them.</P>
+
+<H2><CODE><A NAME="is_const"></A>is_const</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_const</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if <CODE>Ty</CODE> is
+<CODE>const-qualified</CODE>.</P>
+
+<H2><CODE><A NAME="is_constructible"></A>is_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty, class... Args&gt;
+    struct <B>is_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> only if the variable definition:</P>
+
+<PRE>Ty X(declval&lt;Args&gt;()...);</PRE>
+
+<P>is well formed.</P>
+
+<H2><CODE><A NAME="is_convertible"></A>is_convertible</CODE></H2>
+
+<PRE>template&lt;class From, class To&gt;
+    struct <B>is_convertible</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the expression <CODE>To to = from;</CODE>,
+where <CODE>from</CODE> is an object of type <CODE>From</CODE>, is well-formed.</P>
+
+<H2><CODE><A NAME="is_copy_assignable"></A>is_copy_assignable</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_copy_assignable</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_assignable&lt;Ty&amp;, const Ty&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_copy_constructible"></A>is_copy_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_copy_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_constructible&lt;Ty, const Ty&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_default_constructible"></A>is_default_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_default_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_constructible&lt;Ty&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_destructible"></A>is_destructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_destructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> only if, in the template definition:</P>
+
+<PRE>template&lt;class Ty&gt;
+    struct S {
+	Ty X; };</PRE>
+
+<P>the destructor <CODE>S&lt;Ty&gt;::~S()</CODE> is not deleted.</P>
+
+<H2><CODE><A NAME="is_empty"></A>is_empty</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_empty</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is an
+empty class, otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_enum"></A>is_enum</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_enum</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+an enumeration type or a <CODE>cv-qualified</CODE> form of an enumeration type,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_floating_point"></A>is_floating_point</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_floating_point</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a floating point type or a <CODE>cv-qualified</CODE> form of a floating point type,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>A <SPAN><A NAME="floating_point_type"></A>floating point type</SPAN> is one of
+<CODE>float</CODE>, <CODE>double</CODE>, or <CODE>long double</CODE>.</P>
+
+<H2><CODE><A NAME="is_function"></A>is_function</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_function</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a function type,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_fundamental"></A>is_fundamental</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_fundamental</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is a
+fundamental type, that is, <CODE>void</CODE>,
+an <A HREF="#integral_type">integral type</A>,
+an <A HREF="#floating_point_type">floating point type</A>,
+or a <CODE>cv-qualified</CODE> form of one of them,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_integral"></A>is_integral</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_integral</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+one of the integral types, or a <CODE>cv-qualified</CODE> form of one
+of the integral types, otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>An <SPAN><A NAME="integral_type"></A>integral type</SPAN> is one of
+<CODE>bool</CODE>,
+<CODE>char</CODE>,
+<CODE>char16_t</CODE>,
+<CODE>char32_t</CODE>,
+<CODE>unsigned char</CODE>,
+<CODE>signed char</CODE>,
+<CODE>wchar_t</CODE>,
+<CODE>short</CODE>,
+<CODE>unsigned short</CODE>,
+<CODE>int</CODE>,
+<CODE>unsigned int</CODE>,
+<CODE>long</CODE>,
+<CODE>unsigned long</CODE>,
+<CODE>long long</CODE>,
+and <CODE>unsigned long long</CODE>.</P>
+
+<H2><CODE><A NAME="is_literal_type"></A>is_literal_type</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_literal_type</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a literal type,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_lvalue_reference"></A>is_lvalue_reference</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_lvalue_reference</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a reference to an object or to a function,
+otherwise it <A HREF="#holds_false">holds false</A>.
+Note that it may <B>not</B> be an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<H2><CODE><A NAME="is_member_function_pointer"></A>is_member_function_pointer</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_member_function_pointer</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a pointer to member function or a <CODE>cv-qualified</CODE> pointer to
+member function,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_member_object_pointer"></A>is_member_object_pointer</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_member_object_pointer</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a pointer to member object or a <CODE>cv-qualified</CODE> pointer to member object,
+otherwise it <A HREF="#holds_false">holds false</A>. Note that <CODE>is_member_object_pointer</CODE>
+holds false if <CODE>Ty</CODE> is a pointer to member function.</P>
+
+<H2><CODE><A NAME="is_member_pointer"></A>is_member_pointer</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_member_pointer</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a pointer to member function or a pointer to member object,
+or a <CODE>cv-qualified</CODE> form of one of them,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_move_assignable"></A>is_move_assignable</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_move_assignable</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_assignable&lt;Ty&amp;, Ty&amp;&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_move_constructible"></A>is_move_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_move_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_constructible&lt;Ty, Ty&amp;&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_nothrow_assignable"></A>is_nothrow_assignable</CODE></H2>
+
+<PRE>template&lt;class To, class From&gt;
+    struct <B>is_nothrow_assignable</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> only if the unevaluated operand:</P>
+
+<PRE>declval&lt;To&gt;() = declval&lt;From&gt;()</PRE>
+
+<P>is well formed and is known to throw no exceptions.</P>
+
+<H2><CODE><A NAME="is_nothrow_constructible"></A>is_nothrow_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty, class... Args&gt;
+    struct <B>is_nothrow_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> only if the variable definition:</P>
+
+<PRE>Ty X(declval&lt;Args&gt;()...);</PRE>
+
+<P>is well formed and is known to throw no exceptions.</P>
+
+<H2><CODE><A NAME="is_nothrow_copy_assignable"></A>is_nothrow_copy_assignable</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_nothrow_copy_assignable</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_nothrow_assignable&lt;Ty&amp;, const Ty&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_nothrow_copy_constructible"></A>is_nothrow_copy_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_nothrow_copy_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_nothrow_constructible&lt;Ty, const Ty&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_nothrow_default_constructible"></A>is_nothrow_default_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_nothrow_default_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_nothrow_constructible&lt;Ty&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_nothrow_destructible"></A>is_nothrow_destructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_nothrow_destructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> only if, in the template definition:</P>
+
+<PRE>template&lt;class Ty&gt;
+    struct S {
+	Ty X; };</PRE>
+
+<P>the destructor <CODE>S&lt;Ty&gt;::~S()</CODE> is not deleted
+and is known to throw no exceptions.</P>
+
+<H2><CODE><A NAME="is_nothrow_move_assignable"></A>is_nothrow_move_assignable</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_nothrow_move_assignable</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_nothrow_assignable&lt;Ty&amp;, Ty&amp;&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_nothrow_move_constructible"></A>is_nothrow_move_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_nothrow_move_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_nothrow_constructible&lt;Ty, Ty&amp;&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_object"></A>is_object</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_object</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_false">holds false</A> if the type <CODE>Ty</CODE> is
+a reference type, a function type, or void,
+or a <CODE>cv-qualified</CODE> form of one of them,
+otherwise it <A HREF="#holds_true">holds true</A>.</P>
+
+<H2><CODE><A NAME="is_pod"></A>is_pod</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_pod</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a scalar type, a POD aggregate type,
+or a <CODE>cv-qualified</CODE> form of one of them,
+or an array of such a type,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>A <B>POD aggregate</B> type is a class, struct, or union whose
+non-static data members are all scalar types or POD aggregates, and
+that has no references, no user-defined copy assignment operator, and no
+user-defined destructor.</P>
+
+<H2><CODE><A NAME="is_pointer"></A>is_pointer</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_pointer</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a pointer to <CODE>void</CODE>, a pointer to an object, or a pointer to a function,
+or a <CODE>cv-qualified</CODE> form of one of them,
+otherwise it <A HREF="#holds_false">holds false</A>. Note that <CODE>is_pointer</CODE>
+holds false if <CODE>Ty</CODE> is a pointer to member or a pointer to
+member function.</P>
+
+<H2><CODE><A NAME="is_polymorphic"></A>is_polymorphic</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_polymorphic</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE>
+is a class that declares or inherits a virtual function,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_reference"></A>is_reference</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_reference</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a reference to an object or to a function,
+otherwise it <A HREF="#holds_false">holds false</A>.
+Beginning with <B>C++11</B>, it may also be an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<H2><CODE><A NAME="is_rvalue_reference"></A>is_rvalue_reference</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_rvalue_reference</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<H2><CODE><A NAME="is_same"></A>is_same</CODE></H2>
+
+<PRE>template&lt;class Ty1, class Ty2&gt;
+    struct <B>is_same</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the types <CODE>Ty1</CODE>
+and <CODE>Ty2</CODE> are the same type,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_scalar"></A>is_scalar</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_scalar</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+an <A HREF="#integral_type">integral type</A>,
+a <A HREF="#floating_point_type">floating point type</A>,
+an enumeration type, a pointer type, or a pointer to member type,
+or a <CODE>cv-qualified</CODE> form of one of them,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_signed"></A>is_signed</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_signed</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a signed <A HREF="#integral_type">integral type</A>
+or a <CODE>cv-qualified</CODE> signed integral type,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>Beginning with <B>C++11</B> it may also be
+a <A HREF="#floating_point_type">floating point type</A>,
+an enumeration, or a <CODE>cv-qualified</CODE> form of one of these types.
+A type is considered signed if <CODE>Ty(-1) &lt; Ty(0)</CODE>.</P>
+
+<H2><CODE><A NAME="is_standard_layout"></A>is_standard_layout</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_standard_layout</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE>
+is a class that has a standard layout of member objects in memory,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_trivial"></A>is_trivial</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_trivial</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE>
+is a trivial class,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_trivially_assignable"></A>is_trivially_assignable</CODE></H2>
+
+<PRE>template&lt;class To, class From&gt;
+    struct <B>is_trivially_assignable</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> only if the unevaluated operand:</P>
+
+<PRE>declval&lt;To&gt;() = declval&lt;From&gt;()</PRE>
+
+<P>is well formed and is known to perform no operation that is not trivial.</P>
+
+<H2><CODE><A NAME="is_trivially_constructible"></A>is_trivially_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty, class... Args&gt;
+    struct <B>is_trivially_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> only if the variable definition:</P>
+
+<PRE>Ty X(declval&lt;Args&gt;()...);</PRE>
+
+<P>is well formed and is known to perform no operation that is not trivial.</P>
+
+<H2><CODE><A NAME="is_trivially_copy_assignable"></A>is_trivially_copy_assignable</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_trivially_copy_assignable</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_trivially_assignable&lt;Ty&amp;, const Ty&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_trivially_copy_constructible"></A>is_trivially_copy_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_trivially_copy_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_trivially_constructible&lt;Ty, const Ty&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_trivially_copyable"></A>is_trivially_copyable</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_trivially_copyable</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_trivially_copy_constructible&lt;Ty&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_trivially_default_constructible"></A>is_trivially_default_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_trivially_default_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_trivially_constructible&lt;Ty&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_trivially_destructible"></A>is_trivially_destructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_trivially_destructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> only if, in the template definition:</P>
+
+<PRE>template&lt;class Ty&gt;
+    struct S {
+	Ty X; };</PRE>
+
+<P>the destructor <CODE>S&lt;Ty&gt;::~S()</CODE> is not deleted
+and is known to perform no operation that is not trivial.</P>
+
+<H2><CODE><A NAME="is_trivially_move_assignable"></A>is_trivially_move_assignable</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_trivially_move_assignable</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_trivially_assignable&lt;Ty&amp;, Ty&amp;&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_trivially_move_constructible"></A>is_trivially_move_constructible</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_trivially_move_constructible</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+is equivalent to <CODE>is_trivially_constructible&lt;Ty, Ty&amp;&amp;&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="is_union"></A>is_union</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_union</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+a union type or a <CODE>cv-qualified</CODE> form of a union type,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_unsigned"></A>is_unsigned</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_unsigned</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+an unsigned <A HREF="#integral_type">integral type</A>
+or a <CODE>cv-qualified</CODE> unsigned integral type,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<P>Beginning with <B>C++11</B> it may also be
+an enumeration, or a <CODE>cv-qualified</CODE> form of such a type.
+A type is considered unsigned if <CODE>Ty(0) &lt; Ty(-1)</CODE>.</P>
+
+<H2><CODE><A NAME="is_void"></A>is_void</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_void</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if the type <CODE>Ty</CODE> is
+<CODE>void</CODE> or a <CODE>cv-qualified</CODE> form of <CODE>void</CODE>,
+otherwise it <A HREF="#holds_false">holds false</A>.</P>
+
+<H2><CODE><A NAME="is_volatile"></A>is_volatile</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>is_volatile</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_predicate">type predicate</A>
+<A HREF="#holds_true">holds true</A> if <CODE>Ty</CODE> is
+<CODE>volatile-qualified</CODE>.</P>
+
+<H2><CODE><A NAME="make_signed"></A>make_signed</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>make_signed</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is <CODE>Ty</CODE> if
+<CODE><A HREF="#is_signed">is_signed</A>&lt;Ty&gt;</CODE>
+<A HREF="#holds_true">holds true</A>. Otherwise it is the smallest signed type
+<CODE>STy</CODE> for which <CODE>sizeof (Ty) &lt;= sizeof (STy)</CODE>.</P>
+
+
+<H2><CODE><A NAME="make_unsigned"></A>make_unsigned</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>make_unsigned</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is <CODE>Ty</CODE> if
+<CODE><A HREF="#is_unsigned">is_unsigned</A>&lt;Ty&gt;</CODE>
+<A HREF="#holds_true">holds true</A>. Otherwise it is the smallest unsigned type
+<CODE>UTy</CODE> for which <CODE>sizeof (Ty) &lt;= sizeof (UTy)</CODE>.</P>
+
+<H2><CODE><A NAME="rank"></A>rank</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>rank</B>;</PRE>
+
+<P>The <A HREF="#type_query">type query</A>
+<A HREF="#holds_the_value">holds the value</A> of the number of dimensions of
+the array type <CODE>Ty</CODE>, or 0 if <CODE>Ty</CODE> is not an array type.</P>
+
+<H2><CODE><A NAME="remove_all_extents"></A>remove_all_extents</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>remove_all_extents</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is
+the element type of the array type <CODE>Ty</CODE> with all array dimensions
+removed, or <CODE>Ty</CODE> if <CODE>Ty</CODE> is not an array type.</P>
+
+<H2><CODE><A NAME="remove_extent"></A>remove_extent</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>remove_extent</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is
+<CODE>Ty1</CODE> when <CODE>Ty</CODE> is of the form <CODE>Ty1[N]</CODE>,
+otherwise <CODE>Ty</CODE>.</P>
+
+<H2><CODE><A NAME="remove_const"></A>remove_const</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>remove_const</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is
+<CODE>Ty1</CODE> when <CODE>Ty</CODE> is of the form <CODE>const Ty1</CODE>,
+otherwise <CODE>Ty</CODE>.</P>
+
+<H2><CODE><A NAME="remove_cv"></A>remove_cv</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>remove_cv</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is
+<CODE>Ty1</CODE> when <CODE>Ty</CODE> is of the form <CODE>const Ty1</CODE>,
+<CODE>volatile Ty1</CODE>, or <CODE>const volatile Ty1</CODE>,
+otherwise <CODE>Ty</CODE>.</P>
+
+<H2><CODE><A NAME="remove_pointer"></A>remove_pointer</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>remove_pointer</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is
+<CODE>Ty1</CODE> when <CODE>Ty</CODE> is of the form <CODE>Ty1*</CODE>,
+<CODE>Ty1* const</CODE>, <CODE>Ty1* volatile</CODE>, or <CODE>Ty1* const volatile</CODE>,
+otherwise <CODE>Ty</CODE>.</P>
+
+<H2><CODE><A NAME="remove_reference"></A>remove_reference</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>remove_reference</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is
+<CODE>Ty1</CODE> when <CODE>Ty</CODE> is of the form <CODE>Ty1&amp;</CODE>,
+otherwise <CODE>Ty</CODE>.</P>
+
+<H2><CODE><A NAME="remove_volatile"></A>remove_volatile</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>remove_volatile</B>;</PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is
+<CODE>Ty1</CODE> when <CODE>Ty</CODE> is of the form <CODE>volatile Ty1</CODE>,
+otherwise <CODE>Ty</CODE>.</P>
+
+<H2><A NAME="result_of"></A><CODE>result_of</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;  <B>[added with C++11]</B>
+    struct <B>result_of</B> {
+    typedef T0 type;
+    };</PRE>
+
+<P>The template class defines its member <CODE>type</CODE> as a synonym for
+the return type of a function call described by its template argument
+<CODE>Ty</CODE>. The template argument must be of the form
+<CODE>Fty(T1, T2, ..., TN)</CODE>, where <CODE>Fty</CODE> is a
+<A HREF="functio2.html#callable_type">callable type</A>. The template determines
+the return type according to the first of the following rules that applies:</P>
+
+<UL>
+<LI>if <CODE>Fty</CODE> is a pointer to function type <I>R(*)(U1, U2, ..., UN)</I> the
+return type is <I>R</I>;</LI>
+<LI>if <CODE>Fty</CODE> is a pointer to member function type
+<I>R(U1::*)(U2, ..., UN)</I> the return type is <I>R</I>;</LI>
+<LI>if <CODE>Fty</CODE> is a pointer to data member type
+<I>R U1::*</I> the return type is <I>R</I>;</LI>
+<LI>if <CODE>Fty</CODE> is a class with a member typedef <I>result_type</I> the
+return type is <I>Fty::result_type</I>;</LI>
+<LI>if <I>N</I> is 0 (that is, <CODE>Ty</CODE> is of the form <CODE>Fty()</CODE>)
+the return type is <I>void</I>;</LI>
+<LI>if <CODE>Fty</CODE> is a class with a member template named <I>result</I>
+the return type is <I>Fty::result&lt;T1, T2, ..., TN&gt;::type</I>;</LI>
+<LI>in all other cases it is an error.</LI>
+</UL>
+
+<H2><CODE><A NAME="true_type"></A>true_type</CODE></H2>
+
+<PRE>typedef integral_constant&lt;bool, true&gt; <B>true_type</B>;</PRE>
+
+<P>The type is a synonym for a specialization of the template
+<CODE>integral_constant</CODE>.</P>
+
+<H2><CODE><A NAME="underlying_type"></A>underlying_type</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>underlying_type</B>; <B>[added with C++11]</B></PRE>
+
+<P>An instance of the <A HREF="#type_modifier">type modifier</A>
+holds a <A HREF="#modified-type">modified-type</A> that is the
+underlying type for the enumeration type <CODE>Ty</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by Dinkumware, Ltd. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

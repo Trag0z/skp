@@ -1,0 +1,2045 @@
+<HTML><HEAD>
+<TITLE>&lt;atomic&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;atomic&gt;"></A><CODE>&lt;atomic&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P><B><CODE><A HREF="#atomic">atomic</A>
+&middot; <A HREF="#atomic&lt;integral&gt;">atomic&lt;<I>integral</I>&gt;</A>
+&middot; <A HREF="#atomic&lt;Ty_*&gt;">atomic&lt;Ty *&gt;</A>
+&middot; <A HREF="#atomic_flag">atomic_flag</A>
+&middot; <A HREF="#atomic_integral">atomic_<I>integral</I></A>
+&middot; <A HREF="#memory_order">memory_order</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#atomic_int8_t">atomic_int8_t</A>
+&middot; <A HREF="#atomic_uint8_t">atomic_uint8_t</A>
+&middot; <A HREF="#atomic_int16_t">atomic_int16_t</A>
+&middot; <A HREF="#atomic_uint16_t">atomic_uint16_t</A>
+&middot; <A HREF="#atomic_int32_t">atomic_int32_t</A>
+&middot; <A HREF="#atomic_uint32_t">atomic_uint32_t</A>
+&middot; <A HREF="#atomic_int64_t">atomic_int64_t</A>
+&middot; <A HREF="#atomic_uint64_t">atomic_uint64_t</A>
+&middot; <A HREF="#atomic_int_least8_t">atomic_int_least8_t</A>
+&middot; <A HREF="#atomic_uint_least8_t">atomic_uint_least8_t</A>
+&middot; <A HREF="#atomic_int_least16_t">atomic_int_least16_t</A>
+&middot; <A HREF="#atomic_uint_least16_t">atomic_uint_least16_t</A>
+&middot; <A HREF="#atomic_int_least32_t">atomic_int_least32_t</A>
+&middot; <A HREF="#atomic_uint_least32_t">atomic_uint_least32_t</A>
+&middot; <A HREF="#atomic_int_least64_t">atomic_int_least64_t</A>
+&middot; <A HREF="#atomic_uint_least64_t">atomic_uint_least64_t</A>
+&middot; <A HREF="#atomic_int_fast8_t">atomic_int_fast8_t</A>
+&middot; <A HREF="#atomic_uint_fast8_t">atomic_uint_fast8_t</A>
+&middot; <A HREF="#atomic_int_fast16_t">atomic_int_fast16_t</A>
+&middot; <A HREF="#atomic_uint_fast16_t">atomic_uint_fast16_t</A>
+&middot; <A HREF="#atomic_int_fast32_t">atomic_int_fast32_t</A>
+&middot; <A HREF="#atomic_uint_fast32_t">atomic_uint_fast32_t</A>
+&middot; <A HREF="#atomic_int_fast64_t">atomic_int_fast64_t</A>
+&middot; <A HREF="#atomic_uint_fast64_t">atomic_uint_fast64_t</A>
+&middot; <A HREF="#atomic_intptr_t">atomic_intptr_t</A>
+&middot; <A HREF="#atomic_uintptr_t">atomic_uintptr_t</A>
+&middot; <A HREF="#atomic_size_t">atomic_size_t</A>
+&middot; <A HREF="#atomic_ptrdiff_t">atomic_ptrdiff_t</A>
+&middot; <A HREF="#atomic_intmax_t">atomic_intmax_t</A>
+&middot; <A HREF="#atomic_uintmax_t">atomic_uintmax_t</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#atomic_compare_exchange_strong">atomic_compare_exchange_strong</A>
+&middot; <A HREF="#atomic_compare_exchange_strong_explicit">atomic_compare_exchange_strong_explicit</A>
+&middot; <A HREF="#atomic_compare_exchange_weak">atomic_compare_exchange_weak</A>
+&middot; <A HREF="#atomic_compare_exchange_weak_explicit">atomic_compare_exchange_weak_explicit</A>
+&middot; <A HREF="#atomic_exchange">atomic_exchange</A>
+&middot; <A HREF="#atomic_exchange_explicit">atomic_exchange_explicit</A>
+&middot; <A HREF="#atomic_fetch_add">atomic_fetch_add</A>
+&middot; <A HREF="#atomic_fetch_add_explicit">atomic_fetch_add_explicit</A>
+&middot; <A HREF="#atomic_fetch_and">atomic_fetch_and</A>
+&middot; <A HREF="#atomic_fetch_and_explicit">atomic_fetch_and_explicit</A>
+&middot; <A HREF="#atomic_fetch_or">atomic_fetch_or</A>
+&middot; <A HREF="#atomic_fetch_or_explicit">atomic_fetch_or_explicit</A>
+&middot; <A HREF="#atomic_fetch_sub">atomic_fetch_sub</A>
+&middot; <A HREF="#atomic_fetch_sub_explicit">atomic_fetch_sub_explicit</A>
+&middot; <A HREF="#atomic_fetch_xor">atomic_fetch_xor</A>
+&middot; <A HREF="#atomic_fetch_xor_explicit">atomic_fetch_xor_explicit</A>
+&middot; <A HREF="#atomic_flag_clear">atomic_flag_clear</A>
+&middot; <A HREF="#atomic_flag_clear_explicit">atomic_flag_clear_explicit</A>
+&middot; <A HREF="#atomic_flag_test_and_set">atomic_flag_test_and_set</A>
+&middot; <A HREF="#atomic_flag_test_and_set_explicit">atomic_flag_test_and_set_explicit</A>
+&middot; <A HREF="#atomic_init">atomic_init</A>
+&middot; <A HREF="#atomic_is_lock_free">atomic_is_lock_free</A>
+&middot; <A HREF="#atomic_load">atomic_load</A>
+&middot; <A HREF="#atomic_load_explicit">atomic_load_explicit</A>
+&middot; <A HREF="#atomic_signal_fence">atomic_signal_fence</A>
+&middot; <A HREF="#atomic_store">atomic_store</A>
+&middot; <A HREF="#atomic_store_explicit">atomic_store_explicit</A>
+&middot; <A HREF="#atomic_thread_fence">atomic_thread_fence</A>
+&middot; <A HREF="#kill_dependency">kill_dependency</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#ATOMIC_BOOL_LOCK_FREE">ATOMIC_BOOL_LOCK_FREE</A>
+&middot; <A HREF="#ATOMIC_CHAR_LOCK_FREE">ATOMIC_CHAR_LOCK_FREE</A>
+&middot; <A HREF="#ATOMIC_CHAR16_T_LOCK_FREE">ATOMIC_CHAR16_T_LOCK_FREE</A>
+&middot; <A HREF="#ATOMIC_CHAR32_T_LOCK_FREE">ATOMIC_CHAR32_T_LOCK_FREE</A>
+&middot; <A HREF="#ATOMIC_FLAG_INIT">ATOMIC_FLAG_INIT</A>
+&middot; <A HREF="#ATOMIC_INT_LOCK_FREE">ATOMIC_INT_LOCK_FREE</A>
+&middot; <A HREF="#ATOMIC_LLONG_LOCK_FREE">ATOMIC_LLONG_LOCK_FREE</A>
+&middot; <A HREF="#ATOMIC_LONG_LOCK_FREE">ATOMIC_LONG_LOCK_FREE</A>
+&middot; <A HREF="#ATOMIC_POINTER_LOCK_FREE">ATOMIC_POINTER_LOCK_FREE</A>
+&middot; <A HREF="#ATOMIC_SHORT_LOCK_FREE">ATOMIC_SHORT_LOCK_FREE</A>
+&middot; <A HREF="#ATOMIC_VAR_INIT">ATOMIC_VAR_INIT</A>
+&middot; <A HREF="#ATOMIC_WCHAR_T_LOCK_FREE">ATOMIC_WCHAR_T_LOCK_FREE</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the standard header <B><CODE>&lt;atomic&gt;</CODE></B>
+to define several classes and template classes for defining types that
+support atomic operations.
+An <B><A NAME="atomic_operation"></A>atomic operation</B> has two key
+properties:</P>
+
+<UL>
+<LI>it is indivisible, so another atomic operation on the same object from
+another thread will see either the value that the object had before
+the atomic operation or the value that it had after the operation; and</LI>
+
+<LI>it establishes ordering requirements for the visibility of the effects
+of other atomic operations in the same thread, according to
+the operation's
+<B><A HREF="#memory_order"><CODE>memory_order</CODE></A></B> argument
+(and, as a corollary, it inhibits compiler optimizations that would
+violate the ordering requirements).</LI>
+</UL>
+
+<P>These two properties, in conjunction with the
+<I>inter-thread happens before</I>
+relationship in the language definition, allow expert programmers
+to write algorithms that correctly manipulate an object from
+multiple threads without mutex locks.</P>
+
+<P>This documentation uses, but does not define, the terms
+<B><A NAME="consume_operation"></A>consume operation</B>,
+<B><A NAME="acquire_operation"></A>acquire operation</B>,
+<B><A NAME="release_operation"></A>release operation</B>,
+<B><A NAME="acquire_fence"></A>acquire fence</B>,
+<B><A NAME="release_fence"></A>release fence</B>,
+<B><A NAME="sequentially_consistent"></A>sequentially consistent</B>, and
+<B><A NAME="read-modify-write_operation"></A>read-modify-write operation</B>. These
+terms are formally defined in the C++ standard in
+[intro.multithread] and [atomics.fences] which also formalize their
+interaction with the C++ memory model.</P>
+
+<P>On some platforms it might not be possible to efficiently implement atomic
+operations for some types without mutex locks. An atomic type is
+<B><A NAME="lock_free"></A>lock free</B> if no atomic operations on that
+type use locks.</P>
+
+<P>The class <B><A HREF="#atomic_flag"><CODE>atomic_flag</CODE></A></B> provides a minimal
+atomic type that holds a boolean flag. Its operations are always
+<B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<P>The template class <B><A HREF="#atomic"><CODE>atomic&lt;Ty&gt;</CODE></A></B> stores an
+object of its argument type <CODE>Ty</CODE> and provides atomic access to that stored value. It
+can be instantiated with any type that can be copied with <CODE>memcpy</CODE> and tested for
+equality with <CODE>memcmp</CODE>. In particular, it can be used with user-defined types that
+meet these requirements and, in many cases, floating-point types. The template also has a set
+of specializations for integral types and a partial specialization for pointers. These
+specializations provide additional operations that are not available through the general
+template:</P>
+
+<UL>
+<LI><B><A HREF="#atomic&lt;integral&gt;">atomic&lt;<I>integral</I>&gt;</A></B> -- this specialization
+applies to all the integral types except <CODE>bool</CODE>. It provides a rich set of member
+functions for atomic arithmetic and logical operations.</LI>
+
+<LI><B><A HREF="#atomic&lt;Ty_*&gt;">atomic&lt;Ty *&gt;</A></B> -- this partial specialization
+applies to all pointer types. It provides member functions for
+adding or subtracting an offset from the managed pointer value and for
+incrementing and decrementing
+the managed pointer value.
+</LI>
+</UL>
+
+<P>Each <CODE>atomic&lt;<I>integral</I>&gt;</CODE> type has a corresponding macro
+that can be used in an
+<A HREF="preproc.html#if_directive"><I>if</I> directive</A>
+to determine at compile time whether operations on that type are
+<B><A HREF="#lock_free">lock free</A></B>. If the
+<B><A NAME="macro_value"></A>value</B>
+of the macro is zero, operations
+on the type are not lock free. If the value is 1, operations may be
+lock free, and a runtime check is needed. If the value is 2, operations
+are lock free. The function
+<B><A HREF="#atomic_is_lock_free"><CODE>atomic_is_lock_free</CODE></A></B>
+can be used to determine at runtime whether operations on the type are
+lock free.</P>
+
+<P>For each of the integral types except <CODE>bool</CODE> there is a corresponding named
+atomic type that manages an object of that integral type. The
+<A HREF="#managed_type">managed type</A>
+for each
+<B><A HREF="#atomic_integral"><CODE>atomic_<I>integral</I></CODE></A></B>
+type is:</P>
+
+<UL>
+<LI><CODE>atomic_char</CODE> -- <CODE>char</CODE></LI>
+<LI><CODE>atomic_schar</CODE> -- <CODE>signed char</CODE></LI>
+<LI><CODE>atomic_uchar</CODE> -- <CODE>unsigned char</CODE></LI>
+<LI><CODE>atomic_char16_t</CODE> -- <CODE>char16_t</CODE></LI>
+<LI><CODE>atomic_char32_t</CODE> -- <CODE>char32_t</CODE></LI>
+<LI><CODE>atomic_wchar_t</CODE> -- <CODE>wchar_t</CODE></LI>
+<LI><CODE>atomic_short</CODE> -- <CODE>short</CODE></LI>
+<LI><CODE>atomic_ushort</CODE> -- <CODE>unsigned short</CODE></LI>
+<LI><CODE>atomic_int</CODE> -- <CODE>int</CODE></LI>
+<LI><CODE>atomic_uint</CODE> -- <CODE>unsigned int</CODE></LI>
+<LI><CODE>atomic_long</CODE> -- <CODE>long</CODE></LI>
+<LI><CODE>atomic_ulong</CODE> -- <CODE>unsigned long</CODE></LI>
+<LI><CODE>atomic_llong</CODE> -- <CODE>long long</CODE></LI>
+<LI><CODE>atomic_ullong</CODE> -- <CODE>unsigned long long</CODE></LI>
+</UL>
+
+<P>Each <CODE>atomic<I>_integral</I></CODE> type has the same set of member functions as the corresponding
+instantiation of <CODE>atomic&lt;Ty&gt;</CODE> and can be passed to any of the
+<A HREF="#non-member_atomic_functions">non-member atomic functions</A>.</P>
+
+<P>There are <CODE>typedef</CODE> names for specializations of the <CODE>atomic</CODE>
+template for some of the types defined in the header <CODE>&lt;inttypes.h&gt;</CODE>:</P>
+
+<UL>
+<LI><CODE>atomic_int8_t</CODE> -- <CODE>atomic&lt;int8_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint8_t</CODE> -- <CODE>atomic&lt;uint8_t&gt;</CODE></LI>
+<LI><CODE>atomic_int16_t</CODE> -- <CODE>atomic&lt;int16_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint16_t</CODE> -- <CODE>atomic&lt;uint16_t&gt;</CODE></LI>
+<LI><CODE>atomic_int32_t</CODE> -- <CODE>atomic&lt;int32_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint32_t</CODE> -- <CODE>atomic&lt;uint32_t&gt;</CODE></LI>
+<LI><CODE>atomic_int64_t</CODE> -- <CODE>atomic&lt;int64_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint64_t</CODE> -- <CODE>atomic&lt;uint64_t&gt;</CODE></LI>
+
+<LI><CODE>atomic_int_least8_t</CODE> -- <CODE>atomic&lt;int_least8_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint_least8_t</CODE> -- <CODE>atomic&lt;uint_least8_t&gt;</CODE></LI>
+<LI><CODE>atomic_int_least16_t</CODE> -- <CODE>atomic&lt;int_least16_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint_least16_t</CODE> -- <CODE>atomic&lt;uint_least16_t&gt;</CODE></LI>
+<LI><CODE>atomic_int_least32_t</CODE> -- <CODE>atomic&lt;int_least32_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint_least32_t</CODE> -- <CODE>atomic&lt;uint_least32_t&gt;</CODE></LI>
+<LI><CODE>atomic_int_least64_t</CODE> -- <CODE>atomic&lt;int_least64_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint_least64_t</CODE> -- <CODE>atomic&lt;uint_least64_t&gt;</CODE></LI>
+
+<LI><CODE>atomic_int_fast8_t</CODE> -- <CODE>atomic&lt;int_fast8_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint_fast8_t</CODE> -- <CODE>atomic&lt;uint_fast8_t&gt;</CODE></LI>
+<LI><CODE>atomic_int_fast16_t</CODE> -- <CODE>atomic&lt;int_fast16_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint_fast16_t</CODE> -- <CODE>atomic&lt;uint_fast16_t&gt;</CODE></LI>
+<LI><CODE>atomic_int_fast32_t</CODE> -- <CODE>atomic&lt;int_fast32_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint_fast32_t</CODE> -- <CODE>atomic&lt;uint_fast32_t&gt;</CODE></LI>
+<LI><CODE>atomic_int_fast64_t</CODE> -- <CODE>atomic&lt;int_fast64_t&gt;</CODE></LI>
+<LI><CODE>atomic_uint_fast64_t</CODE> -- <CODE>atomic&lt;uint_fast64_t&gt;</CODE></LI>
+
+<LI><CODE>atomic_intptr_t</CODE> -- <CODE>atomic&lt;intptr_t&gt;</CODE></LI>
+<LI><CODE>atomic_uintptr_t</CODE> -- <CODE>atomic&lt;uintptr_t&gt;</CODE></LI>
+<LI><CODE>atomic_size_t</CODE> -- <CODE>atomic&lt;size_t&gt;</CODE></LI>
+<LI><CODE>atomic_ptrdiff_t</CODE> -- <CODE>atomic&lt;ptrdiff_t&gt;</CODE></LI>
+<LI><CODE>atomic_intmax_t</CODE> -- <CODE>atomic&lt;intmax_t&gt;</CODE></LI>
+<LI><CODE>atomic_uintmax_t</CODE> -- <CODE>atomic&lt;uintmax_t&gt;</CODE></LI>
+</UL>
+
+<P>There are also <B><A NAME="non-member_atomic_functions"></A>non-member atomic functions</B>
+for all of the operations provided by the various <CODE>atomic&lt;Ty&gt;</CODE> templates. In
+the descriptions of each of these functions, <I>a-type</I> refers to any of the atomic types
+and <I>m-type</I> refers to the corresponding <A HREF="#managed_type">managed type</A>.
+These functions are divided into three groups:</P>
+
+<UL>
+<LI><B><A NAME="general_operations"></A>general operations</B> (applicable to all
+instantiations of <CODE>atomic&lt;Ty&gt;</CODE>)
+
+<UL>
+<LI><B><A HREF="#atomic_is_lock_free"><CODE>atomic_is_lock_free</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_init"><CODE>atomic_init</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_store"><CODE>atomic_store</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_store_explicit"><CODE>atomic_store_explicit</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_load"><CODE>atomic_load</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_load_explicit"><CODE>atomic_load_explicit</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_exchange"><CODE>atomic_exchange</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_exchange_explicit"><CODE>atomic_exchange_explicit</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_compare_exchange_weak"><CODE>atomic_compare_exchange_weak</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_compare_exchange_weak_explicit"><CODE>atomic_compare_exchange_weak_explicit</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_compare_exchange_strong"><CODE>atomic_compare_exchange_strong</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_compare_exchange_strong_explicit"><CODE>atomic_compare_exchange_strong_explicit</CODE></A></B></LI>
+</UL></LI>
+
+<LI><B><A NAME="arithmetic_operations"></A>arithmetic operations</B> (applicable to
+<CODE>atomic&lt;<I>integral</I>&gt;</CODE> and <CODE>atomic&lt;Ty *&gt;</CODE>)
+<UL>
+<LI><B><A HREF="#atomic_fetch_add"><CODE>atomic_fetch_add</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_fetch_add_explicit"><CODE>atomic_fetch_add_explicit</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_fetch_sub"><CODE>atomic_fetch_sub</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_fetch_sub_explicit"><CODE>atomic_fetch_sub_explicit</CODE></A></B></LI>
+</UL>
+</LI>
+<LI><B><A NAME="logical_operations"></A>logical operations</B> (applicable to
+<CODE>atomic&lt;<I>integral</I>&gt;</CODE>)
+<UL>
+<LI><B><A HREF="#atomic_fetch_and"><CODE>atomic_fetch_and</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_fetch_and_explicit"><CODE>atomic_fetch_and_explicit</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_fetch_or"><CODE>atomic_fetch_or</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_fetch_or_explicit"><CODE>atomic_fetch_or_explicit</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_fetch_xor"><CODE>atomic_fetch_xor</CODE></A></B></LI>
+<LI><B><A HREF="#atomic_fetch_xor_explicit"><CODE>atomic_fetch_xor_explicit</CODE></A></B></LI>
+</UL>
+</LI>
+</UL>
+
+<P>The <B><A NAME="managed_type"></A>managed type</B> of any atomic type is the type of the
+data object that it manages. For instantiations of <CODE>atomic&lt;Ty&gt;</CODE> the managed
+type is <CODE>Ty</CODE>. For the <CODE>atomic<I>_integral</I></CODE> types it is the
+corresponding integral type.</P>
+
+<P>To create a fence, use the function
+<B><A HREF="#atomic_thread_fence"><CODE>atomic_thread_fence</CODE></A></B> or the function
+<B><A HREF="#atomic_signal_fence"><CODE>atomic_signal_fence</CODE></A></B>.</P>
+
+<P>Some platforms support data dependency analysis. For those platforms, consider using the
+<B><A HREF="#memory_order"><CODE>memory_order</CODE></A></B> option
+<CODE>memory_order_consume</CODE> and the template function
+<B><A HREF="#kill_dependency"><CODE>kill_dependency</CODE></A></B>.</P>
+
+<PRE>namespace std {
+        // ENUMERATION TYPES
+typedef enum <B><A HREF="#memory_order">memory_order</A></B> {
+    memory_order_relaxed,
+    memory_order_consume,
+    memory_order_acquire,
+    memory_order_release,
+    memory_order_acq_rel,
+    memory_order_seq_cst,
+} <B>memory_order</B>;
+
+        // TEMPLATE CLASS atomic
+template&lt;class Ty&gt;
+    struct <B><A HREF="#atomic">atomic</A></B>;
+template&lt;class Ty&gt;
+    struct <B><A HREF="#atomic&lt;Ty_*&gt;">atomic</A></B>&lt;Ty *&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;char&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;signed char&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;unsigned char&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;char16_t&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;char32_t&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;wchar_t&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;short&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;unsigned short&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;int&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;unsigned int&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;long&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;unsigned long&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;long long&gt;;
+template&lt;&gt;
+    struct <B><A HREF="#atomic&lt;integral&gt;">atomic</A></B>&lt;unsigned long long&gt;;
+
+        // ATOMIC TYPEDEFS
+typedef atomic&lt;int8_t&gt; <B><A NAME="atomic_int8_t"></A>atomic_int8_t</B>;
+typedef atomic&lt;uint8_t&gt; <B><A NAME="atomic_uint8_t"></A>atomic_uint8_t</B>;
+typedef atomic&lt;int16_t&gt; <B><A NAME="atomic_int16_t"></A>atomic_int16_t</B>;
+typedef atomic&lt;uint16_t&gt; <B><A NAME="atomic_uint16_t"></A>atomic_uint16_t</B>;
+typedef atomic&lt;int32_t&gt; <B><A NAME="atomic_int32_t"></A>atomic_int32_t</B>;
+typedef atomic&lt;uint32_t&gt; <B><A NAME="atomic_uint32_t"></A>atomic_uint32_t</B>;
+typedef atomic&lt;int64_t&gt; <B><A NAME="atomic_int64_t"></A>atomic_int64_t</B>;
+typedef atomic&lt;uint64_t&gt; <B><A NAME="atomic_uint64_t"></A>atomic_uint64_t</B>;
+
+typedef atomic&lt;int_least8_t&gt; <B><A NAME="atomic_int_least8_t"></A>atomic_int_least8_t</B>;
+typedef atomic&lt;uint_least8_t&gt; <B><A NAME="atomic_uint_least8_t"></A>atomic_uint_least8_t</B>;
+typedef atomic&lt;int_least16_t&gt; <B><A NAME="atomic_int_least16_t"></A>atomic_int_least16_t</B>;
+typedef atomic&lt;uint_least16_t&gt; <B><A NAME="atomic_uint_least16_t"></A>atomic_uint_least16_t</B>;
+typedef atomic&lt;int_least32_t&gt; <B><A NAME="atomic_int_least32_t"></A>atomic_int_least32_t</B>;
+typedef atomic&lt;uint_least32_t&gt; <B><A NAME="atomic_uint_least32_t"></A>atomic_uint_least32_t</B>;
+typedef atomic&lt;int_least64_t&gt; <B><A NAME="atomic_int_least64_t"></A>atomic_int_least64_t</B>;
+typedef atomic&lt;uint_least64_t&gt; <B><A NAME="atomic_uint_least64_t"></A>atomic_uint_least64_t</B>;
+
+typedef atomic&lt;int_fast8_t&gt; <B><A NAME="atomic_int_fast8_t"></A>atomic_int_fast8_t</B>;
+typedef atomic&lt;uint_fast8_t&gt; <B><A NAME="atomic_uint_fast8_t"></A>atomic_uint_fast8_t</B>;
+typedef atomic&lt;int_fast16_t&gt; <B><A NAME="atomic_int_fast16_t"></A>atomic_int_fast16_t</B>;
+typedef atomic&lt;uint_fast16_t&gt; <B><A NAME="atomic_uint_fast16_t"></A>atomic_uint_fast16_t</B>;
+typedef atomic&lt;int_fast32_t&gt; <B><A NAME="atomic_int_fast32_t"></A>atomic_int_fast32_t</B>;
+typedef atomic&lt;uint_fast32_t&gt; <B><A NAME="atomic_uint_fast32_t"></A>atomic_uint_fast32_t</B>;
+typedef atomic&lt;int_fast64_t&gt; <B><A NAME="atomic_int_fast64_t"></A>atomic_int_fast64_t</B>;
+typedef atomic&lt;uint_fast64_t&gt; <B><A NAME="atomic_uint_fast64_t"></A>atomic_uint_fast64_t</B>;
+
+typedef atomic&lt;intptr_t&gt; <B><A NAME="atomic_intptr_t"></A>atomic_intptr_t</B>;
+typedef atomic&lt;uintptr_t&gt; <B><A NAME="atomic_uintptr_t"></A>atomic_uintptr_t</B>;
+typedef atomic&lt;size_t&gt; <B><A NAME="atomic_size_t"></A>atomic_size_t</B>;
+typedef atomic&lt;ptrdiff_t&gt; <B><A NAME="atomic_ptrdiff_t"></A>atomic_ptrdiff_t</B>;
+typedef atomic&lt;intmax_t&gt; <B><A NAME="atomic_intmax_t"></A>atomic_intmax_t</B>;
+typedef atomic&lt;uintmax_t&gt; <B><A NAME="atomic_uintmax_t"></A>atomic_uintmax_t</B>;
+
+        // TEMPLATE FUNCTIONS
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#kill_dependency">kill_dependency</A></B>(Ty t) noexcept;
+
+        // MACROS
+#define <B><A HREF="#ATOMIC_FLAG_INIT">ATOMIC_FLAG_INIT</A></B> <I>initializer</I>
+#define <B><A HREF="#ATOMIC_VAR_INIT">ATOMIC_VAR_INIT</A></B> <I>initializer</I>
+
+#define <B><A HREF="#ATOMIC_BOOL_LOCK_FREE">ATOMIC_BOOL_LOCK_FREE</A></B> <I>integer-value</I>
+#define <B><A HREF="#ATOMIC_CHAR_LOCK_FREE">ATOMIC_CHAR_LOCK_FREE</A></B> <I>integer-value</I>
+#define <B><A HREF="#ATOMIC_CHAR16_T_LOCK_FREE">ATOMIC_CHAR16_T_LOCK_FREE</A></B> <I>integer-value</I>
+#define <B><A HREF="#ATOMIC_CHAR32_T_LOCK_FREE">ATOMIC_CHAR32_T_LOCK_FREE</A></B> <I>integer-value</I>
+#define <B><A HREF="#ATOMIC_WCHAR_T_LOCK_FREE">ATOMIC_WCHAR_T_LOCK_FREE</A></B> <I>integer-value</I>
+#define <B><A HREF="#ATOMIC_SHORT_LOCK_FREE">ATOMIC_SHORT_LOCK_FREE</A></B> <I>integer-value</I>
+#define <B><A HREF="#ATOMIC_INT_LOCK_FREE">ATOMIC_INT_LOCK_FREE</A></B> <I>integer-value</I>
+#define <B><A HREF="#ATOMIC_LONG_LOCK_FREE">ATOMIC_LONG_LOCK_FREE</A></B> <I>integer-value</I>
+#define <B><A HREF="#ATOMIC_LLONG_LOCK_FREE">ATOMIC_LLONG_LOCK_FREE</A></B> <I>integer-value</I>
+#define <B><A HREF="#ATOMIC_POINTER_LOCK_FREE">ATOMIC_POINTER_LOCK_FREE</A></B> <I>integer-value</I>
+
+        // STRUCT atomic_flag
+typedef struct <B><A HREF="#atomic_flag">atomic_flag</A></B> {
+    ...
+    } <B>atomic_flag</B>;
+bool <B><A HREF="#atomic_flag_test_and_set">atomic_flag_test_and_set</A></B>(volatile atomic_flag *) noexcept;
+bool <B><A HREF="#atomic_flag_test_and_set">atomic_flag_test_and_set</A></B>(atomic_flag *) noexcept;
+bool <B><A HREF="#atomic_flag_test_and_set_explicit">atomic_flag_test_and_set_explicit</A></B>(volatile atomic_flag *, memory_order) noexcept;
+bool <B><A HREF="#atomic_flag_test_and_set_explicit">atomic_flag_test_and_set_explicit</A></B>(atomic_flag *, memory_order) noexcept;
+bool <B><A HREF="#atomic_flag_clear">atomic_flag_clear</A></B>(volatile atomic_flag *) noexcept;
+bool <B><A HREF="#atomic_flag_clear">atomic_flag_clear</A></B>(atomic_flag *) noexcept;
+bool <B><A HREF="#atomic_flag_clear_explicit">atomic_flag_clear_explicit</A></B>(volatile atomic_flag *, memory_order) noexcept;
+bool <B><A HREF="#atomic_flag_clear_explicit">atomic_flag_clear_explicit</A></B>(atomic_flag *, memory_order) noexcept;
+
+        // GENERAL-PURPOSE ATOMIC TYPES
+typedef struct <B><A HREF="#atomic_integral">atomic_char</A></B> {
+    ...
+    } <B>atomic_char</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_schar</A></B> {
+    ...
+    } <B>atomic_schar</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_uchar</A></B> {
+    ...
+    } <B>atomic_uchar</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_char16_t</A></B> {
+    ...
+    } <B>atomic_char16_t</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_char32_t</A></B> {
+    ...
+    } <B>atomic_char32_t</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_wchar_t</A></B> {
+    ...
+    } <B>atomic_wchar_t</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_short</A></B> {
+    ...
+    } <B>atomic_short</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_ushort</A></B> {
+    ...
+    } <B>atomic_ushort</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_int</A></B> {
+    ...
+    } <B>atomic_int</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_uint</A></B> {
+    ...
+    } <B>atomic_uint</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_long</A></B> {
+    ...
+    } <B>atomic_long</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_ulong</A></B> {
+    ...
+    } <B>atomic_ulong</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_llong</A></B> {
+    ...
+    } <B>atomic_llong</B>;
+typedef struct <B><A HREF="#atomic_integral">atomic_ullong</A></B> {
+    ...
+    } <B>atomic_ullong</B>;
+
+        // GENERAL OPERATIONS
+template&lt;class Ty&gt;
+    bool <B><A HREF="#atomic_is_lock_free">atomic_is_lock_free</A></B>(const volatile <I>a-type</I> *) noexcept;
+template&lt;class Ty&gt;
+    bool <B><A HREF="#atomic_is_lock_free">atomic_is_lock_free</A></B>(volatile <I>a-type</I> *) noexcept;
+
+template&lt;class Ty&gt;
+    void <B><A HREF="#atomic_init">atomic_init</A></B>(volatile <I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    void <B><A HREF="#atomic_init">atomic_init</A></B>(<I>a-type</I> *, Ty) noexcept;
+
+template&lt;class Ty&gt;
+    void <B><A HREF="#atomic_store">atomic_store</A></B>(volatile <I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    void <B><A HREF="#atomic_store">atomic_store</A></B>(<I>a-type</I> *, Ty) noexcept;
+
+template&lt;class Ty&gt;
+    void <B><A HREF="#atomic_store_explicit">atomic_store_explicit</A></B>(volatile <I>a-type</I> *, Ty, memory_order) noexcept;
+template&lt;class Ty&gt;
+    void <B><A HREF="#atomic_store_explicit">atomic_store_explicit</A></B>(<I>a-type</I> *, Ty, memory_order) noexcept;
+
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_load">atomic_load</A></B>(const volatile <I>a-type</I> *) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_load">atomic_load</A></B>(const <I>a-type</I> *) noexcept;
+
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_load_explicit">atomic_load_explicit</A></B>(const volatile <I>a-type</I> *, memory_order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_load_explicit">atomic_load_explicit</A></B>(const <I>a-type</I> *, memory_order) noexcept;
+
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_exchange">atomic_exchange</A></B>(const volatile <I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_exchange">atomic_exchange</A></B>(const <I>a-type</I> *, Ty) noexcept;
+
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_exchange_explicit">atomic_exchange_explicit</A></B>(const volatile <I>a-type</I> *, Ty, memory_order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_exchange_explicit">atomic_exchange_explicit</A></B>(const <I>a-type</I> *, Ty, memory_order) noexcept;
+
+template&lt;class Ty&gt;
+    bool <B><A HREF="#atomic_compare_exchange_weak">atomic_compare_exchange_weak</A></B>(volatile <I>a-type</I> *, Ty *, Ty) noexcept;
+template&lt;class Ty&gt;
+    bool <B><A HREF="#atomic_compare_exchange_weak">atomic_compare_exchange_weak</A></B>(<I>a-type</I> *, Ty *, Ty) noexcept;
+template&lt;class Ty&gt;
+    bool <B><A HREF="#atomic_compare_exchange_weak_explicit">atomic_compare_exchange_weak_explicit</A></B>(volatile <I>a-type</I> *, Ty *, Ty,
+    memory_order, memory_order) noexcept;
+template&lt;class Ty&gt;
+    bool <B><A HREF="#atomic_compare_exchange_weak_explicit">atomic_compare_exchange_weak_explicit</A></B>(<I>a-type</I> *, Ty *, Ty,
+    memory_order, memory_order) noexcept;
+template&lt;class Ty&gt;
+    bool <B><A HREF="#atomic_compare_exchange_strong">atomic_compare_exchange_strong</A></B>(volatile <I>a-type</I> *, Ty *, Ty) noexcept;
+template&lt;class Ty&gt;
+    bool <B><A HREF="#atomic_compare_exchange_strong">atomic_compare_exchange_strong</A></B>(<I>a-type</I> *, Ty *, Ty) noexcept;
+template&lt;class Ty&gt;
+    bool <B><A HREF="#atomic_compare_exchange_strong_explicit">atomic_compare_exchange_strong_explicit</A></B>(volatile <I>a-type</I> *, Ty *, Ty,
+    memory_order, memory_order) noexcept;
+template&lt;class Ty&gt;
+    bool <B><A HREF="#atomic_compare_exchange_strong_explicit">atomic_compare_exchange_strong_explicit</A></B>(<I>a-type</I> *, Ty *, Ty,
+    memory_order, memory_order) noexcept;
+
+        // ARITHMETIC OPERATIONS
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_add">atomic_fetch_add</A></B>(volatile <I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_add">atomic_fetch_add</A></B>(<I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_add_explicit">atomic_fetch_add_explicit</A></B>(volatile <I>a-type</I> *, Ty, memory_order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_add_explicit">atomic_fetch_add_explicit</A></B>(<I>a-type</I> *, Ty, memory_order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_sub">atomic_fetch_sub</A></B>(volatile <I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_sub">atomic_fetch_sub</A></B>(<I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_sub_explicit">atomic_fetch_sub_explicit</A></B>(volatile <I>a-type</I> *, Ty, memory_order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_sub_explicit">atomic_fetch_sub_explicit</A></B>(<I>a-type</I> *, Ty, memory_order) noexcept;
+
+        // LOGICAL OPERATIONS
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_and">atomic_fetch_and</A></B>(volatile <I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_and">atomic_fetch_and</A></B>(<I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_and_explicit">atomic_fetch_and_explicit</A></B>(volatile <I>a-type</I> *, Ty, memory_order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_and_explicit">atomic_fetch_and_explicit</A></B>(<I>a-type</I> *, Ty, memory_order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_or">atomic_fetch_or</A></B>(volatile <I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_or">atomic_fetch_or</A></B>(<I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_or_explicit">atomic_fetch_or_explicit</A></B>(volatile <I>a-type</I> *, Ty, memory_order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_or_explicit">atomic_fetch_or_explicit</A></B>(<I>a-type</I> *, Ty, memory_order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_xor">atomic_fetch_xor</A></B>(volatile <I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_xor">atomic_fetch_xor</A></B>(<I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_xor_explicit">atomic_fetch_xor_explicit</A></B>(volatile <I>a-type</I> *, Ty, memory_order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#atomic_fetch_xor_explicit">atomic_fetch_xor_explicit</A></B>(<I>a-type</I> *, Ty, memory_order) noexcept;
+
+        // FENCES
+extern "C" void <B><A HREF="#atomic_thread_fence">atomic_thread_fence</A></B>(memory_order) noexcept;
+extern "C" void <B><A HREF="#atomic_signal_fence">atomic_signal_fence</A></B>(memory_order) noexcept;
+}   // namespace std</PRE>
+
+<H2><CODE><A NAME="atomic"></A>atomic</CODE></H2><HR>
+
+<P><B><CODE><A HREF="#atomic__atomic">atomic</A>
+&middot; <A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A>
+&middot; <A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A>
+&middot; <A HREF="#atomic__exchange">exchange</A>
+&middot; <A HREF="#atomic__is_lock_free">is_lock_free</A>
+&middot; <A HREF="#atomic__load">load</A>
+&middot; <A HREF="#atomic__operator_Ty">operator Ty</A>
+&middot; <A HREF="#atomic__operator2">operator=</A>
+&middot; <A HREF="#atomic__store">store</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Ty&gt;
+    struct <B>atomic</B> {
+    <B>atomic</B>() = default;
+    constexpr <B><A HREF="#atomic__atomic">atomic</A></B>(Ty);
+    <B>atomic</B>(const atomic&amp;) = delete;
+    atomic&amp; <B>operator=</B>(const atomic&amp;) volatile = delete;
+    atomic&amp; <B>operator=</B>(const atomic&amp;) = delete;
+
+    Ty <B><A HREF="#atomic__operator2">operator=</A></B>(Ty) volatile noexcept;
+    Ty <B><A HREF="#atomic__operator2">operator=</A></B>(Ty) noexcept;
+    <B><A HREF="#atomic__operator_Ty">operator Ty</A></B>() const volatile noexcept;
+    <B><A HREF="#atomic__operator_Ty">operator Ty</A></B>() const noexcept;
+
+    bool <B><A HREF="#atomic__is_lock_free">is_lock_free</A></B>() const volatile noexcept;
+    bool <B><A HREF="#atomic__is_lock_free">is_lock_free</A></B>() const noexcept;
+
+    void <B><A HREF="#atomic__store">store</A></B>(Ty, memory_order = memory_order_seq_cst) volatile noexcept;
+    void <B><A HREF="#atomic__store">store</A></B>(Ty, memory_order = memory_order_seq_cst) noexcept;
+    Ty <B><A HREF="#atomic__load">load</A></B>(memory_order = memory_order_seq_cst) const volatile noexcept;
+    Ty <B><A HREF="#atomic__load">load</A></B>(memory_order = memory_order_seq_cst) const noexcept;
+    Ty <B><A HREF="#atomic__exchange">exchange</A></B>(Ty, memory_order = memory_order_seq_cst) volatile noexcept;
+    Ty <B><A HREF="#atomic__exchange">exchange</A></B>(Ty, memory_order = memory_order_seq_cst) noexcept;
+
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(Ty&amp;, Ty,
+        memory_order = memory_order_seq_cst) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(Ty&amp;, Ty,
+        memory_order = memory_order_seq_cst) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(Ty&amp;, Ty,
+        memory_order, memory_order) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(Ty&amp;, Ty,
+        memory_order, memory_order) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(Ty&amp;, Ty,
+        memory_order = memory_order_seq_cst) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(Ty&amp;, Ty,
+        memory_order = memory_order_seq_cst) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(Ty&amp;, Ty,
+        memory_order, memory_order) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(Ty&amp;, Ty,
+        memory_order, memory_order) noexcept;
+};</PRE>
+
+<P>The template class describes an object that performs atomic operations on a
+stored value of type <CODE>Ty</CODE>. There are specializations
+<B><A HREF="#atomic&lt;integral&gt;"><CODE>atomic&lt;<I>integral</I>&gt;</CODE></A></B>
+for the built-in
+integral types and a partial specialization
+<B><A HREF="#atomic&lt;Ty_*&gt;"><CODE>atomic&lt;Ty *&gt;</CODE></A></B>
+for pointer types. This
+template is used for all other types.</P>
+
+<P>The type <CODE>Ty</CODE> must be trivially
+copyable, that is, copying its bytes with <CODE>memcpy</CODE> must produce a
+valid <CODE>Ty</CODE> object that compares equal to the original object.
+Also, the <CODE>compare_exchange_weak</CODE>
+and <CODE>compare_exchange_strong</CODE> member functions use
+<CODE>memcmp</CODE>
+to determine whether two <CODE>Ty</CODE> values are equal; if <CODE>Ty</CODE>
+defines its own <CODE>operator==</CODE> these functions will not use it.</P>
+
+<P>The member functions of <CODE>atomic</CODE> use <CODE>memcpy</CODE> to copy
+values of <CODE>Ty</CODE>.</P>
+
+<P>Objects of type <CODE>atomic&lt;Ty&gt;</CODE> can be passed to any
+of the <B><A HREF="#general_operations">general operations</A></B>.</P>
+
+<H3><CODE><A NAME="atomic__atomic"></A>atomic::atomic</CODE></H3>
+
+<PRE>atomic&lt;Ty&gt;::<B>atomic</B>() = default;
+constexpr atomic&lt;Ty&gt;::<B>atomic</B>(<I>Ty</I> val) noexcept;
+atomic&lt;Ty&gt;::<B>atomic</B>(const atomic&amp;) = delete;
+
+atomic&lt;<I>integral</I>&gt;::<B>atomic&lt;<I>integral</I>&gt;</B>() = default;
+constexpr atomic&lt;<I>integral</I>&gt;::<B>atomic&lt;<I>integral</I>&gt;</B>(<I>integral</I> val) noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>atomic&lt;<I>integral</I>&gt;</B>(const atomic&lt;<I>integral</I>&gt;&amp;) = delete;
+
+atomic&lt;<I>Ty *</I>&gt;::<B>atomic&lt;<I>Ty *</I>&gt;</B>() = default;
+constexpr atomic&lt;<I>Ty *</I>&gt;::<B>atomic&lt;<I>Ty *</I>&gt;</B>(<I>Ty *</I>) noexcept;
+atomic&lt;<I>Ty *</I>&gt;::<B>atomic&lt;<I>Ty *</I>&gt;</B>(const atomic&lt;<I>Ty *</I>&gt;&amp;) = delete;
+
+atomic_<I>integral</I>::<B>atomic_<I>integral</I></B>() = default;
+constexpr atomic_<I>integral</I>::<B>atomic_<I>integral</I></B>(<I>m-type</I>) noexcept;
+atomic_<I>integral</I>::<B>atomic_<I>integral</I></B>(const atomic_<I>integral</I>&amp;) = delete;</PRE>
+
+<P>Atomic objects cannot be copied
+and they cannot be moved. They can be initialized with aggregate initialization and
+with a constructor:</P>
+
+<PRE>atomic&lt;int&gt; ai0 = { 0 };
+atomic&lt;int&gt; ai1 = ATOMIC_VAR_INIT(0);
+atomic&lt;int&gt; ai2(0);</PRE>
+
+<P>In this implementation, when
+a compiler does not support <CODE>=delete</CODE> or <CODE>=default</CODE>,
+objects that are instantiations of <CODE>atomic&lt;Ty&gt;</CODE> can be initialized only
+by the constructor that takes an argument of type <CODE>Ty</CODE> and not with
+aggregate initialization;
+<CODE>atomic_<I>integral</I></CODE> objects can be initialized only with
+aggregate initialization.</P>
+
+<H3><CODE><A NAME="atomic__compare_exchange_strong"></A>atomic::compare_exchange_strong</CODE></H3>
+
+<PRE>bool atomic&lt;Ty&gt;::<B>compare_exchange_strong</B>(
+    Ty&amp; exp, Ty val, memory_order order = memory_order_seq_cst) volatile noexcept;
+bool atomic&lt;Ty&gt;::<B>compare_exchange_strong</B>(
+    Ty&amp; exp, Ty val, memory_order order = memory_order_seq_cst) noexcept;
+bool atomic&lt;Ty&gt;::<B>compare_exchange_strong</B>(
+    Ty&amp; exp, Ty val, memory_order order1, memory_order order2) volatile noexcept;
+bool atomic&lt;Ty&gt;::<B>compare_exchange_strong</B>(
+    Ty&amp; exp, Ty val, memory_order order1, memory_order order2) noexcept;
+
+bool atomic&lt;<I>integral</I>&gt;::<B>compare_exchange_strong</B>(
+    <I>integral</I>&amp; exp, <I>integral</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+bool atomic&lt;<I>integral</I>&gt;::<B>compare_exchange_strong</B>(
+    <I>integral</I>&amp; exp, <I>integral</I> val, memory_order order = memory_order_seq_cst) noexcept;
+bool atomic&lt;<I>integral</I>&gt;::<B>compare_exchange_strong</B>(
+    <I>integral</I>&amp; exp, <I>integral</I> val, memory_order order1, memory_order order2) volatile noexcept;
+bool atomic&lt;<I>integral</I>&gt;::<B>compare_exchange_strong</B>(
+    <I>integral</I>&amp; exp, <I>integral</I> val, memory_order order1, memory_order order2) noexcept;
+
+bool atomic&lt;Ty *&gt;::<B>compare_exchange_strong</B>(
+    Ty *&amp; exp, Ty *val, memory_order order = memory_order_seq_cst) volatile noexcept;
+bool atomic&lt;Ty *&gt;::<B>compare_exchange_strong</B>(
+    Ty *&amp; exp, Ty *val, memory_order order = memory_order_seq_cst) noexcept;
+bool atomic&lt;Ty *&gt;::<B>compare_exchange_strong</B>(
+    Ty *&amp; exp, Ty *val, memory_order order1, memory_order order2) volatile noexcept;
+bool atomic&lt;Ty *&gt;::<B>compare_exchange_strong</B>(
+    Ty *&amp; exp, Ty *val, memory_order order1, memory_order order2) noexcept;
+
+bool atomic_<I>integral</I>::<B>compare_exchange_strong</B>(
+    <I>m-type</I>&amp; exp, <I>m-type</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+bool atomic_<I>integral</I>::<B>compare_exchange_strong</B>(
+    <I>m-type</I>&amp; exp, <I>m-type</I> val, memory_order order = memory_order_seq_cst) noexcept;
+bool atomic_<I>integral</I>::<B>compare_exchange_strong</B>(
+    <I>m-type</I>&amp; exp, <I>m-type</I> val, memory_order order1, memory_order order2) volatile noexcept;
+bool atomic_<I>integral</I>::<B>compare_exchange_strong</B>(
+    <I>m-type</I>&amp; exp, <I>m-type</I> val, memory_order order1, memory_order order2) noexcept;</PRE>
+
+<P>The member functions that take one <CODE>memory_order</CODE> argument perform an
+<B><A HREF="#atomic_compare_and_exchange">atomic compare and exchange</A></B>
+operation
+on <CODE>this</CODE>, with <CODE>order1</CODE> equal to <CODE>order</CODE> and
+<CODE>order2</CODE> equal to <CODE>memory_order_acquire</CODE> if <CODE>order</CODE>
+is <CODE>memory_order_acq_rel</CODE>, <CODE>memory_order_relaxed</CODE>
+if <CODE>order</CODE> is <CODE>memory_order_release</CODE>, and
+<CODE>order</CODE> otherwise. They return the result of the operation.</P>
+
+<P>The member functions that take two <CODE>memory_order</CODE> arguments perform an
+<B><A HREF="#atomic_compare_and_exchange">atomic compare and exchange</A></B>
+operation
+on <CODE>this</CODE> and return the result.
+The value of <CODE>order2</CODE> should not be <CODE>memory_order_release</CODE> or
+<CODE>memory_order_acq_rel</CODE>, nor should it be stronger than the value
+of <CODE>order1</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__compare_exchange_weak"></A>atomic::compare_exchange_weak</CODE></H3>
+
+<PRE>bool atomic&lt;Ty&gt;::<B>compare_exchange_weak</B>(
+    Ty&amp; exp, Ty val, memory_order order = memory_order_seq_cst) volatile noexcept;
+bool atomic&lt;Ty&gt;::<B>compare_exchange_weak</B>(
+    Ty&amp; exp, Ty val, memory_order order = memory_order_seq_cst) noexcept;
+bool atomic&lt;Ty&gt;::<B>compare_exchange_weak</B>(
+    Ty&amp; exp, Ty val, memory_order order1, memory_order order2) volatile noexcept;
+bool atomic&lt;Ty&gt;::<B>compare_exchange_weak</B>(
+    Ty&amp; exp, Ty val, memory_order order1, memory_order order2) noexcept;
+
+bool atomic&lt;<I>integral</I>&gt;::<B>compare_exchange_weak</B>(
+    <I>integral</I>&amp; exp, <I>integral</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+bool atomic&lt;<I>integral</I>&gt;::<B>compare_exchange_weak</B>(
+    <I>integral</I>&amp; exp, <I>integral</I> val, memory_order order = memory_order_seq_cst) noexcept;
+bool atomic&lt;<I>integral</I>&gt;::<B>compare_exchange_weak</B>(
+    <I>integral</I>&amp; exp, <I>integral</I> val, memory_order order1, memory_order order2) volatile noexcept;
+bool atomic&lt;<I>integral</I>&gt;::<B>compare_exchange_weak</B>(
+    <I>integral</I>&amp; exp, <I>integral</I> val, memory_order order1, memory_order order2) noexcept;
+
+bool atomic&lt;Ty *&gt;::<B>compare_exchange_weak</B>(
+    Ty *&amp; exp, Ty *val, memory_order order = memory_order_seq_cst) volatile noexcept;
+bool atomic&lt;Ty *&gt;::<B>compare_exchange_weak</B>(
+    Ty *&amp; exp, Ty *val, memory_order order = memory_order_seq_cst) noexcept;
+bool atomic&lt;Ty *&gt;::<B>compare_exchange_weak</B>(
+    Ty *&amp; exp, Ty *val, memory_order order1, memory_order order2) volatile noexcept;
+bool atomic&lt;Ty *&gt;::<B>compare_exchange_weak</B>(
+    Ty *&amp; exp, Ty *val, memory_order order1, memory_order order2) noexcept;
+
+bool atomic_<I>integral</I>::<B>compare_exchange_weak</B>(
+    <I>m-type</I>&amp; exp, <I>m-type</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+bool atomic_<I>integral</I>::<B>compare_exchange_weak</B>(
+    <I>m-type</I>&amp; exp, <I>m-type</I> val, memory_order order = memory_order_seq_cst) noexcept;
+bool atomic_<I>integral</I>::<B>compare_exchange_weak</B>(
+    <I>m-type</I>&amp; exp, <I>m-type</I> val, memory_order order1, memory_order order2) volatile noexcept;
+bool atomic_<I>integral</I>::<B>compare_exchange_weak</B>(
+    <I>m-type</I>&amp; exp, <I>m-type</I> val, memory_order order1, memory_order order2) noexcept;</PRE>
+
+<P>The member functions that take one <CODE>memory_order</CODE> argument perform a
+<B><A HREF="#weak_atomic_compare_and_exchange">weak atomic compare and exchange</A></B> operation
+on <CODE>this</CODE>, with <CODE>order1</CODE> equal to <CODE>order</CODE> and
+<CODE>order2</CODE> equal to <CODE>memory_order_acquire</CODE> if
+<CODE>order</CODE>
+is <CODE>memory_order_acq_rel</CODE>, <CODE>memory_order_relaxed</CODE>
+if <CODE>order</CODE> is <CODE>memory_order_release</CODE>, and
+<CODE>order</CODE>
+otherwise. They return the result of the operation.</P>
+
+<P>The member functions that take two <CODE>memory_order</CODE> arguments perform a
+<B><A HREF="#weak_atomic_compare_and_exchange">weak atomic compare and exchange</A></B> operation
+on <CODE>this</CODE> and return the result.
+The value of <CODE>order2</CODE> should not be <CODE>memory_order_release</CODE> or
+<CODE>memory_order_acq_rel</CODE>, nor should it be stronger than the value
+of <CODE>order1</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__exchange"></A>atomic::exchange</CODE></H3>
+
+<PRE>
+Ty atomic&lt;Ty&gt;::<B>exchange</B>(
+    Ty value, memory_order order = memory_order_seq_cst) volatile noexcept;
+Ty atomic&lt;Ty&gt;::<B>exchange</B>(
+    Ty value, memory_order order = memory_order_seq_cst) noexcept;
+
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>exchange</B>(
+    <I>integral</I> value, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>exchange</B>(
+    <I>integral</I> value, memory_order order = memory_order_seq_cst) noexcept;
+
+Ty *atomic&lt;Ty *&gt;::<B>exchange</B>(
+    Ty *value, memory_order order = memory_order_seq_cst) volatile noexcept;
+Ty *atomic&lt;Ty *&gt;::<B>exchange</B>(
+    Ty *value, memory_order order = memory_order_seq_cst) noexcept;
+
+<I>m-type</I> atomic_<I>integral</I>::<B>exchange</B>(
+    <I>m-type</I> value, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>m-type</I> atomic_<I>integral</I>::<B>exchange</B>(
+    <I>m-type</I> value, memory_order order = memory_order_seq_cst) noexcept;</PRE>
+
+<P>The member functions atomically store <CODE>value</CODE> as the stored
+value in <CODE>*this</CODE> and return the stored value that
+<CODE>*this</CODE> held on entry.
+They apply the memory constraints specified by <CODE>order</CODE>, and are
+<B><A HREF="#read-modify-write_operation">read-modify-write operations</A></B>.</P>
+
+<H3><CODE><A NAME="atomic__fetch_add"></A>atomic::fetch_add</CODE></H3>
+
+<PRE><I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>fetch_add</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>fetch_add</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) noexcept;
+
+Ty *atomic&lt;Ty *&gt;::<B>fetch_add</B>(
+    ptrdiff_t val, memory_order order = memory_order_seq_cst) volatile noexcept;
+Ty *atomic&lt;Ty *&gt;::<B>fetch_add</B>(
+    ptrdiff_t val, memory_order order = memory_order_seq_cst) noexcept;
+
+<I>m-type</I> atomic_<I>integral</I>::<B>fetch_add</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>m-type</I> atomic_<I>integral</I>::<B>fetch_add</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) noexcept;</PRE>
+
+<P>The member functions return
+<CODE><B><A HREF="#atomic_fetch_add_explicit">atomic_fetch_add_explicit</A></B>(this, val, order) + val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__fetch_and"></A>atomic::fetch_and</CODE></H3>
+
+<PRE><I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>fetch_and</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>fetch_and</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst);
+
+<I>m-type</I> atomic_<I>integral</I>::<B>fetch_and</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) volatile;
+<I>m-type</I> atomic_<I>integral</I>::<B>fetch_and</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) noexcept;</PRE>
+
+<P>The member functions return
+<CODE><B><A HREF="#atomic_fetch_and_explicit">atomic_fetch_and_explicit</A></B>(this, val, order) &amp; val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__fetch_or"></A>atomic::fetch_or</CODE></H3>
+
+<PRE><I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>fetch_or</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>fetch_or</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) noexcept;
+
+<I>m-type</I> atomic_<I>integral</I>::<B>fetch_or</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>m-type</I> atomic_<I>integral</I>::<B>fetch_or</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) noexcept;</PRE>
+
+<P>The member functions return
+<CODE><B><A HREF="#atomic_fetch_or_explicit">atomic_fetch_or_explicit</A></B>(this, val, order) | val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__fetch_sub"></A>atomic::fetch_sub</CODE></H3>
+
+<PRE><I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>fetch_sub</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>fetch_sub</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) noexcept;
+
+Ty *atomic&lt;Ty *&gt;::<B>fetch_sub</B>(
+    ptrdiff_t val, memory_order order = memory_order_seq_cst) volatile noexcept;
+Ty *atomic&lt;Ty *&gt;::<B>fetch_sub</B>(
+    ptrdiff_t val, memory_order order = memory_order_seq_cst) noexcept;
+
+<I>m-type</I> atomic_<I>integral</I>::<B>fetch_sub</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>m-type</I> atomic_<I>integral</I>::<B>fetch_sub</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) noexcept;</PRE>
+
+<P>The member functions return
+<CODE><B><A HREF="#atomic_fetch_sub_explicit">atomic_fetch_sub_explicit</A></B>(this, val, order) - val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__fetch_xor"></A>atomic::fetch_xor</CODE></H3>
+
+<PRE><I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>fetch_xor</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>fetch_xor</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) noexcept;
+
+<I>m-type</I> atomic_<I>integral</I>::<B>fetch_xor</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+<I>m-type</I> atomic_<I>integral</I>::<B>fetch_xor</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) noexcept;</PRE>
+
+<P>The member functions return
+<CODE><B><A HREF="#atomic_fetch_xor_explicit">atomic_fetch_xor_explicit</A></B>(this, val, order) ^ val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__is_lock_free"></A>atomic::is_lock_free</CODE></H3>
+
+<PRE>bool <B>is_lock_free</B>() const volatile noexcept;
+bool <B>is_lock_free</B>() const noexcept;</PRE>
+
+<P>The member functions return
+<CODE><B><A HREF="#atomic_is_lock_free">atomic_is_lock_free</A></B>(this)</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__load"></A>atomic::load</CODE></H3>
+
+<PRE>Ty atomic&lt;Ty&gt;::<B>load</B>(memory_order order = memory_order_seq_cst) const volatile noexcept;
+Ty atomic&lt;Ty&gt;::<B>load</B>(memory_order order = memory_order_seq_cst) const noexcept;
+
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>load</B>(memory_order order = memory_order_seq_cst) const volatile noexcept;
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>load</B>(memory_order order = memory_order_seq_cst) const noexcept;
+
+Ty *atomic&lt;Ty *&gt;::<B>load</B>(memory_order order = memory_order_seq_cst) const volatile noexcept;
+Ty *atomic&lt;Ty *&gt;::<B>load</B>(memory_order order = memory_order_seq_cst) const noexcept;
+
+<I>m-type</I> atomic_<I>integral</I>::<B>load</B>(memory_order order = memory_order_seq_cst) const volatile noexcept;
+<I>m-type</I> atomic_<I>integral</I>::<B>load</B>(memory_order order = memory_order_seq_cst) const noexcept;</PRE>
+
+<P>The member functions atomically read the stored value of <CODE>*this</CODE>
+and return the result.
+They apply the memory constraints specified by <CODE>order</CODE>.
+The value of <CODE>order</CODE> should not be
+<CODE>memory_order_release</CODE> or <CODE>memory_order_acq_rel</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__operator_Ty"></A>atomic::operator Ty</CODE></H3>
+
+<PRE>atomic&lt;Ty&gt;::<B>operator Ty</B>() const volatile noexcept;
+atomic&lt;Ty&gt;::<B>operator Ty</B>() const noexcept;
+
+atomic&lt;<I>integral</I>&gt;::<B>operator <I>integral</I></B>() const volatile noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>operator <I>integral</I></B>() const noexcept;
+
+atomic&lt;Ty *&gt;::<B>operator Ty *</B>() const volatile noexcept;
+atomic&lt;Ty *&gt;::<B>operator Ty *</B>() const noexcept;
+
+atomic_<I>integral</I>::<B>operator <I>m-type</I></B>() const volatile noexcept;
+atomic_<I>integral</I>::<B>operator <I>m-type</I></B>() const noexcept;</PRE>
+
+<P>The member operators return
+<CODE><B><A HREF="#atomic__load">load</A></B>(memory_order_seq_cst)</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__operator2"></A>atomic::operator=</CODE></H3>
+
+<PRE>Ty atomic&lt;Ty&gt;::<B>operator=</B>(Ty val) volatile noexcept;
+Ty atomic&lt;Ty&gt;::<B>operator=</B>(Ty val) noexcept;
+
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>operator=</B>(<I>integral</I> val) volatile noexcept;
+<I>integral</I> atomic&lt;<I>integral</I>&gt;::<B>operator=</B>(<I>integral</I> val) noexcept;
+
+Ty *atomic&lt;Ty *&gt;::<B>operator=</B>(Ty *val) volatile noexcept;
+Ty *atomic&lt;Ty *&gt;::<B>operator=</B>(Ty *val) noexcept;
+
+<I>m-type</I> atomic_<I>integral</I>::<B>operator=</B>(<I>m-type</I> val) volatile noexcept;
+<I>m-type</I> atomic_<I>integral</I>::<B>operator=</B>(<I>m-type</I> val) noexcept;</PRE>
+
+<P>The member operators call <CODE><B><A HREF="#atomic__store">store</A></B>(val)</CODE>
+and return <CODE>val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__operator++"></A>atomic::operator++</CODE></H3>
+
+<PRE>atomic&lt;<I>integral</I>&gt;::<B>operator++</B>(int) volatile noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>operator++</B>(int) noexcept;
+
+atomic&lt;Ty *&gt;::<B>operator++</B>(int) volatile noexcept;
+atomic&lt;Ty *&gt;::<B>operator++</B>(int) noexcept;
+
+atomic_<I>integral</I>::<B>operator++</B>(int) volatile noexcept;
+atomic_<I>integral</I>::<B>operator++</B>(int) noexcept;
+
+atomic&lt;<I>integral</I>&gt;::<B>operator++</B>() volatile noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>operator++</B>() noexcept;
+
+atomic&lt;Ty *&gt;::<B>operator++</B>() volatile noexcept;
+atomic&lt;Ty *&gt;::<B>operator++</B>() noexcept;
+
+atomic_<I>integral</I>::<B>operator++</B>() volatile noexcept;
+atomic_<I>integral</I>::<B>operator++</B>() noexcept;</PRE>
+
+<P>The first six member operators return
+<CODE><B><A HREF="#atomic_fetch_add_explicit">atomic_fetch_add_explicit</A></B>(this, 1, memory_order_seq_cst)</CODE>.
+The last six member operators return
+<CODE><B><A HREF="#atomic_fetch_add_explicit">atomic_fetch_add_explicit</A></B>(this, 1, memory_order_seq_cst) + 1</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__operator+2"></A>atomic::operator+=</CODE></H3>
+
+<PRE>atomic&lt;<I>integral</I>&gt;::<B>operator+=</B>(<I>integral</I> val) volatile noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>operator+=</B>(<I>integral</I> val) noexcept;
+
+atomic&lt;Ty *&gt;::<B>operator+=</B>(ptrdiff_t val) volatile noexcept;
+atomic&lt;Ty *&gt;::<B>operator+=</B>(ptrdiff_t val) noexcept;
+
+atomic_<I>integral</I>::<B>operator+=</B>(<I>m-type</I> val) volatile noexcept;
+atomic_<I>integral</I>::<B>operator+=</B>(<I>m-type</I> val) noexcept;</PRE>
+
+<P>The member operators return
+<CODE><B><A HREF="#atomic_fetch_add_explicit">atomic_fetch_add_explicit</A></B>(this, val, memory_order_seq_cst) + val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__operator--"></A>atomic::operator--</CODE></H3>
+
+<PRE>atomic&lt;<I>integral</I>&gt;::<B>operator--</B>(int) volatile noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>operator--</B>(int) noexcept;
+
+atomic&lt;Ty *&gt;::<B>operator--</B>(int) volatile noexcept;
+atomic&lt;Ty *&gt;::<B>operator--</B>(int) noexcept;
+
+atomic_<I>integral</I>::<B>operator--</B>(int) volatile noexcept;
+atomic_<I>integral</I>::<B>operator--</B>(int) noexcept;
+
+atomic&lt;<I>integral</I>&gt;::<B>operator--</B>() volatile noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>operator--</B>() noexcept;
+
+atomic&lt;Ty *&gt;::<B>operator--</B>() volatile noexcept;
+atomic&lt;Ty *&gt;::<B>operator--</B>() noexcept;
+
+atomic_<I>integral</I>::<B>operator--</B>() volatile noexcept;
+atomic_<I>integral</I>::<B>operator--</B>() noexcept;</PRE>
+
+<P>The first six member operators return
+<CODE><B><A HREF="#atomic_fetch_sub_explicit">atomic_fetch_sub_explicit</A></B>(this, 1, memory_order_seq_cst)</CODE>.
+The last six member operators return
+<CODE><B><A HREF="#atomic_fetch_sub_explicit">atomic_fetch_sub_explicit</A></B>(this, 1, memory_order_seq_cst) - 1</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__operator-2"></A>atomic::operator-=</CODE></H3>
+
+<PRE>atomic&lt;<I>integral</I>&gt;::<B>operator-=</B>(<I>integral</I> val) volatile noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>operator-=</B>(<I>integral</I> val) noexcept;
+
+atomic&lt;Ty *&gt;::<B>operator-=</B>(ptrdiff_t val) volatile noexcept;
+atomic&lt;Ty *&gt;::<B>operator-=</B>(ptrdiff_t val) noexcept;
+
+atomic_<I>integral</I>::<B>operator-=</B>(<I>m-type</I> val) volatile noexcept;
+atomic_<I>integral</I>::<B>operator-=</B>(<I>m-type</I> val) noexcept;</PRE>
+
+<P>The member operators return
+<CODE><B><A HREF="#atomic_fetch_sub_explicit">atomic_fetch_sub_explicit</A></B>(this, val, memory_order_seq_cst) - val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__operator&amp;2"></A>atomic::operator&amp;=</CODE></H3>
+
+<PRE>atomic&lt;<I>integral</I>&gt;::<B>operator&amp;=</B>(<I>integral</I> val) volatile noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>operator&amp;=</B>(<I>integral</I> val) noexcept;
+
+atomic_<I>integral</I>::<B>operator&amp;=</B>(<I>m-type</I> val) volatile noexcept;
+atomic_<I>integral</I>::<B>operator&amp;=</B>(<I>m-type</I> val) noexcept;</PRE>
+
+<P>The member operators return
+<CODE><B><A HREF="#atomic_fetch_and_explicit">atomic_fetch_and_explicit</A></B>(this, val, memory_order_seq_cst) &amp; val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__operator|2"></A>atomic::operator|=</CODE></H3>
+
+<PRE>atomic&lt;<I>integral</I>&gt;::<B>operator|=</B>(<I>integral</I> val) volatile noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>operator|=</B>(<I>integral</I> val) noexcept;
+
+atomic_<I>integral</I>::<B>operator|=</B>(<I>m-type</I> val) volatile noexcept;
+atomic_<I>integral</I>::<B>operator|=</B>(<I>m-type</I> val) noexcept;</PRE>
+
+<P>The member operators return
+<CODE><B><A HREF="#atomic_fetch_or_explicit">atomic_fetch_or_explicit</A></B>(this, val, memory_order_seq_cst) | val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__operator^2"></A>atomic::operator^=</CODE></H3>
+
+<PRE>atomic&lt;<I>integral</I>&gt;::<B>operator^=</B>(<I>integral</I> val) volatile noexcept;
+atomic&lt;<I>integral</I>&gt;::<B>operator^=</B>(<I>integral</I> val) noexcept;
+
+atomic_<I>integral</I>::<B>operator^=</B>(<I>m-type</I> val) volatile noexcept;
+atomic_<I>integral</I>::<B>operator^=</B>(<I>m-type</I> val) noexcept;</PRE>
+
+<P>The member operators return
+<CODE><B><A HREF="#atomic_fetch_xor_explicit">atomic_fetch_xor_explicit</A></B>(this, val, memory_order_seq_cst) ^ val</CODE>.</P>
+
+<H3><CODE><A NAME="atomic__store"></A>atomic::store</CODE></H3>
+
+<PRE>void atomic&lt;Ty&gt;::<B>store</B>(
+    Ty val, memory_order order = memory_order_seq_cst) volatile noexcept;
+void atomic&lt;Ty&gt;::<B>store</B>(
+    Ty val, memory_order order = memory_order_seq_cst) noexcept;
+
+void atomic&lt;<I>integral</I>&gt;::<B>store</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+void atomic&lt;<I>integral</I>&gt;::<B>store</B>(
+    <I>integral</I> val, memory_order order = memory_order_seq_cst) noexcept;
+
+void atomic&lt;Ty *&gt;::<B>store</B>(
+    Ty *val, memory_order order = memory_order_seq_cst) volatile noexcept;
+void atomic&lt;Ty *&gt;::<B>store</B>(
+    Ty *val, memory_order order = memory_order_seq_cst) noexcept;
+
+void atomic_<I>integral</I>::<B>store</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) volatile noexcept;
+void atomic_<I>integral</I>::<B>store</B>(
+    <I>m-type</I> val, memory_order order = memory_order_seq_cst) noexcept;</PRE>
+
+<P>The member functions atomically store <CODE>val</CODE> as the
+stored value in <CODE>*this</CODE>.
+They apply the memory constraints specified by <CODE>order</CODE>.
+The value of <CODE>order</CODE> should not be
+<CODE>memory_order_consume</CODE>,
+<CODE>memory_order_acquire</CODE>, or <CODE>memory_order_acq_rel</CODE>.</P>
+
+<H2><CODE><A NAME="atomic&lt;integral&gt;"></A>atomic&lt;<I>integral</I>&gt;</CODE></H2><HR>
+
+<P><B><CODE><A HREF="#atomic__atomic">atomic&lt;<I>integral</I>&gt;</A>
+&middot; <A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A>
+&middot; <A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A>
+&middot; <A HREF="#atomic__exchange">exchange</A>
+&middot; <A HREF="#atomic__fetch_add">fetch_add</A>
+&middot; <A HREF="#atomic__fetch_and">fetch_and</A>
+&middot; <A HREF="#atomic__fetch_or">fetch_or</A>
+&middot; <A HREF="#atomic__fetch_sub">fetch_sub</A>
+&middot; <A HREF="#atomic__fetch_xor">fetch_xor</A>
+&middot; <A HREF="#atomic__is_lock_free">is_lock_free</A>
+&middot; <A HREF="#atomic__load">load</A>
+&middot; <A HREF="#atomic__operator_Ty">operator <I>integral</I></A>
+&middot; <A HREF="#atomic__operator2">operator=</A>
+&middot; <A HREF="#atomic__operator++">operator++</A>
+&middot; <A HREF="#atomic__operator+2">operator+=</A>
+&middot; <A HREF="#atomic__operator--">operator--</A>
+&middot; <A HREF="#atomic__operator-2">operator-=</A>
+&middot; <A HREF="#atomic__operator&amp;2">operator&amp;=</A>
+&middot; <A HREF="#atomic__operator|2">operator|=</A>
+&middot; <A HREF="#atomic__operator^2">operator^=</A>
+&middot; <A HREF="#atomic__store">store</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;&gt;
+    struct <B>atomic&lt;<I>integral</I>&gt;</B> {
+    <B>atomic</B>() = default;
+    constexpr <B><A HREF="#atomic__atomic">atomic</A></B>(<I>integral</I>) noexcept;
+    <B>atomic</B>(const atomic&amp;) = delete;
+    atomic&amp; <B>operator=</B>(const atomic&amp;) volatile = delete;
+    atomic&amp; <B>operator=</B>(const atomic&amp;) = delete;
+
+    <I>integral</I> <B><A HREF="#atomic__operator2">operator=</A></B>(<I>integral</I>) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator2">operator=</A></B>(<I>integral</I>) noexcept;
+    atomic&amp; <B>operator=</B>(const atomic&amp;) volatile = delete;
+    atomic&amp; <B>operator=</B>(const atomic&amp;) = delete;
+
+    <I>integral</I> <B><A HREF="#atomic__operator2">operator=</A></B>(<I>integral</I>) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator2">operator=</A></B>(<I>integral</I>) noexcept;
+    <B><A HREF="#atomic__operator_Ty">operator <I>integral</I></A></B>() const volatile noexcept;
+    <B><A HREF="#atomic__operator_Ty">operator <I>integral</I></A></B>() const noexcept;
+
+    bool <B><A HREF="#atomic__is_lock_free">is_lock_free</A></B>() const volatile noexcept;
+    bool <B><A HREF="#atomic__is_lock_free">is_lock_free</A></B>() const noexcept;
+
+    void <B><A HREF="#atomic__store">store</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    void <B><A HREF="#atomic__store">store</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__load">load</A></B>(memory_order = memory_order_seq_cst) const volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__load">load</A></B>(memory_order = memory_order_seq_cst) const noexcept;
+    <I>integral</I> <B><A HREF="#atomic__exchange">exchange</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__exchange">exchange</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) noexcept;
+
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(<I>integral</I>&amp;, <I>integral</I>,
+        memory_order = memory_order_seq_cst) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(<I>integral</I>&amp;, <I>integral</I>,
+        memory_order = memory_order_seq_cst) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(<I>integral</I>&amp;, <I>integral</I>,
+        memory_order, memory_order) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(<I>integral</I>&amp;, <I>integral</I>,
+        memory_order, memory_order) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(<I>integral</I>&amp;, <I>integral</I>,
+        memory_order = memory_order_seq_cst) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(<I>integral</I>&amp;, <I>integral</I>,
+        memory_order = memory_order_seq_cst) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(<I>integral</I>&amp;, <I>integral</I>,
+        memory_order, memory_order) volatile;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(<I>integral</I>&amp;, <I>integral</I>,
+        memory_order, memory_order) noexcept;
+
+    <I>integral</I> <B><A HREF="#atomic__fetch_add">fetch_add</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__fetch_add">fetch_add</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__fetch_sub">fetch_sub</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__fetch_sub">fetch_sub</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__fetch_and">fetch_and</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__fetch_and">fetch_and</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__fetch_or">fetch_or</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__fetch_or">fetch_or</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__fetch_xor">fetch_xor</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__fetch_xor">fetch_xor</A></B>(<I>integral</I>, memory_order = memory_order_seq_cst) noexcept;
+
+    <I>integral</I> <B><A HREF="#atomic__operator++">operator++</A></B>(int) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator++">operator++</A></B>(int) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator++">operator++</A></B>() volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator++">operator++</A></B>() noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator+2">operator+=</A></B>(<I>integral</I>) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator+2">operator+=</A></B>(<I>integral</I>) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator--">operator--</A></B>(int) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator--">operator--</A></B>(int) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator--">operator--</A></B>() volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator--">operator--</A></B>() noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator-2">operator-=</A></B>(<I>integral</I>) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator-2">operator-=</A></B>(<I>integral</I>) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator&amp;2">operator&amp;=</A></B>(<I>integral</I>) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator&amp;2">operator&amp;=</A></B>(<I>integral</I>) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator|2">operator|=</A></B>(<I>integral</I>) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator|2">operator|=</A></B>(<I>integral</I>) noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator^2">operator^=</A></B>(<I>integral</I>) volatile noexcept;
+    <I>integral</I> <B><A HREF="#atomic__operator^2">operator^=</A></B>(<I>integral</I>) noexcept;
+};</PRE>
+
+<P>For each of the integral types except <CODE>bool</CODE>
+there is a corresponding specialization of the template class
+<B><A HREF="#atomic"><CODE>atomic</CODE></A></B><CODE>&lt;Ty&gt;</CODE>
+instantiated with the integral type:</P>
+
+<UL>
+<LI><CODE>atomic&lt;char&gt;</CODE></LI>
+<LI><CODE>atomic&lt;signed char&gt;</CODE></LI>
+<LI><CODE>atomic&lt;unsigned char&gt;</CODE></LI>
+<LI><CODE>atomic&lt;char16_t&gt;</CODE></LI>
+<LI><CODE>atomic&lt;char32_t&gt;</CODE></LI>
+<LI><CODE>atomic&lt;wchar_t&gt;</CODE></LI>
+<LI><CODE>atomic&lt;short&gt;</CODE></LI>
+<LI><CODE>atomic&lt;unsigned short&gt;</CODE></LI>
+<LI><CODE>atomic&lt;int&gt;</CODE></LI>
+<LI><CODE>atomic&lt;unsigned int&gt;</CODE></LI>
+<LI><CODE>atomic&lt;long&gt;</CODE></LI>
+<LI><CODE>atomic&lt;unsigned long&gt;</CODE></LI>
+<LI><CODE>atomic&lt;long long&gt;</CODE></LI>
+<LI><CODE>atomic&lt;unsigned long long&gt;</CODE></LI>
+</UL>
+
+<P>Objects of these types can be passed to any of the
+<B><A HREF="#non-member_atomic_functions">non-member atomic functions</A></B>
+described earlier.</P>
+
+<P>In this implementation the template
+specialization is derived from the corresponding
+<CODE>atomic<I>_integral</I></CODE> type. For example, the specialization
+<CODE>atomic&lt;unsigned int&gt;</CODE> is derived from
+<CODE>atomic_uint</CODE>.</P>
+
+<H2><CODE><A NAME="atomic&lt;Ty_*&gt;"></A>atomic&lt;Ty *&gt;</CODE></H2><HR>
+
+<P><B><CODE><A HREF="#atomic__atomic">atomic&lt;Ty *&gt;</A>
+&middot; <A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A>
+&middot; <A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A>
+&middot; <A HREF="#atomic__exchange">exchange</A>
+&middot; <A HREF="#atomic__fetch_add">fetch_add</A>
+&middot; <A HREF="#atomic__fetch_sub">fetch_sub</A>
+&middot; <A HREF="#atomic__is_lock_free">is_lock_free</A>
+&middot; <A HREF="#atomic__load">load</A>
+&middot; <A HREF="#atomic__operator_Ty">operator Ty *</A>
+&middot; <A HREF="#atomic__operator2">operator=</A>
+&middot; <A HREF="#atomic__operator++">operator++</A>
+&middot; <A HREF="#atomic__operator+2">operator+=</A>
+&middot; <A HREF="#atomic__operator--">operator--</A>
+&middot; <A HREF="#atomic__operator-2">operator-=</A>
+&middot; <A HREF="#atomic__store">store</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Ty&gt;
+     struct <B>atomic&lt;Ty *&gt;</B> {
+    <B>atomic</B>() = default;
+    constexpr <B><A HREF="#atomic__atomic">atomic</A></B>(Ty *) noexcept;
+    <B>atomic</B>(const atomic&amp;) = delete;
+    atomic&amp; <B>operator=</B>(const atomic&amp;) volatile = delete;
+    atomic&amp; <B>operator=</B>(const atomic&amp;) = delete;
+
+    Ty *<B><A HREF="#atomic__operator2">operator=</A></B>(Ty *) volatile noexcept;
+    Ty *<B><A HREF="#atomic__operator2">operator=</A></B>(Ty *) noexcept;
+    <B><A HREF="#atomic__operator_Ty">operator Ty *</A></B>() const volatile noexcept;
+    <B><A HREF="#atomic__operator_Ty">operator Ty *</A></B>() const noexcept;
+
+    bool <B><A HREF="#atomic__is_lock_free">is_lock_free</A></B>() const volatile noexcept;
+    bool <B><A HREF="#atomic__is_lock_free">is_lock_free</A></B>() const noexcept;
+
+    void <B><A HREF="#atomic__store">store</A></B>(Ty *, memory_order = memory_order_seq_cst) volatile noexcept;
+    void <B><A HREF="#atomic__store">store</A></B>(Ty *, memory_order = memory_order_seq_cst) noexcept;
+    Ty *<B><A HREF="#atomic__load">load</A></B>(memory_order = memory_order_seq_cst) const volatile noexcept;
+    Ty *<B><A HREF="#atomic__load">load</A></B>(memory_order = memory_order_seq_cst) const noexcept;
+    Ty *<B><A HREF="#atomic__exchange">exchange</A></B>(Ty *, memory_order = memory_order_seq_cst) volatile noexcept;
+    Ty *<B><A HREF="#atomic__exchange">exchange</A></B>(Ty *, memory_order = memory_order_seq_cst) noexcept;
+
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(Ty *&amp;, Ty *,
+        memory_order = memory_order_seq_cst) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(Ty *&amp;, Ty *,
+        memory_order = memory_order_seq_cst) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(Ty *&amp;, Ty *,
+        memory_order, memory_order) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(Ty *&amp;, Ty *,
+        memory_order, memory_order) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(Ty *&amp;, Ty *,
+        memory_order = memory_order_seq_cst) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(Ty *&amp;, Ty *,
+        memory_order = memory_order_seq_cst) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(Ty *&amp;, Ty *,
+        memory_order, memory_order) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(Ty *&amp;, Ty *,
+        memory_order, memory_order) noexcept;
+
+    Ty *<B><A HREF="#atomic__fetch_add">fetch_add</A></B>(ptrdiff_t, memory_order = memory_order_seq_cst) volatile noexcept;
+    Ty *<B><A HREF="#atomic__fetch_add">fetch_add</A></B>(ptrdiff_t, memory_order = memory_order_seq_cst) noexcept;
+    Ty *<B><A HREF="#atomic__fetch_sub">fetch_sub</A></B>(ptrdiff_t, memory_order = memory_order_seq_cst) volatile noexcept;
+    Ty *<B><A HREF="#atomic__fetch_sub">fetch_sub</A></B>(ptrdiff_t, memory_order = memory_order_seq_cst) noexcept noexcept;
+
+    Ty *<B><A HREF="#atomic__operator++">operator++</A></B>(int) volatile noexcept;
+    Ty *<B><A HREF="#atomic__operator++">operator++</A></B>(int) noexcept;
+    Ty *<B><A HREF="#atomic__operator++">operator++</A></B>() volatile noexcept;
+    Ty *<B><A HREF="#atomic__operator++">operator++</A></B>() noexcept;
+    Ty *<B><A HREF="#atomic__operator--">operator--</A></B>(int) volatile noexcept;
+    Ty *<B><A HREF="#atomic__operator--">operator--</A></B>(int) noexcept;
+    Ty *<B><A HREF="#atomic__operator--">operator--</A></B>() volatile noexcept;
+    Ty *<B><A HREF="#atomic__operator--">operator--</A></B>() noexcept;
+    Ty *<B><A HREF="#atomic__operator+2">operator+=</A></B>(ptrdiff_t) volatile noexcept;
+    Ty *<B><A HREF="#atomic__operator+2">operator+=</A></B>(ptrdiff_t) noexcept;
+    Ty *<B><A HREF="#atomic__operator-2">operator-=</A></B>(ptrdiff_t) volatile noexcept;
+    Ty *<B><A HREF="#atomic__operator-2">operator-=</A></B>(ptrdiff_t) noexcept;
+};</PRE>
+
+<P>The partial specialization describes an object that performs atomic
+operations on a
+stored value of type <CODE>Ty *</CODE>. Its arithmetic operations are a bit
+different from
+those in <CODE>atomic&lt;<I>integral</I>&gt;</CODE>: they take an argument of
+type  <CODE>ptrdiff_t</CODE> and they adjust that argument according to
+the size of <CODE>Ty</CODE> to be consistent with ordinary address
+arithmetic.</P>
+
+<P>Objects of any of these partial specializations can be passed to
+the <B><A HREF="#general_operations">general operations</A></B>
+and the
+<B><A HREF="#arithmetic_operations">arithmetic operations</A></B>.</P>
+
+<H2><CODE><A NAME="ATOMIC_BOOL_LOCK_FREE"></A>ATOMIC_BOOL_LOCK_FREE</CODE></H2>
+
+<PRE>#define <B>ATOMIC_BOOL_LOCK_FREE</B> <I>integer-value</I></PRE>
+
+<P>The macro has a <B><A HREF="#macro_value">value</A></B> that
+indicates whether the type
+<CODE><A HREF="#atomic">atomic</A>&lt;bool&gt;</CODE>
+is <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="ATOMIC_CHAR_LOCK_FREE"></A>ATOMIC_CHAR_LOCK_FREE</CODE></H2>
+
+<PRE>#define <B>ATOMIC_CHAR_LOCK_FREE</B> <I>integer-value</I></PRE>
+
+<P>The macro has a <B><A HREF="#macro_value">value</A></B> that indicates whether
+the types
+<B><A HREF="#atomic_integral"><CODE>atomic_char</CODE></A></B>,
+<B><A HREF="#atomic_integral"><CODE>atomic_schar</CODE></A></B>,
+ and
+<B><A HREF="#atomic_integral"><CODE>atomic_uchar</CODE></A></B>
+are <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="ATOMIC_CHAR16_T_LOCK_FREE"></A>ATOMIC_CHAR16_T_LOCK_FREE</CODE></H2>
+
+<PRE>#define <B>ATOMIC_CHAR16_T_LOCK_FREE</B> <I>integer-value</I></PRE>
+
+<P>The macro has a <B><A HREF="#macro_value">value</A></B> that indicates whether
+the type
+<B><A HREF="#atomic_integral"><CODE>atomic_char16_t</CODE></A></B>
+is <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="ATOMIC_CHAR32_T_LOCK_FREE"></A>ATOMIC_CHAR32_T_LOCK_FREE</CODE></H2>
+
+<PRE>#define <B>ATOMIC_CHAR32_T_LOCK_FREE</B> <I>integer-value</I></PRE>
+
+<P>The macro has a <B><A HREF="#macro_value">value</A></B> that indicates whether
+the type
+<B><A HREF="#atomic_integral"><CODE>atomic_char32_t</CODE></A></B>
+is <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="atomic_compare_exchange_strong"></A>atomic_compare_exchange_strong</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>atomic_compare_exchange_strong</B>(volatile <I>a-type</I> *atom, Ty *exp, Ty val) noexcept;
+template&lt;class Ty&gt;
+    bool <B>atomic_compare_exchange_strong</B>(<I>a-type</I> *atom, Ty *exp, Ty val) noexcept;</PRE>
+
+<P>The template functions return
+<CODE><B><A HREF="#atomic_compare_exchange_strong_explicit">atomic_compare_exchange_strong_explicit</A></B>(atom,
+exp, val, memory_order_seq_cst, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_compare_exchange_strong_explicit"></A>atomic_compare_exchange_strong_explicit</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>atomic_compare_exchange_strong_explicit</B>(volatile <I>a-type</I> *atom, Ty *exp, Ty val,
+    memory_order order1, memory_order order2) noexcept;
+template&lt;class Ty&gt;
+    bool <B>atomic_compare_exchange_strong_explicit</B>(<I>a-type</I> *atom, Ty *exp, Ty val,
+    memory_order order1, memory_order order2) noexcept;</PRE>
+
+<P>The template functions perform an
+<B><A HREF="#atomic_compare_and_exchange">atomic compare and exchange</A></B> operation
+on their arguments and return the result.
+The value of <CODE>order2</CODE> should not be <CODE>memory_order_release</CODE> or
+<CODE>memory_order_acq_rel</CODE>, nor should it be stronger than the value
+of <CODE>order1</CODE>.</P>
+
+<P>An <B><A NAME="atomic_compare_and_exchange"></A>atomic compare and exchange</B> operation takes
+five arguments: an <CODE>atom</CODE>, which is a pointer to the object that the operation
+is applied to; a pointer or reference named <CODE>exp</CODE> that refers to a value; a value
+named <CODE>val</CODE>; and two memory order arguments, <CODE>order1</CODE> and
+<CODE>order2</CODE>. The operation does the following, all atomically: it compares
+the value stored in the object pointed to by <CODE>atom</CODE> with the value pointed
+to by <CODE>exp</CODE>; if they are equal, it replaces the value stored in the
+object pointed to by <CODE>atom</CODE> with the value <CODE>val</CODE>
+with a
+<B><A HREF="#read-modify-write_operation">read-modify-write operation</A></B>
+and applies
+the memory order constraints specified by <CODE>order1</CODE>; if they are not equal,
+it replaces the value pointed to by <CODE>exp</CODE> with the value stored in the
+object pointed to by <CODE>atom</CODE> and applies the memory order constraints specified
+by <CODE>order2</CODE>. It returns the boolean value that was the result of the comparison.</P>
+
+<H2><CODE><A NAME="atomic_compare_exchange_weak"></A>atomic_compare_exchange_weak</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>atomic_compare_exchange_weak</B>(volatile <I>a-type</I> *atom, Ty *exp, Ty val) noexcept;
+template&lt;class Ty&gt;
+    bool <B>atomic_compare_exchange_weak</B>(<I>a-type</I> *atom, Ty *exp, Ty val) noexcept;</PRE>
+
+<P>The template functions return
+<CODE><B><A HREF="#atomic_compare_exchange_weak_explicit">atomic_compare_exchange_weak_explicit</A></B>(atom,
+exp, val, memory_order_seq_cst, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_compare_exchange_weak_explicit"></A>atomic_compare_exchange_weak_explicit</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>atomic_compare_exchange_weak_explicit</B>(volatile <I>a-type</I> *atom, Ty *exp, Ty val,
+    memory_order order1, memory_order order2) noexcept;
+template&lt;class Ty&gt;
+    bool <B>atomic_compare_exchange_weak_explicit</B>(<I>a-type</I> *atom, Ty *exp, Ty val,
+    memory_order order1, memory_order order2) noexcept;</PRE>
+
+<P>The template functions perform a
+<B><A HREF="#weak_atomic_compare_and_exchange">weak atomic compare and exchange</A></B>
+operation on their arguments and return the result.
+The value of <CODE>order2</CODE> should not be <CODE>memory_order_release</CODE> or
+<CODE>memory_order_acq_rel</CODE>, nor should it be stronger than the value
+of <CODE>order1</CODE>.</P>
+
+<P>A <B><A NAME="weak_atomic_compare_and_exchange"></A>weak atomic compare and exchange</B>
+is an <B><A HREF="#atomic_compare_and_exchange">atomic compare and exchange</A></B>
+operation that may return spuriously. If it returns <CODE>true</CODE>, the comparison
+succeeded and the success exchange was made; if it returns <CODE>false</CODE>, the comparison
+failed and the failure exchange may or may not have been made.</P>
+
+<H2><CODE><A NAME="atomic_exchange"></A>atomic_exchange</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_exchange</B>(volatile <I>a-type</I> *atom, Ty value) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_exchange</B>(<I>a-type</I> *atom, Ty value) noexcept;</PRE>
+
+<P>The template functions return
+<CODE><B><A HREF="#atomic_exchange_explicit">atomic_exchange_explicit</A></B>(atom, value, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_exchange_explicit"></A>atomic_exchange_explicit</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_exchange_explicit</B>(volatile <I>a-type</I> *atom, Ty value, memory_order order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_exchange_explicit</B>(<I>a-type</I> *atom, Ty value, memory_order order) noexcept;</PRE>
+
+<P>The template functions atomically store <CODE>value</CODE> as the stored
+value in <CODE>*atom</CODE> and return the stored value that <CODE>*atom</CODE>
+held on entry.
+They apply the memory constraints specified by <CODE>order</CODE>, and are
+<B><A HREF="#read-modify-write_operation">read-modify-write operations</A></B>.</P>
+
+<H2><CODE><A NAME="atomic_fetch_add"></A>atomic_fetch_add</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_add</B>(volatile <I>a-type</I> *atom, Ty value) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_add</B>(<I>a-type</I> *atom, Ty value) noexcept;</PRE>
+
+<P>The template functions return
+<CODE><B><A HREF="#atomic_fetch_add_explicit">atomic_fetch_add_explicit</A></B>(atom, value, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_fetch_add_explicit"></A>atomic_fetch_add_explicit</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_add_explicit</B>(volatile <I>a-type</I> *atom, Ty value, memory_order order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_add_explicit</B>(<I>a-type</I> *atom, Ty value, memory_order order) noexcept;</PRE>
+
+<P>The template functions atomically add <CODE>value</CODE> to the stored value held in
+<CODE>*atom</CODE> and store the result in <CODE>*atom</CODE>.
+They return the value held in <CODE>*atom</CODE> immediately before the operations.
+They apply the memory constraints specified by <CODE>order</CODE>, and are
+<B><A HREF="#read-modify-write_operation">read-modify-write operations</A></B>.</P>
+
+<H2><CODE><A NAME="atomic_fetch_and"></A>atomic_fetch_and</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_and</B>(volatile <I>a-type</I> *atom, Ty value) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_and</B>(<I>a-type</I> *atom, Ty value) noexcept;</PRE>
+
+<P>The template functions return
+<CODE><B><A HREF="#atomic_fetch_and_explicit">atomic_fetch_and_explicit</A></B>(atom, value, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_fetch_and_explicit"></A>atomic_fetch_and_explicit</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_and_explicit</B>(volatile <I>a-type</I> *atom, Ty value, memory_order order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_and_explicit</B>(<I>a-type</I> *atom, Ty value, memory_order order) noexcept;</PRE>
+
+<P>The template functions atomically store into <CODE>*atom</CODE> the bitwise <I>and</I>
+of <CODE>value</CODE> and the stored value held in <CODE>*atom</CODE>.
+They return the value held in <CODE>*atom</CODE> immediately before the operations.
+They apply the memory constraints specified by <CODE>order</CODE>, and are
+<B><A HREF="#read-modify-write_operation">read-modify-write operations</A></B>.</P>
+
+<H2><CODE><A NAME="atomic_fetch_or"></A>atomic_fetch_or</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_or</B>(volatile <I>a-type</I> *atom, Ty value) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_or</B>(<I>a-type</I> *atom, Ty value) noexcept;</PRE>
+
+<P>The template functions return
+<CODE><B><A HREF="#atomic_fetch_or_explicit">atomic_fetch_or_explicit</A></B>(atom, value, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_fetch_or_explicit"></A>atomic_fetch_or_explicit</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_or_explicit</B>(volatile <I>a-type</I> *atom, Ty value, memory_order order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_or_explicit</B>(<I>a-type</I> *atom, Ty value, memory_order order) noexcept;</PRE>
+
+<P>The template functions atomically store into <CODE>*atom</CODE> the bitwise <I>inclusive or</I>
+of <CODE>value</CODE> and the stored value held in <CODE>*atom</CODE>.
+They return the value held in <CODE>*atom</CODE> immediately before the operations.
+They apply the memory constraints specified by <CODE>order</CODE>, and are
+<B><A HREF="#read-modify-write_operation">read-modify-write operations</A></B>.</P>
+
+<H2><CODE><A NAME="atomic_fetch_sub"></A>atomic_fetch_sub</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_sub</B>(volatile <I>a-type</I> *atom, Ty value) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_sub</B>(<I>a-type</I> *atom, Ty value) noexcept;</PRE>
+
+<P>The template functions return
+<CODE><B><A HREF="#atomic_fetch_sub_explicit">atomic_fetch_sub_explicit</A></B>(atom, value, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_fetch_sub_explicit"></A>atomic_fetch_sub_explicit</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_sub_explicit</B>(volatile <I>a-type</I> *atom, Ty value, memory_order order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_sub_explicit</B>(<I>a-type</I> *atom, Ty value, memory_order order) noexcept;</PRE>
+
+<P>The template functions atomically subtract <CODE>value</CODE> from the stored value held in
+<CODE>*atom</CODE> and store the result in <CODE>*atom</CODE>.
+They return the value held in <CODE>*atom</CODE> immediately before the operations.
+They apply the memory constraints specified by <CODE>order</CODE>, and are
+<B><A HREF="#read-modify-write_operation">read-modify-write operations</A></B>.</P>
+
+<P>When <I>a-type</I> is
+<B><A NAME="atomic_address"></A><CODE>atomic_address</CODE></B>,
+the argument <CODE>value</CODE> has type <CODE>ptrdiff_t</CODE> and the subtraction
+is done as if the stored pointer had type <CODE>char *</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_fetch_xor"></A>atomic_fetch_xor</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_xor</B>(volatile <I>a-type</I> *atom, Ty value) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_xor</B>(<I>a-type</I> *atom, Ty value) noexcept;</PRE>
+
+<P>The template functions return
+<CODE><B><A HREF="#atomic_fetch_xor_explicit">atomic_fetch_xor_explicit</A></B>(atom, value, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_fetch_xor_explicit"></A>atomic_fetch_xor_explicit</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_xor_explicit</B>(volatile <I>a-type</I> *atom, Ty value, memory_order order) noexcept;
+template&lt;class Ty&gt;
+    Ty <B>atomic_fetch_xor_explicit</B>(<I>a-type</I> *atom, Ty value, memory_order order) noexcept;</PRE>
+
+<P>The template functions atomically store into <CODE>*atom</CODE> the bitwise <I>exclusive or</I>
+of <CODE>value</CODE> and the stored value held in <CODE>*atom</CODE>.
+They return the value held in <CODE>*atom</CODE> immediately before the operations.
+They apply the memory constraints specified by <CODE>order</CODE>, and are
+<B><A HREF="#read-modify-write_operation">read-modify-write operations</A></B>.</P>
+
+<H2><CODE><A NAME="atomic_flag"></A>atomic_flag</CODE></H2><HR>
+
+<P><B><CODE><A HREF="#atomic_flag__atomic_flag">atomic_flag</A>
+&middot; <A HREF="#atomic_flag__clear">clear</A>
+&middot; <A HREF="#atomic_flag__test_and_set">test_and_set</A>
+</CODE></B></P>
+<HR>
+
+<PRE>typef struct <B>atomic_flag</B> {
+    <B>atomic_flag</B>() = default;
+    <B>atomic_flag</B>(const atomic_flag&amp;) = delete;
+    atomic_flag&amp; <B>operator=</B>(const atomic_flag&amp;) volatile = delete;
+    atomic_flag&amp; <B>operator=</B>(const atomic_flag&amp;) = delete;
+
+    bool <B><A HREF="#atomic_flag__test_and_set">test_and_set</A></B>(memory_order = memory_order_seq_cst) volatile noexcept;
+    bool <B><A HREF="#atomic_flag__test_and_set">test_and_set</A></B>(memory_order = memory_order_seq_cst) noexcept;
+    void <B><A HREF="#atomic_flag__clear">clear</A></B>(memory_order = memory_order_seq_cst) volatile noexcept;
+    void <B><A HREF="#atomic_flag__clear">clear</A></B>(memory_order = memory_order_seq_cst) noexcept;
+} atomic_flag;</PRE>
+
+<P>The class describes an object that atomically sets and clears a boolean flag.
+These operations are always <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<P>Objects of type <CODE>atomic_flag</CODE> can be passed to the non-member functions
+<B><A HREF="#atomic_flag_clear"><CODE>atomic_flag_clear</CODE></A></B>,
+<B><A HREF="#atomic_flag_clear_explicit"><CODE>atomic_flag_clear_explicit</CODE></A></B>,
+<B><A HREF="#atomic_flag_test_and_set"><CODE>atomic_flag_test_and_set</CODE></A></B>, and
+<B><A HREF="#atomic_flag_test_and_set_explicit"><CODE>atomic_flag_test_and_set_explicit</CODE></A></B>,
+and can be initialized with the value
+<B><A HREF="#ATOMIC_FLAG_INIT"><CODE>ATOMIC_FLAG_INIT</CODE></A></B>.</P>
+
+<H3><CODE><A NAME="atomic_flag__atomic_flag"></A>atomic_flag::atomic_flag</CODE></H3>
+
+<PRE><B>atomic_flag</B>() noexcept;</PRE>
+
+<P>The constructor constructs an object that holds an unspecified value.</P>
+
+<H3><CODE><A NAME="atomic_flag__clear"></A>atomic_flag::clear</CODE></H3>
+
+<PRE>void <B>clear</B>(memory_order order = memory_order_seq_cst) volatile noexcept;
+void <B>clear</B>(memory_order order = memory_order_seq_cst) noexcept;</PRE>
+
+<P>The member functions call
+<CODE><B><A HREF="#atomic_flag_clear_explicit">atomic_flag_clear_explicit</A></B>(this, order)</CODE>.</P>
+
+<H3><CODE><A NAME="atomic_flag__test_and_set"></A>atomic_flag::test_and_set</CODE></H3>
+
+<PRE>bool <B>test_and_set</B>(memory_order order = memory_order_seq_cst) volatile noexcept;
+bool <B>test_and_set</B>(memory_order order = memory_order_seq_cst) noexcept;</PRE>
+
+<P>The member functions return
+<CODE><B><A HREF="#atomic_flag_test_and_set_explicit">atomic_flag_test_and_set_explicit</A></B>(this, order)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_flag_clear"></A>atomic_flag_clear</CODE></H2>
+
+<PRE>void <B>atomic_flag_clear</B>(volatile atomic_flag *atom) noexcept;
+void <B>atomic_flag_clear</B>(atomic_flag *atom) noexcept;</PRE>
+
+<P>The functions call <CODE>atomic_flag_clear_explicit(atom, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_flag_clear_explicit"></A>atomic_flag_clear_explicit</CODE></H2>
+
+<PRE>void <B>atomic_flag_clear_explicit</B>(volatile atomic_flag *atom, memory_order order) noexcept;
+void <B>atomic_flag_clear_explicit</B>(atomic_flag *atom, memory_order order) noexcept;</PRE>
+
+<P>The functions atomically set the flag stored in <CODE>atom</CODE> to <CODE>false</CODE> and
+apply the memory order constraints specified by <CODE>order</CODE>.
+The value of <CODE>order</CODE> should not be
+<CODE>memory_order_acquire</CODE>
+or <CODE>memory_order_acq_rel</CODE>.</P>
+
+<H2><CODE><A NAME="ATOMIC_FLAG_INIT"></A>ATOMIC_FLAG_INIT</CODE></H2>
+
+<PRE>#define <B>ATOMIC_FLAG_INIT</B> <I>initializer</I></PRE>
+
+<P>The macro defines a value that can be used to statically initialize an object
+of type <CODE>atomic_flag</CODE> to its cleared state.</P>
+
+<H2><CODE><A NAME="atomic_flag_test_and_set"></A>atomic_flag_test_and_set</CODE></H2>
+
+<PRE>bool <B>atomic_flag_test_and_set</B>(volatile atomic_flag *atom) noexcept;
+bool <B>atomic_flag_test_and_set</B>(atomic_flag *atom) noexcept;</PRE>
+
+<P>The functions return
+<CODE>atomic_flag_test_and_set_explicit(atom, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_flag_test_and_set_explicit"></A>atomic_flag_test_and_set_explicit</CODE></H2>
+
+<PRE>bool <B>atomic_flag_test_and_set_explicit</B>(volatile atomic_flag *atom, memory_order order) noexcept;
+bool <B>atomic_flag_test_and_set_explicit</B>(atomic_flag *atom, memory_order order) noexcept;</PRE>
+
+<P>The functions atomically set the flag stored in <CODE>atom</CODE> to <CODE>true</CODE> and
+return the value that the flag had on entry.
+They apply the memory constraints specified by <CODE>order</CODE>, and are
+<B><A HREF="#read-modify-write_operation">read-modify-write operations</A></B>.</P>
+
+<H2><CODE><A NAME="atomic_init"></A>atomic_init</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    void <B>atomic_init</B>(volatile <I>a-type</I> *, Ty) noexcept;
+template&lt;class Ty&gt;
+    void <B>atomic_init</B>(<I>a-type</I> *, Ty) noexcept;</PRE>
+
+<P>The template functions set the value stored in <CODE>atom</CODE> to <CODE>value</CODE>. They
+are not atomic and not thread-safe.</P>
+
+<H2><CODE><A NAME="atomic_integral"></A>atomic_<I>integral</I></CODE></H2><HR>
+
+<P><B><CODE><A HREF="#atomic__atomic">atomic_<I>integral</I></A>
+&middot; <A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A>
+&middot; <A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A>
+&middot; <A HREF="#atomic__exchange">exchange</A>
+&middot; <A HREF="#atomic__fetch_add">fetch_add</A>
+&middot; <A HREF="#atomic__fetch_and">fetch_and</A>
+&middot; <A HREF="#atomic__fetch_or">fetch_or</A>
+&middot; <A HREF="#atomic__fetch_sub">fetch_sub</A>
+&middot; <A HREF="#atomic__fetch_xor">fetch_xor</A>
+&middot; <A HREF="#atomic__is_lock_free">is_lock_free</A>
+&middot; <A HREF="#atomic__load">load</A>
+&middot; <A HREF="#atomic__operator_Ty">operator <I>m-type</I></A>
+&middot; <A HREF="#atomic__operator2">operator=</A>
+&middot; <A HREF="#atomic__operator++">operator++</A>
+&middot; <A HREF="#atomic__operator+2">operator+=</A>
+&middot; <A HREF="#atomic__operator--">operator--</A>
+&middot; <A HREF="#atomic__operator-2">operator-=</A>
+&middot; <A HREF="#atomic__operator&amp;2">operator&amp;=</A>
+&middot; <A HREF="#atomic__operator|2">operator|=</A>
+&middot; <A HREF="#atomic__operator^2">operator^=</A>
+&middot; <A HREF="#atomic__store">store</A>
+</CODE></B></P>
+<HR>
+
+<PRE>typedef struct <B>atomic_char</B> { /* ... */ } atomic_char;
+typedef struct <B>atomic_schar</B> { /* ... */ } atomic_schar;
+typedef struct <B>atomic_uchar</B> { /* ... */ } atomic_uchar;
+typedef struct <B>atomic_char16_t</B> { /* ... */ } atomic_char16_6;
+typedef struct <B>atomic_char32_t</B> { /* ... */ } atomic_char32_t;
+typedef struct <B>atomic_wchar_t</B> { /* ... */ } atomic_wchar_t;
+typedef struct <B>atomic_short</B> { /* ... */ } atomic_short;
+typedef struct <B>atomic_ushort</B> { /* ... */ } atomic_ushort;
+typedef struct <B>atomic_int</B> { /* ... */ } atomic_int;
+typedef struct <B>atomic_uint</B> { /* ... */ } atomic_uint;
+typedef struct <B>atomic_long</B> { /* ... */ } atomic_long;
+typedef struct <B>atomic_ulong</B> { /* ... */ } atomic_ulong;
+typedef struct <B>atomic_llong</B> { /* ... */ } atomic_llong;
+typedef struct <B>atomic_ullong</B> { /* ... */ } atomic_ullong;
+
+typedef struct <B>atomic_<I>integral</I></B> {
+    <B>atomic_<I>integral</I></B>() = default;
+    constexpr <B><A HREF="#atomic__atomic">atomic_<I>integral</I></A></B>(<I>m-type</I>) noexcept;
+    <B>atomic_<I>integral</I></B>(const atomic_<I>integral</I>&amp;) = delete;
+    atomic_<I>integral</I>&amp; <B>operator=</B>(const atomic_<I>integral</I>&amp;) volatile = delete;
+    atomic_<I>integral</I>&amp; <B>operator=</B>(const atomic_<I>integral</I>&amp;) = delete;
+
+    <I>m-type</I> <B><A HREF="#atomic__operator2">operator=</A></B>(<I>m-type</I>) volatile;
+    <I>m-type</I> <B><A HREF="#atomic__operator2">operator=</A></B>(<I>m-type</I>) noexcept;
+    <B><A HREF="#atomic__operator_Ty">operator m-type</A></B>() const volatile noexcept;
+    <B><A HREF="#atomic__operator_Ty">operator m-type</A></B>() const noexcept;
+
+    bool <B><A HREF="#atomic__is_lock_free">is_lock_free</A></B>() const volatile noexcept;
+    bool <B><A HREF="#atomic__is_lock_free">is_lock_free</A></B>() const noexcept;
+    void <B><A HREF="#atomic__store">store</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    void <B><A HREF="#atomic__store">store</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__load">load</A></B>(memory_order = memory_order_seq_cst) const volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__load">load</A></B>(memory_order = memory_order_seq_cst) const noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__exchange">exchange</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__exchange">exchange</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(<I>m-type</I>&amp;, <I>m-type</I>,
+        memory_order = memory_order_seq_cst) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(<I>m-type</I>&amp;, <I>m-type</I>,
+        memory_order = memory_order_seq_cst) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(<I>m-type</I>&amp;, <I>m-type</I>,
+        memory_order, memory_order) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_weak">compare_exchange_weak</A></B>(<I>m-type</I>&amp;, <I>m-type</I>,
+        memory_order, memory_order) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(<I>m-type</I>&amp;, <I>m-type</I>,
+        memory_order = memory_order_seq_cst) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(<I>m-type</I>&amp;, <I>m-type</I>,
+        memory_order = memory_order_seq_cst) noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(<I>m-type</I>&amp;, <I>m-type</I>,
+        memory_order, memory_order) volatile noexcept;
+    bool <B><A HREF="#atomic__compare_exchange_strong">compare_exchange_strong</A></B>(<I>m-type</I>&amp;, <I>m-type</I>,
+        memory_order, memory_order) noexcept;
+
+    <I>m-type</I> <B><A HREF="#atomic__fetch_add">fetch_add</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__fetch_add">fetch_add</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__fetch_sub">fetch_sub</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__fetch_sub">fetch_sub</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__fetch_and">fetch_and</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__fetch_and">fetch_and</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__fetch_or">fetch_or</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__fetch_or">fetch_or</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__fetch_xor">fetch_xor</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__fetch_xor">fetch_xor</A></B>(<I>m-type</I>, memory_order = memory_order_seq_cst) noexcept;
+
+    <I>m-type</I> <B><A HREF="#atomic__operator++">operator++</A></B>(int) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator++">operator++</A></B>(int) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator++">operator++</A></B>() volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator++">operator++</A></B>() noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator--">operator--</A></B>(int) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator--">operator--</A></B>(int) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator--">operator--</A></B>() volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator--">operator--</A></B>() noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator+2">operator+=</A></B>(<I>m-type</I>) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator+2">operator+=</A></B>(<I>m-type</I>) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator-2">operator-=</A></B>(<I>m-type</I>) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator-2">operator-=</A></B>(<I>m-type</I>) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator&amp;2">operator&amp;=</A></B>(<I>m-type</I>) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator&amp;2">operator&amp;=</A></B>(<I>m-type</I>) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator|2">operator|=</A></B>(<I>m-type</I>) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator|2">operator|=</A></B>(<I>m-type</I>) noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator^2">operator^=</A></B>(<I>m-type</I>) volatile noexcept;
+    <I>m-type</I> <B><A HREF="#atomic__operator^2">operator^=</A></B>(<I>m-type</I>) noexcept;
+} atomic_<I>integral</I>;</PRE>
+
+<P>The integral atomic types consist of all of the
+<B><A NAME="general-purpose"></A>general-purpose</B> atomic types except
+<CODE>atomic_address</CODE> and <CODE>atomic_bool</CODE>. Each integral
+atomic type describes an object that performs atomic operations on a stored
+value of its <A HREF="#managed_type">managed type</A>.</P>
+
+<P>Objects of these types can be passed to the
+<B><A HREF="#general_operations">general operations</A></B>, the
+<B><A HREF="#arithmetic_operations">arithmetic operations</A></B>, and the
+<B><A HREF="#logical_operations">logical operations</A></B>.</P>
+
+<H2><CODE><A NAME="ATOMIC_INT_LOCK_FREE"></A>ATOMIC_INT_LOCK_FREE</CODE></H2>
+
+<PRE>#define <B>ATOMIC_INT_LOCK_FREE</B> <I>integer-value</I></PRE>
+
+<P>The macro has a <B><A HREF="#macro_value">value</A></B> that
+indicates whether the types
+<B><A HREF="#atomic_integral"><CODE>atomic_int</CODE></A></B>
+and
+<B><A HREF="#atomic_integral"><CODE>atomic_uint</CODE></A></B>
+are <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="atomic_is_lock_free"></A>atomic_is_lock_free</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>atomic_is_lock_free</B>(const volatile <I>a-type</I> *atom) noexcept;
+template&lt;class Ty&gt;
+    bool <B>atomic_is_lock_free</B>(const <I>a-type</I> *atom) noexcept;</PRE>
+
+<P>The template functions return <CODE>true</CODE> only if atomic operations on
+<CODE>*atom</CODE> are <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="ATOMIC_LLONG_LOCK_FREE"></A>ATOMIC_LLONG_LOCK_FREE</CODE></H2>
+
+<PRE>#define <B>ATOMIC_LLONG_LOCK_FREE</B> <I>integer-value</I></PRE>
+
+<P>The macro has a <B><A HREF="#macro_value">value</A></B> that
+indicates whether the types
+<B><A HREF="#atomic_integral"><CODE>atomic_llong</CODE></A></B>
+and
+<B><A HREF="#atomic_integral"><CODE>atomic_ullong</CODE></A></B>
+are <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="atomic_load"></A>atomic_load</CODE></H2>
+
+<PRE>Ty <B>atomic_load</B>(const volatile <I>a-type</I> *atom) noexcept;
+Ty <B>atomic_load</B>(const <I>a-type</I> *atom) noexcept;</PRE>
+
+<P>The functions return
+<CODE><B><A HREF="#atomic_load_explicit">atomic_load_explicit</A></B>(atom, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_load_explicit"></A>atomic_load_explicit</CODE></H2>
+
+<PRE>Ty <B>atomic_load_explicit</B>(const volatile <I>a-type</I> *atom, memory_order order);
+Ty <B>atomic_load_explicit</B>(const <I>a-type</I> *atom, memory_order order);</PRE>
+
+<P>The functions atomically load the stored value held in
+<CODE>*atom</CODE> and return the result.
+They apply the memory constraints specified by <CODE>order</CODE>.
+The value of <CODE>order</CODE> should not be
+<CODE>memory_order_release</CODE>
+or <CODE>memory_order_acq_rel</CODE>.</P>
+
+<H2><CODE><A NAME="ATOMIC_LONG_LOCK_FREE"></A>ATOMIC_LONG_LOCK_FREE</CODE></H2>
+
+<PRE>#define <B>ATOMIC_LONG_LOCK_FREE</B> <I>integer-value</I></PRE>
+
+<P>The macro has a <B><A HREF="#macro_value">value</A></B> that
+indicates whether the types
+<B><A HREF="#atomic_integral"><CODE>atomic_long</CODE></A></B>
+and
+<B><A HREF="#atomic_integral"><CODE>atomic_ulong</CODE></A></B>
+are <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="ATOMIC_POINTER_LOCK_FREE"></A>ATOMIC_POINTER_LOCK_FREE</CODE></H2>
+
+<PRE>#define <B>ATOMIC_POINTER_LOCK_FREE</B> <I>integer-value</I></PRE>
+
+<P>The macro has a <B><A HREF="#macro_value">value</A></B> that
+indicates whether the type
+<CODE><A HREF="#atomic">atomic</A>&lt;Ty *&gt;</CODE>,
+where <CODE>Ty</CODE> is any object type,
+is <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="ATOMIC_SHORT_LOCK_FREE"></A>ATOMIC_SHORT_LOCK_FREE</CODE></H2>
+
+<PRE>#define <B>ATOMIC_SHORT_LOCK_FREE</B> <I>integer-value</I></PRE>
+
+<P>The macro has a <B><A HREF="#macro_value">value</A></B> that
+indicates whether the types
+<B><A HREF="#atomic_integral"><CODE>atomic_short</CODE></A></B>
+and
+<B><A HREF="#atomic_integral"><CODE>atomic_ushort</CODE></A></B>
+are <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="atomic_signal_fence"></A>atomic_signal_fence</CODE></H2>
+
+<PRE>extern "C" void <B>atomic_signal_fence</B>(memory_order order) noexcept;</PRE>
+
+<P>The function acts the same as
+<B><A HREF="#atomic_thread_fence">atomic_thread_fence</A></B>
+except that it establishes ordering requirements only between fences
+in the calling thread and in signal handlers executed in the same thread.</P>
+
+<H2><CODE><A NAME="atomic_store"></A>atomic_store</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    void <B>atomic_store</B>(volatile <I>a-type</I> *atom, Ty value) noexcept;
+template&lt;class Ty&gt;
+    void <B>atomic_store</B>(<I>a-type</I> *atom, Ty value) noexcept;</PRE>
+
+<P>The template functions call <CODE>atomic_store_explicit(atom, value, memory_order_seq_cst)</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_store_explicit"></A>atomic_store_explicit</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    void <B>atomic_store_explicit</B>(volatile <I>a-type</I> *atom, Ty value, memory_order order) noexcept;
+template&lt;class Ty&gt;
+    void <B>atomic_store_explicit</B>(<I>a-type</I> *atom, Ty value, memory_order order) noexcept;</PRE>
+
+<P>The template functions atomically store <CODE>value</CODE> as the stored value
+in <CODE>*atom</CODE>.
+They apply the memory constraints specified by <CODE>order</CODE>.
+The value of <CODE>order</CODE> should not be
+<CODE>memory_order_consume</CODE>,
+<CODE>memory_order_acquire</CODE>, or <CODE>memory_order_acq_rel</CODE>.</P>
+
+<H2><CODE><A NAME="atomic_thread_fence"></A>atomic_thread_fence</CODE></H2>
+
+<PRE>extern "C" void <B>atomic_thread_fence</B>(memory_order order) noexcept;</PRE>
+
+<P>The function acts as a <I>fence</I> that establishes memory ordering
+requirements with respect to other fences. The <CODE>order</CODE> argument
+determines the type of the fence:</P>
+
+<UL>
+<LI><CODE>memory_order_relaxed</CODE> --
+    the fence has no effect.</LI>
+<LI><CODE>memory_order_consume</CODE> --
+    the fence is an <B><A HREF="#acquire_fence">acquire fence</A></B>.</LI>
+<LI><CODE>memory_order_acquire</CODE> --
+    the fence is an acquire fence.</LI>
+<LI><CODE>memory_order_release</CODE> --
+    the fence is a <B><A HREF="#release_fence">release fence</A></B>.</LI>
+<LI><CODE>memory_order_acq_rel</CODE> --
+    the fence is both an acquire fence and
+    a release fence.</LI>
+<LI><CODE>memory_order_seq_cst</CODE> --
+    the fence is both an acquire fence and a release fence and
+    it is <B><A HREF="#sequentially_consistent">sequentially consistent</A></B></LI>
+</UL>
+
+<H2><CODE><A NAME="ATOMIC_VAR_INIT"></A>ATOMIC_VAR_INIT</CODE></H2>
+
+<PRE>#define <B>ATOMIC_VAR_INIT(x)</B> <I>initializer</I></PRE>
+
+<P>The macro expands to an expression that can be used to statically
+initialize
+a <B><A HREF="#general-purpose">general-purpose</A></B> atomic type to the value
+<CODE>x</CODE>, when <CODE>x</CODE> can be converted to
+atomic type's
+<A HREF="#managed_type">managed type</A>.</P>
+
+<H2><CODE><A NAME="ATOMIC_WCHAR_T_LOCK_FREE"></A>ATOMIC_WCHAR_T_LOCK_FREE</CODE></H2>
+
+<PRE>#define <B>ATOMIC_WCHAR_T_LOCK_FREE</B> <I>integer-value</I></PRE>
+
+<P>The macro has a <B><A HREF="#macro_value">value</A></B> that
+indicates whether the type
+<B><A HREF="#atomic_integral"><CODE>atomic_wchar_t</CODE></A></B>
+is <B><A HREF="#lock_free">lock free</A></B>.</P>
+
+<H2><CODE><A NAME="kill_dependency"></A>kill_dependency</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    <B>kill_dependency</B>(Ty) noexcept;</PRE>
+
+<P>The template function returns its argument. The evaluation of the argument
+does not <I>carry a dependency</I> to the function call. By breaking
+a possible dependency chain, the function might permit the compiler
+to generate more efficient code. See the discussion of the attribute
+<CODE>[[carries_dependency]]</CODE>
+in the C++ standard.</P>
+
+<H2><CODE><A NAME="memory_order"></A>memory_order</CODE></H2>
+
+<PRE>typedef enum <B>memory_order</B> {
+    memory_order_relaxed,
+    memory_order_consume,
+    memory_order_acquire,
+    memory_order_release,
+    memory_order_acq_rel,
+    memory_order_seq_cst
+} memory_order;</PRE>
+
+<P>The enumeration supplies symbolic names for synchronization operations on
+memory locations. These operations affect how assignments in one thread become
+visible in another, as set out in [intro.mulththread] in the C++ standard. The
+meanings of these names are:</P>
+
+<UL>
+<LI><CODE>memory_order_relaxed</CODE> --
+    no ordering required.</LI>
+<LI><CODE>memory_order_consume</CODE> --
+    a load operation acts as a <B><A HREF="#consume_operation">consume operation</A></B>
+    on the memory location.</LI>
+<LI><CODE>memory_order_acquire</CODE> --
+    a load operation acts as an <B><A HREF="#acquire_operation">acquire operation</A></B>
+    on the memory location.</LI>
+<LI><CODE>memory_order_release</CODE> --
+    a store operation acts as a <B><A HREF="#release_operation">release operation</A></B>
+    on the memory location.</LI>
+<LI><CODE>memory_order_acq_rel</CODE> --
+    combines <CODE>memory_order_acquire</CODE> and <CODE>memory_order_release</CODE>.</LI>
+<LI><CODE>memory_order_seq_cst</CODE> --
+    combines <CODE>memory_order_acquire</CODE> and <CODE>memory_order_release</CODE>
+    and requires that all memory accesses marked as <CODE>memory_order_seq_cst</CODE>
+    be <B><A HREF="#sequentially_consistent">sequentially consistent</A></B>.</LI>
+</UL>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+&copy; 2013 Sony Computer Entertainment Inc. All rights reserved.</I></P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

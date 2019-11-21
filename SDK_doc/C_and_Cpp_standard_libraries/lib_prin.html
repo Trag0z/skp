@@ -1,0 +1,1909 @@
+<HTML><HEAD>
+<TITLE>Formatted Output -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+<H1><A NAME="Formatted_Output"></A>Formatted Output</H1><HR>
+
+<P><B><A HREF="#Print_Formats">Print Formats</A>
+&middot; <A HREF="#Print_Functions">Print Functions</A>
+&middot; <A HREF="#Print_Conversion_Specifiers">Print Conversion Specifiers</A>
+</B></P>
+<HR>
+
+<P>Several library functions help you convert data values from
+encoded internal representations to text sequences that are
+generally readable by people. You provide a
+<A HREF="#format_string">format string</A> as the value of the
+<CODE>format</CODE> argument to each of these functions, hence
+the term <B>formatted output</B>.
+The functions fall into two categories.</P>
+
+<P>The <B><A NAME="byte_print_functions"></A>byte print functions</B>
+(declared in
+<A HREF="stdio.html#&lt;stdio.h&gt;"><CODE>&lt;stdio.h&gt;</CODE></A>)
+convert internal representations to sequences of type <I>char,</I>
+and help you compose such sequences for display:
+<A HREF="stdio.html#fprintf">fprintf</A>,
+<A HREF="stdio.html#printf">printf</A>,
+<A HREF="stdio.html#sprintf">sprintf</A>,
+<A HREF="stdio.html#vfprintf">vfprintf</A>,
+<A HREF="stdio.html#vprintf">vprintf</A>, and
+<A HREF="stdio.html#vsprintf">vsprintf</A>.
+For these function, a format string is a
+<A HREF="lib_over.html#multibyte_string">multibyte string</A>
+that begins and ends in the
+<A HREF="charset.html#initial_shift_state">initial shift state</A>.</P>
+
+<P>The <B><A NAME="wide_print_functions"></A>wide print functions</B>
+(declared in
+<A HREF="wchar.html#&lt;wchar.h&gt;"><CODE>&lt;wchar.h&gt;</CODE></A>
+and hence added with
+<B>Amendment 1</B>)
+convert internal representations to sequences of type
+<A HREF="stddef.html#wchar_t"><CODE>wchar_t</CODE></A>,
+and help you compose such sequences for display:
+<A HREF="wchar.html#fwprintf">fwprintf</A>,
+<A HREF="wchar.html#swprintf">swprintf</A>,
+<A HREF="wchar.html#wprintf">wprintf</A>,
+<A HREF="wchar.html#vfwprintf">vfwprintf</A>,
+<A HREF="wchar.html#vswprintf">vswprintf</A>, and
+<A HREF="wchar.html#vwprintf">vwprintf</A>.
+For these functions, a format string is a
+<A HREF="lib_over.html#wide-character_string">wide-character string</A>.
+In the descriptions that follow, a wide character <CODE>wc</CODE>
+from a format string or a stream is compared to a specific (byte)
+character <CODE>c</CODE> as if by evaluating the expression
+<CODE><A HREF="wchar.html#wctob">wctob</A>(wc) == c</CODE>.</P>
+
+<H2><A NAME="Print_Formats"></A>Print Formats</H2>
+
+<P>A <B><A NAME="format_string"></A>format string</B> has the same
+syntax for both the print functions and the
+<A HREF="lib_scan.html#Formatted_Input">scan functions</A>,
+as shown in the diagram.</P>
+
+<P><IMG SRC="format.gif"></P>
+
+<P>A format string consists of zero or more
+<B><A NAME="conversion_specification"></A>conversion specifications</B>
+interspersed with literal text and
+<B><A NAME="white_space"></A>white space</B>.
+White space is a sequence of one or more
+characters <CODE>c</CODE> for which the call
+<CODE><A HREF="ctype.html#isspace">isspace</A>(c)</CODE> returns nonzero.
+For the print functions, a conversion specification is one of the
+<A HREF="#print_conversion_specification">
+print conversion specifications</A> described below.</P>
+
+<P>A print function scans the format string once from beginning
+to end to determine what conversions to perform. Every print
+function accepts a
+<A HREF="stdarg.html#varying_number_of_arguments">varying number
+of arguments</A>, either directly or under control of an argument of type
+<A HREF="stdarg.html#va_list"><CODE>va_list</CODE></A>.
+Some print conversion specifications
+in the format string use the next argument in the list.
+A print function uses each successive argument no more than
+once. Trailing arguments can be left unused.</P>
+
+<P>In the description that follows:</P>
+
+<UL>
+<LI><B><A NAME="integer_conversions"></A>integer conversions</B> are the
+<B><A NAME="conversion_specifiers"></A>conversion specifiers</B> that
+end in <CODE>d</CODE>, <CODE>i</CODE>, <CODE>o</CODE>, <CODE>u</CODE>,
+<CODE>x</CODE>, or <CODE>X</CODE></LI>
+
+<LI><B><A NAME="floating-point_conversions"></A>floating-point conversions</B>
+are the conversion specifiers
+that end in <CODE>e</CODE>, <CODE>E</CODE>, <CODE>f</CODE>, <CODE>F</CODE>,
+<CODE>g</CODE>, or <CODE>G</CODE></LI>
+</UL>
+
+<H2><A NAME="Print_Functions"></A>Print Functions</H2>
+
+<P>For the print functions, literal text or
+<A HREF="#white_space">white space</A> in a format
+string generates characters that match the characters in the format
+string. A
+<B><A NAME="print_conversion_specification"></A>print conversion specification</B> typically generates characters
+by converting the next argument value to a corresponding text sequence.
+A print conversion specification has the format:</P>
+
+<P><IMG SRC="print.gif"></P>
+
+<P>The red characters in the gray boxes indicates a feature added for vector conversions.</P>
+
+<P>Following the percent character (<B><CODE>%</CODE></B>)
+in the format string, you can write an optional
+<B><A NAME="argument_position"></A>position</B>,
+which consists of a nonzero decimal integer followed by a
+dollar sign (<B><CODE>$</CODE></B>). If present, an
+argument position with value <CODE>N</CODE> indicates
+that at least <CODE>N</CODE> arguments to the print
+function follow, all having the type required for the
+conversion specifier. Argument number <CODE>N</CODE>,
+counting from 1, is the one converted; no arguments are
+skipped over. If no argument position is present, the
+next argument to the print function has the type required
+for the conversion specifier. It is converted and then
+skipped over. (This implementation supports argument
+positions as a conforming extension.)</P>
+
+<P>Following any argument position, you can write zero or more
+<B><A NAME="format_flag"></A>format flags</B>:</P>
+
+<UL>
+<LI><B><CODE>-</CODE></B>
+-- to left-justify a conversion</LI>
+
+<LI><B><CODE>+</CODE></B>
+-- to generate a plus sign for signed values that
+are positive</LI>
+
+<LI><B><CODE><I>space</I></CODE></B>
+-- to generate a <CODE><I>space</I></CODE> for signed values
+that have neither a plus nor a minus sign</LI>
+
+<LI><B><CODE>#</CODE></B>
+-- to prefix <CODE>0</CODE> on an <CODE>o</CODE> conversion,
+to prefix <CODE>0x</CODE> on an <CODE>x</CODE> conversion,
+to prefix <CODE>0X</CODE> on an <CODE>X</CODE> conversion,
+or to generate a decimal point and fraction
+digits that are otherwise suppressed on a floating-point conversion</LI>
+
+<LI><B><CODE>0</CODE></B>
+-- to pad a conversion with leading zeros after
+any sign or prefix, in the absence of a minus (<CODE>-</CODE>)
+format flag or a specified precision</LI>
+</UL>
+
+<P>For vector conversions,
+you can intersperse format flags with an optional
+<B><A NAME="separator"></A>separator</B>, the characters
+comma, semicolon, colon, or underscore. The conversion
+occurs for each of the elements of the vector, and
+generates a separator between each pair of elements.
+If you specify no separator, the default is:</P>
+
+<UL>
+<LI>for the <CODE>c</CODE> conversion specifier, no character.</LI>
+
+<LI>for all other conversion specifications, a space character.</LI>
+</UL>
+
+<P>Following any format flags, you can write a
+<B><A NAME="print_field_width"></A>field width</B> that
+specifies the minimum number of characters to generate for the conversion.
+Unless altered by a format flag,
+the default behavior is to pad a short conversion
+on the left with <CODE><I>space</I></CODE> characters.
+If you write an asterisk (<B><CODE>*</CODE></B>)
+instead of a decimal number for a field width, then a print
+function takes the value of the next argument (which must be of type
+<I>int</I>) as the field width. If the argument value is negative,
+it supplies a <CODE>-</CODE> format flag
+and its magnitude is the field width.</P>
+
+<P>Following any field width, you can write a dot (<B><CODE>.</CODE></B>)
+followed by a
+<B><A NAME="precision"></A>precision</B>
+that specifies one of the following:
+the minimum number of digits to generate on an integer conversion;
+the number of fraction digits to generate on an <CODE>e</CODE>,
+<CODE>E</CODE>, or <CODE>f</CODE> conversion;
+the maximum number of significant digits to generate
+on a <CODE>g</CODE> or <CODE>G</CODE> conversion; or the maximum number
+of characters to generate from a
+<A HREF="lib_over.html#C_string">C string</A>
+on an <CODE>s</CODE> conversion.</P>
+
+<P>If you write an <B><CODE>*</CODE></B> instead of
+a decimal number for a precision,
+a print function takes the value of the next argument (which must
+be of type <I>int</I>) as the precision. If the argument value is
+negative, the default precision applies. If you do not write either
+an <CODE>*</CODE> or a decimal number following the dot, the precision
+is zero.</P>
+
+<H2><A NAME="Print_Conversion_Specifiers"></A>Print Conversion Specifiers</H2>
+
+<P>Following any
+<A HREF="#precision">precision</A>,
+you must write a one-character <B>print conversion specifier</B>,
+possibly preceded by a one- or two-character qualifier.
+Each combination determines the type required of the
+next argument (if any) and how the library functions alter the argument
+value before converting it to a text sequence.
+The <A HREF="#integer_conversions">integer</A> and
+<A HREF="#floating-point_conversions">
+floating-point conversions</A> also determine
+what base to use for the text representation.
+If a conversion specifier requires a precision <I>p</I> and you do
+not provide one in the format, then the conversion specifier chooses
+a default value for the precision.</P>
+
+<P>The following table lists all defined combinations
+and their properties:</P>
+
+<TABLE BORDER=1 CELLPADDING=3 ALIGN=CENTER>
+<CAPTION><B>Table 1. Combinations and Properties for Print Conversion Specifiers</B></CAPTION>
+<TR><TH>Conversion Specifier</TH><TH>Argument Type     </TH><TH>Converted Value        </TH><TH>Base  </TH><TH>Default Precision</TH><TH>Remarks</TH></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %a       </TD><TD>double x          </TD><TD>(double)x              </TD><TD>16    </TD><TD>all  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %La       </TD><TD>long double x     </TD><TD>(long double)x         </TD><TD>16    </TD><TD>all  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>   %A       </TD><TD>double x          </TD><TD>(double)x              </TD><TD>16    </TD><TD>all  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %LA       </TD><TD>long double x     </TD><TD>(long double)x         </TD><TD>16    </TD><TD>all  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %c       </TD><TD>int x             </TD><TD>(unsigned char)x       </TD><TD><BR>  </TD><TD><BR>  </TD><TD><BR></TD></TR>
+<TR><TD>  %lc       </TD><TD>wint_t x          </TD><TD>(wchar_t)x             </TD><TD><BR>  </TD><TD><BR>  </TD><TD><BR></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %d       </TD><TD>int x             </TD><TD>(int)x                 </TD><TD>10    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hd       </TD><TD>int x             </TD><TD>(short)x               </TD><TD>10    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %ld       </TD><TD>long x            </TD><TD>(long)x                </TD><TD>10    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hhd      </TD><TD>int x             </TD><TD>(signed char)x         </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %jd       </TD><TD>intmax_t x        </TD><TD>(intmax_t)x            </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %lld      </TD><TD>long long x       </TD><TD>(long long)x           </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %td       </TD><TD>ptrdiff_t x       </TD><TD>(ptrdiff_t)x           </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %zd       </TD><TD>size_t x          </TD><TD>(ptrdiff_t)x           </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %e       </TD><TD>double x          </TD><TD>(double)x              </TD><TD>10    </TD><TD> 6  </TD><TD><BR></TD></TR>
+<TR><TD>  %Le       </TD><TD>long double x     </TD><TD>(long double)x         </TD><TD>10    </TD><TD> 6  </TD><TD><BR></TD></TR>
+<TR><TD>   %E       </TD><TD>double x          </TD><TD>(double)x              </TD><TD>10    </TD><TD> 6  </TD><TD><BR></TD></TR>
+<TR><TD>  %LE       </TD><TD>long double x     </TD><TD>(long double)x         </TD><TD>10    </TD><TD> 6  </TD><TD><BR></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %f       </TD><TD>double x          </TD><TD>(double)x              </TD><TD>10    </TD><TD> 6  </TD><TD><BR></TD></TR>
+<TR><TD>  %Lf       </TD><TD>long double x     </TD><TD>(long double)x         </TD><TD>10    </TD><TD> 6  </TD><TD><BR></TD></TR>
+<TR><TD>   %F       </TD><TD>double x          </TD><TD>(double)x              </TD><TD>10    </TD><TD> 6  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %LF       </TD><TD>long double x     </TD><TD>(long double)x         </TD><TD>10    </TD><TD> 6  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %g       </TD><TD>double x          </TD><TD>(double)x              </TD><TD>10    </TD><TD> 6  </TD><TD><BR></TD></TR>
+<TR><TD>  %Lg       </TD><TD>long double x     </TD><TD>(long double)x         </TD><TD>10    </TD><TD> 6  </TD><TD><BR></TD></TR>
+<TR><TD>   %G       </TD><TD>double x          </TD><TD>(double)x              </TD><TD>10    </TD><TD> 6  </TD><TD><BR></TD></TR>
+<TR><TD>  %LG       </TD><TD>long double x     </TD><TD>(long double)x         </TD><TD>10    </TD><TD> 6  </TD><TD><BR></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %i       </TD><TD>int x             </TD><TD>(int)x                 </TD><TD>10    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hi       </TD><TD>int x             </TD><TD>(short)x               </TD><TD>10    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %li       </TD><TD>long x            </TD><TD>(long)x                </TD><TD>10    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hhi      </TD><TD>int x             </TD><TD>(signed char)x         </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %ji       </TD><TD>intmax_t x        </TD><TD>(intmax_t)x            </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %lli      </TD><TD>long long x       </TD><TD>(long long)x           </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %ti       </TD><TD>ptrdiff_t x       </TD><TD>(ptrdiff_t)x           </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %zi       </TD><TD>size_t x          </TD><TD>(ptrdiff_t)x           </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %o       </TD><TD>int x             </TD><TD>(unsigned int)x        </TD><TD> 8    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %ho       </TD><TD>int x             </TD><TD>(unsigned short)x      </TD><TD> 8    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %lo       </TD><TD>long x            </TD><TD>(unsigned long)x       </TD><TD> 8    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hho      </TD><TD>int x             </TD><TD>(unsigned char)x       </TD><TD> 8    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %jo       </TD><TD>intmax_t x        </TD><TD>(uintmax_t)x           </TD><TD> 8    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %llo      </TD><TD>long long x       </TD><TD>(unsigned long long)x  </TD><TD> 8    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %to       </TD><TD>ptrdiff_t x       </TD><TD>(size_t)x              </TD><TD> 8    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %zo       </TD><TD>size_t x          </TD><TD>(size_t)x              </TD><TD> 8    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %p       </TD><TD>void *x           </TD><TD>(void *)x              </TD><TD><BR>  </TD><TD><BR>  </TD><TD><BR></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %s       </TD><TD>const char *x     </TD><TD>(const char *)x        </TD><TD><BR>  </TD><TD>all  </TD><TD><BR></TD></TR>
+<TR><TD>  %ls       </TD><TD>const wchar_t *x  </TD><TD>(const wchar_t *)x     </TD><TD><BR>  </TD><TD>all  </TD><TD><BR></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %u       </TD><TD>int x             </TD><TD>(unsigned int)x        </TD><TD>10    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hu       </TD><TD>int x             </TD><TD>(unsigned short)x      </TD><TD>10    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %lu       </TD><TD>long x            </TD><TD>(unsigned long)x       </TD><TD>10    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hhu      </TD><TD>int x             </TD><TD>(unsigned char)x       </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %ju       </TD><TD>intmax_t x        </TD><TD>(uintmax_t)x           </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %llu      </TD><TD>long long x       </TD><TD>(unsigned long long)x  </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %tu       </TD><TD>ptrdiff_t x       </TD><TD>(size_t)x              </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %zu       </TD><TD>size_t x          </TD><TD>(size_t)x              </TD><TD>10    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %x       </TD><TD>int x             </TD><TD>(unsigned int)x        </TD><TD>16    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hx       </TD><TD>int x             </TD><TD>(unsigned short)x      </TD><TD>16    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %lx       </TD><TD>long x            </TD><TD>(unsigned long)x       </TD><TD>16    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hhx      </TD><TD>int x             </TD><TD>(unsigned char)x       </TD><TD>16    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %jx       </TD><TD>intmax_t x        </TD><TD>(uintmax_t)x           </TD><TD>16    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %llx      </TD><TD>long long x       </TD><TD>(unsigned long long)x  </TD><TD>16    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %tx       </TD><TD>ptrdiff_t x       </TD><TD>(size_t)x              </TD><TD>16    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %zx       </TD><TD>size_t x          </TD><TD>(size_t)x              </TD><TD>16    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %X       </TD><TD>int x             </TD><TD>(unsigned int)x        </TD><TD>16    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hX       </TD><TD>int x             </TD><TD>(unsigned short)x      </TD><TD>16    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %lX       </TD><TD>long x            </TD><TD>(unsigned long)x       </TD><TD>16    </TD><TD> 1  </TD><TD><BR></TD></TR>
+<TR><TD>  %hhX      </TD><TD>int x             </TD><TD>(unsigned char)x       </TD><TD>16    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %jX       </TD><TD>intmax_t x        </TD><TD>(uintmax_t)x           </TD><TD>16    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %llX      </TD><TD>long long x       </TD><TD>(unsigned long long)x  </TD><TD>16    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %tX       </TD><TD>ptrdiff_t x       </TD><TD>(size_t)x              </TD><TD>16    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD>  %zX       </TD><TD>size_t x          </TD><TD>(size_t)x              </TD><TD>16    </TD><TD> 1  </TD><TD><B>added with C99</B></TD></TR>
+<TR><TD COLSPAN=6><BR></TD></TR>
+<TR><TD>   %%       </TD><TD><B>none</B>              </TD><TD>(char)'%'              </TD><TD><BR>  </TD><TD><BR>  </TD><TD><BR></TD></TR>
+</TABLE>
+
+<table border="1" cellpadding="3" ALIGN=CENTER>
+        <caption><b>Table 2. Combinations and Properties for Print Conversion Specifiers for 64-bit Vector Data Types</b></caption>
+                        <TR ALIGN = "left">
+				 <TH VALIGN="top">
+                                        <P>Conversion Specifier</P>
+                                </TH>
+                                <TH VALIGN="top">
+                                        <P>Converted Value</P>
+                                </TH>
+                                <TH VALIGN="top">
+                                        <P>Base</P>
+                                </TH>
+                                <TH VALIGN="top">
+                                        <P>Default Precision</P>
+                                </TH>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vha</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>all</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%va</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>all</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%vhA</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>all</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vA</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>all</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%vc</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 unsigned char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>&nbsp;</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%vd</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>	
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhhd</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 signed char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%vhd</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vld</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%vlld</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1 long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhe</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%ve</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%vhE</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vE</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhf</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			 <TR>
+                                <TD VALIGN="top">
+                                        <P>%vf</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhF</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%vF</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhg</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vg</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhG</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			 <TR>
+                                <TD VALIGN="top">
+                                        <P>%vG</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vi</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%vhhi</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 signed char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhi</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%vli</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+		 	<TR>
+                                <TD VALIGN="top">
+                                        <P>%vlli</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1 long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vo</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhho</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 unsigned char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vho</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vlo</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vllo</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1 unsigned long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vu</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                       <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhhu</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 unsigned char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhu</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vlu</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vllu</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1 unsigned long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vx</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhhx</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 unsigned char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhx</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vlx</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vllx</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1 unsigned long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vX</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhhX</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 unsigned char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vhX</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vlX</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%vllX</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1 unsigned long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+	
+			</TABLE>
+
+<table border="1" cellpadding="3" ALIGN=CENTER>
+        <caption><b>Table 3. Combinations and Properties for Print Conversion Specifiers for 128-bit Vector Data Types</b></caption>
+                        <TR ALIGN = "left">
+				 <TH VALIGN="top">
+                                        <P>Conversion Specifier</P>
+                                </TH>
+                                <TH VALIGN="top">
+                                        <P>Converted Value</P>
+                                </TH>
+                                <TH VALIGN="top">
+                                        <P>Base</P>
+                                </TH>
+                                <TH VALIGN="top">
+                                        <P>Default Precision</P>
+                                </TH>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wha</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>all</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%wa</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>all</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%whA</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>all</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wA</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>all</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%wc</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16 unsigned char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>&nbsp;</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%wd</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>	
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whhd</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16 signed char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%whd</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wld</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%wlld</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whe</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%we</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%whE</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wE</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whf</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			 <TR>
+                                <TD VALIGN="top">
+                                        <P>%wf</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whF</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%wF</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whg</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wg</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whG</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 half float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			 <TR>
+                                <TD VALIGN="top">
+                                        <P>%wG</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 float</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>6</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wi</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%whhi</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16 signed char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whi</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR>
+                                <TD VALIGN="top">
+                                        <P>%wli</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+		 	<TR>
+                                <TD VALIGN="top">
+                                        <P>%wlli</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+			<TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wo</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whho</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16 unsigned char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%who</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 unsigned short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wlo</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wllo</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wu</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                       <TR>
+                                <TD VALIGN="top">
+                                        <P>%whhu</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16 unsigned char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whu</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 unsigned short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wlu</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wllu</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>10</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wx</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whhx</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16 unsigned char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whx</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 unsigned short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wlx</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wllx</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR><TD colspan=5>&nbsp;</TD></TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wX</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whhX</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16 unsigned char</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%whX</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>8 unsigned short</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wlX</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>4 unsigned int</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+                        <TR>
+                                <TD VALIGN="top">
+                                        <P>%wllX</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>2 unsigned long long</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>16</P>
+                                </TD>
+                                <TD VALIGN="top">
+                                        <P>1</P>
+                                </TD>
+                        </TR>
+	
+			</TABLE>
+
+<P>The print conversion specifier determines any behavior not summarized
+in this table. For all floating-point conversions:</P>
+
+<UL>
+<LI>Positive infinity prints as <CODE>inf</CODE> or <CODE>INF</CODE>.</LI>
+
+<LI>Negative infinity prints as <CODE>-inf</CODE> or <CODE>-INF</CODE>.</LI>
+
+<LI>Not-a-number (NaN) prints as <CODE>nan</CODE> or <CODE>NAN</CODE>.</LI>
+</UL>
+
+<P>The upper-case version prints only for an upper-case conversion specifier,
+such as <CODE>%E</CODE> but not <CODE>%Lg</CODE>.</P>
+
+<P>In the following descriptions, <I>p</I> is the precision.
+Examples follow each of the print conversion specifiers.
+A single conversion can generate up to 509 characters.</P>
+
+<P>You write <B><A NAME="%a"></A><CODE>%a</CODE></B> or
+<B><A NAME="%A"></A><CODE>%A</CODE></B> to generate
+a signed hexadecimal fractional representation with
+a decimal power-of-two exponent. The generated text takes the form
+<I>&#177;0Xh.hhhP&#177;dd,</I> where <I>&#177;</I> is either a plus or
+minus sign,
+<I>X</I> is either <CODE>x</CODE> (for <CODE>%a</CODE> conversion)
+or <CODE>X</CODE> (for <CODE>%A</CODE> conversion),
+<I>h</I> is a hexadecimal digit,
+<I>d</I> is a decimal digit, the hexadecimal point (<I>.</I>)
+is the decimal point for the current
+<A HREF="charset.html#locale">locale</A>,
+and <I>P</I> is either <CODE>p</CODE> (for <CODE>%a</CODE> conversion)
+or <CODE>P</CODE> (for <CODE>%A</CODE> conversion).
+The generated text has one integer digit
+which is zero only for the value zero,
+a hexadecimal point if any fraction digits are present
+or if you specify the <CODE>#</CODE>
+format flag, at most <I>p</I> fraction digits with no trailing zeros,
+and at least one exponent digit with no leading zeros.
+The result is rounded. The value zero has a zero exponent.</P>
+
+<PRE>    printf("%a", 30.0)              <B>generates, e.g. 0x1.ep+4</B>
+    printf("%.2A", 30.0)            <B>generates, e.g. 0X1.E0P+4</B></PRE>
+
+<P>You write <B><A NAME="%c"></A><CODE>%c</CODE></B>
+to generate a single character from the converted
+value.</P>
+
+<PRE>    printf("%c", 'a')               <B>generates a</B>
+    printf("&lt;%3c|%-3c&gt;", 'a', 'b')  <B>generates &lt;  a|b  &gt;</B></PRE>
+
+<P>For a
+<A HREF="lib_file.html#wide_stream">wide stream</A>,
+conversion of the character <CODE>x</CODE> occurs as if by calling
+<CODE><A HREF="wchar.html#btowc">btowc</A>(x)</CODE>. </P>
+
+<PRE>    wprintf(L"%c", 'a')             <B>generates wide a</B></PRE>
+
+<P>You write <B><A NAME="%lc"></A><CODE>%lc</CODE></B>
+to generate a single character from the converted value.
+Conversion of the character <CODE>x</CODE> occurs as if
+it is followed by a null character in an array of two elements of type
+<A HREF="stddef.html#wchar_t"><CODE>wchar_t</CODE></A>
+converted by the conversion specification
+<A HREF="#%ls"><CODE>ls</CODE></A>.</P>
+
+<PRE>    printf("%lc", L'a')             <B>generates a</B>
+    wprintf(L"lc", L'a')            <B>generates wide a</B></PRE>
+
+<P>You write <B><A NAME="%d"></A><CODE>%d</CODE></B>,
+<B><A NAME="%i"></A><CODE>%i</CODE></B>,
+<B><A NAME="%o"></A><CODE>%o</CODE></B>,
+<B><A NAME="%u"></A><CODE>%u</CODE></B>,
+<B><A NAME="%x"></A><CODE>%x</CODE></B>, or
+<B><A NAME="%X"></A><CODE>%X</CODE></B> to generate
+a possibly signed integer representation. <CODE>%d</CODE> or <CODE>%i</CODE>
+specifies signed decimal representation, <CODE>%o</CODE>
+unsigned octal, <CODE>%u</CODE> unsigned decimal,
+<CODE>%x</CODE> unsigned hexadecimal using the digits <CODE>0-9</CODE>
+and <CODE>a-f</CODE>, and <CODE>%X</CODE> unsigned
+hexadecimal using the digits <CODE>0-9</CODE> and <CODE>A-F</CODE>.
+The conversion generates at least <I>p</I> digits
+to represent the converted value. If <I>p</I> is zero,
+a converted value of zero generates no digits.</P>
+
+<PRE>    printf("%d %o %x", 31, 31, 31)  <B>generates 31 37 1f</B>
+    printf("%hu", 0xffff)           <B>generates 65535</B>
+    printf("%#X %+d", 31, 31)       <B>generates 0X1F +31</B></PRE>
+
+<P>You write <B><A NAME="%e"></A><CODE>%e</CODE></B> or
+<B><A NAME="%E"></A><CODE>%E</CODE></B> to generate
+a signed decimal fractional representation with
+a decimal power-of-ten exponent. The generated text takes the form
+<I>&#177;d.dddE&#177;dd,</I> where <I>&#177;</I> is either a plus or
+minus sign, <I>d</I> is a decimal digit, the decimal point (<I>.</I>)
+is the decimal point for the current
+<A HREF="charset.html#locale">locale</A>,
+and <I>E</I> is either <CODE>e</CODE> (for <CODE>%e</CODE> conversion)
+or <CODE>E</CODE> (for <CODE>%E</CODE> conversion).
+The generated text has one integer digit,
+a decimal point if <I>p</I> is nonzero or if you specify the <CODE>#</CODE>
+format flag, <I>p</I> fraction digits, and at least two exponent digits.
+The result is rounded. The value zero has a zero exponent.</P>
+
+<PRE>    printf("%e", 31.4)              <B>generates 3.140000e+01</B>
+    printf("%.2E", 31.4)            <B>generates 3.14E+01</B></PRE>
+
+<P>You write <B><A NAME="%f"></A><CODE>%f</CODE></B>&nbsp;
+<B><A NAME="%F"></A><CODE>%F</CODE></B>,
+<B><A NAME="%k"></A><CODE>%k</CODE></B>,
+<B><A NAME="%K"></A><CODE>%K</CODE></B>,
+<B><A NAME="%r"></A><CODE>%r</CODE></B>,
+or <B><A NAME="%R"></A><CODE>%R</CODE></B>
+to generate a signed decimal fractional representation
+with no exponent. The generated text takes the form <I>&#177;d.ddd,</I>
+where <I>&#177;</I> is either a plus or minus sign,
+<I>d</I> is a decimal digit, and the decimal point (<I>.</I>)
+is the decimal point for the current
+<A HREF="charset.html#locale">locale</A>.
+The generated text has at least one integer digit,
+a decimal point if <I>p</I> is nonzero or if you specify
+the <CODE>#</CODE> format flag, and <I>p</I> fraction digits.
+The result is rounded.</P>
+
+<PRE>    printf("%f", 31.4)              <B>generates 31.400000</B>
+    printf("%.0f %#.0f", 31.0, 31.0)<B>generates 31 31.</B></PRE>
+
+<P>You write <B><A NAME="%g"></A><CODE>%g</CODE></B> or
+<B><A NAME="%G"></A><CODE>%G</CODE></B> to generate
+a signed decimal fractional
+representation with or without a decimal power-of-ten exponent, as appropriate.
+For <CODE>%g</CODE> conversion, the generated text
+takes the same form as either <CODE>%e</CODE>
+or <CODE>%f</CODE> conversion. For <CODE>%G</CODE> conversion,
+it takes the same form as either
+<CODE>%E</CODE> or
+<CODE>%F</CODE>
+conversion.
+The precision <I>p</I> specifies the number
+of significant digits generated. (If <I>p</I> is zero, it is changed
+to 1.) If <CODE>%e</CODE> conversion would yield an exponent in the range
+[-4, <I>p</I>), then <CODE>%f</CODE> conversion occurs instead.
+The generated text has no trailing zeros
+in any fraction and has a decimal point
+only if there are nonzero fraction digits, unless you specify the
+<CODE>#</CODE> format flag.</P>
+
+<PRE>    printf("%.6g", 31.4)            <B>generates 31.4</B>
+    printf("%.1g", 31.4)            <B>generates 3.14e+01</B></PRE>
+
+<P>You write <B><A NAME="%n"></A><CODE>%n</CODE></B>
+to store the number of characters generated
+(up to this point in the format) in an integer object
+whose address is the value of the next successive argument.</P>
+
+<PRE>    printf("abc%n", &amp;x)                   <B>stores 3</B></PRE>
+
+<P>You write <B><A NAME="%p"></A><CODE>%p</CODE></B>
+to generate an external representation of a <I>pointer to void.</I>
+The conversion is implementation defined.</P>
+
+<PRE>    printf("%p", (void *)&amp;x)        <B>generates, e.g. F4C0</B></PRE>
+
+<P>You write <B><A NAME="%s"></A><CODE>%s</CODE></B>
+to generate a sequence of characters from
+the values stored in the argument
+<A HREF="lib_over.html#C_string">C string</A>.</P>
+
+<PRE>    printf("%s", "hello")           <B>generates hello</B>
+    printf("%.2s", "hello")         <B>generates he</B></PRE>
+
+<P>For a
+<A HREF="lib_file.html#wide_stream">wide stream</A>, conversion
+occurs as if by repeatedly calling
+<A HREF="wchar.html#mbrtowc"><CODE>mbrtowc</CODE></A>,
+beginning in the
+<A HREF="charset.html#initial_conversion_state">
+initial conversion state</A>.
+The conversion generates no more than <I>p</I> characters,
+up to but not including the terminating null character.</P>
+
+<PRE>    wprintf(L"%s", "hello")         <B>generates wide hello</B></PRE>
+
+<P>You write <B><A NAME="%ls"></A><CODE>%ls</CODE></B>
+to generate a sequence of characters from
+the values stored in the argument
+<A HREF="lib_over.html#wide-character_string">wide-character string</A>.
+For a <A HREF="lib_file.html#byte_stream">byte stream</A>,
+conversion occurs as if by repeatedly calling
+<A HREF="wchar.html#wcrtomb"><CODE>wcrtomb</CODE></A>, beginning in the
+<A HREF="charset.html#initial_conversion_state">
+initial conversion state</A>,
+so long as complete multibyte characters can be generated.
+The conversion generates no more than
+<I>p</I> characters, up to but not including the terminating null
+character.</P>
+
+<PRE>    printf("%ls", L"hello")         <B>generates hello</B>
+    wprintf(L"%.2ls", L"hello")      <B>generates wide he</B></PRE>
+
+<P>You write <B><A NAME="%%"></A><CODE>%%</CODE></B> to generate
+the percent character (<CODE>%</CODE>).</P>
+
+<PRE>    printf("%%")                    <B>generates %</B></PRE>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+&copy; 2012 Sony Computer Entertainment Inc. All rights reserved.</I></P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger and Jim Brodie. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

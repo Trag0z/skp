@@ -1,0 +1,574 @@
+<HTML><HEAD>
+<TITLE>&lt;bitset&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;bitset&gt;"></A><CODE>&lt;bitset&gt;</CODE></H1><HR>
+
+<P><B><CODE><A HREF="#bitset">bitset</A>
+&middot; <A HREF="#hash">hash</A>
+&middot; <A HREF="#operator&amp;">operator&amp;</A>
+&middot; <A HREF="#operator|">operator|</A>
+&middot; <A HREF="#operator^">operator^</A>
+&middot; <A HREF="#operator&gt;&gt;">operator&gt;&gt;</A>
+&middot; <A HREF="#operator&lt;&lt;">operator&lt;&lt;</A>
+</CODE></B></P><HR>
+
+<P>Include the standard header <B><CODE>&lt;bitset&gt;</CODE></B>
+to define the template class <CODE>bitset</CODE>
+and two supporting templates.</P>
+
+<P>Beginning with <B>C++11</B>,
+some functions and constructors declared in this header
+use <CODE>constexpr</CODE> to signal that they are treated as
+compile-time constants.</P>
+
+<PRE>namespace std {
+template&lt;size_t Bits&gt;
+    class <B><A HREF="#bitset">bitset</A></B>;
+
+template&lt;size_t Bits&gt;
+    struct <B><A HREF="#hash">hash</A>&lt;bitset&lt;Bits&gt; &gt;</B>  <B>[added with C++11]</B>
+        : public <A HREF="functio2.html#unary_function">unary_function</A>&lt;bitset&lt;Bits&gt;, size_t&gt; {
+    size_t <B>operator()</B>(bitset&lt;Bits&gt; val) const;
+    };
+
+        // TEMPLATE FUNCTIONS
+template&lt;size_t Bits&gt;
+    bitset&lt;Bits&gt;
+        <B><A HREF="#operator&amp;">operator&amp;</A></B>(const bitset&lt;Bits&gt;&amp; left,
+            const bitset&lt;Bits&gt;&amp; right) noexcept;
+template&lt;size_t Bits&gt;
+    bitset&lt;Bits&gt;
+        <B><A HREF="#operator|">operator|</A></B>(const bitset&lt;Bits&gt;&amp; left,
+            const bitset&lt;Bits&gt;&amp; right) noexcept;
+template&lt;size_t Bits&gt;
+    bitset&lt;Bits&gt;
+        <B><A HREF="#operator^">operator^</A></B>(const bitset&lt;Bits&gt;&amp; left,
+            const bitset&lt;Bits&gt;&amp; right) noexcept;
+
+template&lt;class Elem, class Tr, size_t Bits&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp;
+        <B><A HREF="#operator&gt;&gt;">operator&gt;&gt;</A></B>(basic_istream&lt;Elem, Tr&gt;&amp; istr,
+            bitset&lt;Bits&gt;&amp; right);
+template&lt;class Elem, class Tr, size_t Bits&gt;
+    basic_ostream&lt;Elem, Tr&gt;&amp;
+        <B><A HREF="#operator&lt;&lt;">operator&lt;&lt;</A></B>(basic_ostream&lt;Elem, Tr&gt;&amp; ostr,
+            const bitset&lt;Bits&gt;&amp; right);
+}  // namespace std</PRE>
+
+<H2><A NAME="bitset"></A><CODE>bitset</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#bitset__all">all</A>
+&middot; <A HREF="#bitset__any">any</A>
+&middot; <A HREF="#bitset__bitset">bitset</A>
+&middot; <A HREF="#bitset__count">count</A>
+&middot; <A HREF="#bitset__element_type">element_type</A>
+&middot; <A HREF="#bitset__flip">flip</A>
+&middot; <A HREF="#bitset__none">none</A>
+&middot; <A HREF="#bitset__operator!2">operator!=</A>
+&middot; <A HREF="#bitset__operator&amp;2">operator&amp;=</A>
+&middot; <A HREF="#bitset__operator&lt;&lt;">operator&lt;&lt;</A>
+&middot; <A HREF="#bitset__operator&lt;&lt;2">operator&lt;&lt;=</A>
+&middot; <A HREF="#bitset__operator22">operator==</A>
+&middot; <A HREF="#bitset__operator&gt;&gt;">operator&gt;&gt;</A>
+&middot; <A HREF="#bitset__operator&gt;&gt;2">operator&gt;&gt;=</A>
+&middot; <A HREF="#bitset__operator[]">operator[]</A>
+&middot; <A HREF="#bitset__operator^2">operator^=</A>
+&middot; <A HREF="#bitset__operator|2">operator|=</A>
+&middot; <A HREF="#bitset__operator~">operator~</A>
+&middot; <A HREF="#bitset__reference">reference</A>
+&middot; <A HREF="#bitset__reset">reset</A>
+&middot; <A HREF="#bitset__set">set</A>
+&middot; <A HREF="#bitset__size">size</A>
+&middot; <A HREF="#bitset__test">test</A>
+&middot; <A HREF="#bitset__to_string">to_string</A>
+&middot; <A HREF="#bitset__to_ullong">to_ullong</A>
+&middot; <A HREF="#bitset__to_ulong">to_ulong</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;size_t Bits&gt;
+    class <B>bitset</B> {
+public:
+    typedef bool <B><A HREF="#bitset__element_type">element_type</A></B>;
+    class <B><A HREF="#bitset__reference">reference</A></B>;
+
+    constexpr <B><A HREF="#bitset__bitset">bitset</A></B>() noexcept;
+    constexpr <B><A HREF="#bitset__bitset">bitset</A></B>(unsigned long val); <B>[replaced with C++11]</B>
+    constexpr <B><A HREF="#bitset__bitset">bitset</A></B>(unsigned long long val) noexcept; <B>[added with C++11]</B>&nbsp;
+    template&lt;class Elem, class Tr, class Alloc&gt;
+        explicit <B><A HREF="#bitset__bitset">bitset</A></B>(const basic_string&lt;Elem, Tr, Alloc&gt;&amp; str,
+            typename basic_string&lt;Elem, Tr, Alloc&gt;::size_type
+                pos = 0,
+            typename basic_string&lt;Elem, Tr, Alloc&gt;::size_type
+                count = basic_string&lt;Elem, Tr, Alloc&gt;::npos,
+            Elem digit0 = Elem('0'),
+            Elem digit1 = Elem('1'));
+    template&lt;class Elem&gt;
+        explicit <B><A HREF="#bitset__bitset">bitset</A></B>(const Elem *ptr,
+            typename basic_string&lt;Elem&gt;::size_type
+                count = basic_string&lt;Elem&gt;::npos,
+            Elem digit0 = Elem('0'),
+            Elem digit1 = Elem('1'));
+
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__operator&amp;2">operator&amp;=</A></B>(const bitset&lt;Bits&gt;&amp; right) noexcept;
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__operator|2">operator|=</A></B>(const bitset&lt;Bits&gt;&amp; right) noexcept;
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__operator^2">operator^=</A></B>(const bitset&lt;Bits&gt;&amp; right) noexcept;
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__operator&lt;&lt;2">operator&lt;&lt;=</A></B>(size_t pos) noexcept;
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__operator&gt;&gt;2">operator&gt;&gt;=</A></B>(size_t pos) noexcept;
+
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__set">set</A></B>() noexcept;
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__set">set</A></B>(size_t pos, bool val = true);
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__reset">reset</A></B>() noexcept;
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__reset">reset</A></B>(size_t pos);
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__flip">flip</A></B>() noexcept;
+    bitset&lt;Bits&gt;&amp; <B><A HREF="#bitset__flip">flip</A></B>(size_t pos);
+
+    constexpr bool <B><A HREF="#bitset__operator[]">operator[]</A></B>(size_t pos) const;
+    reference <B><A HREF="#bitset__operator[]">operator[]</A></B>(size_t pos);
+    unsigned long <B><A HREF="#bitset__to_ulong">to_ulong</A></B>() const;
+    unsigned long long <B><A HREF="#bitset__to_ullong">to_ullong</A></B>() const; <B>[added with C++11]</B>
+    template&lt;class Elem = char,
+        class Tr = char_traits&lt;Elem&gt;,
+        class Alloc = allocator&lt;Elem&gt; &gt;
+        basic_string&lt;Elem, Tr, Alloc&gt;
+            <B><A HREF="#bitset__to_string">to_string</A></B>(Elem digit0 = Elem('0'), Elem digit1 = Elem('1')) const;
+
+    size_t <B><A HREF="#bitset__count">count</A></B>() const noexcept;
+    contexpr size_t <B><A HREF="#bitset__size">size</A></B>() const noexcept;
+
+    bool <B><A HREF="#bitset__operator22">operator==</A></B>(const bitset&lt;Bits&gt;&amp; right) const noexcept;
+    bool <B><A HREF="#bitset__operator!2">operator!=</A></B>(const bitset&lt;Bits&gt;&amp; right) const noexcept;
+    bool <B><A HREF="#bitset__test">test</A></B>(size_t pos) const;
+    bool <B><A HREF="#bitset__any">any</A></B>() const noexcept;
+    bool <B><A HREF="#bitset__none">none</A></B>() const noexcept;
+    bool <B><A HREF="#bitset__all">all</A></B>() const noexcept; <B>[added with C++11]</B>
+
+    bitset&lt;Bits&gt; <B><A HREF="#bitset__operator&lt;&lt;">operator&lt;&lt;</A></B>(size_t pos) const noexcept;
+    bitset&lt;Bits&gt; <B><A HREF="#bitset__operator&gt;&gt;">operator&gt;&gt;</A></B>(size_t pos) const noexcept;
+    bitset&lt;Bits&gt; <B><A HREF="#bitset__operator~">operator~</A></B>() const noexcept;
+    };</PRE>
+
+<P>The template class describes an object that stores a
+sequence of <CODE>Bits</CODE> bits. A bit is
+<B><A NAME="bit_set"></A>set</B> if its value is 1,
+<B><A NAME="bit_reset"></A>reset</B> if its value is 0.
+To <B><A NAME="bit_flip"></A>flip</B> a bit is to change its value
+from 1 to 0 or from 0 to 1.
+When converting between an object of
+class <CODE>bitset&lt;Bits&gt;</CODE> and an object of some integral type,
+bit position <CODE>J</CODE> corresponds to the bit value
+<CODE>1 &lt;&lt; J</CODE>. The integral value corresponding to two
+or more bits is the sum of their bit values.</P>
+
+<H3><CODE><A NAME="bitset__all"></A>bitset::all</CODE></H3>
+
+<PRE>bool <B>all</B>() const noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The member function returns true if all bits are set in the
+bit sequence.</P>
+
+<H3><CODE><A NAME="bitset__any"></A>bitset::any</CODE></H3>
+
+<PRE>bool <B>any</B>() const noexcept;</PRE>
+
+<P>The member function returns true if any bit is set in the
+bit sequence.</P>
+
+<H3><CODE><A NAME="bitset__bitset"></A>bitset::bitset</CODE></H3>
+
+<PRE>constexpr <B>bitset</B>() noexcept;
+constexpr <B>bitset</B>(unsigned long val); <B>[replaced with C++11]</B>
+constexpr <B>bitset</B>(unsigned long long val) noexcept; <B>[added with C++11]</B>&nbsp;
+template&lt;class Elem, class Tr, class Alloc&gt;
+    explicit <B>bitset</B>(const basic_string&lt;Elem, Tr, Alloc&gt;&amp; str,
+        typename basic_string&lt;Elem, Tr, Alloc&gt;::size_type
+            pos = 0,
+        typename basic_string&lt;Elem, Tr, Alloc&gt;::size_type
+            count = basic_string&lt;Elem, Tr, Alloc&gt;::npos,
+        Elem digit0 = Elem('0'),
+        Elem digit1 = Elem('1'));
+template&lt;class Elem&gt;
+    explicit <B>bitset</B>(const Elem *ptr,
+        typename basic_string&lt;Elem&gt;::size_type
+            count = basic_string&lt;Elem&gt;::npos,
+        Elem digit0 = Elem('0'),
+        Elem digit1 = Elem('1'));</PRE>
+
+<P>The first constructor resets all bits in the bit sequence.
+The second or third constructor sets only those bits at position <CODE>J</CODE>
+for which <CODE>val &amp; 1 &lt;&lt; J</CODE> is nonzero.</P>
+
+<P>The fourth constructor determines the initial bit values from
+elements of a string determined from <CODE>str</CODE>. If
+<CODE>str.<A HREF="string2.html#basic_string__size">size</A>()
+&lt; pos</CODE>, the constructor throws an object of class
+<CODE><A HREF="stdexcep.html#out_of_range">out_of_range</A></CODE>.
+Otherwise, the effective length of the string <CODE>rlen</CODE>
+is the smaller of <CODE>count</CODE> and
+<CODE>str.size() - pos</CODE>. If any of the <CODE>rlen</CODE>
+elements beginning at position <CODE>pos</CODE> is other than
+<CODE>digit0</CODE> or <CODE>digit1</CODE>, the constructor throws an object of class
+<CODE><A HREF="stdexcep.html#invalid_argument">invalid_argument</A></CODE>.
+Otherwise, the constructor sets only those bits at position <CODE>J</CODE>
+for which the element at position <CODE>pos + J</CODE> is <CODE>digit1</CODE>.</P>
+
+<P>The fifth constructor is effectively the same as:</P>
+
+<PRE>bitset(count == basic_string&lt;Elem&gt;::npos
+    ? basic_string&lt;Elem&gt;(ptr)
+    : basic_string&lt;Elem&gt;ptr, count),
+	0, count, digit0, digit1)</PRE>
+
+<H3><CODE><A NAME="bitset__count"></A>bitset::count</CODE></H3>
+
+<PRE>size_t <B><A HREF="#bitset__count">count</A></B>() const noexcept;</PRE>
+
+<P>The member function returns the number of bits set in the
+bit sequence.</P>
+
+<H3><CODE><A NAME="bitset__element_type"></A>bitset::element_type</CODE></H3>
+
+<PRE>typedef bool <B>element_type</B>;</PRE>
+
+<P>The type is a synonym for <CODE>bool</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__flip"></A>bitset::flip</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt;&amp; <B>flip</B>() noexcept;
+bitset&lt;Bits&gt;&amp; <B>flip</B>(size_t pos);</PRE>
+
+<P>The first member function flips all bits in the bit sequence,
+then returns <CODE>*this</CODE>.
+The second member function throws
+<CODE><A HREF="stdexcep.html#out_of_range">out_of_range</A></CODE> if
+<CODE><A HREF="#bitset__size">size</A>()
+&lt;= pos</CODE>. Otherwise, it flips the bit
+at position <CODE>pos</CODE>, then returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__none"></A>bitset::none</CODE></H3>
+
+<PRE>bool <B><A HREF="#bitset__none">none</A></B>() const noexcept;</PRE>
+
+<P>The member function returns true if none of the bits are set
+in the bit sequence.</P>
+
+<H3><CODE><A NAME="bitset__operator!2"></A>bitset::operator!=</CODE></H3>
+
+<PRE>bool <B>operator!=</B>(const bitset&lt;Bits&gt;&amp; right) const noexcept;</PRE>
+
+<P>The member operator function returns true
+only if the bit sequence stored in
+<CODE>*this</CODE> differs from the one stored in <CODE>right</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__operator&amp;2"></A>bitset::operator&amp;=</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt;&amp; <B>operator&amp;=</B>(const bitset&lt;Bits&gt;&amp; right) noexcept;</PRE>
+
+<P>The member operator function replaces each element of the bit sequence stored
+in <CODE>*this</CODE> with the logical AND of its previous value and
+the corresponding bit in <CODE>right</CODE>.
+The function returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__operator&lt;&lt;"></A>bitset::operator&lt;&lt;</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt; <B>operator&lt;&lt;</B>(size_t pos) noexcept;</PRE>
+
+<P>The member operator function returns <CODE>bitset(*this)
+<A HREF="#bitset__operator&lt;&lt;2">&lt;&lt;=</A> pos</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__operator&lt;&lt;2"></A>bitset::operator&lt;&lt;=</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt;&amp; <B>operator&lt;&lt;=</B>(size_t pos) noexcept;</PRE>
+
+<P>The member operator function replaces
+each element of the bit sequence stored
+in <CODE>*this</CODE> with the element <CODE>pos</CODE> positions earlier
+in the sequence. If no such earlier element exists, the function clears
+the bit. The function returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__operator22"></A>bitset::operator==</CODE></H3>
+
+<PRE>bool <B>operator==</B>(const bitset&lt;Bits&gt;&amp; right) const noexcept;</PRE>
+
+<P>The member operator function returns true
+only if the bit sequence stored in
+<CODE>*this</CODE> is the same as the one stored in <CODE>right</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__operator&gt;&gt;"></A>bitset::operator&gt;&gt;</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt; <B>operator&gt;&gt;</B>(size_t pos) noexcept;</PRE>
+
+<P>The member operator function returns <CODE>bitset(*this)
+<A HREF="#bitset__operator&gt;&gt;2">&gt;&gt;=</A> pos</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__operator&gt;&gt;2"></A>bitset::operator&gt;&gt;=</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt;&amp; <B>operator&gt;&gt;=</B>(size_t pos) noexcept;</PRE>
+
+<P>The member function replaces each element of the bit sequence stored
+in <CODE>*this</CODE> with the element <CODE>pos</CODE> positions later
+in the sequence. If no such later element exists, the function clears
+the bit. The function returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__operator[]"></A>bitset::operator[]</CODE></H3>
+
+<PRE>constexpr bool <B>operator[]</B>(size_type pos) const;
+reference <B>operator[]</B>(size_type pos);</PRE>
+
+<P>The member function returns an object of class
+<CODE><A HREF="#bitset__reference">reference</A></CODE>,
+which designates the bit at position <CODE>pos</CODE>,
+if the object can be modified. Otherwise, it returns
+the value of the bit at position <CODE>pos</CODE>
+in the bit sequence. If that position is
+invalid, the behavior is undefined.</P>
+
+<P>The member function throws nothing.</P>
+
+<H3><CODE><A NAME="bitset__operator^2"></A>bitset::operator^=</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt;&amp; <B>operator^=</B>(const bitset&lt;Bits&gt;&amp; right) noexcept;</PRE>
+
+<P>The member operator function replaces each element of the bit sequence stored
+in <CODE>*this</CODE> with the logical
+EXCLUSIVE OR of its previous value and
+the corresponding bit in <CODE>right</CODE>.
+The function returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__operator|2"></A>bitset::operator|=</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt;&amp; <B>operator|=</B>(const bitset&lt;Bits&gt;&amp; right) noexcept;</PRE>
+
+<P>The member operator function replaces each element of the bit sequence stored
+in <CODE>*this</CODE> with the logical OR of its previous value and
+the corresponding bit in <CODE>right</CODE>.
+The function returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__operator~"></A>bitset::operator~</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt; <B>operator~</B>() const noexcept;</PRE>
+
+<P>The member operator function returns
+<CODE>bitset(*this).<A HREF="#bitset__flip">flip</A>()</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__reference"></A>bitset::reference</CODE></H3>
+
+<PRE>class <B>reference</B> {
+    <B>reference</B>() noexcept;
+public:
+    <B>~reference</B>() noexcept;
+    reference&amp; <B>operator=</B>(bool val) noexcept;
+    reference&amp; <B>operator=</B>(const reference&amp; bitref) noexcept;
+    bool <B>operator~</B>() const noexcept;
+    <B>operator bool</B>() const noexcept;
+    reference&amp; <B>flip</B>() noexcept;
+    };</PRE>
+
+<P>The member class describes an object that designates an
+individual bit within the bit sequence. Thus, for <CODE>val</CODE>
+an object of type <CODE>bool</CODE>, <CODE>bs</CODE> and <CODE>bs2</CODE>
+objects of type <CODE>bitset&lt;Bits&gt;</CODE>, and
+<CODE>I</CODE> and <CODE>J</CODE>
+valid positions within such an object, the member functions
+of class <CODE>reference</CODE> ensure that (in order):</P>
+
+<UL>
+<LI><B><CODE>bs[I] = val</CODE></B> stores <CODE>val</CODE> at bit position
+<CODE>I</CODE> in <CODE>bs</CODE></LI>
+
+<LI><B><CODE>bs[I] = bs2[J]</CODE></B> stores the value of the bit
+<CODE>bs2[J]</CODE> at bit position
+<CODE>I</CODE> in <CODE>bs</CODE></LI>
+
+<LI><B><CODE>val = ~bs[I]</CODE></B> stores the flipped value of the bit
+<CODE>bs[I]</CODE> in <CODE>val</CODE></LI>
+
+<LI><B><CODE>val = bs[I]</CODE></B> stores the value of the bit
+<CODE>bs[I]</CODE> in <CODE>val</CODE></LI>
+
+<LI><B><CODE>bs[I].flip()</CODE></B> stores the flipped value of the bit
+<CODE>bs[I]</CODE> back at bit position
+<CODE>I</CODE> in <CODE>bs</CODE></LI>
+</UL>
+
+<H3><CODE><A NAME="bitset__reset"></A>bitset::reset</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt;&amp; <B>reset</B>() noexcept;
+bitset&lt;Bits&gt;&amp; <B>reset</B>(size_t pos);</PRE>
+
+<P>The first member function resets (or clears) all bits in the bit sequence,
+then returns <CODE>*this</CODE>.
+The second member function throws
+<CODE><A HREF="stdexcep.html#out_of_range">out_of_range</A></CODE> if
+<CODE><A HREF="#bitset__size">size</A>()
+&lt;= pos</CODE>. Otherwise, it resets the bit
+at position <CODE>pos</CODE>, then returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__set"></A>bitset::set</CODE></H3>
+
+<PRE>bitset&lt;Bits&gt;&amp; <B>set</B>() noexcept;
+bitset&lt;Bits&gt;&amp; <B>set</B>(size_t pos, bool val = true);</PRE>
+
+<P>The first member function sets all bits in the bit sequence,
+then returns <CODE>*this</CODE>.
+The second member function throws
+<CODE><A HREF="stdexcep.html#out_of_range">out_of_range</A></CODE> if
+<CODE><A HREF="#bitset__size">size</A>()
+&lt;= pos</CODE>. Otherwise, it stores <CODE>val</CODE> in the bit
+at position <CODE>pos</CODE>, then returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__size"></A>bitset::size</CODE></H3>
+
+<PRE>constexpr size_t <B>size</B>() const noexcept;</PRE>
+
+<P>The member function returns <CODE>Bits</CODE>.</P>
+
+<H3><CODE><A NAME="bitset__test"></A>bitset::test</CODE></H3>
+
+<PRE>bool <B>test</B>(size_t pos);</PRE>
+
+<P>The member function throws
+<CODE><A HREF="stdexcep.html#out_of_range">out_of_range</A></CODE> if
+<CODE><A HREF="#bitset__size">size</A>()
+&lt;= pos</CODE>. Otherwise, it returns true only if the bit
+at position <CODE>pos</CODE> is set.</P>
+
+<H3><CODE><A NAME="bitset__to_string"></A>bitset::to_string</CODE></H3>
+
+<PRE>template&lt;class Elem = char,
+    class Tr = char_traits&lt;Elem&gt;,
+    class Alloc = allocator&lt;Elem&gt; &gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;
+        <B><A HREF="#bitset__to_string">to_string</A></B>(Elem digit0 = Elem('0'), Elem digit1 = Elem('1')) const;</PRE>
+
+<P>The member function constructs <CODE>str</CODE>, an object of class
+<CODE>basic_string&lt;Elem, Tr, Alloc&gt;</CODE>.
+For each bit in the bit sequence, the function
+appends <CODE>digit1</CODE> if the bit is set, otherwise <CODE>digit0</CODE>.
+The <I>last</I> element appended to <CODE>str</CODE> corresponds to
+bit position zero. The function returns <CODE>str</CODE>.</P>
+
+
+<H3><CODE><A NAME="bitset__to_ullong"></A>bitset::to_ullong</CODE></H3>
+
+<PRE>unsigned long long <B>to_ullong</B>() const; <B>[added with C++11]</B></PRE>
+
+<P>The member function throws
+<CODE><A HREF="stdexcep.html#overflow_error">overflow_error</A></CODE>
+if any bit in the bit sequence has a bit value that cannot be
+represented as a value of type <CODE>unsigned long long</CODE>. Otherwise,
+it returns the sum of the bit values in the bit sequence.</P>
+
+<H3><CODE><A NAME="bitset__to_ulong"></A>bitset::to_ulong</CODE></H3>
+
+<PRE>unsigned long <B>to_ulong</B>() const;</PRE>
+
+<P>The member function throws
+<CODE><A HREF="stdexcep.html#overflow_error">overflow_error</A></CODE>
+if any bit in the bit sequence has a bit value that cannot be
+represented as a value of type <CODE>unsigned long</CODE>. Otherwise,
+it returns the sum of the bit values in the bit sequence.</P>
+
+<H2><A NAME="hash"></A><CODE>hash</CODE></H2>
+
+<PRE>template&lt;size_t Bits&gt;
+    struct <B>hash</B>&lt;bitset&lt;Bits&gt; &gt; <B>[added with C++11]</B>
+        : public <A HREF="functio2.html#unary_function">unary_function</A>&lt;bitset&lt;Bits&gt;, size_t&gt; {
+    size_t <B>operator()</B>(bitset&lt;Bits&gt; val) const;
+    };</PRE>
+
+<P>The template class defines its member function as returning
+a value uniquely determined by <CODE>val</CODE>. The member function defines a
+<A HREF="functio2.html#hash_function">hash function</A>, suitable for mapping values of type
+<CODE><A HREF="#bitset">bitset&lt;Bits&gt;</A></CODE>
+to a distribution of index values.</P>
+
+<H2><A NAME="operator&amp;"></A><CODE>operator&amp;</CODE></H2>
+
+<PRE>template&lt;size_t Bits&gt;
+    bitset&lt;Bits&gt;
+        <B>operator&amp;</B>(const bitset&lt;Bits&gt;&amp; left,
+            const bitset&lt;Bits&gt;&amp; right) noexcept;</PRE>
+
+<P>The template function returns <CODE>(temp = left) &amp;= right</CODE>,
+where <CODE>temp</CODE> has type <CODE>bitset&lt;Bits&gt;</CODE>.</P>
+
+<H2><A NAME="operator|"></A><CODE>operator|</CODE></H2>
+
+<PRE>template&lt;size_t Bits&gt;
+    bitset&lt;Bits&gt;
+        <B>operator|</B>(const bitset&lt;Bits&gt;&amp; left,
+            const bitset&lt;Bits&gt;&amp; right)noexcept;</PRE>
+
+<P>The template function returns <CODE>(temp = left) |= right</CODE>,
+where <CODE>temp</CODE> has type <CODE>bitset&lt;Bits&gt;</CODE>.</P>
+
+<H2><A NAME="operator^"></A><CODE>operator^</CODE></H2>
+
+<PRE>template&lt;size_t Bits&gt;
+    bitset&lt;Bits&gt;
+        <B>operator^</B>(const bitset&lt;Bits&gt;&amp; left,
+            const bitset&lt;Bits&gt;&amp; right) noexcept;</PRE>
+
+<P>The template function returns <CODE>(temp = left) ^= right</CODE>,
+where <CODE>temp</CODE> has type <CODE>bitset&lt;Bits&gt;</CODE>.</P>
+
+<H2><A NAME="operator&lt;&lt;"></A><CODE>operator&lt;&lt;</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, size_t Bits&gt;
+    basic_ostream&lt;Elem, Tr&gt;&amp;
+        <B>operator&lt;&lt;</B>(basic_ostream&lt;Elem, Tr&gt;&amp; ostr,
+            const bitset&lt;Bits&gt;&amp; right);</PRE>
+
+<P>The template function overloads <CODE>operator&lt;&lt;</CODE>
+to insert a text representation of the bit sequence in <CODE>ostr</CODE>.
+It effectively executes <CODE>ostr &lt;&lt;
+right.<A HREF="#bitset__to_string">to_string</A>&lt;Elem,
+Tr, allocator&lt;Elem&gt; &gt;(Elem('0'), Elem('1'))</CODE>,
+then returns <CODE>ostr</CODE>.</P>
+
+<H2><A NAME="operator&gt;&gt;"></A><CODE>operator&gt;&gt;</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, size_t Bits&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp;
+        <B>operator&gt;&gt;</B>(basic_istream&lt;Elem, Tr&gt;&amp; istr,
+            bitset&lt;Bits&gt;&amp; right);</PRE>
+
+<P>The template function overloads <CODE>operator&gt;&gt;</CODE>
+to store in <CODE>right</CODE> the value
+<CODE>bitset(str)</CODE>, where
+<CODE>str</CODE> is an object of type
+<CODE><A HREF="string2.html#basic_string">basic_string</A>&lt;Elem,
+Tr, allocator&lt;Elem&gt; &gt;&amp;</CODE> extracted
+from <CODE>istr</CODE>. The function extracts elements and appends
+them to <CODE>str</CODE> until:</P>
+
+<UL>
+<LI><CODE>Bits</CODE> elements have been extracted and stored</LI>
+
+<LI>end-of-file occurs on the input sequence</LI>
+
+<LI>the next input element is neither <CODE>digit0</CODE> nor <CODE>digit1</CODE>,
+where <CODE>digit0</CODE> is <CODE>Elem('0')</CODE>,
+and <CODE>digit1</CODE> is <CODE>Elem('1')</CODE>,
+in which case the input element is not extracted</LI>
+</UL>
+
+<P>If the function stores no characters in <CODE>str</CODE>, it calls
+<CODE>istr.<A HREF="ios.html#basic_ios__setstate">setstate</A>(ios_base::failbit)</CODE>.
+In any case, it returns <CODE>istr</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

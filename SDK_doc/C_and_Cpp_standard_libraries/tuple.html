@@ -1,0 +1,564 @@
+<HTML><HEAD>
+<TITLE>&lt;tuple&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;tuple&gt;"></A><CODE>&lt;tuple&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P><B><CODE><A HREF="#forward_as_tuple">forward_as_tuple</A>
+&middot; <A HREF="#get">get</A>
+&middot; <A HREF="#ignore">ignore</A>
+&middot; <A HREF="#make_tuple">make_tuple</A>
+&middot; <A HREF="#swap">swap</A>
+&middot; <A HREF="#tie">tie</A>
+&middot; <A HREF="#tuple">tuple</A>
+&middot; <A HREF="#tuple_cat">tuple_cat</A>
+&middot; <A HREF="#tuple_element">tuple_element</A>
+&middot; <A HREF="#tuple_size">tuple_size</A>
+&middot; <A HREF="#uses_allocator">uses_allocator</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#operator22">operator==</A>
+&middot; <A HREF="#operator!2">operator!=</A>
+&middot; <A HREF="#operator&lt;">operator&lt;</A>
+&middot; <A HREF="#operator&lt;2">operator&lt;=</A>
+&middot; <A HREF="#operator&gt;">operator&gt;</A>
+&middot; <A HREF="#operator&gt;2">operator&gt;=</A>
+</CODE></B></P>
+
+<HR>
+
+<P>Include the standard
+header <B><CODE>&lt;tuple&gt;</CODE></B> to define a template
+<CODE>tuple</CODE> whose instances hold objects of varying types.</P>
+
+<P>Note: Beginning with <B>C++11</B>,
+this header makes extensive use of
+<A HREF="lib_cpp.html#variadic_templates">variadic templates</A>,
+indicated by various uses of ellipsis (<CODE>...</CODE>).
+The descriptions below use variadic notation, but still apply to
+older compilers, provided the number of parameters in a varying-length
+list does not exceed ten.</P>
+
+<PRE>namespace std {
+    // TEMPLATE CLASSES
+template&lt;class... Types&gt;
+    class <B><A HREF="#tuple">tuple</A></B>;
+
+template&lt;size_t Idx, class Ty&gt;
+    class <B><A HREF="#tuple_element">tuple_element</A></B>; // not defined
+template&lt;size_t Idx, class... Types&gt;
+    class <B><A HREF="#tuple_element">tuple_element</A></B>&lt;Idx, tuple&lt;Types...&gt; &gt;;
+template&lt;size_t Idx, class... Types&gt; <B>[added with C++11]</B>
+    class <B><A HREF="#tuple_element">tuple_element</A></B>&lt;Idx, const tuple&lt;Types...&gt; &gt;;
+template&lt;size_t Idx, class... Types&gt; <B>[added with C++11]</B>
+    class <B><A HREF="#tuple_element">tuple_element</A></B>&lt;Idx, volatile tuple&lt;Types...&gt; &gt;;
+template&lt;size_t Idx, class... Types&gt; <B>[added with C++11]</B>
+    class <B><A HREF="#tuple_element">tuple_element</A></B>&lt;Idx, const volatile tuple&lt;Types...&gt; &gt;;
+
+template&lt;class Ty&gt;
+    class <B><A HREF="#tuple_size">tuple_size</A></B>; // not defined
+template&lt;class... Types&gt;
+    class <B><A HREF="#tuple_size">tuple_size</A></B>&lt;tuple&lt;Types...&gt; &gt;;
+template&lt;class... Types&gt; <B>[added with C++11]</B>
+    class <B><A HREF="#tuple_size">tuple_size</A></B>&lt;const tuple&lt;Types...&gt; &gt;;
+template&lt;class... Types&gt; <B>[added with C++11]</B>
+    class <B><A HREF="#tuple_size">tuple_size</A></B>&lt;volatile tuple&lt;Types...&gt; &gt;;
+template&lt;class... Types&gt; <B>[added with C++11]</B>
+    class <B><A HREF="#tuple_size">tuple_size</A></B>&lt;const volatile tuple&lt;Types...&gt; &gt;;
+
+    // TEMPLATE FUNCTIONS
+template&lt;size_t Idx, class... Types&gt;
+    typename tuple_element&lt;Idx, tuple&lt;Types...&gt; &gt;::type&amp;
+        <B><A HREF="#get">get</A></B>(tuple&lt;Types...&gt;&amp; tpl) noexcept;
+template&lt;size_t Idx, class... Types&gt;
+    typename tuple_element&lt;Idx, tuple&lt;Types...&gt; &gt;::type const&amp;
+        <B><A HREF="#get">get</A></B>(const tuple&lt;Types...&gt;&amp; tpl) noexcept;
+template&lt;size_t Idx, class... Types&gt; <B>[added with C++11]</B>
+    typename tuple_element&lt;Idx, tuple&lt;Types...&gt; &gt;::type&amp;&amp;
+        <B><A HREF="#get">get</A></B>(tuple&lt;Types...&gt;&amp;&amp; tpl) noexcept;
+
+
+template&lt;class... Types&gt; <B>[added with C++11]</B>
+    tuple&lt;Types&amp;&amp;...&gt;
+        <B><A HREF="#forward_as_tuple">forward_as_tuple</A></B>(Types&amp;&amp;... Args) noexcept;
+template&lt;class... Types&gt;
+    tuple&lt;Types2...&gt;
+        <B><A HREF="#make_tuple">make_tuple</A></B>(Types&amp;&amp;...);
+template&lt;class... Types&gt;
+    tuple&lt;Types&amp;...&gt;
+        <B><A HREF="#tie">tie</A></B>(Types&amp;...) noexcept;
+
+template&lt;class... Types1, class... Types2&gt;
+    tuple&lt;Types1..., Types2...&gt;
+        <B><A HREF="#tuple_cat">tuple_cat</A></B>(const tuple&lt;Types1...&gt;&amp; t1,
+            const tuple&lt;Types2...&gt;&amp; t2); <B>[added with C++11]</B>
+template&lt;class... Types1, class... Types2&gt;
+    tuple&lt;Types1..., Types2...&gt;
+        <B><A HREF="#tuple_cat">tuple_cat</A></B>(const tuple&lt;Types1...&gt;&amp; t1,
+            tuple&lt;Types2...&gt;&amp;&amp; t2); <B>[added with C++11]</B>
+template&lt;class... Types1, class... Types2&gt;
+    tuple&lt;Types1..., Types2...&gt;
+        <B><A HREF="#tuple_cat">tuple_cat</A></B>(tuple&lt;Types1...&gt;&amp;&amp; t1,
+            const tuple&lt;Types2...&gt;&amp; t2); <B>[added with C++11]</B>
+template&lt;class... Types1, class... Types2&gt;
+    tuple&lt;Types1..., Types2...&gt;
+        <B><A HREF="#tuple_cat">tuple_cat</A></B>(tuple&lt;Types1...&gt;&amp;&amp; t1,
+            tuple&lt;Types2...&gt;&amp;&amp; t2); <B>[added with C++11]</B>
+
+template&lt;class... Types&gt;
+    void <B><A HREF="#swap">swap</A></B>(tuple&lt;Types...&gt;&amp; left,
+        tuple&lt;Types...&gt;&amp; right)
+            noexcept(noexcept(left.swap(right)));
+
+    // TEMPLATE COMPARISON OPERATORS
+template&lt;class... Types1, class... Types2&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);
+template&lt;class... Types1, class... Types2&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);
+template&lt;class... Types1, class... Types2&gt;
+    bool <B><A HREF="#operator&lt;">operator&lt;</A></B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);
+template&lt;class... Types1, class... Types2&gt;
+    bool <B><A HREF="#operator&gt;2">operator&gt;=</A></B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);
+template&lt;class... Types1, class... Types2&gt;
+    bool <B><A HREF="#operator&gt;">operator&gt;</A></B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);
+template&lt;class... Types1, class... Types2&gt;
+    bool <B><A HREF="#operator&lt;2">operator&lt;=</A></B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);
+
+    // CONST OBJECTS
+const T1 <B><A HREF="#ignore">ignore</A></B>;
+
+        // HELPERS
+template&lt;class... Types, class Alloc&gt;
+    struct <B><A HREF="#uses_allocator">uses_allocator</A></B>&lt;tuple&lt;Types...&gt;, Alloc&gt;;
+
+    namespace tr1 {
+using std::get; using std::ignore; <B>[added with C++11]</B>
+using std::make_tuple; using std::ref;
+using std::tie; using std::tuple;
+using std::tuple_cat; using std::tuple_element;
+using std::tuple_size;
+    }  // namespace tr1
+}  // namespace std</PRE>
+
+<H2><CODE><A NAME="forward_as_tuple"></A>forward_as_tuple</CODE></H2>
+
+<PRE>template&lt;class... Types&gt; <B>[added with C++11]</B>
+    tuple&lt;Types&amp;&amp;...&gt;
+        <B>forward_as_tuple</B>(Types&amp;&amp;... Args) noexcept;</PRE>
+
+<P>The template function returns
+<CODE>tuple&lt;Types&amp;&amp;...&gt;(forward&lt;Types&gt;(Args)...)</CODE></P>
+
+<H2><CODE><A NAME="get"></A>get</CODE></H2>
+
+<PRE>template&lt;size_t Idx, class... Types&gt;
+    typename tuple_element&lt;Idx, tuple&lt;Types...&gt; &gt;::type&amp;
+        <B>get</B>(tuple&lt;Types...&gt;&amp; tpl) noexcept;
+template&lt;size_t Idx, class... Types&gt;
+    typename tuple_element&lt;Idx, tuple&lt;Types...&gt; &gt;::type const&amp;
+        <B>get</B>(const tuple&lt;Types...&gt;&amp; tpl) noexcept;
+template&lt;size_t Idx, class... Types&gt; <B>[added with C++11]</B>
+    typename tuple_element&lt;Idx, tuple&lt;Types...&gt; &gt;::type&amp;&amp;
+        <B>get</B>(tuple&lt;Types...&gt;&amp;&amp; tpl) noexcept;</PRE>
+
+
+<P>The template functions each return a reference to the value at
+<A HREF="#tuple_index">index</A> <CODE>Idx</CODE> in the <CODE>tuple</CODE>
+object <CODE>tpl</CODE>. If the corresponding type <CODE>Ti</CODE>
+in <CODE>Types</CODE> is a reference type,
+all functions return <CODE>Ti</CODE>; otherwise the first
+function returns <CODE>Ti&amp;</CODE>,
+the second function returns <CODE>const Ti&amp;</CODE>,
+and the third function returns <CODE>Ti&amp;&amp;</CODE>.</P>
+
+<H2><CODE><A NAME="ignore"></A>ignore</CODE></H2>
+
+<PRE>const T1 <B>ignore</B>;</PRE>
+
+<P>The object has unspecified type <CODE>T1</CODE> and can be assigned
+anything with no effect. Note that <CODE>ignore&amp;</CODE> can make a
+useful placeholder in a <CODE>tuple</CODE> object.</P>
+
+<H2><CODE><A NAME="make_tuple"></A>make_tuple</CODE></H2>
+
+<PRE>template&lt;class... Types&gt;
+    tuple&lt;Types2...&gt;
+        <B>make_tuple</B>(Types&amp;&amp;...);</PRE>
+
+<P>The template function returns a <CODE>tuple</CODE> object
+constructed from the argument list, where each element type <CODE>T2i</CODE>
+in <CODE>Types2</CODE> is determined from the corresponding
+<CODE>Ti</CODE> in <CODE>Types</CODE> as follows:</P>
+
+<UL>
+<LI>If <CODE>Ti</CODE> is any const/volatile qualified
+<CODE><A HREF="functio2.html#reference_wrapper">reference_wrapper</A>&lt;X&gt;</CODE>,
+<CODE>T2i</CODE> is <CODE>X&amp;</CODE>.</LI>
+
+<LI>Otherwise, beginning with <B>C++11</B>, <CODE>T2i</CODE> is
+<CODE><A HREF="typetrait.html#decay">decay</A>&lt;Ti&gt;::type</CODE>.</LI>
+
+<LI>Otherwise, <CODE>T2i</CODE> is <CODE>Ti</CODE>.</LI>
+</UL>
+
+<H2><CODE><A NAME="operator22"></A>operator==</CODE></H2>
+
+<PRE>template&lt;class... Types1, class... Types2&gt;
+    bool <B>operator==</B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);</PRE>
+
+<P>The function returns true only when both tuples are empty, or when
+<CODE>get&lt;0&gt;(tpl1) == get&lt;0&gt;(tpl2) &amp;&amp;
+...</CODE> for all corresponding elements.</P>
+
+<H2><CODE><A NAME="operator!2"></A>operator!=</CODE></H2>
+
+<PRE>template&lt;class... Types1, class... Types2&gt;
+    bool <B>operator!=</B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);</PRE>
+
+<P>The function returns <CODE>!(tpl1 == tpl2)</CODE>.</P>
+
+<H2><CODE><A NAME="operator&lt;"></A>operator&lt;</CODE></H2>
+
+<PRE>template&lt;class... Types1, class... Types2&gt;
+    bool <B>operator&lt;</B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);</PRE>
+
+<P>The function returns true only when both tuples are not empty and
+<CODE>get&lt;0&gt;(tpl1) &lt; get&lt;0&gt;(tpl2) ||
+!(get&lt;0&gt;(tpl2) &lt; get&lt;0&gt;(tpl1)) &amp;&amp;
+...</CODE> for all corresponding elements.</P>
+
+<H2><CODE><A NAME="operator&lt;2"></A>operator&lt;=</CODE></H2>
+
+<PRE>template&lt;class... Types1, class... Types2&gt;
+    bool <B>operator&lt;=</B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);</PRE>
+
+<P>The function returns <CODE>!(tpl2 &lt; tpl1)</CODE>.</P>
+
+<H2><CODE><A NAME="operator&gt;"></A>operator&gt;</CODE></H2>
+
+<PRE>template&lt;class... Types1, class... Types2&gt;
+    bool <B>operator&gt;</B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);</PRE>
+
+<P>The function returns <CODE>tpl2 &lt; tpl1</CODE>.</P>
+
+<H2><CODE><A NAME="operator&gt;2"></A>operator&gt;=</CODE></H2>
+
+<PRE>template&lt;class... Types1, class... Types2&gt;
+    bool <B>operator&gt;=</B>(const tuple&lt;Types1...&gt;&amp; tpl1,
+        const tuple&lt;Types2...&gt;&amp; tpl2);</PRE>
+
+<P>The function returns <CODE>!(tpl1 &lt; tpl2)</CODE>.</P>
+
+<H2><CODE><A NAME="swap"></A>swap</CODE></H2>
+
+<PRE>template&lt;class... Types&gt;
+    void <B>swap</B>(tuple&lt;Types...&gt;&amp; left,
+        tuple&lt;Types...&gt;&amp; right)
+            noexcept(noexcept(left.swap(right)));</PRE>
+
+<P>The function executes <CODE>left.swap(right)</CODE>.</P>
+
+<H2><CODE><A NAME="tie"></A>tie</CODE></H2>
+
+<PRE>template&lt;class... Types&gt;
+    tuple&lt;Types&amp;...&gt;
+        <B>tie</B>(Types&amp;...) noexcept;</PRE>
+
+<P>The template function returns a <CODE>tuple</CODE> object
+constructed from the argument list, where each element is a reference.
+Note that a reference to
+<CODE><A HREF="#ignore">ignore</A></CODE> can be assigned anything
+and will do nothing.</P>
+
+<H2><CODE><A NAME="tuple"></A>tuple</CODE></H2>
+
+<PRE>template&lt;class... Types&gt;
+class <B>tuple</B> {
+public:
+    constexpr <B><A HREF="#tuple__tuple">tuple</A></B>();
+    explicit <B><A HREF="#tuple__tuple">tuple</A></B>(const Types&amp;...);
+    template&lt;class... Types2&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(const tuple&lt;Types2...&gt;&amp; right);
+    template&lt;class U1, class U2&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(const pair&lt;U1, U2&gt;&amp; right);
+
+    template&lt;class... Types2&gt;
+        explicit <B><A HREF="#tuple__tuple">tuple</A></B>(Types2...&amp;&amp; args); <B>[added with C++11]</B>&nbsp;
+
+    <B><A HREF="#tuple__tuple">tuple</A></B>(tuple&amp;&amp; right); <B>[added with C++11]</B>
+    template&lt;class... Types2&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(tuple&lt;Types2...&gt;&amp;&amp; right); <B>[added with C++11]</B>
+    template&lt;class U1, class U2&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(pair&lt;U1, U2&gt;&amp;&amp; right); <B>[added with C++11]</B>&nbsp;
+    <B><A HREF="#tuple__tuple">tuple</A></B>(const tuple&amp; right) = default; <B>[added with C++11]</B>
+
+    template&lt;class Alloc&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(allocator_arg_t, const Alloc&amp; al); <B>[added with C++11]</B>
+    template&lt;class Alloc&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(allocator_arg_t, const Alloc&amp; al,
+            const Types&amp;...); <B>[added with C++11]</B>
+    template&lt;class Alloc, class... Types2&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(allocator_arg_t, const Alloc&amp; al,
+            const tuple&lt;Types2...&gt;&amp; right); <B>[added with C++11]</B>
+    template&lt;class Alloc, class U1, class U2&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(allocator_arg_t, const Alloc&amp; al,
+            const pair&lt;U1, U2&gt;&amp; right); <B>[added with C++11]</B>
+
+    template&lt;class Alloc, class... Types2&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(allocator_arg_t, const Alloc&amp; al,
+            Types2...&amp;&amp; args); <B>[added with C++11]</B>
+
+    template&lt;class Alloc&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(allocator_arg_t, const Alloc&amp; al,
+            tuple&amp;&amp; right); <B>[added with C++11]</B>
+    template&lt;class Alloc, class... Types2&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(allocator_arg_t, const Alloc&amp; al,
+            tuple&lt;Types2...&gt;&amp;&amp; right); <B>[added with C++11]</B>
+    template&lt;class Alloc, class U1, class U2&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(allocator_arg_t, const Alloc&amp; al,
+            pair&lt;U1, U2&gt;&amp;&amp; right); <B>[added with C++11]</B>
+    template&lt;class Alloc&gt;
+        <B><A HREF="#tuple__tuple">tuple</A></B>(allocator_arg_t, const Alloc&amp; al,
+            const tuple&amp; right); <B>[added with C++11]</B>
+
+    tuple&amp; <B><A HREF="#tuple__operator2">operator=</A></B>(const tuple&amp; right);
+    template&lt;class... Types2&gt;
+        tuple&amp; <B><A HREF="#tuple__operator2">operator=</A></B>(const tuple&lt;Types2...&gt;&amp; right);
+    template&lt;class U1, class U2&gt;
+        tuple&amp; <B><A HREF="#tuple__operator2">operator=</A></B>(const pair&lt;U1, U2&gt;&amp; right);
+
+    tuple&amp; <B><A HREF="#tuple__operator2">operator=</A></B>(tuple&amp;&amp; right); <B>[added with C++11]</B>
+    template&lt;class... Types2&gt;
+        tuple&amp; <B><A HREF="#tuple__operator2">operator=</A></B>(tuple&lt;Types2...&gt;&amp;&amp; right); <B>[added with C++11]</B>
+    template&lt;class U1, class U2&gt;
+        tuple&amp; <B><A HREF="#tuple__operator2">operator=</A></B>(pair&lt;U1, U2&gt;&amp;&amp; right); <B>[added with C++11]</B>
+
+    void <B><A HREF="#tuple__swap">swap</A></B>(tuple&amp; right)
+        noexcept(expr); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The template class describes an object that stores zero or more
+objects of types specified by <CODE>Types</CODE>. The
+<B><A NAME="tuple_extent"></A>extent</B> of a tuple instance
+is the number <CODE>N</CODE> of its template arguments.
+The <B><A NAME="tuple_index"></A>index</B> of the template
+argument <CODE>Ti</CODE> (counting from zero)
+and of the corresponding stored value of that type is <CODE>i</CODE>.</P>
+
+<H3><CODE><A NAME="tuple__operator2"></A>tuple::operator=</CODE></H3>
+
+<PRE>tuple&amp; <B>operator=</B>(const tuple&amp; right);
+template&lt;class... Types2&gt;
+    tuple&amp; <B>operator=</B>(const tuple&lt;Types2...&gt;&amp; right);
+template&lt;class U1, class U2&gt;
+    tuple&amp; <B>operator=</B>(const pair&lt;U1, U2&gt;&amp; right);
+
+tuple&amp; <B>operator=</B>(tuple&amp;&amp; right); <B>[added with C++11]</B>
+template&lt;class... Types2&gt;
+    tuple&amp; <B>operator=</B>(tuple&lt;Types2...&gt;&amp;&amp; right); <B>[added with C++11]</B>
+template&lt;class U1, class U2&gt;
+    tuple&amp; <B>operator=</B>(pair&lt;U1, U2&gt;&amp;&amp; right); <B>[added with C++11]</B></PRE>
+
+<P>The first two member operators assign the elements of <CODE>right</CODE> to
+the corresponding elements of <CODE>*this</CODE>. The third member operator
+assigns <CODE>right.first</CODE> to the element at
+<A HREF="#tuple_index">index</A> 0
+of <CODE>*this</CODE> and <CODE>right.second</CODE> to the element at
+index 1. All three member operators return <CODE>*this</CODE>.</P>
+
+<P>The remaining member operators are analogs to earlier ones, but with
+<A HREF="lib_cpp.html#rvalue_references">rvalue references</A>.</P>
+
+<H3><CODE><A NAME="tuple__swap"></A>tuple::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(tuple&amp; right)
+    noexcept(expr); <B>[added with C++11]</B></PRE>
+
+<P>The member function calls <CODE>swap</CODE> for each element of <CODE>right</CODE>
+and the corresponding element of <CODE>*this</CODE>.</P>
+
+<P>The <CODE>noexcept</CODE> expression <CODE>expr</CODE> is true if,
+for each type <CODE>Ti</CODE> in <CODE>Types...</CODE>
+<CODE>noexcept(swap(declval&lt;Ti&amp;&gt;(), declval&lt;Ti&amp;&gt;()))</CODE>.
+is true.</P>
+
+<H3><CODE><A NAME="tuple__tuple"></A>tuple::tuple</CODE></H3>
+
+<PRE><B>tuple</B>();
+explicit <B>tuple</B>(const Types&amp;...);
+<B>tuple</B>(const tuple&amp; right);
+template&lt;class... Types2&gt;
+    <B>tuple</B>(const tuple&lt;Types2...&gt;&amp; right);
+template&lt;class U1, class U2&gt;
+    <B>tuple</B>(const pair&lt;U1, U2&gt;&amp; right);
+
+template&lt;class... Types2&gt;
+    explicit <B>tuple</B>(Types2...&amp;&amp; args); <B>[added with C++11]</B>&nbsp;
+
+<B>tuple</B>(tuple&amp;&amp; right); <B>[added with C++11]</B>
+template&lt;class... Types2&gt;
+    <B>tuple</B>(tuple&lt;Types2...&gt;&amp;&amp; right); <B>[added with C++11]</B>
+template&lt;class U1, class U2&gt;
+    <B>tuple</B>(pair&lt;U1, U2&gt;&amp;&amp; right); <B>[added with C++11]</B>&nbsp;
+<B>tuple</B>(const tuple&amp; right) = default; <B>[added with C++11]</B>
+
+template&lt;class Alloc&gt;
+    <B>tuple</B>(allocator_arg_t, const Alloc&amp; al); <B>[added with C++11]</B>
+template&lt;class Alloc&gt;
+    <B>tuple</B>(allocator_arg_t, const Alloc&amp; al,
+        const Types&amp;...); <B>[added with C++11]</B>
+template&lt;class Alloc, class... Types2&gt;
+    <B>tuple</B>(allocator_arg_t, const Alloc&amp; al,
+        const tuple&lt;Types2...&gt;&amp; right); <B>[added with C++11]</B>
+template&lt;class Alloc, class U1, class U2&gt;
+    <B>tuple</B>(allocator_arg_t, const Alloc&amp; al,
+        const pair&lt;U1, U2&gt;&amp; right); <B>[added with C++11]</B>
+
+template&lt;class Alloc, class... Types2&gt;
+    <B>tuple</B>(allocator_arg_t, const Alloc&amp; al,
+        Types2...&amp;&amp; args); <B>[added with C++11]</B>
+
+template&lt;class Alloc&gt;
+    <B>tuple</B>(allocator_arg_t, const Alloc&amp; al,
+        tuple&amp;&amp; right); <B>[added with C++11]</B>
+template&lt;class Alloc, class... Types2&gt;
+    <B>tuple</B>(allocator_arg_t, const Alloc&amp; al,
+        tuple&lt;Types2...&gt;&amp;&amp; right); <B>[added with C++11]</B>
+template&lt;class Alloc, class U1, class U2&gt;
+    <B>tuple</B>(allocator_arg_t, const Alloc&amp; al,
+        pair&lt;U1, U2&gt;&amp;&amp; right); <B>[added with C++11]</B>
+template&lt;class Alloc&gt;
+    <B>tuple</B>(allocator_arg_t, const Alloc&amp; al,
+        const tuple&amp; right); <B>[added with C++11]</B></PRE>
+
+<P>The first constructor constructs an object whose elements are default
+constructed. The second constructor constructs an object whose elements are
+copy constructed from the argument list.</P>
+
+<P>The third and fourth constructors
+construct an object whose elements are copy constructed from the corresponding
+element of <CODE>right</CODE>. The fifth constructor constructs an object whose
+element at index 0 is copy constructed from <CODE>right.first</CODE> and whose
+element at index 1 is copy constructed from <CODE>right.second</CODE>.</P>
+
+<P>The sixth constructor constructs each of the elements by moving
+the corresponding argument.
+The seventh through ninth constructors are analogs to earlier ones, but with
+<A HREF="lib_cpp.html#rvalue_references">rvalue references</A>.</P>
+
+<P>The remaining constructors construct each of the tuple elements (of
+type <CODE>Ti</CODE>, with optional argument <CODE>Vi</CODE>) in one of three ways:</P>
+
+<UL>
+<LI>If <CODE><A HREF="memory.html#uses_allocator">uses_allocator</A>&lt;Ti, Alloc&gt;</CODE>
+<A HREF="typetrait.html#holds_false">holds false</A>,
+then the element is constructed with no additional arguments
+(just the optional argument <CODE>Vi</CODE>).</LI>
+
+<LI>If <CODE>uses_allocator&lt;Ti, Alloc&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>,
+and <CODE>is_constructible&lt;Ti, allocator_arg_t, Alloc [, Ti]&gt;</CODE>
+holds true, then the optional constructor argument
+<CODE>Vi</CODE> is preceded by the two arguments
+<CODE><A HREF="memory.html#allocator_arg">allocator_arg</A></CODE>
+and <CODE>al</CODE>.</LI>
+
+<LI>If <CODE>uses_allocator&lt;Ti, Alloc&gt;</CODE> holds true
+and <CODE>is_constructible&lt;Ti, allocator_arg_t, Alloc [, Ti]&gt;</CODE>
+holds false, then the optional constructor argument
+<CODE>Vi</CODE> is followed by <CODE>al</CODE>.</LI>
+</UL>
+
+<H2><CODE><A NAME="tuple_cat"></A>tuple_cat</CODE></H2>
+
+<PRE>template&lt;class... Types1, class... Types2&gt;
+    tuple&lt;Types1..., Types2...&gt;
+        <B>tuple_cat</B>(const tuple&lt;Types1...&gt;&amp; t1,
+            const tuple&lt;Types2...&gt;&amp; t2); <B>[added with C++11]</B>
+template&lt;class... Types1, class... Types2&gt;
+    tuple&lt;Types1..., Types2...&gt;
+        <B>tuple_cat</B>(const tuple&lt;Types1...&gt;&amp; t1,
+            tuple&lt;Types2...&gt;&amp;&amp; t2); <B>[added with C++11]</B>
+template&lt;class... Types1, class... Types2&gt;
+    tuple&lt;Types1..., Types2...&gt;
+        <B>tuple_cat</B>(tuple&lt;Types1...&gt;&amp;&amp; t1,
+            const tuple&lt;Types2...&gt;&amp; t2); <B>[added with C++11]</B>
+template&lt;class... Types1, class... Types2&gt;
+    tuple&lt;Types1..., Types2...&gt;
+        <B>tuple_cat</B>(tuple&lt;Types1...&gt;&amp;&amp; t1,
+            tuple&lt;Types2...&gt;&amp;&amp; t2); <B>[added with C++11]</B></PRE>
+
+<P>The template function returns an object of type
+<CODE>tuple&lt;Types1..., Types2...&gt;</CODE> whose first
+<CODE>Types1...</CODE> elements are initialized from <CODE>t1</CODE>
+and whose remaining <CODE>Types2...</CODE> elements are initialized
+from <CODE>t2</CODE>.</P>
+
+<H2><CODE><A NAME="tuple_element"></A>tuple_element</CODE></H2>
+
+<PRE>template&lt;size_t Idx, class Ty&gt;
+    class <B>tuple_element</B>; // not defined
+template&lt;size_t Idx, class... Types&gt;
+    class <B>tuple_element</B>&lt;Idx, tuple&lt;Types...&gt; &gt;;
+template&lt;size_t Idx, class... Types&gt; <B>[added with C++11]</B>
+    class <B>tuple_element</B>&lt;Idx, const tuple&lt;Types...&gt; &gt;;
+template&lt;size_t Idx, class... Types&gt; <B>[added with C++11]</B>
+    class <B>tuple_element</B>&lt;Idx, volatile tuple&lt;Types...&gt; &gt;;
+template&lt;size_t Idx, class... Types&gt; <B>[added with C++11]</B>
+    class <B>tuple_element</B>&lt;Idx, const volatile tuple&lt;Types...&gt; &gt;;</PRE>
+
+<P>The template class has a member type <CODE>type</CODE> that is a synonym
+for the cv-qualified type at <A HREF="#tuple_index">index</A> <CODE>Idx</CODE>
+of the type <CODE>tuple&lt;Types...&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="tuple_size"></A>tuple_size</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    class <B>tuple_size</B>; // not defined
+template&lt;class... Types&gt;
+    class <B>tuple_size</B>&lt;tuple&lt;Types...&gt; &gt;;
+template&lt;class... Types&gt; <B>[added with C++11]</B>
+    class <B>tuple_size</B>&lt;const tuple&lt;Types...&gt; &gt;;
+template&lt;class... Types&gt; <B>[added with C++11]</B>
+    class <B>tuple_size</B>&lt;volatile tuple&lt;Types...&gt; &gt;;
+template&lt;class... Types&gt; <B>[added with C++11]</B>
+    class <B>tuple_size</B>&lt;const volatile tuple&lt;Types...&gt; &gt;;</PRE>
+
+<P>The template class has a member <CODE>const size_t value</CODE>
+whose value is the <A HREF="#tuple_extent">extent</A> of the
+type <CODE>tuple&lt;Types...&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="uses_allocator"></A>uses_allocator</CODE></H2>
+
+<PRE>template&lt;class... Types, class Alloc&gt;
+    struct <B>uses_allocator</B>&lt;tuple&lt;Types...&gt;, Alloc&gt;
+        : public true_type { };</PRE>
+
+<P>The specialization
+always <A HREF="typetrait.html#holds_true">holds true</A>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by Dinkumware, Ltd. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

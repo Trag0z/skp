@@ -1,0 +1,159 @@
+<HTML><HEAD>
+<TITLE>&lt;stdexcept&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;stdexcept&gt;"></A><CODE>&lt;stdexcept&gt;</CODE></H1><HR>
+
+<P>Include the standard header <B><CODE>&lt;stdexcept&gt;</CODE></B>
+to define several classes used for reporting exceptions.
+The classes form a derivation hierarchy, as indicated by the indenting
+above, all derived from class
+<CODE><A HREF="exceptio.html#exception">exception</A></CODE>.</P>
+
+<PRE>namespace std {
+class <B><A HREF="#logic_error">logic_error</A></B>;
+    class <B><A HREF="#domain_error">domain_error</A></B>;
+    class <B><A HREF="#invalid_argument">invalid_argument</A></B>;
+    class <B><A HREF="#length_error">length_error</A></B>;
+    class <B><A HREF="#out_of_range">out_of_range</A></B>;
+
+class <B><A HREF="#runtime_error">runtime_error</A></B>;
+    class <B><A HREF="#range_error">range_error</A></B>;
+    class <B><A HREF="#overflow_error">overflow_error</A></B>;
+    class <B><A HREF="#underflow_error">underflow_error</A></B>;
+}  // namespace std</PRE>
+
+<H2><A NAME="domain_error"></A><CODE>domain_error</CODE></H2>
+
+<PRE>class <B>domain_error</B> : public <A HREF="#logic_error">logic_error</A> {
+public:
+    explicit <B>domain_error</B>(const string&amp; message);
+    explicit <B>domain_error</B>(const char *message); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+to report a
+<A HREF="math.html#domain_error">domain error</A>. The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is a copy of
+<CODE>message.<A HREF="string2.html#basic_string__data">data</A>()</CODE>.</P>
+
+<H2><A NAME="invalid_argument"></A><CODE>invalid_argument</CODE></H2>
+
+<PRE>class <B>invalid_argument</B> : public <A HREF="#logic_error">logic_error</A> {
+public:
+    explicit <B>invalid_argument</B>(const string&amp; message);
+    explicit <B>invalid_argument</B>(const char *message); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+to report an invalid argument. The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is a copy of
+<CODE>message.<A HREF="string2.html#basic_string__data">data</A>()</CODE>.</P>
+
+<H2><A NAME="length_error"></A><CODE>length_error</CODE></H2>
+
+<PRE>class <B>length_error</B> : public <A HREF="#logic_error">logic_error</A> {
+public:
+    explicit <B>length_error</B>(const string&amp; message);
+    explicit <B>length_error</B>(const char *message); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+to report an attempt to generate an object too long to be specified.
+The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is a copy of
+<CODE>message.<A HREF="string2.html#basic_string__data">data</A>()</CODE>.</P>
+
+<H2><A NAME="logic_error"></A><CODE>logic_error</CODE></H2>
+
+<PRE>class <B>logic_error</B> : public <A HREF="exceptio.html#exception">exception</A> {
+public:
+    explicit <B>logic_error</B>(const string&amp; message);
+    explicit <B>logic_error</B>(const char *message); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+to report errors presumably detectable before the program executes,
+such as violations of logical preconditions. The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is a copy of
+<CODE>message.<A HREF="string2.html#basic_string__data">data</A>()</CODE>.</P>
+
+<H2><A NAME="out_of_range"></A><CODE>out_of_range</CODE></H2>
+
+<PRE>class <B>out_of_range</B> : public <A HREF="#logic_error">logic_error</A> {
+public:
+    explicit <B>out_of_range</B>(const string&amp; message);
+    explicit <B>out_of_range</B>(const char *message); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+to report an argument that is out of its valid range. The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is a copy of
+<CODE>message.<A HREF="string2.html#basic_string__data">data</A>()</CODE>.</P>
+
+<H2><A NAME="overflow_error"></A><CODE>overflow_error</CODE></H2>
+
+<PRE>class <B>overflow_error</B> : public <A HREF="#runtime_error">runtime_error</A> {
+public:
+    explicit <B>overflow_error</B>(const string&amp; message);
+    explicit <B>overflow_error</B>(const char *message); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+to report an arithmetic overflow. The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is a copy of
+<CODE>message.<A HREF="string2.html#basic_string__data">data</A>()</CODE>.</P>
+
+<H2><A NAME="range_error"></A><CODE>range_error</CODE></H2>
+
+<PRE>class <B>range_error</B> : public <A HREF="#runtime_error">runtime_error</A> {
+public:
+    explicit <B>range_error</B>(const string&amp; message);
+    explicit <B>range_error</B>(const char *message); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+to report a
+<A HREF="math.html#range_error">range error</A>. The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is a copy of
+<CODE>message.<A HREF="string2.html#basic_string__data">data</A>()</CODE>.</P>
+
+<H2><A NAME="runtime_error"></A><CODE>runtime_error</CODE></H2>
+
+<PRE>class <B>runtime_error</B> : public <A HREF="exceptio.html#exception">exception</A> {
+public:
+    explicit <B>runtime_error</B>(const string&amp; message);
+    explicit <B>runtime_error</B>(const char *message); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+to report errors presumably detectable only when the program executes.
+The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is a copy of
+<CODE>message.<A HREF="string2.html#basic_string__data">data</A>()</CODE>.</P>
+
+<H2><A NAME="underflow_error"></A><CODE>underflow_error</CODE></H2>
+
+<PRE>class <B>underflow_error</B> : public <A HREF="#runtime_error">runtime_error</A> {
+public:
+    explicit <B>underflow_error</B>(const string&amp; message);
+    explicit <B>underflow_error</B>(const char *message); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+to report an arithmetic underflow. The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is a copy of
+<CODE>message.<A HREF="string2.html#basic_string__data">data</A>()</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

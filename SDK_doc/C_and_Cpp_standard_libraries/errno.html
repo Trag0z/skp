@@ -1,0 +1,186 @@
+<HTML><HEAD>
+<TITLE>&lt;errno.h&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;errno.h&gt;"></A><CODE>&lt;errno.h&gt;</CODE></H1><HR>
+
+<P>Include the standard header <B><CODE>&lt;errno.h&gt;</CODE></B>
+to test the value stored in
+<A HREF="#errno"><CODE>errno</CODE></A>
+by certain library functions.</P>
+<HR>
+
+<P><B><CODE><A HREF="#EDOM">EDOM</A>
+&middot; <A HREF="#EILSEQ">EILSEQ</A>
+&middot; <A HREF="#ERANGE">ERANGE</A>
+&middot; <A HREF="#errno">errno</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#errno_t">errno_t</A>
+</CODE></B></P>
+<HR>
+
+<H2><A NAME="Overview"></A>Overview</H2>
+
+<P>At program startup, the value stored in
+<A HREF="#errno"><CODE>errno</CODE></A>
+is zero. Library functions store only values greater than zero.
+Any library function can alter the value stored, but
+only those cases where a library function is explicitly
+required to store a value are documented here.</P>
+
+<P>To test whether a library function stores a value in
+<A HREF="#errno"><CODE>errno</CODE></A>,
+the program should store the value zero there immediately before
+it calls the library function.</P>
+
+<PRE>    /* MACROS */
+#define <A HREF="#EDOM"><B>EDOM</B></A> <I>&lt;#if expression&gt;</I>
+#define <A HREF="#EILSEQ"><B>EILSEQ</B></A> <I>&lt;#if expression&gt;</I> <B>[added with Amendment 1]</B>
+#define <A HREF="#ERANGE"><B>ERANGE</B></A> <I>&lt;#if expression&gt;</I>
+#define <A HREF="#errno"><B>errno</B></A> <I>&lt;int modifiable lvalue&gt;</I>
+
+    /* TYPES */
+#if __STDC_WANT_LIB_EXT1__ <B>[added with <A HREF="index_ext1.html#TR24731">TR24731</A>]</B>
+typedef int <A HREF="#errno_t"><B>errno_t</B></A>;
+#endif /* __STDC_WANT_LIB_EXT1__ */</PRE>
+
+<P>Beginning with <B>C++11</B>,
+the set of error code macros (such as <CODE>EDOM</CODE>, etc. above)
+is greatly increased for compatibility with Posix
+(<CODE>EOTHER</CODE> indicates a non-Posix error code):</P>
+
+<PRE>#define <B><A NAME="E2BIG"></A>E2BIG</B> <I>[argument list too long]</I>
+#define <B><A NAME="EACCES"></A>EACCES</B> <I>[permission denied]</I>
+#define <B><A NAME="EADDRINUSE"></A>EADDRINUSE</B> <I>[address in use]</I>
+#define <B><A NAME="EADDRNOTAVAIL"></A>EADDRNOTAVAIL</B> <I>[address not available]</I>
+#define <B><A NAME="EAFNOSUPPORT"></A>EAFNOSUPPORT</B> <I>[address family not supported]</I>
+#define <B><A NAME="EAGAIN"></A>EAGAIN</B> <I>[resource unavailable try again]</I>
+#define <B><A NAME="EALREADY"></A>EALREADY</B> <I>[connection already in progress]</I>
+#define <B><A NAME="EBADF"></A>EBADF</B> <I>[bad file descriptor]</I>
+#define <B><A NAME="EBADMSG"></A>EBADMSG</B> <I>[bad message]</I>
+#define <B><A NAME="EBUSY"></A>EBUSY</B> <I>[device or resource busy]</I>
+#define <B><A NAME="ECANCELED"></A>ECANCELED</B> <I>[operation canceled]</I>
+#define <B><A NAME="ECHILD"></A>ECHILD</B> <I>[no child process]</I>
+#define <B><A NAME="ECONNABORTED"></A>ECONNABORTED</B> <I>[connection aborted]</I>
+#define <B><A NAME="ECONNREFUSED"></A>ECONNREFUSED</B> <I>[connection refused]</I>
+#define <B><A NAME="ECONNRESET"></A>ECONNRESET</B> <I>[connection reset]</I>
+#define <B><A NAME="EDEADLK"></A>EDEADLK</B> <I>[resource deadlock would occur]</I>
+#define <B><A NAME="EDESTADDRREQ"></A>EDESTADDRREQ</B> <I>[destination address required]</I>
+#define <B><A HREF="#EDOM">EDOM</A></B> <I>[argument out of domain]</I>
+#define <B><A NAME="EEXIST"></A>EEXIST</B> <I>[file exists]</I>
+#define <B><A NAME="EFAULT"></A>EFAULT</B> <I>[bad address]</I>
+#define <B><A NAME="EFBIG"></A>EFBIG</B> <I>[file too large]</I>
+#define <B><A NAME="EHOSTUNREACH"></A>EHOSTUNREACH</B> <I>[host unreachable]</I>
+#define <B><A NAME="EIDRM"></A>EIDRM</B> <I>[identifier removed]</I>
+#define <B><A HREF="#EILSEQ">EILSEQ</A></B> <I>[illegal byte sequence]</I>
+#define <B><A NAME="EINPROGRESS"></A>EINPROGRESS</B> <I>[operation in progress]</I>
+#define <B><A NAME="EINTR"></A>EINTR</B> <I>[interrupted]</I>
+#define <B><A NAME="EINVAL"></A>EINVAL</B> <I>[invalid argument]</I>
+#define <B><A NAME="EIO"></A>EIO</B> <I>[io error]</I>
+#define <B><A NAME="EISCONN"></A>EISCONN</B> <I>[already connected]</I>
+#define <B><A NAME="EISDIR"></A>EISDIR</B> <I>[is a directory]</I>
+#define <B><A NAME="ELOOP"></A>ELOOP</B> <I>[too many symbolic link levels]</I>
+#define <B><A NAME="EMFILE"></A>EMFILE</B> <I>[too many files open]</I>
+#define <B><A NAME="EMLINK"></A>EMLINK</B> <I>[too many links]</I>
+#define <B><A NAME="EMSGSIZE"></A>EMSGSIZE</B> <I>[message size]</I>
+#define <B><A NAME="ENAMETOOLONG"></A>ENAMETOOLONG</B> <I>[filename too long]</I>
+#define <B><A NAME="ENETDOWN"></A>ENETDOWN</B> <I>[network down]</I>
+#define <B><A NAME="ENETRESET"></A>ENETRESET</B> <I>[network reset]</I>
+#define <B><A NAME="ENETUNREACH"></A>ENETUNREACH</B> <I>[network unreachable]</I>
+#define <B><A NAME="ENFILE"></A>ENFILE</B> <I>[too many files open in system]</I>
+#define <B><A NAME="ENOBUFS"></A>ENOBUFS</B> <I>[no buffer space]</I>
+#define <B><A NAME="ENODATA"></A>ENODATA</B> <I>[no message available]</I>
+#define <B><A NAME="ENODEV"></A>ENODEV</B> <I>[no such device]</I>
+#define <B><A NAME="ENOENT"></A>ENOENT</B> <I>[no such file or directory]</I>
+#define <B><A NAME="ENOEXEC"></A>ENOEXEC</B> <I>[executable format error]</I>
+#define <B><A NAME="ENOLCK"></A>ENOLCK</B> <I>[no lock available]</I>
+#define <B><A NAME="ENOLINK"></A>ENOLINK</B> <I>[no link]</I>
+#define <B><A NAME="ENOMEM"></A>ENOMEM</B> <I>[not enough memory]</I>
+#define <B><A NAME="ENOMSG"></A>ENOMSG</B> <I>[no message]</I>
+#define <B><A NAME="ENOPROTOOPT"></A>ENOPROTOOPT</B> <I>[no protocol option]</I>
+#define <B><A NAME="ENOSPC"></A>ENOSPC</B> <I>[no space on device]</I>
+#define <B><A NAME="ENOSR"></A>ENOSR</B> <I>[no stream resources]</I>
+#define <B><A NAME="ENOSTR"></A>ENOSTR</B> <I>[not a stream]</I>
+#define <B><A NAME="ENOSYS"></A>ENOSYS</B> <I>[function not supported]</I>
+#define <B><A NAME="ENOTCONN"></A>ENOTCONN</B> <I>[not connected]</I>
+#define <B><A NAME="ENOTDIR"></A>ENOTDIR</B> <I>[not a directory]</I>
+#define <B><A NAME="ENOTEMPTY"></A>ENOTEMPTY</B> <I>[directory not empty]</I>
+#define <B><A NAME="ENOTRECOVERABLE"></A>ENOTRECOVERABLE</B> <I>[state not recoverable]</I>
+#define <B><A NAME="ENOTSOCK"></A>ENOTSOCK</B> <I>[not a socket]</I>
+#define <B><A NAME="ENOTSUP"></A>ENOTSUP</B> <I>[not supported]</I>
+#define <B><A NAME="ENOTTY"></A>ENOTTY</B> <I>[inappropriate io control operation]</I>
+#define <B><A NAME="ENXIO"></A>ENXIO</B> <I>[no such device or address]</I>
+#define <B><A NAME="EOPNOTSUPP"></A>EOPNOTSUPP</B> <I>[operation not supported]</I>
+#define <B><A NAME="EOTHER"></A>EOTHER</B> <I>[other]</I>
+#define <B><A NAME="EOVERFLOW"></A>EOVERFLOW</B> <I>[value too large]</I>
+#define <B><A NAME="EOWNERDEAD"></A>EOWNERDEAD</B> <I>[owner dead]</I>
+#define <B><A NAME="EPERM"></A>EPERM</B> <I>[operation not permitted]</I>
+#define <B><A NAME="EPIPE"></A>EPIPE</B> <I>[broken pipe]</I>
+#define <B><A NAME="EPROTO"></A>EPROTO</B> <I>[protocol error]</I>
+#define <B><A NAME="EPROTONOSUPPORT"></A>EPROTONOSUPPORT</B> <I>[protocol not supported]</I>
+#define <B><A NAME="EPROTOTYPE"></A>EPROTOTYPE</B> <I>[wrong protocol type]</I>
+#define <B><A HREF="#ERANGE">ERANGE</A></B> <I>[result out of range]</I>
+#define <B><A NAME="EROFS"></A>EROFS</B> <I>[read only file system]</I>
+#define <B><A NAME="ESPIPE"></A>ESPIPE</B> <I>[invalid seek]</I>
+#define <B><A NAME="ESRCH"></A>ESRCH</B> <I>[no such process]</I>
+#define <B><A NAME="ETIME"></A>ETIME</B> <I>[stream timeout]</I>
+#define <B><A NAME="ETIMEDOUT"></A>ETIMEDOUT</B> <I>[timed out]</I>
+#define <B><A NAME="ETXTBSY"></A>ETXTBSY</B> <I>[text file busy]</I>
+#define <B><A NAME="EWOULDBLOCK"></A>EWOULDBLOCK</B> <I>[operation would block]</I>
+#define <B><A NAME="EXDEV"></A>EXDEV</B> <I>[cross device link]</I></PRE>
+
+<P>An implementation can define additional
+macros in this standard header that you can test for equality with
+the value stored. All these additional macros have
+names that begin with <CODE>E</CODE>.</P>
+
+<H2><A NAME="EDOM"></A><CODE>EDOM</CODE></H2>
+
+<PRE>#define <B>EDOM</B> <I>&lt;#if expression&gt;</I></PRE>
+
+<P>The macro yields the value stored in
+<A HREF="#errno"><CODE>errno</CODE></A> on a domain error.</P>
+
+<H2><A NAME="EILSEQ"></A><CODE>EILSEQ</CODE></H2>
+
+<PRE>#define <B>EILSEQ</B> <I>&lt;#if expression&gt;</I> <B>[added with Amendment 1]</B></PRE>
+
+<P>The macro yields the value stored in
+<A HREF="#errno"><CODE>errno</CODE></A> on an invalid
+multibyte sequence.</P>
+
+<H2><A NAME="ERANGE"></A><CODE>ERANGE</CODE></H2>
+
+<PRE>#define <B>ERANGE</B> <I>&lt;#if expression&gt;</I></PRE>
+
+<P>The macro yields the value stored in
+<A HREF="#errno"><CODE>errno</CODE></A> on a range error.</P>
+
+<H2><A NAME="errno"></A><CODE>errno</CODE></H2>
+
+<PRE>#define <B>errno</B> <I>&lt;int modifiable lvalue&gt;</I></PRE>
+
+<P>The macro designates an object that is assigned a value greater
+than zero on certain library errors.</P>
+
+<H2><A NAME="errno_t"></A><CODE>errno_t</CODE></H2>
+
+<PRE>typedef int <B>errno_t</B>; <B>[added with TR24731]</B></PRE>
+
+<P>The type is a synonym for <I>int,</I> used to represent
+a value that can be stored in
+<A HREF="#errno"><CODE>errno</CODE></A>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger and Jim Brodie. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

@@ -1,0 +1,1368 @@
+<HTML><HEAD>
+<TITLE>&lt;inttypes.h&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;inttypes.h&gt;"></A><CODE>&lt;inttypes.h&gt;</CODE></H1>
+
+<P>[added with
+C99]</P><HR>
+
+<P><B><CODE><A HREF="#abs">abs</A>
+&middot; <A HREF="#div">div</A>
+&middot; <A HREF="#imaxabs">imaxabs</A>
+&middot; <A HREF="#imaxdiv">imaxdiv</A>
+&middot; <A HREF="#imaxdiv_t">imaxdiv_t</A>
+&middot; <A HREF="#strtoimax">strtoimax</A>
+&middot; <A HREF="#strtoumax">strtoumax</A>
+&middot; <A HREF="#wcstoimax">wcstoimax</A>
+&middot; <A HREF="#wcstoumax">wcstoumax</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#PRId8">PRId8</A>
+&middot; <A HREF="#PRId16">PRId16</A>
+&middot; <A HREF="#PRId32">PRId32</A>
+&middot; <A HREF="#PRId64">PRId64</A>
+&middot; <A HREF="#PRIdFAST8">PRIdFAST8</A>
+&middot; <A HREF="#PRIdFAST16">PRIdFAST16</A>
+&middot; <A HREF="#PRIdFAST32">PRIdFAST32</A>
+&middot; <A HREF="#PRIdFAST64">PRIdFAST64</A>
+&middot; <A HREF="#PRIdLEAST8">PRIdLEAST8</A>
+&middot; <A HREF="#PRIdLEAST16">PRIdLEAST16</A>
+&middot; <A HREF="#PRIdLEAST32">PRIdLEAST32</A>
+&middot; <A HREF="#PRIdLEAST64">PRIdLEAST64</A>
+&middot; <A HREF="#PRIdMAX">PRIdMAX</A>
+&middot; <A HREF="#PRIdPTR">PRIdPTR</A>
+&middot; <A HREF="#PRIi8">PRIi8</A>
+&middot; <A HREF="#PRIi16">PRIi16</A>
+&middot; <A HREF="#PRIi32">PRIi32</A>
+&middot; <A HREF="#PRIi64">PRIi64</A>
+&middot; <A HREF="#PRIiFAST8">PRIiFAST8</A>
+&middot; <A HREF="#PRIiFAST16">PRIiFAST16</A>
+&middot; <A HREF="#PRIiFAST32">PRIiFAST32</A>
+&middot; <A HREF="#PRIiFAST64">PRIiFAST64</A>
+&middot; <A HREF="#PRIiLEAST8">PRIiLEAST8</A>
+&middot; <A HREF="#PRIiLEAST16">PRIiLEAST16</A>
+&middot; <A HREF="#PRIiLEAST32">PRIiLEAST32</A>
+&middot; <A HREF="#PRIiLEAST64">PRIiLEAST64</A>
+&middot; <A HREF="#PRIiMAX">PRIiMAX</A>
+&middot; <A HREF="#PRIiPTR">PRIiPTR</A>
+&middot; <A HREF="#PRIo8">PRIo8</A>
+&middot; <A HREF="#PRIo16">PRIo16</A>
+&middot; <A HREF="#PRIo32">PRIo32</A>
+&middot; <A HREF="#PRIo64">PRIo64</A>
+&middot; <A HREF="#PRIoFAST8">PRIoFAST8</A>
+&middot; <A HREF="#PRIoFAST16">PRIoFAST16</A>
+&middot; <A HREF="#PRIoFAST32">PRIoFAST32</A>
+&middot; <A HREF="#PRIoFAST64">PRIoFAST64</A>
+&middot; <A HREF="#PRIoLEAST8">PRIoLEAST8</A>
+&middot; <A HREF="#PRIoLEAST16">PRIoLEAST16</A>
+&middot; <A HREF="#PRIoLEAST32">PRIoLEAST32</A>
+&middot; <A HREF="#PRIoLEAST64">PRIoLEAST64</A>
+&middot; <A HREF="#PRIoMAX">PRIoMAX</A>
+&middot; <A HREF="#PRIoPTR">PRIoPTR</A>
+&middot; <A HREF="#PRIu8">PRIu8</A>
+&middot; <A HREF="#PRIu16">PRIu16</A>
+&middot; <A HREF="#PRIu32">PRIu32</A>
+&middot; <A HREF="#PRIu64">PRIu64</A>
+&middot; <A HREF="#PRIuFAST8">PRIuFAST8</A>
+&middot; <A HREF="#PRIuFAST16">PRIuFAST16</A>
+&middot; <A HREF="#PRIuFAST32">PRIuFAST32</A>
+&middot; <A HREF="#PRIuFAST64">PRIuFAST64</A>
+&middot; <A HREF="#PRIuLEAST8">PRIuLEAST8</A>
+&middot; <A HREF="#PRIuLEAST16">PRIuLEAST16</A>
+&middot; <A HREF="#PRIuLEAST32">PRIuLEAST32</A>
+&middot; <A HREF="#PRIuLEAST64">PRIuLEAST64</A>
+&middot; <A HREF="#PRIuMAX">PRIuMAX</A>
+&middot; <A HREF="#PRIuPTR">PRIuPTR</A>
+&middot; <A HREF="#PRIx8">PRIx8</A>
+&middot; <A HREF="#PRIx16">PRIx16</A>
+&middot; <A HREF="#PRIx32">PRIx32</A>
+&middot; <A HREF="#PRIx64">PRIx64</A>
+&middot; <A HREF="#PRIxFAST8">PRIxFAST8</A>
+&middot; <A HREF="#PRIxFAST16">PRIxFAST16</A>
+&middot; <A HREF="#PRIxFAST32">PRIxFAST32</A>
+&middot; <A HREF="#PRIxFAST64">PRIxFAST64</A>
+&middot; <A HREF="#PRIxLEAST8">PRIxLEAST8</A>
+&middot; <A HREF="#PRIxLEAST16">PRIxLEAST16</A>
+&middot; <A HREF="#PRIxLEAST32">PRIxLEAST32</A>
+&middot; <A HREF="#PRIxLEAST64">PRIxLEAST64</A>
+&middot; <A HREF="#PRIxMAX">PRIxMAX</A>
+&middot; <A HREF="#PRIxPTR">PRIxPTR</A>
+&middot; <A HREF="#PRIX8_upper">PRIX8</A>
+&middot; <A HREF="#PRIX16_upper">PRIX16</A>
+&middot; <A HREF="#PRIX32_upper">PRIX32</A>
+&middot; <A HREF="#PRIX64_upper">PRIX64</A>
+&middot; <A HREF="#PRIXFAST8_upper">PRIXFAST8</A>
+&middot; <A HREF="#PRIXFAST16_upper">PRIXFAST16</A>
+&middot; <A HREF="#PRIXFAST32_upper">PRIXFAST32</A>
+&middot; <A HREF="#PRIXFAST64_upper">PRIXFAST64</A>
+&middot; <A HREF="#PRIXLEAST8_upper">PRIXLEAST8</A>
+&middot; <A HREF="#PRIXLEAST16_upper">PRIXLEAST16</A>
+&middot; <A HREF="#PRIXLEAST32_upper">PRIXLEAST32</A>
+&middot; <A HREF="#PRIXLEAST64_upper">PRIXLEAST64</A>
+&middot; <A HREF="#PRIXMAX_upper">PRIXMAX</A>
+&middot; <A HREF="#PRIXPTR_upper">PRIXPTR</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#SCNd8">SCNd8</A>
+&middot; <A HREF="#SCNd16">SCNd16</A>
+&middot; <A HREF="#SCNd32">SCNd32</A>
+&middot; <A HREF="#SCNd64">SCNd64</A>
+&middot; <A HREF="#SCNdFAST8">SCNdFAST8</A>
+&middot; <A HREF="#SCNdFAST16">SCNdFAST16</A>
+&middot; <A HREF="#SCNdFAST32">SCNdFAST32</A>
+&middot; <A HREF="#SCNdFAST64">SCNdFAST64</A>
+&middot; <A HREF="#SCNdLEAST8">SCNdLEAST8</A>
+&middot; <A HREF="#SCNdLEAST16">SCNdLEAST16</A>
+&middot; <A HREF="#SCNdLEAST32">SCNdLEAST32</A>
+&middot; <A HREF="#SCNdLEAST64">SCNdLEAST64</A>
+&middot; <A HREF="#SCNdMAX">SCNdMAX</A>
+&middot; <A HREF="#SCNdPTR">SCNdPTR</A>
+&middot; <A HREF="#SCNi8">SCNi8</A>
+&middot; <A HREF="#SCNi16">SCNi16</A>
+&middot; <A HREF="#SCNi32">SCNi32</A>
+&middot; <A HREF="#SCNi64">SCNi64</A>
+&middot; <A HREF="#SCNiFAST8">SCNiFAST8</A>
+&middot; <A HREF="#SCNiFAST16">SCNiFAST16</A>
+&middot; <A HREF="#SCNiFAST32">SCNiFAST32</A>
+&middot; <A HREF="#SCNiFAST64">SCNiFAST64</A>
+&middot; <A HREF="#SCNiLEAST8">SCNiLEAST8</A>
+&middot; <A HREF="#SCNiLEAST16">SCNiLEAST16</A>
+&middot; <A HREF="#SCNiLEAST32">SCNiLEAST32</A>
+&middot; <A HREF="#SCNiLEAST64">SCNiLEAST64</A>
+&middot; <A HREF="#SCNiMAX">SCNiMAX</A>
+&middot; <A HREF="#SCNiPTR">SCNiPTR</A>
+&middot; <A HREF="#SCNo8">SCNo8</A>
+&middot; <A HREF="#SCNo16">SCNo16</A>
+&middot; <A HREF="#SCNo32">SCNo32</A>
+&middot; <A HREF="#SCNo64">SCNo64</A>
+&middot; <A HREF="#SCNoFAST8">SCNoFAST8</A>
+&middot; <A HREF="#SCNoFAST16">SCNoFAST16</A>
+&middot; <A HREF="#SCNoFAST32">SCNoFAST32</A>
+&middot; <A HREF="#SCNoFAST64">SCNoFAST64</A>
+&middot; <A HREF="#SCNoLEAST8">SCNoLEAST8</A>
+&middot; <A HREF="#SCNoLEAST16">SCNoLEAST16</A>
+&middot; <A HREF="#SCNoLEAST32">SCNoLEAST32</A>
+&middot; <A HREF="#SCNoLEAST64">SCNoLEAST64</A>
+&middot; <A HREF="#SCNoMAX">SCNoMAX</A>
+&middot; <A HREF="#SCNoPTR">SCNoPTR</A>
+&middot; <A HREF="#SCNu8">SCNu8</A>
+&middot; <A HREF="#SCNu16">SCNu16</A>
+&middot; <A HREF="#SCNu32">SCNu32</A>
+&middot; <A HREF="#SCNu64">SCNu64</A>
+&middot; <A HREF="#SCNuFAST8">SCNuFAST8</A>
+&middot; <A HREF="#SCNuFAST16">SCNuFAST16</A>
+&middot; <A HREF="#SCNuFAST32">SCNuFAST32</A>
+&middot; <A HREF="#SCNuFAST64">SCNuFAST64</A>
+&middot; <A HREF="#SCNuLEAST8">SCNuLEAST8</A>
+&middot; <A HREF="#SCNuLEAST16">SCNuLEAST16</A>
+&middot; <A HREF="#SCNuLEAST32">SCNuLEAST32</A>
+&middot; <A HREF="#SCNuLEAST64">SCNuLEAST64</A>
+&middot; <A HREF="#SCNuMAX">SCNuMAX</A>
+&middot; <A HREF="#SCNuPTR">SCNuPTR</A>
+&middot; <A HREF="#SCNx8">SCNx8</A>
+&middot; <A HREF="#SCNx16">SCNx16</A>
+&middot; <A HREF="#SCNx32">SCNx32</A>
+&middot; <A HREF="#SCNx64">SCNx64</A>
+&middot; <A HREF="#SCNxFAST8">SCNxFAST8</A>
+&middot; <A HREF="#SCNxFAST16">SCNxFAST16</A>
+&middot; <A HREF="#SCNxFAST32">SCNxFAST32</A>
+&middot; <A HREF="#SCNxFAST64">SCNxFAST64</A>
+&middot; <A HREF="#SCNxLEAST8">SCNxLEAST8</A>
+&middot; <A HREF="#SCNxLEAST16">SCNxLEAST16</A>
+&middot; <A HREF="#SCNxLEAST32">SCNxLEAST32</A>
+&middot; <A HREF="#SCNxLEAST64">SCNxLEAST64</A>
+&middot; <A HREF="#SCNxMAX">SCNxMAX</A>
+&middot; <A HREF="#SCNxPTR">SCNxPTR</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the standard header <B><CODE>&lt;inttypes.h&gt;</CODE></B>
+to include the standard header
+<A HREF="stdint.html"><CODE>&lt;stdint.h&gt;</CODE></A> and to define a type,
+several functions, and numerous macros for fine control over the
+conversion of integers.</P>
+
+<PRE>        /* TYPE DEFINITIONS */
+typedef struct {
+    intmax_t quot, rem;
+    } <A HREF="#imaxdiv_t"><B>imaxdiv_t</B></A>;
+
+        /* FUNCTION DECLARATIONS */
+intmax_t <A HREF="#imaxabs"><B>imaxabs</B></A>(intmax_t i);
+intmax_t <A HREF="#abs"><B>abs</B></A>(intmax_t i); <B>[C++ only]</B>
+
+imaxdiv_t <A HREF="#imaxdiv"><B>imaxdiv</B></A>(intmax_t numer, intmax_t denom);
+imaxdiv_t <A HREF="#div"><B>div</B></A>(intmax_t numer, intmax_t denom); <B>[C++ only]</B>
+
+intmax_t <A HREF="#strtoimax"><B>strtoimax</B></A>(const char *restrict s,
+    char **restrict endptr, int base);
+uintmax_t <A HREF="#strtoumax"><B>strtoumax</B></A>(const char *restrict s,
+    char **restrict endptr, int base);
+intmax_t <A HREF="#wcstoimax"><B>wcstoimax</B></A>(const wchar_t *restrict s,
+    wchar_t **restrict endptr, int base);
+uintmax_t <A HREF="#wcstoumax"><B>wcstoumax</B></A>(const wchar_t *restrict s,
+    wchar_t **restrict endptr, int base);
+
+        /* PRINT FORMAT MACROS */
+#define <A HREF="#PRId8"><B>PRId8</B></A>     "hhd"
+#define <A HREF="#PRId16"><B>PRId16</B></A>    "hd"
+#define <A HREF="#PRId32"><B>PRId32</B></A>    "d"
+#define <A HREF="#PRId64"><B>PRId64</B></A>    "lld"
+
+#define <A HREF="#PRIdFAST8"><B>PRIdFAST8</B></A>    "d"
+#define <A HREF="#PRIdFAST16"><B>PRIdFAST16</B></A>    "d"
+#define <A HREF="#PRIdFAST32"><B>PRIdFAST32</B></A>    "d"
+#define <A HREF="#PRIdFAST64"><B>PRIdFAST64</B></A>   "lld"
+
+#define <A HREF="#PRIdLEAST8"><B>PRIdLEAST8</B></A>   "hhd"
+#define <A HREF="#PRIdLEAST16"><B>PRIdLEAST16</B></A>  "hd"
+#define <A HREF="#PRIdLEAST32"><B>PRIdLEAST32</B></A>  "d"
+#define <A HREF="#PRIdLEAST64"><B>PRIdLEAST64</B></A>  "lld"
+
+#define <A HREF="#PRIdMAX"><B>PRIdMAX</B></A>   "lld"
+#define <A HREF="#PRIdPTR"><B>PRIdPTR</B></A>   "ld"
+
+#define <A HREF="#PRIi8"><B>PRIi8</B></A>     "hhi"
+#define <A HREF="#PRIi16"><B>PRIi16</B></A>    "hi"
+#define <A HREF="#PRIi32"><B>PRIi32</B></A>    "i"
+#define <A HREF="#PRIi64"><B>PRIi64</B></A>    "lli"
+
+#define <A HREF="#PRIiFAST8"><B>PRIiFAST8</B></A>    "i"
+#define <A HREF="#PRIiFAST16"><B>PRIiFAST16</B></A>    "i"
+#define <A HREF="#PRIiFAST32"><B>PRIiFAST32</B></A>    "i"
+#define <A HREF="#PRIiFAST64"><B>PRIiFAST64</B></A>    "lli"
+
+#define <A HREF="#PRIiLEAST8"><B>PRIiLEAST8</B></A>   "hhi"
+#define <A HREF="#PRIiLEAST16"><B>PRIiLEAST16</B></A>  "hi"
+#define <A HREF="#PRIiLEAST32"><B>PRIiLEAST32</B></A>  "i"
+#define <A HREF="#PRIiLEAST64"><B>PRIiLEAST64</B></A>  "lli"
+
+#define <A HREF="#PRIiMAX"><B>PRIiMAX</B></A>   "lli"
+#define <A HREF="#PRIiPTR"><B>PRIiPTR</B></A>   "li"
+
+#define <A HREF="#PRIo8"><B>PRIo8</B></A>     "hho"
+#define <A HREF="#PRIo16"><B>PRIo16</B></A>    "ho"
+#define <A HREF="#PRIo32"><B>PRIo32</B></A>    "o"
+#define <A HREF="#PRIo64"><B>PRIo64</B></A>    "llo"
+
+#define <A HREF="#PRIoFAST8"><B>PRIoFAST8</B></A>    "o"
+#define <A HREF="#PRIoFAST16"><B>PRIoFAST16</B></A>    "o"
+#define <A HREF="#PRIoFAST32"><B>PRIoFAST32</B></A>    "o"
+#define <A HREF="#PRIoFAST64"><B>PRIoFAST64</B></A>   "llo"
+
+#define <A HREF="#PRIoLEAST8"><B>PRIoLEAST8</B></A>   "hho"
+#define <A HREF="#PRIoLEAST16"><B>PRIoLEAST16</B></A>  "ho"
+#define <A HREF="#PRIoLEAST32"><B>PRIoLEAST32</B></A>  "o"
+#define <A HREF="#PRIoLEAST64"><B>PRIoLEAST64</B></A>  "llo"
+
+#define <A HREF="#PRIoMAX"><B>PRIoMAX</B></A>   "llo"
+#define <A HREF="#PRIoPTR"><B>PRIoPTR</B></A>   "lo"
+
+#define <A HREF="#PRIu8"><B>PRIu8</B></A>     "hhu"
+#define <A HREF="#PRIu16"><B>PRIu16</B></A>    "hu"
+#define <A HREF="#PRIu32"><B>PRIu32</B></A>    "u"
+#define <A HREF="#PRIu64"><B>PRIu64</B></A>    "llu"
+
+#define <A HREF="#PRIuFAST8"><B>PRIuFAST8</B></A>    "u"
+#define <A HREF="#PRIuFAST16"><B>PRIuFAST16</B></A>    "u"
+#define <A HREF="#PRIuFAST32"><B>PRIuFAST32</B></A>    "u"
+#define <A HREF="#PRIuFAST64"><B>PRIuFAST64</B></A>   "llu"
+
+#define <A HREF="#PRIuLEAST8"><B>PRIuLEAST8</B></A>   "hhu"
+#define <A HREF="#PRIuLEAST16"><B>PRIuLEAST16</B></A>  "hu"
+#define <A HREF="#PRIuLEAST32"><B>PRIuLEAST32</B></A>  "u"
+#define <A HREF="#PRIuLEAST64"><B>PRIuLEAST64</B></A>  "llu"
+
+#define <A HREF="#PRIuMAX"><B>PRIuMAX</B></A>   "llu"
+#define <A HREF="#PRIuPTR"><B>PRIuPTR</B></A>   "lu"
+
+#define <A HREF="#PRIx8"><B>PRIx8</B></A>     "hhx"
+#define <A HREF="#PRIx16"><B>PRIx16</B></A>    "hx"
+#define <A HREF="#PRIx32"><B>PRIx32</B></A>    "x"
+#define <A HREF="#PRIx64"><B>PRIx64</B></A>    "llx"
+
+#define <A HREF="#PRIxFAST8"><B>PRIxFAST8</B></A>    "x"
+#define <A HREF="#PRIxFAST16"><B>PRIxFAST16</B></A>    "x"
+#define <A HREF="#PRIxFAST32"><B>PRIxFAST32</B></A>    "x"
+#define <A HREF="#PRIxFAST64"><B>PRIxFAST64</B></A>   "llx"
+
+#define <A HREF="#PRIxLEAST8"><B>PRIxLEAST8</B></A>   "hhx"
+#define <A HREF="#PRIxLEAST16"><B>PRIxLEAST16</B></A>  "hx"
+#define <A HREF="#PRIxLEAST32"><B>PRIxLEAST32</B></A>  "x"
+#define <A HREF="#PRIxLEAST64"><B>PRIxLEAST64</B></A>  "llx"
+
+#define <A HREF="#PRIxMAX"><B>PRIxMAX</B></A>   "llx"
+#define <A HREF="#PRIxPTR"><B>PRIxPTR</B></A>   "lx"
+
+#define <A HREF="#PRIX8_upper"><B>PRIX8</B></A>     "hhX"
+#define <A HREF="#PRIX16_upper"><B>PRIX16</B></A>    "hX"
+#define <A HREF="#PRIX32_upper"><B>PRIX32</B></A>    "X"
+#define <A HREF="#PRIX64_upper"><B>PRIX64</B></A>    "llX"
+
+#define <A HREF="#PRIXFAST8_upper"><B>PRIXFAST8</B></A>    "X"
+#define <A HREF="#PRIXFAST16_upper"><B>PRIXFAST16</B></A>    "X"
+#define <A HREF="#PRIXFAST32_upper"><B>PRIXFAST32</B></A>    "X"
+#define <A HREF="#PRIXFAST64_upper"><B>PRIXFAST64</B></A>   "llX"
+
+#define <A HREF="#PRIXLEAST8_upper"><B>PRIXLEAST8</B></A>   "hhX"
+#define <A HREF="#PRIXLEAST16_upper"><B>PRIXLEAST16</B></A>  "hX"
+#define <A HREF="#PRIXLEAST32_upper"><B>PRIXLEAST32</B></A>  "X"
+#define <A HREF="#PRIXLEAST64_upper"><B>PRIXLEAST64</B></A>  "llX"
+
+#define <A HREF="#PRIXMAX_upper"><B>PRIXMAX</B></A>   "llX"
+#define <A HREF="#PRIXPTR_upper"><B>PRIXPTR</B></A>   "lX"
+
+        /* SCAN FORMAT MACROS */
+#define <A HREF="#SCNd8"><B>SCNd8</B></A>     "hhd"
+#define <A HREF="#SCNd16"><B>SCNd16</B></A>    "hd"
+#define <A HREF="#SCNd32"><B>SCNd32</B></A>    "d"
+#define <A HREF="#SCNd64"><B>SCNd64</B></A>    "lld"
+
+#define <A HREF="#SCNdFAST8"><B>SCNdFAST8</B></A>    "d"
+#define <A HREF="#SCNdFAST16"><B>SCNdFAST16</B></A>    "d"
+#define <A HREF="#SCNdFAST32"><B>SCNdFAST32</B></A>    "d"
+#define <A HREF="#SCNdFAST64"><B>SCNdFAST64</B></A>   "lld"
+
+#define <A HREF="#SCNdLEAST8"><B>SCNdLEAST8</B></A>   "hhd"
+#define <A HREF="#SCNdLEAST16"><B>SCNdLEAST16</B></A>  "hd"
+#define <A HREF="#SCNdLEAST32"><B>SCNdLEAST32</B></A>  "d"
+#define <A HREF="#SCNdLEAST64"><B>SCNdLEAST64</B></A>  "lld"
+
+#define <A HREF="#SCNdMAX"><B>SCNdMAX</B></A>   "lld"
+#define <A HREF="#SCNdPTR"><B>SCNdPTR</B></A>   "ld"
+
+#define <A HREF="#SCNi8"><B>SCNi8</B></A>     "hhi"
+#define <A HREF="#SCNi16"><B>SCNi16</B></A>    "hi"
+#define <A HREF="#SCNi32"><B>SCNi32</B></A>    "i"
+#define <A HREF="#SCNi64"><B>SCNi64</B></A>    "lli"
+
+#define <A HREF="#SCNiFAST8"><B>SCNiFAST8</B></A>    "i"
+#define <A HREF="#SCNiFAST16"><B>SCNiFAST16</B></A>    "i"
+#define <A HREF="#SCNiFAST32"><B>SCNiFAST32</B></A>    "i"
+#define <A HREF="#SCNiFAST64"><B>SCNiFAST64</B></A>   "lli"
+
+#define <A HREF="#SCNiLEAST8"><B>SCNiLEAST8</B></A>   "hhi"
+#define <A HREF="#SCNiLEAST16"><B>SCNiLEAST16</B></A>  "hi"
+#define <A HREF="#SCNiLEAST32"><B>SCNiLEAST32</B></A>  "i"
+#define <A HREF="#SCNiLEAST64"><B>SCNiLEAST64</B></A>  "lli"
+
+#define <A HREF="#SCNiMAX"><B>SCNiMAX</B></A>   "lli"
+#define <A HREF="#SCNiPTR"><B>SCNiPTR</B></A>   "li"
+
+#define <A HREF="#SCNo8"><B>SCNo8</B></A>     "hho"
+#define <A HREF="#SCNo16"><B>SCNo16</B></A>    "ho"
+#define <A HREF="#SCNo32"><B>SCNo32</B></A>    "o"
+#define <A HREF="#SCNo64"><B>SCNo64</B></A>    "llo"
+
+#define <A HREF="#SCNoFAST8"><B>SCNoFAST8</B></A>    "o"
+#define <A HREF="#SCNoFAST16"><B>SCNoFAST16</B></A>    "o"
+#define <A HREF="#SCNoFAST32"><B>SCNoFAST32</B></A>    "o"
+#define <A HREF="#SCNoFAST64"><B>SCNoFAST64</B></A>   "llo"
+
+#define <A HREF="#SCNoLEAST8"><B>SCNoLEAST8</B></A>   "hho"
+#define <A HREF="#SCNoLEAST16"><B>SCNoLEAST16</B></A>  "ho"
+#define <A HREF="#SCNoLEAST32"><B>SCNoLEAST32</B></A>  "o"
+#define <A HREF="#SCNoLEAST64"><B>SCNoLEAST64</B></A>  "llo"
+
+#define <A HREF="#SCNoMAX"><B>SCNoMAX</B></A>   "llo"
+#define <A HREF="#SCNoPTR"><B>SCNoPTR</B></A>   "lo"
+
+#define <A HREF="#SCNu8"><B>SCNu8</B></A>     "hhu"
+#define <A HREF="#SCNu16"><B>SCNu16</B></A>    "hu"
+#define <A HREF="#SCNu32"><B>SCNu32</B></A>    "u"
+#define <A HREF="#SCNu64"><B>SCNu64</B></A>    "llu"
+
+#define <A HREF="#SCNuFAST8"><B>SCNuFAST8</B></A>    "u"
+#define <A HREF="#SCNuFAST16"><B>SCNuFAST16</B></A>    "u"
+#define <A HREF="#SCNuFAST32"><B>SCNuFAST32</B></A>    "u"
+#define <A HREF="#SCNuFAST64"><B>SCNuFAST64</B></A>   "llu"
+
+#define <A HREF="#SCNuLEAST8"><B>SCNuLEAST8</B></A>   "hhu"
+#define <A HREF="#SCNuLEAST16"><B>SCNuLEAST16</B></A>  "hu"
+#define <A HREF="#SCNuLEAST32"><B>SCNuLEAST32</B></A>  "u"
+#define <A HREF="#SCNuLEAST64"><B>SCNuLEAST64</B></A>  "llu"
+
+#define <A HREF="#SCNuMAX"><B>SCNuMAX</B></A>   "llu"
+#define <A HREF="#SCNuPTR"><B>SCNuPTR</B></A>   "lu"
+
+#define <A HREF="#SCNx8"><B>SCNx8</B></A>     "hhx"
+#define <A HREF="#SCNx16"><B>SCNx16</B></A>    "hx"
+#define <A HREF="#SCNx32"><B>SCNx32</B></A>    "x"
+#define <A HREF="#SCNx64"><B>SCNx64</B></A>    "llx"
+
+#define <A HREF="#SCNxFAST8"><B>SCNxFAST8</B></A>    "x"
+#define <A HREF="#SCNxFAST16"><B>SCNxFAST16</B></A>    "x"
+#define <A HREF="#SCNxFAST32"><B>SCNxFAST32</B></A>    "x"
+#define <A HREF="#SCNxFAST64"><B>SCNxFAST64</B></A>   "llx"
+
+#define <A HREF="#SCNxLEAST8"><B>SCNxLEAST8</B></A>   "hhx"
+#define <A HREF="#SCNxLEAST16"><B>SCNxLEAST16</B></A>  "hx"
+#define <A HREF="#SCNxLEAST32"><B>SCNxLEAST32</B></A>  "x"
+#define <A HREF="#SCNxLEAST64"><B>SCNxLEAST64</B></A>  "llx"
+
+#define <A HREF="#SCNxMAX"><B>SCNxMAX</B></A>   "llx"
+#define <A HREF="#SCNxPTR"><B>SCNxPTR</B></A>   "lx"</PRE>
+
+<H2><A NAME="imaxabs"></A><CODE>imaxabs</CODE>,
+<A NAME="abs"></A><CODE>abs</CODE></H2>
+
+<PRE>intmax_t <B>imaxabs</B>(intmax_t i);
+intmax_t <B>abs</B>(intmax_t i); <B>[C++ only]</B></PRE>
+
+<P>The function returns the absolute value of
+<CODE>i</CODE>, <CODE>|i|</CODE>.</P>
+
+<H2><A NAME="imaxdiv"></A><CODE>imaxdiv</CODE>,
+<A NAME="div"></A><CODE>div</CODE></H2>
+
+<PRE>imaxdiv_t <B>imaxdiv</B>(intmax_t numer, intmax_t denom);
+imaxdiv_t <B>div</B>(intmax_t numer, intmax_t denom); <B>[C++ only]</B></PRE>
+
+<P>The function divides <CODE>numer</CODE> by <CODE>denom</CODE> and returns
+both quotient and remainder in the structure
+result <CODE>x</CODE>, if the quotient can be represented.
+The structure member <CODE>x.quot</CODE>
+is the algebraic quotient truncated toward zero.
+The structure member <CODE>x.rem</CODE> is the remainder, such
+that <CODE>numer == x.quot*denom + x.rem</CODE>.</P>
+
+<H2><A NAME="imaxdiv_t"></A><CODE>imaxdiv_t</CODE></H2>
+
+<PRE>typedef struct {
+    intmax_t quot, rem;
+    } <B>imaxdiv_t</B>;</PRE>
+
+<P>The type is the structure type returned by the function
+<A HREF="#imaxdiv"><CODE>imaxdiv</CODE></A>.
+The structure contains members that represent the quotient
+(<CODE>quot</CODE>) and remainder (<CODE>rem</CODE>)
+of a signed integer division with operands of type <I>intmax_t.</I> The
+members shown above can occur in either order.</P>
+
+<H2><A NAME="PRId8"></A><CODE>PRId8</CODE>,
+<A NAME="PRId16"></A><CODE>PRId16</CODE>,
+<A NAME="PRId32"></A><CODE>PRId32</CODE>,
+<A NAME="PRId64"></A><CODE>PRId64</CODE></H2>
+
+<PRE>#define <B>PRId8</B>     "hhd"
+#define <B>PRId16</B>    "hd"
+#define <B>PRId32</B>    "d"
+#define <B>PRId64</B>    "lld"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>d</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int8_t"><CODE>int8_t</CODE></A>,
+<A HREF="stdint.html#int16_t"><CODE>int16_t</CODE></A>,
+<A HREF="stdint.html#int32_t"><CODE>int32_t</CODE></A>, or
+<A HREF="stdint.html#int64_t"><CODE>int64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIdFAST8"></A><CODE>PRIdFAST8</CODE>,
+<A NAME="PRIdFAST16"></A><CODE>PRIdFAST16</CODE>,
+<A NAME="PRIdFAST32"></A><CODE>PRIdFAST32</CODE>,
+<A NAME="PRIdFAST64"></A><CODE>PRIdFAST64</CODE></H2>
+
+<PRE>#define <B>PRIdFAST8</B>    "d"
+#define <B>PRIdFAST16</B>    "d"
+#define <B>PRIdFAST32</B>    "d"
+#define <B>PRIdFAST64</B>   "lld"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>d</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int_fast8_t"><CODE>int_fast8_t</CODE></A>,
+<A HREF="stdint.html#int_fast16_t"><CODE>int_fast16_t</CODE></A>,
+<A HREF="stdint.html#int_fast32_t"><CODE>int_fast32_t</CODE></A>, or
+<A HREF="stdint.html#int_fast64_t"><CODE>int_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIdLEAST8"></A><CODE>PRIdLEAST8</CODE>,
+<A NAME="PRIdLEAST16"></A><CODE>PRIdLEAST16</CODE>,
+<A NAME="PRIdLEAST32"></A><CODE>PRIdLEAST32</CODE>,
+<A NAME="PRIdLEAST64"></A><CODE>PRIdLEAST64</CODE></H2>
+
+<PRE>#define <B>PRIdLEAST8</B>   "hhd"
+#define <B>PRIdLEAST16</B>  "hd"
+#define <B>PRIdLEAST32</B>  "d"
+#define <B>PRIdLEAST64</B>  "lld"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>d</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int_least8_t"><CODE>int_least8_t</CODE></A>,
+<A HREF="stdint.html#int_least16_t"><CODE>int_least16_t</CODE></A>,
+<A HREF="stdint.html#int_least32_t"><CODE>int_least32_t</CODE></A>, or
+<A HREF="stdint.html#int_least64_t"><CODE>int_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIdMAX"></A><CODE>PRIdMAX</CODE></H2>
+
+<PRE>#define <B>PRIdMAX</B>   "lld"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as a <CODE>d</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#intmax_t"><CODE>intmax_t</CODE></A>.</P>
+
+<H2><A NAME="PRIdPTR"></A><CODE>PRIdPTR</CODE></H2>
+
+<PRE>#define <B>PRIdPTR</B>   "ld"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as a <CODE>d</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#intptr_t"><CODE>intptr_t</CODE></A>.</P>
+
+<H2><A NAME="PRIi8"></A><CODE>PRIi8</CODE>,
+<A NAME="PRIi16"></A><CODE>PRIi16</CODE>,
+<A NAME="PRIi32"></A><CODE>PRIi32</CODE>,
+<A NAME="PRIi64"></A><CODE>PRIi64</CODE></H2>
+
+<PRE>#define <B>PRIi8</B>     "hhi"
+#define <B>PRIi16</B>    "hi"
+#define <B>PRIi32</B>    "i"
+#define <B>PRIi64</B>    "lli"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>i</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int8_t"><CODE>int8_t</CODE></A>,
+<A HREF="stdint.html#int16_t"><CODE>int16_t</CODE></A>,
+<A HREF="stdint.html#int32_t"><CODE>int32_t</CODE></A>, or
+<A HREF="stdint.html#int64_t"><CODE>int64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIiFAST8"></A><CODE>PRIiFAST8</CODE>,
+<A NAME="PRIiFAST16"></A><CODE>PRIiFAST16</CODE>,
+<A NAME="PRIiFAST32"></A><CODE>PRIiFAST32</CODE>,
+<A NAME="PRIiFAST64"></A><CODE>PRIiFAST64</CODE></H2>
+
+<PRE>#define <B>PRIiFAST8</B>    "i"
+#define <B>PRIiFAST16</B>    "i"
+#define <B>PRIiFAST32</B>    "i"
+#define <B>PRIiFAST64</B>   "lli"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>i</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int_fast8_t"><CODE>int_fast8_t</CODE></A>,
+<A HREF="stdint.html#int_fast16_t"><CODE>int_fast16_t</CODE></A>,
+<A HREF="stdint.html#int_fast32_t"><CODE>int_fast32_t</CODE></A>, or
+<A HREF="stdint.html#int_fast64_t"><CODE>int_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIiLEAST8"></A><CODE>PRIiLEAST8</CODE>,
+<A NAME="PRIiLEAST16"></A><CODE>PRIiLEAST16</CODE>,
+<A NAME="PRIiLEAST32"></A><CODE>PRIiLEAST32</CODE>,
+<A NAME="PRIiLEAST64"></A><CODE>PRIiLEAST64</CODE></H2>
+
+<PRE>#define <B>PRIiLEAST8</B>   "hhi"
+#define <B>PRIiLEAST16</B>  "hi"
+#define <B>PRIiLEAST32</B>  "i"
+#define <B>PRIiLEAST64</B>  "lli"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>i</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int_least8_t"><CODE>int_least8_t</CODE></A>,
+<A HREF="stdint.html#int_least16_t"><CODE>int_least16_t</CODE></A>,
+<A HREF="stdint.html#int_least32_t"><CODE>int_least32_t</CODE></A>, or
+<A HREF="stdint.html#int_least64_t"><CODE>int_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIiMAX"></A><CODE>PRIiMAX</CODE></H2>
+
+<PRE>#define <B>PRIiMAX</B>   "lli"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>i</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#intmax_t"><CODE>intmax_t</CODE></A>.</P>
+
+<H2><A NAME="PRIiPTR"></A><CODE>PRIiPTR</CODE></H2>
+
+<PRE>#define <B>PRIiPTR</B>   "li"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>i</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#intptr_t"><CODE>intptr_t</CODE></A>.</P>
+
+<H2><A NAME="PRIo8"></A><CODE>PRIo8</CODE>,
+<A NAME="PRIo16"></A><CODE>PRIo16</CODE>,
+<A NAME="PRIo32"></A><CODE>PRIo32</CODE>,
+<A NAME="PRIo64"></A><CODE>PRIo64</CODE></H2>
+
+<PRE>#define <B>PRIo8</B>     "hho"
+#define <B>PRIo16</B>    "ho"
+#define <B>PRIo32</B>    "o"
+#define <B>PRIo64</B>    "llo"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>o</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint8_t"><CODE>uint8_t</CODE></A>,
+<A HREF="stdint.html#uint16_t"><CODE>uint16_t</CODE></A>,
+<A HREF="stdint.html#uint32_t"><CODE>uint32_t</CODE></A>, or
+<A HREF="stdint.html#uint64_t"><CODE>uint64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIoFAST8"></A><CODE>PRIoFAST8</CODE>,
+<A NAME="PRIoFAST16"></A><CODE>PRIoFAST16</CODE>,
+<A NAME="PRIoFAST32"></A><CODE>PRIoFAST32</CODE>,
+<A NAME="PRIoFAST64"></A><CODE>PRIoFAST64</CODE></H2>
+
+<PRE>#define <B>PRIoFAST8</B>    "o"
+#define <B>PRIoFAST16</B>    "o"
+#define <B>PRIoFAST32</B>    "o"
+#define <B>PRIoFAST64</B>   "llo"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>o</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_fast8_t"><CODE>uint_fast8_t</CODE></A>,
+<A HREF="stdint.html#uint_fast16_t"><CODE>uint_fast16_t</CODE></A>,
+<A HREF="stdint.html#uint_fast32_t"><CODE>uint_fast32_t</CODE></A>, or
+<A HREF="stdint.html#uint_fast64_t"><CODE>uint_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIoLEAST8"></A><CODE>PRIoLEAST8</CODE>,
+<A NAME="PRIoLEAST16"></A><CODE>PRIoLEAST16</CODE>,
+<A NAME="PRIoLEAST32"></A><CODE>PRIoLEAST32</CODE>,
+<A NAME="PRIoLEAST64"></A><CODE>PRIoLEAST64</CODE></H2>
+
+<PRE>#define <B>PRIoLEAST8</B>   "hho"
+#define <B>PRIoLEAST16</B>  "ho"
+#define <B>PRIoLEAST32</B>  "o"
+#define <B>PRIoLEAST64</B>  "llo"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>o</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_least8_t"><CODE>uint_least8_t</CODE></A>,
+<A HREF="stdint.html#uint_least16_t"><CODE>uint_least16_t</CODE></A>,
+<A HREF="stdint.html#uint_least32_t"><CODE>uint_least32_t</CODE></A>, or
+<A HREF="stdint.html#uint_least64_t"><CODE>uint_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIoMAX"></A><CODE>PRIoMAX</CODE></H2>
+
+<PRE>#define <B>PRIoMAX</B>   "llo"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>o</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintmax_t"><CODE>uintmax_t</CODE></A>.</P>
+
+<H2><A NAME="PRIoPTR"></A><CODE>PRIoPTR</CODE></H2>
+
+<PRE>#define <B>PRIoPTR</B>   "lo"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>o</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintptr_t"><CODE>uintptr_t</CODE></A>.</P>
+
+<H2><A NAME="PRIu8"></A><CODE>PRIu8</CODE>,
+<A NAME="PRIu16"></A><CODE>PRIu16</CODE>,
+<A NAME="PRIu32"></A><CODE>PRIu32</CODE>,
+<A NAME="PRIu64"></A><CODE>PRIu64</CODE></H2>
+
+<PRE>#define <B>PRIu8</B>     "hhu"
+#define <B>PRIu16</B>    "hu"
+#define <B>PRIu32</B>    "u"
+#define <B>PRIu64</B>    "llu"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>u</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint8_t"><CODE>uint8_t</CODE></A>,
+<A HREF="stdint.html#uint16_t"><CODE>uint16_t</CODE></A>,
+<A HREF="stdint.html#uint32_t"><CODE>uint32_t</CODE></A>, or
+<A HREF="stdint.html#uint64_t"><CODE>uint64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIuFAST8"></A><CODE>PRIuFAST8</CODE>,
+<A NAME="PRIuFAST16"></A><CODE>PRIuFAST16</CODE>,
+<A NAME="PRIuFAST32"></A><CODE>PRIuFAST32</CODE>,
+<A NAME="PRIuFAST64"></A><CODE>PRIuFAST64</CODE></H2>
+
+<PRE>#define <B>PRIuFAST8</B>    "u"
+#define <B>PRIuFAST16</B>    "u"
+#define <B>PRIuFAST32</B>    "u"
+#define <B>PRIuFAST64</B>   "llu"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>u</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_fast8_t"><CODE>uint_fast8_t</CODE></A>,
+<A HREF="stdint.html#uint_fast16_t"><CODE>uint_fast16_t</CODE></A>,
+<A HREF="stdint.html#uint_fast32_t"><CODE>uint_fast32_t</CODE></A>, or
+<A HREF="stdint.html#uint_fast64_t"><CODE>uint_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIuLEAST8"></A><CODE>PRIuLEAST8</CODE>,
+<A NAME="PRIuLEAST16"></A><CODE>PRIuLEAST16</CODE>,
+<A NAME="PRIuLEAST32"></A><CODE>PRIuLEAST32</CODE>,
+<A NAME="PRIuLEAST64"></A><CODE>PRIuLEAST64</CODE></H2>
+
+<PRE>#define <B>PRIuLEAST8</B>   "hhu"
+#define <B>PRIuLEAST16</B>  "hu"
+#define <B>PRIuLEAST32</B>  "u"
+#define <B>PRIuLEAST64</B>  "llu"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>u</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_least8_t"><CODE>uint_least8_t</CODE></A>,
+<A HREF="stdint.html#uint_least16_t"><CODE>uint_least16_t</CODE></A>,
+<A HREF="stdint.html#uint_least32_t"><CODE>uint_least32_t</CODE></A>, or
+<A HREF="stdint.html#uint_least64_t"><CODE>uint_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIuMAX"></A><CODE>PRIuMAX</CODE></H2>
+
+<PRE>#define <B>PRIuMAX</B>   "llu"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as a <CODE>u</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintmax_t"><CODE>uintmax_t</CODE></A>.</P>
+
+<H2><A NAME="PRIuPTR"></A><CODE>PRIuPTR</CODE></H2>
+
+<PRE>#define <B>PRIuPTR</B>   "lu"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as a <CODE>u</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintptr_t"><CODE>uintptr_t</CODE></A>.</P>
+
+<H2><A NAME="PRIx8"></A><CODE>PRIx8</CODE>,
+<A NAME="PRIx16"></A><CODE>PRIx16</CODE>,
+<A NAME="PRIx32"></A><CODE>PRIx32</CODE>,
+<A NAME="PRIx64"></A><CODE>PRIx64</CODE></H2>
+
+<PRE>#define <B>PRIx8</B>     "hhx"
+#define <B>PRIx16</B>    "hx"
+#define <B>PRIx32</B>    "x"
+#define <B>PRIx64</B>    "llx"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>x</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint8_t"><CODE>uint8_t</CODE></A>,
+<A HREF="stdint.html#uint16_t"><CODE>uint16_t</CODE></A>,
+<A HREF="stdint.html#uint32_t"><CODE>uint32_t</CODE></A>, or
+<A HREF="stdint.html#uint64_t"><CODE>uint64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIxFAST8"></A><CODE>PRIxFAST8</CODE>,
+<A NAME="PRIxFAST16"></A><CODE>PRIxFAST16</CODE>,
+<A NAME="PRIxFAST32"></A><CODE>PRIxFAST32</CODE>,
+<A NAME="PRIxFAST64"></A><CODE>PRIxFAST64</CODE></H2>
+
+<PRE>#define <B>PRIxFAST8</B>    "x"
+#define <B>PRIxFAST16</B>    "x"
+#define <B>PRIxFAST32</B>    "x"
+#define <B>PRIxFAST64</B>   "llx"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>x</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_fast8_t"><CODE>uint_fast8_t</CODE></A>,
+<A HREF="stdint.html#uint_fast16_t"><CODE>uint_fast16_t</CODE></A>,
+<A HREF="stdint.html#uint_fast32_t"><CODE>uint_fast32_t</CODE></A>, or
+<A HREF="stdint.html#uint_fast64_t"><CODE>uint_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIxLEAST8"></A><CODE>PRIxLEAST8</CODE>,
+<A NAME="PRIxLEAST16"></A><CODE>PRIxLEAST16</CODE>,
+<A NAME="PRIxLEAST32"></A><CODE>PRIxLEAST32</CODE>,
+<A NAME="PRIxLEAST64"></A><CODE>PRIxLEAST64</CODE></H2>
+
+<PRE>#define <B>PRIxLEAST8</B>   "hhx"
+#define <B>PRIxLEAST16</B>  "hx"
+#define <B>PRIxLEAST32</B>  "x"
+#define <B>PRIxLEAST64</B>  "llx"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>x</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_least8_t"><CODE>uint_least8_t</CODE></A>,
+<A HREF="stdint.html#uint_least16_t"><CODE>uint_least16_t</CODE></A>,
+<A HREF="stdint.html#uint_least32_t"><CODE>uint_least32_t</CODE></A>, or
+<A HREF="stdint.html#uint_least64_t"><CODE>uint_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIxMAX"></A><CODE>PRIxMAX</CODE></H2>
+
+<PRE>#define <B>PRIxMAX</B>   "llx"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>x</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintmax_t"><CODE>uintmax_t</CODE></A>.</P>
+
+<H2><A NAME="PRIxPTR"></A><CODE>PRIxPTR</CODE></H2>
+
+<PRE>#define <B>PRIxPTR</B>   "lx"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>x</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintptr_t"><CODE>uintptr_t</CODE></A>.</P>
+
+<H2><A NAME="PRIX8_upper"></A><CODE>PRIX8</CODE>,
+<A NAME="PRIX16_upper"></A><CODE>PRIX16</CODE>,
+<A NAME="PRIX32_upper"></A><CODE>PRIX32</CODE>,
+<A NAME="PRIX64_upper"></A><CODE>PRIX64</CODE></H2>
+
+<PRE>#define <B>PRIX8</B>     "hhX"
+#define <B>PRIX16</B>    "hX"
+#define <B>PRIX32</B>    "X"
+#define <B>PRIX64</B>    "llX"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>X</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint8_t"><CODE>uint8_t</CODE></A>,
+<A HREF="stdint.html#uint16_t"><CODE>uint16_t</CODE></A>,
+<A HREF="stdint.html#uint32_t"><CODE>uint32_t</CODE></A>, or
+<A HREF="stdint.html#uint64_t"><CODE>uint64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIXFAST8_upper"></A><CODE>PRIXFAST8</CODE>,
+<A NAME="PRIXFAST16_upper"></A><CODE>PRIXFAST16</CODE>,
+<A NAME="PRIXFAST32_upper"></A><CODE>PRIXFAST32</CODE>,
+<A NAME="PRIXFAST64_upper"></A><CODE>PRIXFAST64</CODE></H2>
+
+<PRE>#define <B>PRIXFAST8</B>    "X"
+#define <B>PRIXFAST16</B>    "X"
+#define <B>PRIXFAST32</B>    "X"
+#define <B>PRIXFAST64</B>   "llX"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>X</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_fast8_t"><CODE>uint_fast8_t</CODE></A>,
+<A HREF="stdint.html#uint_fast16_t"><CODE>uint_fast16_t</CODE></A>,
+<A HREF="stdint.html#uint_fast32_t"><CODE>uint_fast32_t</CODE></A>, or
+<A HREF="stdint.html#uint_fast64_t"><CODE>uint_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIXLEAST8_upper"></A><CODE>PRIXLEAST8</CODE>,
+<A NAME="PRIXLEAST16_upper"></A><CODE>PRIXLEAST16</CODE>,
+<A NAME="PRIXLEAST32_upper"></A><CODE>PRIXLEAST32</CODE>,
+<A NAME="PRIXLEAST64_upper"></A><CODE>PRIXLEAST64</CODE></H2>
+
+<PRE>#define <B>PRIXLEAST8</B>   "hhX"
+#define <B>PRIXLEAST16</B>  "hX"
+#define <B>PRIXLEAST32</B>  "X"
+#define <B>PRIXLEAST64</B>  "llX"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>X</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_least8_t"><CODE>uint_least8_t</CODE></A>,
+<A HREF="stdint.html#uint_least16_t"><CODE>uint_least16_t</CODE></A>,
+<A HREF="stdint.html#uint_least32_t"><CODE>uint_least32_t</CODE></A>, or
+<A HREF="stdint.html#uint_least64_t"><CODE>uint_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="PRIXMAX_upper"></A><CODE>PRIXMAX</CODE></H2>
+
+<PRE>#define <B>PRIXMAX</B>   "llX"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>X</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintmax_t"><CODE>uintmax_t</CODE></A>.</P>
+
+<H2><A NAME="PRIXPTR_upper"></A><CODE>PRIXPTR</CODE></H2>
+
+<PRE>#define <B>PRIXPTR</B>   "lX"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>X</CODE> print conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintptr_t"><CODE>uintptr_t</CODE></A>.</P>
+
+<H2><A NAME="SCNd8"></A><CODE>SCNd8</CODE>,
+<A NAME="SCNd16"></A><CODE>SCNd16</CODE>,
+<A NAME="SCNd32"></A><CODE>SCNd32</CODE>,
+<A NAME="SCNd64"></A><CODE>SCNd64</CODE></H2>
+
+<PRE>#define <B>SCNd8</B>     "hhd"
+#define <B>SCNd16</B>    "hd"
+#define <B>SCNd32</B>    "d"
+#define <B>SCNd64</B>    "lld"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>d</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int8_t"><CODE>int8_t</CODE></A>,
+<A HREF="stdint.html#int16_t"><CODE>int16_t</CODE></A>,
+<A HREF="stdint.html#int32_t"><CODE>int32_t</CODE></A>, or
+<A HREF="stdint.html#int64_t"><CODE>int64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNdFAST8"></A><CODE>SCNdFAST8</CODE>,
+<A NAME="SCNdFAST16"></A><CODE>SCNdFAST16</CODE>,
+<A NAME="SCNdFAST32"></A><CODE>SCNdFAST32</CODE>,
+<A NAME="SCNdFAST64"></A><CODE>SCNdFAST64</CODE></H2>
+
+<PRE>#define <B>SCNdFAST8</B>    "d"
+#define <B>SCNdFAST16</B>    "d"
+#define <B>SCNdFAST32</B>    "d"
+#define <B>SCNdFAST64</B>   "lld"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>d</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int_fast8_t"><CODE>int_fast8_t</CODE></A>,
+<A HREF="stdint.html#int_fast16_t"><CODE>int_fast16_t</CODE></A>,
+<A HREF="stdint.html#int_fast32_t"><CODE>int_fast32_t</CODE></A>, or
+<A HREF="stdint.html#int_fast64_t"><CODE>int_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNdLEAST8"></A><CODE>SCNdLEAST8</CODE>,
+<A NAME="SCNdLEAST16"></A><CODE>SCNdLEAST16</CODE>,
+<A NAME="SCNdLEAST32"></A><CODE>SCNdLEAST32</CODE>,
+<A NAME="SCNdLEAST64"></A><CODE>SCNdLEAST64</CODE></H2>
+
+<PRE>#define <B>SCNdLEAST8</B>   "hhd"
+#define <B>SCNdLEAST16</B>  "hd"
+#define <B>SCNdLEAST32</B>  "d"
+#define <B>SCNdLEAST64</B>  "lld"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>d</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int_least8_t"><CODE>int_least8_t</CODE></A>,
+<A HREF="stdint.html#int_least16_t"><CODE>int_least16_t</CODE></A>,
+<A HREF="stdint.html#int_least32_t"><CODE>int_least32_t</CODE></A>, or
+<A HREF="stdint.html#int_least64_t"><CODE>int_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNdMAX"></A><CODE>SCNdMAX</CODE></H2>
+
+<PRE>#define <B>SCNdMAX</B>   "lld"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as a <CODE>d</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#intmax_t"><CODE>intmax_t</CODE></A>.</P>
+
+<H2><A NAME="SCNdPTR"></A><CODE>SCNdPTR</CODE></H2>
+
+<PRE>#define <B>SCNdPTR</B>   "ld"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as a <CODE>d</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#intptr_t"><CODE>intptr_t</CODE></A>.</P>
+
+<H2><A NAME="SCNi8"></A><CODE>SCNi8</CODE>,
+<A NAME="SCNi16"></A><CODE>SCNi16</CODE>,
+<A NAME="SCNi32"></A><CODE>SCNi32</CODE>,
+<A NAME="SCNi64"></A><CODE>SCNi64</CODE></H2>
+
+<PRE>#define <B>SCNi8</B>     "hhi"
+#define <B>SCNi16</B>    "hi"
+#define <B>SCNi32</B>    "i"
+#define <B>SCNi64</B>    "lli"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>i</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int8_t"><CODE>int8_t</CODE></A>,
+<A HREF="stdint.html#int16_t"><CODE>int16_t</CODE></A>,
+<A HREF="stdint.html#int32_t"><CODE>int32_t</CODE></A>, or
+<A HREF="stdint.html#int64_t"><CODE>int64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNiFAST8"></A><CODE>SCNiFAST8</CODE>,
+<A NAME="SCNiFAST16"></A><CODE>SCNiFAST16</CODE>,
+<A NAME="SCNiFAST32"></A><CODE>SCNiFAST32</CODE>,
+<A NAME="SCNiFAST64"></A><CODE>SCNiFAST64</CODE></H2>
+
+<PRE>#define <B>SCNiFAST8</B>    "i"
+#define <B>SCNiFAST16</B>    "i"
+#define <B>SCNiFAST32</B>    "i"
+#define <B>SCNiFAST64</B>   "lli"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>i</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int_fast8_t"><CODE>int_fast8_t</CODE></A>,
+<A HREF="stdint.html#int_fast16_t"><CODE>int_fast16_t</CODE></A>,
+<A HREF="stdint.html#int_fast32_t"><CODE>int_fast32_t</CODE></A>, or
+<A HREF="stdint.html#int_fast64_t"><CODE>int_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNiLEAST8"></A><CODE>SCNiLEAST8</CODE>,
+<A NAME="SCNiLEAST16"></A><CODE>SCNiLEAST16</CODE>,
+<A NAME="SCNiLEAST32"></A><CODE>SCNiLEAST32</CODE>,
+<A NAME="SCNiLEAST64"></A><CODE>SCNiLEAST64</CODE></H2>
+
+<PRE>#define <B>SCNiLEAST8</B>   "hhi"
+#define <B>SCNiLEAST16</B>  "hi"
+#define <B>SCNiLEAST32</B>  "i"
+#define <B>SCNiLEAST64</B>  "lli"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>i</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#int_least8_t"><CODE>int_least8_t</CODE></A>,
+<A HREF="stdint.html#int_least16_t"><CODE>int_least16_t</CODE></A>,
+<A HREF="stdint.html#int_least32_t"><CODE>int_least32_t</CODE></A>, or
+<A HREF="stdint.html#int_least64_t"><CODE>int_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNiMAX"></A><CODE>SCNiMAX</CODE></H2>
+
+<PRE>#define <B>SCNiMAX</B>   "lli"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>i</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#intmax_t"><CODE>intmax_t</CODE></A>.</P>
+
+<H2><A NAME="SCNiPTR"></A><CODE>SCNiPTR</CODE></H2>
+
+<PRE>#define <B>SCNiPTR</B>   "li"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>i</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#intptr_t"><CODE>intptr_t</CODE></A>.</P>
+
+<H2><A NAME="SCNo8"></A><CODE>SCNo8</CODE>,
+<A NAME="SCNo16"></A><CODE>SCNo16</CODE>,
+<A NAME="SCNo32"></A><CODE>SCNo32</CODE>,
+<A NAME="SCNo64"></A><CODE>SCNo64</CODE></H2>
+
+<PRE>#define <B>SCNo8</B>     "hho"
+#define <B>SCNo16</B>    "ho"
+#define <B>SCNo32</B>    "o"
+#define <B>SCNo64</B>    "llo"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>o</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint8_t"><CODE>uint8_t</CODE></A>,
+<A HREF="stdint.html#uint16_t"><CODE>uint16_t</CODE></A>,
+<A HREF="stdint.html#uint32_t"><CODE>uint32_t</CODE></A>, or
+<A HREF="stdint.html#uint64_t"><CODE>uint64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNoFAST8"></A><CODE>SCNoFAST8</CODE>,
+<A NAME="SCNoFAST16"></A><CODE>SCNoFAST16</CODE>,
+<A NAME="SCNoFAST32"></A><CODE>SCNoFAST32</CODE>,
+<A NAME="SCNoFAST64"></A><CODE>SCNoFAST64</CODE></H2>
+
+<PRE>#define <B>SCNoFAST8</B>    "o"
+#define <B>SCNoFAST16</B>    "o"
+#define <B>SCNoFAST32</B>    "o"
+#define <B>SCNoFAST64</B>   "llo"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>o</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_fast8_t"><CODE>uint_fast8_t</CODE></A>,
+<A HREF="stdint.html#uint_fast16_t"><CODE>uint_fast16_t</CODE></A>,
+<A HREF="stdint.html#uint_fast32_t"><CODE>uint_fast32_t</CODE></A>, or
+<A HREF="stdint.html#uint_fast64_t"><CODE>uint_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNoLEAST8"></A><CODE>SCNoLEAST8</CODE>,
+<A NAME="SCNoLEAST16"></A><CODE>SCNoLEAST16</CODE>,
+<A NAME="SCNoLEAST32"></A><CODE>SCNoLEAST32</CODE>,
+<A NAME="SCNoLEAST64"></A><CODE>SCNoLEAST64</CODE></H2>
+
+<PRE>#define <B>SCNoLEAST8</B>   "hho"
+#define <B>SCNoLEAST16</B>  "ho"
+#define <B>SCNoLEAST32</B>  "o"
+#define <B>SCNoLEAST64</B>  "llo"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>o</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_least8_t"><CODE>uint_least8_t</CODE></A>,
+<A HREF="stdint.html#uint_least16_t"><CODE>uint_least16_t</CODE></A>,
+<A HREF="stdint.html#uint_least32_t"><CODE>uint_least32_t</CODE></A>, or
+<A HREF="stdint.html#uint_least64_t"><CODE>uint_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNoMAX"></A><CODE>SCNoMAX</CODE></H2>
+
+<PRE>#define <B>SCNoMAX</B>   "llo"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>o</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintmax_t"><CODE>uintmax_t</CODE></A>.</P>
+
+<H2><A NAME="SCNoPTR"></A><CODE>SCNoPTR</CODE></H2>
+
+<PRE>#define <B>SCNoPTR</B>   "lo"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>o</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintptr_t"><CODE>uintptr_t</CODE></A>.</P>
+
+<H2><A NAME="SCNu8"></A><CODE>SCNu8</CODE>,
+<A NAME="SCNu16"></A><CODE>SCNu16</CODE>,
+<A NAME="SCNu32"></A><CODE>SCNu32</CODE>,
+<A NAME="SCNu64"></A><CODE>SCNu64</CODE></H2>
+
+<PRE>#define <B>SCNu8</B>     "hhu"
+#define <B>SCNu16</B>    "hu"
+#define <B>SCNu32</B>    "u"
+#define <B>SCNu64</B>    "llu"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>u</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint8_t"><CODE>uint8_t</CODE></A>,
+<A HREF="stdint.html#uint16_t"><CODE>uint16_t</CODE></A>,
+<A HREF="stdint.html#uint32_t"><CODE>uint32_t</CODE></A>, or
+<A HREF="stdint.html#uint64_t"><CODE>uint64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNuFAST8"></A><CODE>SCNuFAST8</CODE>,
+<A NAME="SCNuFAST16"></A><CODE>SCNuFAST16</CODE>,
+<A NAME="SCNuFAST32"></A><CODE>SCNuFAST32</CODE>,
+<A NAME="SCNuFAST64"></A><CODE>SCNuFAST64</CODE></H2>
+
+<PRE>#define <B>SCNuFAST8</B>    "u"
+#define <B>SCNuFAST16</B>    "u"
+#define <B>SCNuFAST32</B>    "u"
+#define <B>SCNuFAST64</B>   "llu"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>u</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_fast8_t"><CODE>uint_fast8_t</CODE></A>,
+<A HREF="stdint.html#uint_fast16_t"><CODE>uint_fast16_t</CODE></A>,
+<A HREF="stdint.html#uint_fast32_t"><CODE>uint_fast32_t</CODE></A>, or
+<A HREF="stdint.html#uint_fast64_t"><CODE>uint_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNuLEAST8"></A><CODE>SCNuLEAST8</CODE>,
+<A NAME="SCNuLEAST16"></A><CODE>SCNuLEAST16</CODE>,
+<A NAME="SCNuLEAST32"></A><CODE>SCNuLEAST32</CODE>,
+<A NAME="SCNuLEAST64"></A><CODE>SCNuLEAST64</CODE></H2>
+
+<PRE>#define <B>SCNuLEAST8</B>   "hhu"
+#define <B>SCNuLEAST16</B>  "hu"
+#define <B>SCNuLEAST32</B>  "u"
+#define <B>SCNuLEAST64</B>  "llu"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as a <CODE>u</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_least8_t"><CODE>uint_least8_t</CODE></A>,
+<A HREF="stdint.html#uint_least16_t"><CODE>uint_least16_t</CODE></A>,
+<A HREF="stdint.html#uint_least32_t"><CODE>uint_least32_t</CODE></A>, or
+<A HREF="stdint.html#uint_least64_t"><CODE>uint_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNuMAX"></A><CODE>SCNuMAX</CODE></H2>
+
+<PRE>#define <B>SCNuMAX</B>   "llu"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as a <CODE>u</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintmax_t"><CODE>uintmax_t</CODE></A>.</P>
+
+<H2><A NAME="SCNuPTR"></A><CODE>SCNuPTR</CODE></H2>
+
+<PRE>#define <B>SCNuPTR</B>   "lu"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as a <CODE>u</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintptr_t"><CODE>uintptr_t</CODE></A>.</P>
+
+<H2><A NAME="SCNx8"></A><CODE>SCNx8</CODE>,
+<A NAME="SCNx16"></A><CODE>SCNx16</CODE>,
+<A NAME="SCNx32"></A><CODE>SCNx32</CODE>,
+<A NAME="SCNx64"></A><CODE>SCNx64</CODE></H2>
+
+<PRE>#define <B>SCNx8</B>     "hhx"
+#define <B>SCNx16</B>    "hx"
+#define <B>SCNx32</B>    "x"
+#define <B>SCNx64</B>    "llx"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>x</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint8_t"><CODE>uint8_t</CODE></A>,
+<A HREF="stdint.html#uint16_t"><CODE>uint16_t</CODE></A>,
+<A HREF="stdint.html#uint32_t"><CODE>uint32_t</CODE></A>, or
+<A HREF="stdint.html#uint64_t"><CODE>uint64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNxFAST8"></A><CODE>SCNxFAST8</CODE>,
+<A NAME="SCNxFAST16"></A><CODE>SCNxFAST16</CODE>,
+<A NAME="SCNxFAST32"></A><CODE>SCNxFAST32</CODE>,
+<A NAME="SCNxFAST64"></A><CODE>SCNxFAST64</CODE></H2>
+
+<PRE>#define <B>SCNxFAST8</B>    "x"
+#define <B>SCNxFAST16</B>    "x"
+#define <B>SCNxFAST32</B>    "x"
+#define <B>SCNxFAST64</B>   "llx"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>x</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_fast8_t"><CODE>uint_fast8_t</CODE></A>,
+<A HREF="stdint.html#uint_fast16_t"><CODE>uint_fast16_t</CODE></A>,
+<A HREF="stdint.html#uint_fast32_t"><CODE>uint_fast32_t</CODE></A>, or
+<A HREF="stdint.html#uint_fast64_t"><CODE>uint_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNxLEAST8"></A><CODE>SCNxLEAST8</CODE>,
+<A NAME="SCNxLEAST16"></A><CODE>SCNxLEAST16</CODE>,
+<A NAME="SCNxLEAST32"></A><CODE>SCNxLEAST32</CODE>,
+<A NAME="SCNxLEAST64"></A><CODE>SCNxLEAST64</CODE></H2>
+
+<PRE>#define <B>SCNxLEAST8</B>   "hhx"
+#define <B>SCNxLEAST16</B>  "hx"
+#define <B>SCNxLEAST32</B>  "x"
+#define <B>SCNxLEAST64</B>  "llx"</PRE>
+
+<P>The macros each expand to a string literal suitable
+for use as an <CODE>x</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uint_least8_t"><CODE>uint_least8_t</CODE></A>,
+<A HREF="stdint.html#uint_least16_t"><CODE>uint_least16_t</CODE></A>,
+<A HREF="stdint.html#uint_least32_t"><CODE>uint_least32_t</CODE></A>, or
+<A HREF="stdint.html#uint_least64_t"><CODE>uint_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="SCNxMAX"></A><CODE>SCNxMAX</CODE></H2>
+
+<PRE>#define <B>SCNxMAX</B>   "llx"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>x</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintmax_t"><CODE>uintmax_t</CODE></A>.</P>
+
+<H2><A NAME="SCNxPTR"></A><CODE>SCNxPTR</CODE></H2>
+
+<PRE>#define <B>SCNxPTR</B>   "lx"</PRE>
+
+<P>The macro expands to a string literal suitable
+for use as an <CODE>x</CODE> scan conversion specificier,
+plus any needed qualifiers, to convert values of the types
+<A HREF="stdint.html#uintptr_t"><CODE>uintptr_t</CODE></A>.</P>
+
+<H2><A NAME="strtoimax"></A><CODE>strtoimax</CODE></H2>
+
+<PRE>intmax_t <B>strtoimax</B>(const char *restrict s, char **restrict endptr,
+    int base);</PRE>
+
+<P>The function converts the initial characters of the string <CODE>s</CODE>
+to an equivalent value <CODE>x</CODE> of type <I>intmax_t.</I>
+If <CODE>endptr</CODE> is not a null pointer,
+it stores a pointer to the unconverted remainder
+of the string in <CODE>*endptr</CODE>.
+The function then returns <CODE>x</CODE>.
+<CODE>strtoimax</CODE> converts strings exactly as does
+<A HREF="stdlib.html#strtol"><CODE>strtol</CODE></A>.</P>
+
+<P>If the string <CODE>s</CODE> does not match a valid pattern, the value
+stored in <CODE>*endptr</CODE> is <CODE>s</CODE>,
+and <CODE>x</CODE> is zero. If the
+equivalent value is too large to represent as type <I>intmax_t,</I>
+<CODE>strtoimax</CODE> stores the value of
+<A HREF="errno.html#ERANGE"><CODE>ERANGE</CODE></A> in
+<A HREF="errno.html#errno"><CODE>errno</CODE></A>
+and returns either
+<A HREF="stdint.html#INTMAX_MAX"><CODE>INTMAX_MAX</CODE></A>,
+if <CODE>x</CODE> is positive, or
+<A HREF="stdint.html#INTMAX_MIN"><CODE>INTMAX_MIN</CODE></A>,
+if <CODE>x</CODE> is negative.</P>
+
+<H2><A NAME="strtoumax"></A><CODE>strtoumax</CODE></H2>
+
+<PRE>uintmax_t <B>strtoumax</B>(const char *restrict s, char **restrict endptr,
+    int base);</PRE>
+
+<P>The function converts the initial characters of the string <CODE>s</CODE>
+to an equivalent value <CODE>x</CODE> of type <I>uintmax_t.</I>
+If <CODE>endptr</CODE> is not a null pointer,
+it stores a pointer to the unconverted remainder
+of the string in <CODE>*endptr</CODE>.
+The function then returns <CODE>x</CODE>.
+<CODE>strtoumax</CODE> converts strings exactly as does
+<A HREF="stdlib.html#strtoul"><CODE>strtoul</CODE></A>.</P>
+
+<P>If the string <CODE>s</CODE> does not match a valid pattern, the value
+stored in <CODE>*endptr</CODE> is <CODE>s</CODE>,
+and <CODE>x</CODE> is zero. If the
+equivalent value is too large to represent as type <I>uintmax_t,</I>
+<CODE>strtoumax</CODE> stores the value of
+<A HREF="errno.html#ERANGE"><CODE>ERANGE</CODE></A> in
+<A HREF="errno.html#errno"><CODE>errno</CODE></A> and returns
+<A HREF="stdint.html#UINTMAX_MAX"><CODE>UINTMAX_MAX</CODE></A>.</P>
+
+<H2><A NAME="wcstoimax"></A><CODE>wcstoimax</CODE></H2>
+
+<PRE>intmax_t <B>wcstoimax</B>(const wchar_t *restrict s, wchar_t **restrict endptr,
+    int base);</PRE>
+
+<P>The function converts the initial wide characters of the wide
+string <CODE>s</CODE> to an equivalent value <CODE>x</CODE>
+of type <I>intmax_t.</I> If <CODE>endptr</CODE> is not a null pointer,
+the function stores a pointer to the unconverted remainder
+of the wide string in <CODE>*endptr</CODE>.
+The function then returns <CODE>x</CODE>.</P>
+
+<P>The initial wide characters of the wide string <CODE>s</CODE> must
+match the same pattern as recognized by the function
+<A HREF="stdlib.html#strtol"><CODE>strtol</CODE></A>,
+with the same <CODE>base</CODE> argument,
+where each wide character <CODE>wc</CODE> is converted as if by calling
+<CODE><A HREF="wchar.html#wctob">wctob</A>(wc))</CODE>.</P>
+
+<P>If the wide string <CODE>s</CODE> matches this pattern,
+<CODE>wcstoimax</CODE> converts strings exactly as does
+<CODE>strtol</CODE>, with the same <CODE>base</CODE> argument,
+for the converted sequence.
+If the wide string <CODE>s</CODE> does not match a valid pattern,
+the value stored in <CODE>*endptr</CODE> is <CODE>s</CODE>,
+and <CODE>x</CODE> is zero. If the equivalent value is too large
+in magnitude to represent as type <I>intmax_t,</I>
+<CODE>wcstoimax</CODE> stores the value of
+<A HREF="errno.html#ERANGE"><CODE>ERANGE</CODE></A> in
+<A HREF="errno.html#errno"><CODE>errno</CODE></A>
+and returns either
+<A HREF="stdint.html#INTMAX_MAX"><CODE>INTMAX_MAX</CODE></A>,
+if <CODE>x</CODE> is positive, or
+<A HREF="stdint.html#INTMAX_MIN"><CODE>INTMAX_MIN</CODE></A>,
+if <CODE>x</CODE> is negative.</P>
+
+<H2><A NAME="wcstoumax"></A><CODE>wcstoumax</CODE></H2>
+
+<PRE>uintmax_t <B>wcstoumax</B>(const wchar_t *restrict s,
+     wchar_t **restrict endptr, int base);</PRE>
+
+<P>The function converts the initial wide characters of the wide
+string <CODE>s</CODE> to an equivalent value <CODE>x</CODE>
+of type <I>uintmax_t.</I> If <CODE>endptr</CODE> is not a null pointer,
+the function stores a pointer to the unconverted remainder
+of the wide string in <CODE>*endptr</CODE>.
+The function then returns <CODE>x</CODE>.</P>
+
+<P>The initial wide characters of the wide string <CODE>s</CODE> must
+match the same pattern as recognized by the function
+<A HREF="stdlib.html#strtol"><CODE>strtol</CODE></A>,
+with the same <CODE>base</CODE> argument,
+where each wide character <CODE>wc</CODE> is converted as if by calling
+<CODE><A HREF="wchar.html#wctob">wctob</A>(wc))</CODE>.</P>
+
+<P>If the wide string <CODE>s</CODE> matches this pattern,
+<CODE>wcstoumax</CODE> converts strings exactly as does
+<CODE>strtol</CODE>, with the same <CODE>base</CODE> argument,
+for the converted sequence.
+If the wide string <CODE>s</CODE> does not match a valid pattern,
+the value stored in <CODE>*endptr</CODE> is <CODE>s</CODE>,
+and <CODE>x</CODE> is zero. If the equivalent value is too large
+to represent as type <I>uintmax_t,</I>
+<CODE>wcstoimax</CODE> stores the value of
+<A HREF="errno.html#ERANGE"><CODE>ERANGE</CODE></A> in
+<A HREF="errno.html#errno"><CODE>errno</CODE></A>
+and returns
+<A HREF="stdint.html#UINTMAX_MAX"><CODE>UINTMAX_MAX</CODE></A>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+&copy; 2012 Sony Computer Entertainment Inc. All rights reserved.</I></P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

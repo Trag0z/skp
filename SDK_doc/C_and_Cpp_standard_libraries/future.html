@@ -1,0 +1,1061 @@
+<HTML><HEAD>
+<TITLE>&lt;future&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;future&gt;"></A><CODE>&lt;future&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P><B><CODE><A HREF="#async">async</A>
+&middot; <A HREF="#future">future</A>
+&middot; <A HREF="#future_category">future_category</A>
+&middot; <A HREF="#future_errc">future_errc</A>
+&middot; <A HREF="#future_error">future_error</A>
+&middot; <A HREF="#future_status">future_status</A>
+&middot; <A HREF="#is_error_code_enum">is_error_code_enum</A>
+&middot; <A HREF="#launch">launch</A>
+&middot; <A HREF="#make_error_code">make_error_code</A>
+&middot; <A HREF="#make_error_condition">make_error_condition</A>
+&middot; <A HREF="#packaged_task">packaged_task</A>
+&middot; <A HREF="#promise">promise</A>
+&middot; <A HREF="#shared_future">shared_future</A>
+&middot; <A HREF="#swap">swap</A>
+&middot; <A HREF="#uses_allocator">uses_allocator</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the standard header <B><CODE>&lt;future&gt;</CODE></B>
+to define several template classes and supporting templates
+that simplify running a function, possibly in a separate thread, and retrieving
+its result. The <B><A NAME="result"></A>result</B> can be the value
+returned by the function or it can be an exception thrown during execution
+of the function and not caught inside the function.</P>
+
+<P>An <B><A NAME="asynchronous_provider"></A>asynchronous provider</B> stores
+the result of a function call. An
+<B><A NAME="asynchronous_return_object"></A>asynchronous return object</B>
+can be used to retrieve the result of a function call.
+An
+<B><A NAME="associated_asynchronous_state"></A>associated asynchronous state</B>
+provides communication between
+an asynchronous provider and one or more asynchronous return
+objects.
+A program does not directly create any associated asynchronous state objects; rather,
+the program creates an asynchronous provider whenever it needs one and from that
+creates an asynchronous return object that shares its associated asynchronous state with
+the provider. Asynchronous providers and asynchronous return objects manage the objects
+that hold their shared associated asynchronous state;
+when the last object that references
+the associated asynchronous state
+<B><A NAME="release"></A>releases</B> it,
+the object that holds the associated asynchronous state is destroyed.</P>
+
+<P>For an overview of the template classes defined in this header, see this
+<A HREF="futures.html">diagram</A>.</P>
+
+<P>An asynchronous provider or an asynchronous return object that has no
+associated asynchronous state is <B><A NAME="empty"></A>empty</B>.</P>
+
+<P>An associated asynchronous state is <B><A NAME="ready"></A>ready</B> only if
+its asynchronous provider has stored a return value or stored an exception.</P>
+
+<P>The template function <A HREF="#async">async</A> and
+the template classes <A HREF="#promise">promise</A> and
+<A HREF="#packaged_task">packaged_task</A>
+are asynchronous providers. The template classes
+<A HREF="#future">future</A>, and
+<A HREF="#shared_future">shared_future</A> describe
+asynchronous return objects.</P>
+
+<P>Each of the template classes <A HREF="#promise">promise</A>,
+<A HREF="#future">future</A>, and
+<A HREF="#shared_future">shared_future</A> has
+a <B><A NAME="specialization"></A>specialization</B> for the type <CODE>void</CODE> and
+a partial specialization for storing and retrieving a value
+by reference.
+These specializations differ from the primary template only in the
+signatures and semantics of the functions that store and retrieve the returned
+value.</P>
+
+<PRE>namespace std {
+        // ENUMERATION TYPES
+enum class <B><A HREF="#future_errc">future_errc</A></B> {
+    broken_promise,
+    future_already_retrieved,
+    promise_already_satisfied,
+    no_state
+};
+
+enum class <B><A HREF="#future_status">future_status</A></B> {
+    ready,
+    timeout,
+    deferred
+};
+
+enum class <B><A HREF="#launch">launch</A></B> {
+    async = 1,  // exposition only
+    deferred,
+    any = async | deferred  // implementation defined addition
+};
+
+        // ERROR HANDLING
+template&lt;&gt;
+    struct <B><A HREF="#is_error_code_enum">is_error_code_enum</A></B>&lt;future_errc&gt;
+        : public true_type { };
+error_code <B><A HREF="#make_error_code">make_error_code</A></B>(future_errc error) noexcept;
+error_condition <B><A HREF="#make_error_condition">make_error_condition</A></B>(future_errc error) noexcept;
+const error_category&amp; <B><A HREF="#future_category">future_category</A></B>() noexcept;
+class <B><A HREF="#future_error">future_error</A></B>;
+
+        // TEMPLATE CLASSES AND SPECIALIZATIONS
+template&lt;class Ty&gt;
+    class <B><A HREF="#promise">promise</A></B>;
+template&lt;class Ty&gt;
+    class <B><A HREF="#promise">promise</A></B>&lt;Ty&amp;&gt;;
+template&lt;&gt;
+    class <B><A HREF="#promise">promise</A></B>&lt;void&gt;;
+
+template&lt;class Ty&gt;
+    class <B><A HREF="#future">future</A></B>;
+template&lt;class Ty&gt;
+    class <B><A HREF="#future">future</A></B>&lt;Ty&amp;&gt;;
+template&lt;&gt;
+    class <B><A HREF="#future">future</A></B>&lt;void&gt;;
+
+template&lt;class Ty&gt;
+    class <B><A HREF="#shared_future">shared_future</A></B>;
+template&lt;class Ty&gt;
+    class <B><A HREF="#shared_future">shared_future</A></B>&lt;Ty&amp;&gt;;
+template&lt;&gt;
+    class <B><A HREF="#shared_future">shared_future</A></B>&lt;void&gt;;
+
+template&lt;class&gt;
+    class <B>packaged_task</B>; // not defined
+template&lt;class Ty, class... ArgTypes&gt;
+    class <B><A HREF="#packaged_task">packaged_task</A></B>&lt;Ty(ArgTypes)&gt;;
+
+        // TEMPLATE FUNCTIONS
+template&lt;class Fn, class... ArgTypes&gt;
+    future&lt;typename result_of&lt;Fn(ArgTypes...)&gt;::type&gt;;
+        <B><A HREF="#async">async</A></B>(Fn&amp;&amp; fn, ArgTypes&amp;&amp;... args);
+template&lt;class Fn, class... ArgTypes&gt;
+    future&lt;typename result_of&lt;Fn(ArgTypes...)&gt;::type&gt;;
+        <B><A HREF="#async">async</A></B>(launch policy, Fn&amp;&amp; fn, ArgTypes&amp;&amp;... args);
+
+template&lt;class Ty&gt;
+    void <B><A HREF="#swap">swap</A></B>(promise&lt;Ty&gt;&amp; left, promise&lt;Ty&gt;&amp; right) noexcept;
+template&lt;class Ty, class... ArgTypes&gt;
+    void <B><A HREF="#swap">swap</A></B>(packaged_task&lt;Ty(ArgTypes...)&gt;&amp; left,
+        packaged_task&lt;Ty(ArgTypes...)&gt;&amp; right) noexcept;
+
+        // HELPERS
+template&lt;class Ty, class Alloc&gt;
+    struct <B><A HREF="#uses_allocator">uses_allocator</A></B>&lt;promise&lt;Ty&gt;, Alloc&gt;;
+template&lt;class Ty, class Alloc&gt;
+    struct <B><A HREF="#uses_allocator">uses_allocator</A></B>&lt;packaged_task&lt;Ty&gt;, Alloc&gt;;
+}   // namespace std</PRE>
+
+<H2><CODE><A NAME="async"></A>async</CODE></H2>
+
+<PRE>template&lt;class Fn, class... ArgTypes&gt;
+    future&lt;typename result_of&lt;Fn(ArgTypes...)&gt;::type&gt;;
+        <B>async</B>(Fn&amp;&amp; fn, ArgTypes&amp;&amp;... args);
+template&lt;class Fn, class... ArgTypes&gt;
+    future&lt;typename result_of&lt;Fn(ArgTypes...)&gt;::type&gt;;
+        <B>async</B>(launch policy, Fn&amp;&amp; fn, ArgTypes&amp;&amp;... args);</PRE>
+
+<P>This discussion uses the following abbreviations:</P>
+
+<UL>
+<LI><B><CODE>dfn</CODE></B> -- the result of calling
+<CODE>decay_copy(forward&lt;Fn&gt;(fn))</CODE></LI>
+
+<LI><B><CODE>dargs</CODE></B> -- the results of the calls
+<CODE>decay_copy(forward&lt;ArgsTypes&gt;(args...))</CODE></LI>
+
+<LI><B><CODE>Ty</CODE></B> -- the type
+<CODE>result_of&lt;Fn(ArgTypes...)&gt;::type</CODE></LI>
+</UL>
+
+<P>Each template function is an
+<A HREF="#asynchronous_provider">asynchronous provider</A>.</P>
+
+<P>The first template function returns
+<CODE>async(launch::any, fn, args...)</CODE>.</P>
+
+<P>The second function returns an object of type <CODE>future&lt;Ty&gt;</CODE>
+whose
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+holds, in addition to the potential <A HREF="#result">result</A>, the values
+of <CODE>dfn</CODE> and <CODE>dargs</CODE> and a
+<A HREF="thread2.html#thread">thread</A> object to manage a separate thread of
+execution.</P>
+
+<P>Unless <CODE>decay&lt;Fn&gt;::type</CODE> is a type other than
+<CODE><A HREF="#launch">launch</A></CODE>,
+the second function
+does not participate in overload resolution.</P>
+
+<P>If <CODE>policy</CODE> is <CODE><A HREF="#launch">launch::any</A></CODE>,
+the function may choose <CODE>launch::async</CODE> or
+<CODE>launch::deferred</CODE>.
+In this implementation the function
+uses <CODE>launch::async</CODE>.</P>
+
+<P>If <CODE>policy</CODE> is <CODE><A HREF="#launch">launch::async</A></CODE>,
+the function creates a new thread that evaluates
+<CODE><A HREF="functio2.html#INVOKE">INVOKE</A>(dfn, dargs..., Ty)</CODE>.
+The function returns after creating the new thread, without waiting for
+any results. If the system cannot start a new thread, the function throws an
+exception object of type
+<CODE><A HREF="system_error.html#system_error">system_error</A></CODE>
+holding an error code of
+<CODE><A HREF="system_error.html#errc">resource_unavailable_try_again</A></CODE>.</P>
+
+<P>If <CODE>policy</CODE> is <CODE><A HREF="#launch">launch::deferred</A></CODE>,
+the function marks its associated asynchronous state as holding a
+<B><A NAME="deferred_function"></A>deferred function</B> and returns.
+The first call to any non-timed function that waits for the associated
+asynchronous state to be ready effectively calls the deferred function
+by evaluating
+<CODE><A HREF="functio2.html#INVOKE">INVOKE</A>(dfn, dargs..., Ty)</CODE>.</P>
+
+<P>In all cases, the <CODE>future</CODE> object's associated asynchronous
+state is not set to ready until the evaluation of
+<CODE><A HREF="functio2.html#INVOKE">INVOKE</A>(dfn, dargs..., Ty)</CODE>
+completes, either by throwing an exception or by returning normally. The
+associated asynchronous state's <A HREF="#result">result</A> then holds the
+exception if there was one, otherwise
+the value, if any, returned by the evaluation.</P>
+
+<H2><CODE><A NAME="future"></A>future</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#future__future">future</A>
+&middot; <A HREF="#future__get">get</A>
+&middot; <A HREF="#future__operator2">operator=</A>
+&middot; <A HREF="#future__share">share</A>
+&middot; <A HREF="#future__valid">valid</A>
+&middot; <A HREF="#future__wait">wait</A>
+&middot; <A HREF="#future__wait_for">wait_for</A>
+&middot; <A HREF="#future__wait_until">wait_until</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Ty&gt;
+    class <B>future</B> {
+public:
+    <B><A HREF="#future__future">future</A></B>() noexcept;
+    <B><A HREF="#future__future">future</A></B>(future&amp;&amp; right) noexcept;
+    <B>future</B>(const future&amp; right) = delete;
+
+    future&amp; <B><A HREF="#future__operator2">operator=</A></B>(future&amp;&amp; right);
+    future&amp; <B>operator=</B>(const future&amp; right) = delete;
+
+    <I>see below</I> <B><A HREF="#future__get">get</A></B>();
+    bool <B><A HREF="#future__valid">valid</A></B>() const noexcept;
+    shared_future&lt;Ty&gt; <B><A HREF="#future__share">share</A></B>();
+
+    void <B><A HREF="#future__wait">wait</A></B>() const;
+    template&lt;class Rep, class Period&gt;
+        future_status <B><A HREF="#future__wait_for">wait_for</A></B>(
+            const chrono::duration&lt;Rep, Period&gt;&amp; rel_time) const;
+    template&lt;class Clock, class Duration&gt;
+        future_status <B><A HREF="#future__wait_until">wait_until</A></B>(
+            const chrono::time_point&lt;Clock, Duration&gt;&amp; abs_time) const;
+};</PRE>
+
+<P>The template class describes an
+<A HREF="#asynchronous_return_object">asynchronous
+return object</A>. Every standard
+<A HREF="#asynchronous_provider">asynchronous provider</A>
+returns an object whose type is an instantiation of this template.
+A <CODE>future</CODE> object provides the only access to the asynchronous
+provider that it is associated with. If you need multiple asynchronous
+return objects that are associated with the same asynchronous provider,
+copy the <CODE>future</CODE> object to a <CODE>shared_future</CODE>
+object.</P>
+
+<P>When
+a <CODE>future</CODE> object is copied, its association with the
+asynchronous provider is transferred to the target object, leaving the
+original object <A HREF="#empty">empty</A>.</P>
+
+<P>Do not call any member functions other than <CODE>valid</CODE>,
+<CODE>operator=</CODE>,
+and the destructor on a <CODE>future</CODE> object that is
+<A HREF="#empty">empty</A>.</P>
+
+<P>Objects of type <CODE>future</CODE> are not synchronized. Calling member
+functions on the same object from multiple threads introduces a data race,
+with unpredictable results.</P>
+
+<H3><CODE><A NAME="future__future"></A>future</CODE></H3>
+
+<PRE><B>future</B>() noexcept;
+<B>future</B>(future&amp;&amp; right) noexcept;</PRE>
+
+<P>The first constructor constructs an <A HREF="#empty">empty</A>
+<CODE>future</CODE> object. The second constructor constructs a
+<CODE>future</CODE>
+object and transfers the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+associated with <CODE>right</CODE> to the newly constructed object, leaving
+<CODE>right</CODE> <A HREF="#empty">empty</A>.</P>
+
+<H3><CODE><A NAME="future__get"></A>future::get</CODE></H3>
+
+<PRE>Ty future::<B>get</B>();
+Ty&amp; future&lt;Ty&amp;&gt;::<B>get</B>();
+void future&lt;void&gt;::<B>get</B>();</PRE>
+
+<P>The member function blocks until the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+associated with this object is <A HREF="#ready">ready</A> then retrieves
+the <A HREF="#result">result</A> stored in the associated asynchronous state.
+If the stored result is an exception, the function rethrows the exception.
+Otherwise, it returns the stored value.</P>
+
+<P>For the partial <A HREF="#specialization">specialization</A>
+<CODE>future&lt;Ty&amp;&gt;</CODE>, the stored value is effectively a
+reference to the object that was passed to the
+<A HREF="#asynchronous_provider">asynchronous provider</A>
+as the return value.</P>
+
+<P>For the <A HREF="#specialization">specialization</A>
+<CODE>future&lt;void&gt;</CODE>
+there is no stored value and the member function returns
+<CODE>void</CODE>.</P>
+
+<P>Otherwise the function moves its return value from the stored value.
+Thus, it should be called only once.</P>
+
+<H3><CODE><A NAME="future__operator2"></A>future::operator=</CODE></H3>
+
+<PRE>future&amp; <B>operator=</B>(future&amp;&amp; right) noexcept;</PRE>
+
+<P>The operator transfers the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+associated with <CODE>right</CODE> to this object, leaving <CODE>right</CODE>
+<A HREF="#empty">empty</A>.
+The operator returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="future__share"></A>future::share</CODE></H3>
+
+<PRE>shared_future&lt;Ty&gt; <B>share</B>();</PRE>
+
+<P>The member function returns
+<CODE><A HREF="#shared_future">shared_future</A>(move(*this))</CODE>.</P>
+
+<H3><CODE><A NAME="future__valid"></A>future::valid</CODE></H3>
+
+<PRE>bool <B>valid</B>() noexcept;</PRE>
+
+<P>The member function returns <CODE>true</CODE> only if this object is not
+<A HREF="#empty">empty</A>.</P>
+
+<H3><CODE><A NAME="future__wait"></A>future::wait</CODE></H3>
+
+<PRE>void <B>wait</B>() const;</PRE>
+
+<P>The member function blocks until the object's
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A> is
+<A HREF="#ready">ready</A>.</P>
+
+<H3><CODE><A NAME="future__wait_for"></A>future::wait_for</CODE></H3>
+
+<PRE>template&lt;class Rep, class Period&gt;
+    future_status <B>wait_for</B>(
+        const chrono::duration&lt;Rep, Period&gt;&amp; rel_time) const;</PRE>
+
+<P>The member function blocks until the object's
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A> is
+<A HREF="#ready">ready</A> or until <CODE>rel_time</CODE> has elapsed.</P>
+
+<P>The member function returns a value
+of type <CODE><A HREF="#future_status">future_status</A></CODE>
+that indicates the reason for returning.</P>
+
+<H3><CODE><A NAME="future__wait_until"></A>future::wait_until</CODE></H3>
+
+<PRE>template&lt;class Clock, class Duration&gt;
+    future_status <B>wait_until</B>(
+        const chrono::time_point&lt;Clock, Duration&gt;&amp; abs_time) const;</PRE>
+
+<P>The member function blocks until the object's
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A> is
+<A HREF="#ready">ready</A> or until the current time is later than <CODE>abs_time</CODE>.</P>
+
+<P>The member function returns a value
+of type <CODE><A HREF="#future_status">future_status</A></CODE>
+that indicates the reason for returning.</P>
+
+<H2><CODE><A NAME="future_category"></A>future_category</CODE></H2>
+
+<PRE>const error_category&amp; <B>future_category</B>() noexcept;</PRE>
+
+<P>The function returns a reference to the
+<A HREF="system_error.html#error_category">error_category</A> object
+that characterizes errors arising from futures.</P>
+
+<H2><CODE><A NAME="future_errc"></A>future_errc</CODE></H2>
+
+<PRE>enum class <B>future_errc</B> {
+    broken_promise,
+    future_already_retrieved,
+    promise_already_satisfied,
+    no_state
+};</PRE>
+
+
+<P>The scoped enumeration supplies symbolic names for all the errors reported
+by the exception <CODE><A HREF="#future_error">future_error</A></CODE>.</P>
+
+<H2><CODE><A NAME="future_error"></A>future_error</CODE></H2>
+
+<PRE>class <B>future_error</B>
+    : public <A HREF="stdexcep.html#logic_error">logic_error</A> {
+public:
+    future_error(error_code code);
+    const error_code&amp; code() const noexcept;
+    const char *what() const throw();
+};</PRE>
+
+<P>The class describes an exception object that can be thrown by various member functions
+of types that manage futures.</P>
+
+<H2><CODE><A NAME="future_status"></A>future_status</CODE></H2>
+
+<PRE>enum class <B>future_status</B> {
+    ready,
+    timeout,
+    deferred
+};</PRE>
+
+
+<P>The scoped enumeration supplies symbolic names for the reasons for a timed wait function
+to return:</P>
+
+<UL>
+<LI><CODE>future_status::ready</CODE> if the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+is <A HREF="#ready">ready</A>,</LI>
+
+<LI><CODE>future_status::timedout</CODE> if the time limit was reached, or</LI>
+
+<LI><CODE>future_status::deferred</CODE> if the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+holds a <A HREF="#deferred_function">deferred function</A> function that is not running.</LI>
+</UL>
+
+<H2><CODE><A NAME="is_error_code_enum"></A>is_error_code_enum</CODE></H2>
+
+<PRE>template&lt;&gt; <B>is_error_code_enum</B>&lt;future_errc&gt;
+    : public true_type { };</PRE>
+
+<P>The specialization of the
+<A HREF="typetrait.html#type_predicate">type predicate</A>
+always <A HREF="typetrait.html#holds_true">holds true</A>, indicating that
+<CODE>future_errc</CODE> is an enumeration suitable for storing in an object
+of type <A HREF="system_error.html#error_code">error_code</A>.</P>
+
+<H2><CODE><A NAME="launch"></A>launch</CODE></H2>
+
+<PRE>enum class <B>launch</B> {
+    async = 1,  // exposition only
+    deferred,
+    any = async | deferred  // implementation defined addition
+};</PRE>
+
+<P>The type is a <A HREF="lib_cpp.html#bitmask_type">bitmask type</A>
+that describes the possible modes for
+the template function <A HREF="#async">async</A>.</P>
+
+<H2><CODE><A NAME="make_error_code"></A>make_error_code</CODE></H2>
+
+<PRE>error_code <B>make_error_code</B>(future_errc error) noexcept;</PRE>
+
+<P>The function returns
+<CODE><A HREF="system_error.html#error_code">error_code</A>(static_cast&lt;int&gt;(e),
+<A HREF="#future_category">future_category</A>())</CODE>.</P>
+
+<H2><CODE><A NAME="make_error_condition"></A>make_error_condition</CODE></H2>
+
+<PRE>error_condition <B>make_error_condition</B>(future_errc error) noexcept;</PRE>
+
+<P>The function returns
+<CODE><A HREF="system_error.html#error_condition">error_condition</A>(static_cast&lt;int&gt;(e),
+<A HREF="#future_category">future_category</A>())</CODE>.</P>
+
+<H2><CODE><A NAME="packaged_task"></A>packaged_task</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#packaged_task__get_future">get_future</A>
+&middot; <A HREF="#packaged_task__operator2">operator=</A>
+&middot; <A HREF="#packaged_task__operator()">operator()</A>
+&middot; <A HREF="#packaged_task__make_ready_at_thread_exit">make_ready_at_thread_exit</A>
+&middot; <A HREF="#packaged_task__operator_bool">operator bool</A>
+&middot; <A HREF="#packaged_task__packaged_task">packaged_task</A>
+&middot; <A HREF="#packaged_task__~packaged_task">~packaged_task</A>
+&middot; <A HREF="#packaged_task__reset">reset</A>
+&middot; <A HREF="#packaged_task__swap">swap</A>
+&middot; <A HREF="#packaged_task__valid">valid</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class&gt;
+    class <B>packaged_task</B>;    // not defined
+
+template&lt;class Ty, class... ArgTypes&gt;
+    class <B>packaged_task</B>&lt;Ty(ArgTypes...)&gt; {
+public:
+    <B><A HREF="#packaged_task__packaged_task">packaged_task</A></B>() noexcept;
+    <B><A HREF="#packaged_task__packaged_task">packaged_task</A></B>(packaged_task&amp;&amp; right) noexcept;
+    template&lt;class Fn&gt;
+        explicit <B><A HREF="#packaged_task__packaged_task">packaged_task</A></B>(Fn&amp;&amp; fn);
+    template&lt;class Fn, class Alloc&gt;
+        explicit <B><A HREF="#packaged_task__packaged_task">packaged_task</A></B>(allocator_arg_t,
+            const Alloc&amp; alloc, Fn&amp;&amp; fn);
+    <B><A HREF="#packaged_task__~packaged_task">~packaged_task</A></B>();
+    <B>packaged_task</B>(packaged_task&amp;) = delete;
+
+    packaged_task&amp; <B><A HREF="#packaged_task__operator2">operator=</A></B>(packaged_task&amp;&amp; right);
+    packaged_task&amp; <B>operator=</B>(packaged_task&amp;) = delete;
+    void <B><A HREF="#packaged_task__swap">swap</A></B>(packaged_task&amp; right) noexcept;
+
+    explicit <B><A HREF="#packaged_task__operator_bool">operator bool</A></B>() const noexcept; <B>[removed in final C++11, not recommended]</B>
+    bool <B><A HREF="#packaged_task__valid">valid</A></B>() const;
+
+    future&lt;Ty&gt; <B><A HREF="#packaged_task__get_future">get_future</A></B>();
+
+    void <B><A HREF="#packaged_task__operator()">operator()</A></B>(ArgTypes...);
+    void <B><A HREF="#packaged_task__make_ready_at_thread_exit">make_ready_at_thread_exit</A></B>(ArgTypes...);
+
+    void <B><A HREF="#packaged_task__reset">reset</A></B>();
+};</PRE>
+
+<P>The template class describes an <A HREF="#asynchronous_provider">asynchronous provider</A>
+that is a <A HREF="functio2.html#call_wrapper">call wrapper</A> whose
+<A HREF="functio2.html#call_signature">call signature</A> is <CODE>Ty(ArgTypes...)</CODE>.
+Its <A HREF="#associated_asynchronous_state">associated asynchronous state</A> holds
+a copy of its callable object in addition to the potential <A HREF="#result">result</A>.
+</P>
+
+<H3><CODE><A NAME="packaged_task__get_future"></A>packaged_task::get_future</CODE></H3>
+
+<PRE>future&lt;Ty&gt; <B>get_future</B>();</PRE>
+
+<P>If this object is <A HREF="#empty">empty</A>, the member function throws an
+exception object of type
+<CODE><A HREF="#future_error">future_error</A></CODE> holding an
+error code of <CODE><A HREF="#future_errc">no_state</A></CODE>.</P>
+
+<P>Otherwise, if the member function has already been called for a
+<CODE>packaged_task</CODE> object with the same
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+as this object, the member function throws an
+exception object of type
+<CODE><A HREF="#future_error">future_error</A></CODE> holding an
+error code of <CODE><A HREF="#future_errc">future_already_retrieved</A></CODE>.</P>
+
+<P>Otherwise, the member function returns an object of type
+<CODE>future&lt;Ty&gt;</CODE>
+that shares this object's
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>.</P>
+
+<H3><CODE><A NAME="packaged_task__make_ready_at_thread_exit"></A>packaged_task::make_ready_at_thread_exit</CODE></H3>
+
+<PRE>void <B>make_ready_at_thread_exit</B>(ArgTypes... args);</PRE>
+
+<P>The member function behaves the same as
+<CODE><A HREF="#packaged_task__operator()">operator()</A>(args...)</CODE>,
+except that the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+is not set to <A HREF="#ready">ready</A>
+until after all thread-local objects in the calling thread have been
+destroyed.
+Thus, threads blocked on the associated asynchronous state will typically
+not be unblocked until the calling thread exits.</P>
+
+<H3><CODE><A NAME="packaged_task__operator2"></A>packaged_task::operator=</CODE></H3>
+
+<PRE>packaged_task&amp; <B>operator=</B>(packaged_task&amp;&amp; right);</PRE>
+
+<P>The operator transfers the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A> from
+<CODE>right</CODE> to this object, leaving <CODE>right</CODE>
+<A HREF="#empty">empty</A>. The operator returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="packaged_task__operator()"></A>packaged_task::operator()</CODE></H3>
+
+<PRE>void <B>operator()</B>(ArgTypes... args);</PRE>
+
+<P>If this object is <A HREF="#empty">empty</A>, the member function throws an
+exception object of type
+<CODE><A HREF="#future_error">future_error</A></CODE> holding an
+error code of <CODE><A HREF="#future_errc">no_state</A></CODE>.</P>
+
+<P>Otherwise, if either of the member functions
+<CODE>operator()</CODE> or <CODE>make_ready_at_thread_exit</CODE> has already
+been called for this object, the member function throws an
+exception object of type
+<CODE><A HREF="#future_error">future_error</A></CODE> holding an
+error code of <CODE><A HREF="#future_errc">promise_already_satisfied</A></CODE>.</P>
+
+<P>Otherwise, the operator calls
+<CODE><A HREF="functio2.html#INVOKE">INVOKE</A>(fn, args..., Ty)</CODE>,
+where <CODE>fn</CODE> is the callable object stored in this object's
+associated asynchronous state, and
+atomically stores the returned value, if any, as the returned <A HREF="#result">result</A>
+of this object's associated asynchronous state and sets that state to
+<A HREF="#ready">ready</A>. As a result, any threads blocked on the associated asynchronous
+state become unblocked.</P>
+
+<H3><CODE><A NAME="packaged_task__operator_bool"></A>packaged_task::operator bool</CODE></H3>
+
+<PRE><B>operator bool</B>() const noexcept;</PRE>
+
+<P>The operator returns <CODE>true</CODE> only if this object is not
+<A HREF="#empty">empty</A>.</P>
+
+<H3><CODE><A NAME="packaged_task__packaged_task"></A>packaged_task::packaged_task</CODE></H3>
+
+<PRE><B>packaged_task</B>() noexcept;
+<B>packaged_task</B>(packaged_task&amp;&amp; right) noexcept;
+template&lt;class Fn&gt;
+    explicit <B>packaged_task</B>(Fn&amp;&amp; fn);
+template&lt;class Fn, class Alloc&gt;
+    explicit <B>packaged_task</B>(allocator_arg_t,
+        const Alloc&amp; alloc, Fn&amp;&amp; fn);</PRE>
+
+<P>The first constructor constructs an <A HREF="#empty">empty</A>
+<CODE>packaged_task</CODE> object. The second
+constructor constructs a <CODE>packaged_task</CODE> object and transfers the associated
+asynchronous state associated with <CODE>right</CODE> to the newly constructed object, leaving
+<CODE>right</CODE> <A HREF="#empty">empty</A>.
+The third constructor constructs
+a <CODE>packaged_task</CODE> object with a copy of <CODE>fn</CODE> stored in its
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>.
+The fourth constructor constructs a
+<CODE>packaged_task</CODE> object with a copy of <CODE>fn</CODE> stored in its
+associated asynchronous state, using
+<CODE>alloc</CODE> for any memory allocations that are needed.</P>
+
+<H3><CODE><A NAME="packaged_task__~packaged_task"></A>packaged_task::~packaged_task</CODE></H3>
+
+<PRE><B>~packaged_task</B>();</PRE>
+
+<P>If this object's <A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+is not <A HREF="#ready">ready</A>, the destructor stores an exception of type
+<CODE><A HREF="#future_error">future_error</A></CODE> with an error code of
+<CODE><A HREF="#future_errc">broken_promise</A></CODE> as the
+<A HREF="#result">result</A> in the associated asynchronous state.
+As a result, any threads blocked on the associated asynchronous
+state become unblocked.</P>
+
+<H3><CODE><A NAME="packaged_task__reset"></A>packaged_task::reset</CODE></H3>
+
+<PRE>void <B>reset</B>();</PRE>
+
+<P>Replaces this object's
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+with a new associated asynchronous state, as if by
+<CODE>*this = packaged_task(move(fn))</CODE>, where <CODE>fn</CODE> is the
+function object stored in this object's associated asynchronous state. Thus, this
+object's state is cleared, and <A HREF="#packaged_task__get_future">get_future</A>,
+<A HREF="#packaged_task__operator()">operator()</A>, and
+<A HREF="#packaged_task__make_ready_at_thread_exit">make_ready_at_thread_exit</A>
+can be called as if on a newly constructed object.</P>
+
+<H3><CODE><A NAME="packaged_task__swap"></A>packaged_task::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(packaged_task&amp; right) noexcept;</PRE>
+
+<P>The member function exchanges the
+<A HREF="#associated_asynchronous_state">associated asynchronous states</A> of this object
+and <CODE>right</CODE>.</P>
+
+<H3><CODE><A NAME="packaged_task__valid"></A>packaged_task::valid</CODE></H3>
+
+<PRE>bool <B>valid</B>() const;</PRE>
+
+<P>The member function returns <CODE>true</CODE> only if this object is not
+<A HREF="#empty">empty</A>.</P>
+
+<H2><CODE><A NAME="promise"></A>promise</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#promise__get_future">get_future</A>
+&middot; <A HREF="#promise__operator2">operator=</A>
+&middot; <A HREF="#promise__promise">promise</A>
+&middot; <A HREF="#promise__set_exception">set_exception</A>
+&middot; <A HREF="#promise__set_exception_at_thread_exit">set_exception_at_thread_exit</A>
+&middot; <A HREF="#promise__set_value">set_value</A>
+&middot; <A HREF="#promise__set_value_at_thread_exit">set_value_at_thread_exit</A>
+&middot; <A HREF="#promise__swap">swap</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Ty&gt;
+    class <B>promise</B> {
+public:
+    <B><A HREF="#promise__promise">promise</A></B>() noexcept;
+    template&lt;class Alloc&gt;
+        <B><A HREF="#promise__promise">promise</A></B>(allocator_arg_t, const Alloc&amp; alloc);
+    <B><A HREF="#promise__promise">promise</A></B>(promise&amp;&amp; right);
+    promise(const promise&amp; right) = delete;
+
+    promise&amp; <B><A HREF="#promise__operator2">operator=</A></B>(promise&amp;&amp; right) noexcept;
+    promise&amp; <B>operator=</B>(promise&amp; right) = delete;
+    void <B><A HREF="#promise__swap">swap</A></B>(promise&amp; right) noexcept;
+
+    future&lt;Ty&gt; <B><A HREF="#promise__get_future">get_future</A></B>();
+
+    void <B><A HREF="#promise__set_value">set_value</A></B>(<I>see below</I>);
+    void <B><A HREF="#promise__set_exception">set_exception</A></B>(exception_ptr exc);
+
+    void <B><A HREF="#promise__set_value_at_thread_exit">set_value_at_thread_exit</A></B>(<I>see below</I>);
+    void <B><A HREF="#promise__set_exception_at_thread_exit">set_exception_at_thread_exit</A></B>(exception_ptr exc);
+};</PRE>
+
+<P>The template class describes an <A HREF="#asynchronous_provider">asynchronous provider</A>.
+It has member functions to set its <A HREF="#result">result</A>.
+It also has a member
+function that returns a <A HREF="#future">future</A> object that shares its
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>.
+This member function can be called only once; subsequent calls throw an exception.
+This guarantee, in conjunction with the move-only semantics of the class template
+<A HREF="#future">future</A>, ensures that no more than one <CODE>future</CODE> object
+can be associated with any one <CODE>promise</CODE> object.</P>
+
+<H3><CODE><A NAME="promise__get_future"></A>promise::get_future</CODE></H3>
+
+<PRE>future&lt;Ty&gt; <B>get_future</B>();</PRE>
+
+<P>If this object is <A HREF="#empty">empty</A>, the member function throws an
+exception object of type
+<CODE><A HREF="#future_error">future_error</A></CODE> holding an
+error code of <CODE><A HREF="#future_errc">no_state</A></CODE>.</P>
+
+<P>Otherwise, if the member function has already been called for a <CODE>promise</CODE> object with
+the same
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+as this object, the member function throws an
+exception object of type
+<CODE><A HREF="#future_error">future_error</A></CODE> holding an
+error code of
+<CODE><A HREF="#future_errc">future_already_retrieved</A></CODE>.</P>
+
+<P>Otherwise, the member function returns an object of type <CODE>future&lt;Ty&gt;</CODE>
+that shares this object's
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>.</P>
+
+<H3><CODE><A NAME="promise__operator2"></A>promise::operator=</CODE></H3>
+
+<PRE>promise&amp; <B>operator=</B>(promise&amp;&amp; right) noexcept;</PRE>
+
+<P>The operator transfers the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+associated with <CODE>right</CODE> to this object, leaving <CODE>right</CODE>
+<A HREF="#empty">empty</A>. The operator returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="promise__promise"></A>promise::promise</CODE></H3>
+
+<PRE><B>promise</B>();
+template&lt;class Alloc&gt;
+    <B>promise</B>(allocator_arg_t, const Alloc&amp; alloc);
+<B>promise</B>(promise&amp;&amp; right) noexcept;</PRE>
+
+<P>The first constructor constructs an <A HREF="#empty">empty</A> <CODE>promise</CODE> object.
+The second constructor constructs an <A HREF="#empty">empty</A> <CODE>promise</CODE> object,
+using <CODE>alloc</CODE> for any memory allocations that it needs.
+The third constructor constructs a <CODE>promise</CODE> object and transfers the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+associated with <CODE>right</CODE> to the newly constructed object, leaving <CODE>right</CODE>
+<A HREF="#empty">empty</A>.</P>
+
+<H3><CODE><A NAME="promise__set_exception"></A>promise::set_exception</CODE></H3>
+
+<PRE>void <B>set_exception</B>(exception_ptr exc);</PRE>
+
+<P>If this object is <A HREF="#empty">empty</A>, the member function throws an
+exception object of type
+<CODE><A HREF="#future_error">future_error</A></CODE> holding an
+error code of <CODE><A HREF="#future_errc">no_state</A></CODE>.</P>
+
+<P>Otherwise, if any of the member functions
+<CODE>set_exception</CODE>, <CODE>set_exception_at_thread_exit</CODE>,
+<CODE>set_value</CODE>, or <CODE>set_value_at_thread_exit</CODE> has already
+been called for a <CODE>promise</CODE> object with the same
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+as this object, the member function throws an
+exception object of type
+<CODE><A HREF="#future_error">future_error</A></CODE> holding an
+error code of <CODE><A HREF="#future_errc">promise_already_satisfied</A></CODE>.</P>
+
+<P>Otherwise, the member function atomically stores <CODE>exc</CODE> as the exception
+<A HREF="#result">result</A> of this <CODE>promise</CODE> object and sets the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+associated with this <CODE>promise</CODE> object to <A HREF="#ready">ready</A>.
+As a result, any threads blocked on the associated asynchronous state become
+unblocked.</P>
+
+<H3><CODE><A NAME="promise__set_exception_at_thread_exit"></A>promise::set_exception_at_thread_exit</CODE></H3>
+
+<PRE>void <B>set_exception_at_thread_exit</B>(exception_ptr exc);</PRE>
+
+<P>The member function behaves the same as
+<A HREF="#promise__set_exception">set_exception</A>,
+except that the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+is not set to <A HREF="#ready">ready</A>
+until after all thread-local objects in the current thread have been destroyed.
+Thus, threads blocked on the associated asynchronous state will typically
+not be unblocked until the current thread exits.</P>
+
+<H3><CODE><A NAME="promise__set_value"></A>promise::set_value</CODE></H3>
+
+<PRE>void <B>promise::set_value</B>(const Ty&amp; value);
+void <B>promise::set_value</B>(Ty&amp;&amp; value);
+void <B>promise&lt;Ty&amp;&gt;::set_value</B>(Ty&amp; value);
+void <B>promise&lt;void&gt;::set_value</B>();</PRE>
+
+<P>If this object is <A HREF="#empty">empty</A>, the member functions throw an
+exception object of type
+<CODE><A HREF="#future_error">future_error</A></CODE> holding an
+error code of <CODE><A HREF="#future_errc">no_state</A></CODE>.</P>
+
+<P>Otherwise, if any of the member functions
+<CODE>set_exception</CODE>, <CODE>set_exception_at_thread_exit</CODE>,
+<CODE>set_value</CODE>, or <CODE>set_value_at_thread_exit</CODE> has already
+been called for a <CODE>promise</CODE> object with the same
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+as this object, the member functions throw an
+exception object of type
+<CODE><A HREF="#future_error">future_error</A></CODE> holding an
+error code of <CODE><A HREF="#future_errc">promise_already_satisfied</A></CODE>.</P>
+
+<P>Otherwise, the member functions atomically store <CODE>value</CODE> as the returned
+<A HREF="#result">result</A> of this <CODE>promise</CODE> object and set the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+associated with this <CODE>promise</CODE> object to <A HREF="#ready">ready</A>.
+As a result, any threads blocked on the associated asynchronous state become
+unblocked.</P>
+
+<P>The first function also throws any exception thrown when <CODE>value</CODE> is copied
+into the associated asynchronous state. If this occurs, the associated asynchronous state
+is not marked as ready.</P>
+
+<P>The second function also throws any exception thrown when <CODE>value</CODE> is moved
+into the associated asynchronous state. If this occurs, the associated asynchronous state
+is not marked as ready.</P>
+
+<P>For the partial <A HREF="#specialization">specialization</A>
+<CODE>promise&lt;Ty&amp;&gt;</CODE>,
+the stored value is effectively a reference to the object that was passed to the
+<CODE>set_value</CODE>.</P>
+
+<P>For the <A HREF="#specialization">specialization</A> <CODE>promise&lt;void&gt;</CODE>
+there is no stored value.</P>
+
+<H3><CODE><A NAME="promise__set_value_at_thread_exit"></A>promise::set_value_at_thread_exit</CODE></H3>
+
+<PRE>void <B>promise::set_value_at_thread_exit</B>(const Ty&amp; value);
+void <B>promise::set_value_at_thread_exit</B>(Ty&amp;&amp; value);
+void <B>promise&lt;Ty&amp;&gt;::set_value_at_thread_exit</B>(Ty&amp; value);
+void <B>promise&lt;void&gt;::set_value_at_thread_exit</B>();</PRE>
+
+<P>The member functions each behaves the same as
+<A HREF="#promise__set_value">set_value</A> with the same argument list,
+except that the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+is not set to <A HREF="#ready">ready</A>
+until after all thread-local objects in the current thread have been destroyed.
+Thus, threads blocked on the associated asynchronous state will typically
+not be unblocked until the current thread exits.</P>
+
+<H3><CODE><A NAME="promise__swap"></A>promise::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(promise&amp; right) noexcept;</PRE>
+
+<P>The member function exchanges the
+<A HREF="#associated_asynchronous_state">associated asynchronous states</A> of this object
+and <CODE>right</CODE>.</P>
+
+<H2><CODE><A NAME="shared_future"></A>shared_future</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#shared_future__get">get</A>
+&middot; <A HREF="#shared_future__operator2">operator=</A>
+&middot; <A HREF="#shared_future__shared_future">shared_future</A>
+&middot; <A HREF="#shared_future__valid">valid</A>
+&middot; <A HREF="#shared_future__wait">wait</A>
+&middot; <A HREF="#shared_future__wait_for">wait_for</A>
+&middot; <A HREF="#shared_future__wait_until">wait_until</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Ty&gt;
+    class <B>shared_future</B> {
+public:
+    <B><A HREF="#shared_future__shared_future">shared_future</A></B>() noexcept;
+    <B><A HREF="#shared_future__shared_future">shared_future</A></B>(future&lt;Ty&gt;&amp;&amp; right);
+    <B><A HREF="#shared_future__shared_future">shared_future</A></B>(shared_future&amp;&amp; right) noexcept;
+    <B><A HREF="#shared_future__shared_future">shared_future</A></B>(const shared_future&amp; right);
+
+    shared_future&amp; <B><A HREF="#shared_future__operator2">operator=</A></B>(shared_future&amp;&amp; right) noexcept;
+    shared_future&amp; <B><A HREF="#shared_future__operator2">operator=</A></B>(const shared_future&amp; right);
+
+    <I>see below</I> <B><A HREF="#shared_future__get">get</A></B>();
+    bool <B><A HREF="#shared_future__valid">valid</A></B>() const noexcept;
+
+    void <B><A HREF="#shared_future__wait">wait</A></B>() const;
+    template&lt;class Rep, class Period&gt;
+        future_status <B><A HREF="#shared_future__wait_for">wait_for</A></B>(
+            const chrono::duration&lt;Rep, Period&gt;&amp; rel_time) const;
+    template&lt;class Clock, class Duration&gt;
+        future_status <B><A HREF="#shared_future__wait_until">wait_until</A></B>(
+            const chrono::time_point&lt;Clock, Duration&gt;&amp; abs_time) const;
+};</PRE>
+
+<P>The template class describes an <A HREF="#asynchronous_return_object">asynchronous
+return object</A>. An <A HREF="#asynchronous_provider">asynchronous provider</A>
+can be associated with any number of <CODE>shared_future</CODE> objects.</P>
+
+<P>Do not call any member functions other than <CODE>valid</CODE>, <CODE>operator=</CODE>,
+and the destructor on a <CODE>shared_future</CODE> object that is <A HREF="#empty">empty</A>.</P>
+
+<P>Objects of type <CODE>shared_future</CODE> are not synchronized. Calling
+member functions on the same object from multiple threads introduces a data
+race, with unpredictable results.</P>
+
+<H3><CODE><A NAME="shared_future__get"></A>shared_future::get</CODE></H3>
+
+<PRE>const Ty&amp; shared_future::<B>get</B>();
+Ty&amp; shared_future&lt;Ty&amp;&gt;::<B>get</B>();
+void shared_future&lt;void&gt;::<B>get</B>();</PRE>
+
+<P>Each of the functions blocks until the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+associated with this object is <A HREF="#ready">ready</A> then retrieves
+the <A HREF="#result">result</A> stored in the associated asynchronous state.
+If the stored result is an exception, the function rethrows the exception. Otherwise,
+it returns the stored value.
+</P>
+
+<P>For the partial <A HREF="#specialization">specialization</A>
+<CODE>shared_future&lt;Ty&amp;&gt;</CODE>,
+the stored value is effectively a reference to the object that was passed to the
+<A HREF="#asynchronous_provider">asynchronous provider</A> as the return value.</P>
+
+<P>For the <A HREF="#specialization">specialization</A> <CODE>shared_future&lt;void&gt;</CODE>
+there is no stored value and the member function returns <CODE>void</CODE>.</P>
+
+<H3><CODE><A NAME="shared_future__operator2"></A>shared_future::operator=</CODE></H3>
+
+<PRE>shared_future&amp; <B>operator=</B>(shared_future&amp;&amp; right) noexcept;
+shared_future&amp; <B>operator=</B>(const shared_future&amp; right);</PRE>
+
+<P>The first operator transfers the
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+associated with <CODE>right</CODE> to this object, leaving <CODE>right</CODE>
+<A HREF="#empty">empty</A>.
+The second operator gives this object the same
+associated asynchronous state as <CODE>right</CODE>.
+The operators return <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="shared_future__shared_future"></A>shared_future::shared_future</CODE></H3>
+
+<PRE><B>shared_future</B>() noexcept;
+<B>shared_future</B>(future&lt;Ty&gt;&amp;&amp; right) noexcept;
+<B>shared_future</B>(shared_future&amp;&amp; right) noexcept;
+<B>shared_future</B>(const shared_future&amp; right);</PRE>
+
+<P>The first constructor constructs an <A HREF="#empty">empty</A>
+<CODE>shared_future</CODE> object.
+The second and third constructors construct a <CODE>shared_future</CODE>
+object and transfer the <A HREF="#associated_asynchronous_state">associated asynchronous state</A>
+associated with <CODE>right</CODE> to the newly constructed object, leaving <CODE>right</CODE>
+<A HREF="#empty">empty</A>.
+The fourth constructor constructs a <CODE>shared_future</CODE> object with the same
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A> as
+<CODE>right</CODE>.
+</P>
+
+<H3><CODE><A NAME="shared_future__valid"></A>shared_future::valid</CODE></H3>
+
+<PRE>bool <B>valid</B>() noexcept;</PRE>
+
+<P>The member function returns <CODE>true</CODE> only if this object is not
+<A HREF="#empty">empty</A>.</P>
+
+<H3><CODE><A NAME="shared_future__wait"></A>shared_future::wait</CODE></H3>
+
+<PRE>void <B>wait</B>() const;</PRE>
+
+<P>The member function blocks until the object's
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A> is
+<A HREF="#ready">ready</A>.</P>
+
+<H3><CODE><A NAME="shared_future__wait_for"></A>shared_future::wait_for</CODE></H3>
+
+<PRE>template&lt;class Rep, class Period&gt;
+    future_status <B>wait_for</B>(
+        const chrono::duration&lt;Rep, Period&gt;&amp; rel_time) const;</PRE>
+
+<P>The member function blocks until the object's
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A> is
+<A HREF="#ready">ready</A> or until <CODE>rel_time</CODE> has elapsed.</P>
+
+<P>The member function returns a value
+of type <CODE><A HREF="#future_status">future_status</A></CODE>
+that indicates the reason for returning.</P>
+
+<H3><CODE><A NAME="shared_future__wait_until"></A>shared_future::wait_until</CODE></H3>
+
+<PRE>template&lt;class Clock, class Duration&gt;
+    future_status <B>wait_until</B>(
+        const chrono::time_point&lt;Clock, Duration&gt;&amp; abs_time) const;</PRE>
+
+<P>The member function blocks until the object's
+<A HREF="#associated_asynchronous_state">associated asynchronous state</A> is
+<A HREF="#ready">ready</A> or until the current time is later than <CODE>abs_time</CODE>.</P>
+
+<P>The member function returns a value
+of type <CODE><A HREF="#future_status">future_status</A></CODE>
+that indicates the reason for returning.</P>
+
+<H2><CODE><A NAME="swap"></A>swap</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    void <B>swap</B>(promise&lt;Ty&gt;&amp; left, promise&lt;Ty&gt;&amp; right) noexcept;
+template&lt;class Ty, class... ArgTypes&gt;
+    void <B>swap</B>(packaged_task&lt;Ty(ArgTypes...)&gt;&amp; left,
+        packaged_task&lt;Ty(ArgTypes...)&gt;&amp; right) noexcept;</PRE>
+
+<P>Each template function calls <CODE>x.swap(y)</CODE>.</P>
+
+<H2><CODE><A NAME="uses_allocator"></A>uses_allocator</CODE></H2>
+
+<PRE>template&lt;class Ty, class Alloc&gt;
+    struct <B>uses_allocator</B>&lt;promise&lt;Ty&gt;, Alloc&gt;
+        : public true_type { };
+template&lt;class Ty, class Alloc&gt;
+    struct <B>uses_allocator</B>&lt;packaged_task&lt;Ty&gt;, Alloc&gt;
+        : public true_type { };</PRE>
+
+<P>The specializations
+always <A HREF="typetrait.html#holds_true">hold true</A>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

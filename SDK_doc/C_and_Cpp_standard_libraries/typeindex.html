@@ -1,0 +1,125 @@
+<HTML><HEAD>
+<TITLE>&lt;typeindex&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;typeindex&gt;"></A><CODE>&lt;typeindex&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P>Include the standard header <B><CODE>&lt;typeindex&gt;</CODE></B>
+to define a class and function that support indexing of objects of class
+<CODE><A HREF="typeinfo.html#type_info">type_info</A></CODE>.</P>
+
+<PRE>namespace std {
+class <B><A HREF="#type_index">type_index</A></B>;
+class <B><A HREF="#hash">hash</A></B>;
+}  // namespace std</PRE>
+
+<H2><A NAME="hash"></A><CODE>hash</CODE></H2>
+
+<PRE>template&lt;&gt;
+    struct <B>hash</B>&lt;type_index&gt;
+        : public <A HREF="functio2.html#unary_function">unary_function</A>&lt;type_index, size_t&gt;
+    { // hashes a typeinfo object
+    size_t <B>operator()</B>(type_index val) const;
+    };</PRE>
+
+<P>The template class defines its member function as returning
+<CODE>val.<A HREF="#type_index__hash_code">hash_code</A>()</CODE>. The member function defines a
+<A HREF="functio2.html#hash_function">hash function</A>, suitable for mapping values of type
+<CODE><A HREF="#type_index">type_index</A></CODE>
+to a distribution of index values.</P>
+
+<H2><A NAME="type_index"></A><CODE>type_index</CODE></H2>
+
+<PRE>class <B>type_index</B>
+    { // indexes a typeinfo object
+public:
+    <B><A HREF="#type_index__type_index">type_index</A></B>(const type_info&amp; tinfo) noexcept;
+
+    const char *<B><A HREF="#type_index__name">name</A></B>() const;
+    size_t <B><A HREF="#type_index__hash_code">hash_code</A></B>() const;
+
+    bool <B><A HREF="#type_index__operator22">operator==</A></B>(const type_info&amp; right) const noexcept;
+    bool <B><A HREF="#type_index__operator!2">operator!=</A></B>(const type_info&amp; right) const noexcept;
+    bool <B><A HREF="#type_index__operator&lt;">operator&lt;</A></B>(const type_info&amp; right) const noexcept;
+    bool <B><A HREF="#type_index__operator&gt;2">operator&gt;=</A></B>(const type_info&amp; right) const noexcept;
+    bool <B><A HREF="#type_index__operator&gt;">operator&gt;</A></B>(const type_info&amp; right) const noexcept;
+    bool <B><A HREF="#type_index__operator&lt;2">operator&lt;=</A></B>(const type_info&amp; right) const noexcept;
+
+private:
+    type_info *ptr; // <I>exposition only</I>
+    };</PRE>
+
+<P>The class wraps a pointer to
+<CODE><A HREF="typeinfo.html#type_info">type_info</A></CODE> to assist in indexing by
+such objects.</P>
+
+<H3><A NAME="type_index__hash_code"></A><CODE>type_index::hash_code</CODE></H3>
+
+<PRE>size_t <B>hash_code</B>() const;</PRE>
+
+<P>The member function returns
+<CODE>ptr-&gt;<A HREF="typeinfo.html#type_info__hash_code">hash_code</A>()</CODE>.</P>
+
+<H3><A NAME="type_index__name"></A><CODE>type_index::name</CODE></H3>
+
+<PRE>const char *<B>name</B>() const;</PRE>
+
+<P>The member function returns
+<CODE>ptr-&gt;<A HREF="typeinfo.html#type_info__name">name</A>()</CODE>.</P>
+
+<H3><A NAME="type_index__operator&lt;"></A><CODE>type_index::operator&lt;</CODE></H3>
+
+<PRE>bool <B>operator&lt;</B>(const type_index&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>*ptr-&gt;before(*right.ptr)</CODE>.</P>
+
+<H3><A NAME="type_index__operator&lt;2"></A><CODE>type_index::operator&lt;=</CODE></H3>
+
+<PRE>bool <B>operator&lt;=</B>(const type_index&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>!(right &lt; *this)</CODE>.</P>
+
+<H3><A NAME="type_index__operator!2"></A><CODE>type_index::operator!=</CODE></H3>
+
+<PRE>bool <B>operator!=</B>(const type_index&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>!(*this == right)</CODE>.</P>
+
+<H3><A NAME="type_index__operator22"></A><CODE>type_index::operator==</CODE></H3>
+
+<PRE>bool <B>operator==</B>(const type_index&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>*ptr == right.ptr</CODE>.</P>
+
+<H3><A NAME="type_index__operator&gt;"></A><CODE>type_index::operator&gt;</CODE></H3>
+
+<PRE>bool <B>operator&gt;</B>(const type_index&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>right &lt; *this</CODE>.</P>
+
+<H3><A NAME="type_index__operator&gt;2"></A><CODE>type_index::operator&gt;=</CODE></H3>
+
+<PRE>bool <B>operator&gt;=</B>(const type_index&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>!(*this &lt; right)</CODE>.</P>
+
+<H3><A NAME="type_index__type_index"></A><CODE>type_index::type_index</CODE></H3>
+
+<PRE><B>type_index</B>(const type_info&amp; tinfo) noexcept;</PRE>
+
+<P>The constructor initializes <CODE>ptr</CODE> to <CODE>&amp;tinfo</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

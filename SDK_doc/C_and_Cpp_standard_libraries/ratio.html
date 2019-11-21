@@ -1,0 +1,307 @@
+<HTML><HEAD>
+<TITLE>&lt;ratio&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;ratio&gt;"></A><CODE>&lt;ratio&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P>Include the standard header <B><CODE>&lt;ratio&gt;</CODE></B>
+to define several templates to store and manipulate rational numbers
+at compile time, as well as several useful constants.</P>
+
+<HR>
+<P><B><CODE><A HREF="#constants">atto</A>
+&middot; <A HREF="#constants">centi</A>
+&middot; <A HREF="#constants">deca</A>
+&middot; <A HREF="#constants">deci</A>
+&middot; <A HREF="#constants">exa</A>
+&middot; <A HREF="#constants">femto</A>
+&middot; <A HREF="#constants">giga</A>
+&middot; <A HREF="#constants">hecto</A>
+&middot; <A HREF="#constants">kilo</A>
+&middot; <A HREF="#constants">mega</A>
+&middot; <A HREF="#constants">micro</A>
+&middot; <A HREF="#constants">milli</A>
+&middot; <A HREF="#constants">nano</A>
+&middot; <A HREF="#constants">peta</A>
+&middot; <A HREF="#constants">pico</A>
+&middot; <A HREF="#ratio">ratio</A>
+&middot; <A HREF="#ratio_add">ratio_add</A>
+&middot; <A HREF="#ratio_divide">ratio_divide</A>
+&middot; <A HREF="#ratio_equal">ratio_equal</A>
+&middot; <A HREF="#ratio_greater">ratio_greater</A>
+&middot; <A HREF="#ratio_greater_equal">ratio_greater_equal</A>
+&middot; <A HREF="#ratio_less">ratio_less</A>
+&middot; <A HREF="#ratio_less_equal">ratio_less_equal</A>
+&middot; <A HREF="#ratio_multiply">ratio_multiply</A>
+&middot; <A HREF="#ratio_not_equal">ratio_not_equal</A>
+&middot; <A HREF="#ratio_subtract">ratio_subtract</A>
+&middot; <A HREF="#constants">tera</A>
+&middot; <A HREF="#constants">yocto</A>
+&middot; <A HREF="#constants">yotta</A>
+&middot; <A HREF="#constants">zepto</A>
+&middot; <A HREF="#constants">zetta</A>
+</CODE></B></P>
+<HR>
+
+<PRE>namespace std {
+    // TEMPLATE CLASS ratio
+    template &lt;intmax_t N, intmax_t D = 1&gt;
+        struct <B><A HREF="#ratio">ratio</A></B>;
+
+    // ratio ARITHMETIC
+    template &lt;class R1, class R2&gt; struct <B><A HREF="#ratio_add">ratio_add</A></B>;
+    template &lt;class R1, class R2&gt; struct <B><A HREF="#ratio_subtract">ratio_subtract</A></B>;
+    template &lt;class R1, class R2&gt; struct <B><A HREF="#ratio_multiply">ratio_multiply</A></B>;
+    template &lt;class R1, class R2&gt; struct <B><A HREF="#ratio_divide">ratio_divide</A></B>;
+
+    // ratio COMPARISON
+    template &lt;class R1, class R2&gt; struct <B><A HREF="#ratio_equal">ratio_equal</A></B>;
+    template &lt;class R1, class R2&gt; struct <B><A HREF="#ratio_not_equal">ratio_not_equal</A></B>;
+    template &lt;class R1, class R2&gt; struct <B><A HREF="#ratio_less">ratio_less</A></B>;
+    template &lt;class R1, class R2&gt; struct <B><A HREF="#ratio_less_equal">ratio_less_equal</A></B>;
+    template &lt;class R1, class R2&gt; struct <B><A HREF="#ratio_greater">ratio_greater</A></B>;
+    template &lt;class R1, class R2&gt; struct <B><A HREF="#ratio_greater_equal">ratio_greater_equal</A></B>;
+
+    // ratio CONSTANTS
+    typedef ratio&lt;1,  1000000000000000000000000&gt; <B><A HREF="#constants">yocto</A></B>;
+    typedef ratio&lt;1,     1000000000000000000000&gt; <B><A HREF="#constants">zepto</A></B>;
+    typedef ratio&lt;1,        1000000000000000000&gt; <B><A HREF="#constants">atto</A></B>;
+    typedef ratio&lt;1,           1000000000000000&gt; <B><A HREF="#constants">femto</A></B>;
+    typedef ratio&lt;1,              1000000000000&gt; <B><A HREF="#constants">pico</A></B>;
+    typedef ratio&lt;1,                 1000000000&gt; <B><A HREF="#constants">nano</A></B>;
+    typedef ratio&lt;1,                    1000000&gt; <B><A HREF="#constants">micro</A></B>;
+    typedef ratio&lt;1,                       1000&gt; <B><A HREF="#constants">milli</A></B>;
+    typedef ratio&lt;1,                        100&gt; <B><A HREF="#constants">centi</A></B>;
+    typedef ratio&lt;1,                         10&gt; <B><A HREF="#constants">deci</A></B>;
+    typedef ratio&lt;                        10, 1&gt; <B><A HREF="#constants">deca</A></B>;
+    typedef ratio&lt;                       100, 1&gt; <B><A HREF="#constants">hecto</A></B>;
+    typedef ratio&lt;                      1000, 1&gt; <B><A HREF="#constants">kilo</A></B>;
+    typedef ratio&lt;                   1000000, 1&gt; <B><A HREF="#constants">mega</A></B>;
+    typedef ratio&lt;                1000000000, 1&gt; <B><A HREF="#constants">giga</A></B>;
+    typedef ratio&lt;             1000000000000, 1&gt; <B><A HREF="#constants">tera</A></B>;
+    typedef ratio&lt;          1000000000000000, 1&gt; <B><A HREF="#constants">peta</A></B>;
+    typedef ratio&lt;       1000000000000000000, 1&gt; <B><A HREF="#constants">exa</A></B>;
+    typedef ratio&lt;   10000000000000000000000, 1&gt; <B><A HREF="#constants">zetta</A></B>;
+    typedef ratio&lt;10000000000000000000000000, 1&gt; <B><A HREF="#constants">yotta</A></B>;
+}   // namespace std</PRE>
+
+<H2><CODE><A NAME="constants"></A>constants</CODE></H2>
+
+<PRE>typedef ratio&lt;1,  1000000000000000000000000&gt; <B>yocto</B>; <B>[optional]</B>
+typedef ratio&lt;1,     1000000000000000000000&gt; <B>zepto</B>; <B>[optional]</B>
+typedef ratio&lt;1,        1000000000000000000&gt; <B>atto</B>;
+typedef ratio&lt;1,           1000000000000000&gt; <B>femto</B>;
+typedef ratio&lt;1,              1000000000000&gt; <B>pico</B>;
+typedef ratio&lt;1,                 1000000000&gt; <B>nano</B>;
+typedef ratio&lt;1,                    1000000&gt; <B>micro</B>;
+typedef ratio&lt;1,                       1000&gt; <B>milli</B>;
+typedef ratio&lt;1,                        100&gt; <B>centi</B>;
+typedef ratio&lt;1,                         10&gt; <B>deci</B>;
+typedef ratio&lt;                        10, 1&gt; <B>deca</B>;
+typedef ratio&lt;                       100, 1&gt; <B>hecto</B>;
+typedef ratio&lt;                      1000, 1&gt; <B>kilo</B>;
+typedef ratio&lt;                   1000000, 1&gt; <B>mega</B>;
+typedef ratio&lt;                1000000000, 1&gt; <B>giga</B>;
+typedef ratio&lt;             1000000000000, 1&gt; <B>tera</B>;
+typedef ratio&lt;          1000000000000000, 1&gt; <B>peta</B>;
+typedef ratio&lt;       1000000000000000000, 1&gt; <B>exa</B>;
+typedef ratio&lt;   10000000000000000000000, 1&gt; <B>zetta</B>; <B>[optional]</B>
+typedef ratio&lt;10000000000000000000000000, 1&gt; <B>yotta</B>; <B>[optional]</B></PRE>
+
+<H2><CODE><A NAME="ratio"></A>ratio</CODE></H2>
+
+<PRE>template &lt;intmax_t N, intmax_t D = 1&gt;
+    struct <B>ratio</B>
+    {
+    static constexpr intmax_t <B>num</B>;
+    static constexpr intmax_t <B>den</B>;
+    typedef ratio&lt;num, den&gt; type;
+    };</PRE>
+
+<P>The template class defines the static constants
+<CODE>num</CODE> and <CODE>den</CODE> such that
+<CODE>num / den == N / D</CODE> and <CODE>num</CODE>
+and <CODE>den</CODE> have no common factors.
+<CODE>num / den</CODE> is the
+<B><A NAME="ratio_value"></A>value</B> represented by
+the template class.
+Thus, <CODE>type</CODE> designates the instantiation
+<CODE>ratio&lt;N0, D0&gt;</CODE> for which <CODE>num == N0</CODE>
+and <CODE>den == D0</CODE>.</P>
+
+<H2><CODE><A NAME="ratio_add"></A>ratio_add</CODE></H2>
+
+<PRE>template &lt;class R1, class R2&gt; struct <B>ratio_add</B>
+    {
+    typedef <I>see below</I> <B>type</B>;
+    };</PRE>
+
+<P>The template class defines <CODE>type</CODE> as a specialization
+of <CODE>ratio</CODE> whose <A HREF="#ratio_value">value</A>
+is the value of <CODE>R1</CODE> plus
+the value of <CODE>R2</CODE>.
+<CODE>R1</CODE> and <CODE>R2</CODE> must both be specializations
+of template class <CODE>ratio</CODE>.</P>
+
+<P>If an implementation supports template aliases,
+<CODE>ratio_add&lt;R1, R2&gt;</CODE> is a synonym for
+<CODE>ratio_add&lt;R1, R2&gt;::type</CODE>.</P>
+
+<H2><CODE><A NAME="ratio_divide"></A>ratio_divide</CODE></H2>
+
+<PRE>template &lt;class R1, class R2&gt; struct <B>ratio_divide</B>
+    {
+    typedef <I>see below</I> <B>type</B>;
+    };</PRE>
+
+<P>The template class defines <CODE>type</CODE> as a specialization
+of <CODE>ratio</CODE> whose <A HREF="#ratio_value">value</A>
+is the value of <CODE>R1</CODE> divided by
+the value of <CODE>R2</CODE>.
+<CODE>R1</CODE> and <CODE>R2</CODE> must both be specializations
+of template class <CODE>ratio</CODE>.</P>
+
+<P>If an implementation supports template aliases,
+<CODE>ratio_divide&lt;R1, R2&gt;</CODE> is a synonym for
+<CODE>ratio_divide&lt;R1, R2&gt;::type</CODE>.</P>
+
+<H2><CODE><A NAME="ratio_equal"></A>ratio_equal</CODE></H2>
+
+<PRE>template &lt;class R1, class R2&gt; struct <B>ratio_equal</B>
+    {
+    typedef bool <B>type</B>;
+	static const bool value = <I>see below</I>;
+    };</PRE>
+
+<P>The template class defines <CODE>type</CODE> as <CODE>bool</CODE>
+and <CODE>value</CODE> as true only if
+the value of <CODE>R1</CODE> is equal to
+the value of <CODE>R2</CODE>.
+<CODE>R1</CODE> and <CODE>R2</CODE> must both be specializations
+of template class <CODE>ratio</CODE>.</P>
+
+<H2><CODE><A NAME="ratio_greater"></A>ratio_greater</CODE></H2>
+
+<PRE>template &lt;class R1, class R2&gt; struct <B>ratio_greater</B>
+    {
+    typedef bool <B>type</B>;
+	static const bool value = <I>see below</I>;
+    };</PRE>
+
+<P>The template class defines <CODE>type</CODE> as <CODE>bool</CODE>
+and <CODE>value</CODE> as true only if
+the value of <CODE>R1</CODE> is greater than
+the value of <CODE>R2</CODE>.
+<CODE>R1</CODE> and <CODE>R2</CODE> must both be specializations
+of template class <CODE>ratio</CODE>.</P>
+
+<H2><CODE><A NAME="ratio_greater_equal"></A>ratio_greater_equal</CODE></H2>
+
+<PRE>template &lt;class R1, class R2&gt; struct <B>ratio_greater_equal</B>
+    {
+    typedef bool <B>type</B>;
+	static const bool value = <I>see below</I>;
+    };</PRE>
+
+<P>The template class defines <CODE>type</CODE> as <CODE>bool</CODE>
+and <CODE>value</CODE> as true only if
+the value of <CODE>R1</CODE> is greater than or equal to
+the value of <CODE>R2</CODE>.
+<CODE>R1</CODE> and <CODE>R2</CODE> must both be specializations
+of template class <CODE>ratio</CODE>.</P>
+
+<H2><CODE><A NAME="ratio_less"></A>ratio_less</CODE></H2>
+
+<PRE>template &lt;class R1, class R2&gt; struct <B>ratio_less</B>
+    {
+    typedef bool <B>type</B>;
+	static const bool value = <I>see below</I>;
+    };</PRE>
+
+<P>The template class defines <CODE>type</CODE> as <CODE>bool</CODE>
+and <CODE>value</CODE> as true only if
+the value of <CODE>R1</CODE> is less than
+the value of <CODE>R2</CODE>.
+<CODE>R1</CODE> and <CODE>R2</CODE> must both be specializations
+of template class <CODE>ratio</CODE>.</P>
+
+<H2><CODE><A NAME="ratio_less_equal"></A>ratio_less_equal</CODE></H2>
+
+<PRE>template &lt;class R1, class R2&gt; struct <B>ratio_less_equal</B>
+    {
+    typedef bool <B>type</B>;
+	static const bool value = <I>see below</I>;
+    };</PRE>
+
+<P>The template class defines <CODE>type</CODE> as <CODE>bool</CODE>
+and <CODE>value</CODE> as true only if
+the value of <CODE>R1</CODE> is less than or equal to
+the value of <CODE>R2</CODE>.
+<CODE>R1</CODE> and <CODE>R2</CODE> must both be specializations
+of template class <CODE>ratio</CODE>.</P>
+
+<H2><CODE><A NAME="ratio_multiply"></A>ratio_multiply</CODE></H2>
+
+<PRE>template &lt;class R1, class R2&gt; struct <B>ratio_multiply</B>
+    {
+    typedef <I>see below</I> <B>type</B>;
+    };</PRE>
+
+<P>The template class defines <CODE>type</CODE> as a specialization
+of <CODE>ratio</CODE> whose <A HREF="#ratio_value">value</A>
+is the value of <CODE>R1</CODE> times
+the value of <CODE>R2</CODE>.
+<CODE>R1</CODE> and <CODE>R2</CODE> must both be specializations
+of template class <CODE>ratio</CODE>.</P>
+
+<P>If an implementation supports template aliases,
+<CODE>ratio_multiply&lt;R1, R2&gt;</CODE> is a synonym for
+<CODE>ratio_multiply&lt;R1, R2&gt;::type</CODE>.</P>
+
+<H2><CODE><A NAME="ratio_not_equal"></A>ratio_not_equal</CODE></H2>
+
+<PRE>template &lt;class R1, class R2&gt; struct <B>ratio_not_equal</B>
+    {
+    typedef bool <B>type</B>;
+	static const bool value = <I>see below</I>;
+    };</PRE>
+
+<P>The template class defines <CODE>type</CODE> as <CODE>bool</CODE>
+and <CODE>value</CODE> as true only if
+the value of <CODE>R1</CODE> is not equal to
+the value of <CODE>R2</CODE>.
+<CODE>R1</CODE> and <CODE>R2</CODE> must both be specializations
+of template class <CODE>ratio</CODE>.</P>
+
+<H2><CODE><A NAME="ratio_subtract"></A>ratio_subtract</CODE></H2>
+
+<PRE>template &lt;class R1, class R2&gt; struct <B>ratio_subtract</B>
+    {
+    typedef <I>see below</I> <B>type</B>;
+    };</PRE>
+
+<P>The template class defines <CODE>type</CODE> as a specialization
+of <CODE>ratio</CODE> whose <A HREF="#ratio_value">value</A>
+is the value of <CODE>R1</CODE> minus
+the value of <CODE>R2</CODE>.
+<CODE>R1</CODE> and <CODE>R2</CODE> must both be specializations
+of template class <CODE>ratio</CODE>.</P>
+
+<P>If an implementation supports template aliases,
+<CODE>ratio_subtract&lt;R1, R2&gt;</CODE> is a synonym for
+<CODE>ratio_subtract&lt;R1, R2&gt;::type</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

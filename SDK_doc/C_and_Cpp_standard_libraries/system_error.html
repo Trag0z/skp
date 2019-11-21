@@ -1,0 +1,738 @@
+<HTML><HEAD>
+<TITLE>&lt;system_error&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;system_error&gt;"></A><CODE>&lt;system_error&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P><B><CODE><A HREF="#errc">errc</A>
+&middot; <A HREF="#error_code">error_code</A>
+&middot; <A HREF="#error_category">error_category</A>
+&middot; <A HREF="#error_condition">error_condition</A>
+&middot; <A HREF="#hash">hash</A>
+&middot; <A HREF="#generic_category_func">generic_category</A>
+&middot; <A HREF="#generic_errno">generic_errno</A>
+&middot; <A HREF="#is_error_code_enum">is_error_code_enum</A>
+&middot; <A HREF="#is_error_condition_enum">is_error_condition_enum</A>
+&middot; <A HREF="#make_error_code">make_error_code</A>
+&middot; <A HREF="#make_error_condition">make_error_condition</A>
+&middot; <A HREF="#system_category_func">system_category</A>
+&middot; <A HREF="#system_error">system_error</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#operator22">operator==</A>
+&middot; <A HREF="#operator!2">operator!=</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#address_family_not_supported">address_family_not_supported</A>
+&middot; <A HREF="#address_in_use">address_in_use</A>
+&middot; <A HREF="#address_not_available">address_not_available</A>
+&middot; <A HREF="#already_connected">already_connected</A>
+&middot; <A HREF="#argument_list_too_long">argument_list_too_long</A>
+&middot; <A HREF="#argument_out_of_domain">argument_out_of_domain</A>
+&middot; <A HREF="#bad_address">bad_address</A>
+&middot; <A HREF="#bad_file_descriptor">bad_file_descriptor</A>
+&middot; <A HREF="#bad_message">bad_message</A>
+&middot; <A HREF="#broken_pipe">broken_pipe</A>
+&middot; <A HREF="#connection_aborted">connection_aborted</A>
+&middot; <A HREF="#connection_already_in_progress">connection_already_in_progress</A>
+&middot; <A HREF="#connection_refused">connection_refused</A>
+&middot; <A HREF="#connection_reset">connection_reset</A>
+&middot; <A HREF="#cross_device_link">cross_device_link</A>
+&middot; <A HREF="#destination_address_required">destination_address_required</A>
+&middot; <A HREF="#device_or_resource_busy">device_or_resource_busy</A>
+&middot; <A HREF="#directory_not_empty">directory_not_empty</A>
+&middot; <A HREF="#executable_format_error">executable_format_error</A>
+&middot; <A HREF="#file_exists">file_exists</A>
+&middot; <A HREF="#file_too_large">file_too_large</A>
+&middot; <A HREF="#filename_too_long">filename_too_long</A>
+&middot; <A HREF="#function_not_supported">function_not_supported</A>
+&middot; <A HREF="#host_unreachable">host_unreachable</A>
+&middot; <A HREF="#identifier_removed">identifier_removed</A>
+&middot; <A HREF="#illegal_byte_sequence">illegal_byte_sequence</A>
+&middot; <A HREF="#inappropriate_io_control_operation">inappropriate_io_control_operation</A>
+&middot; <A HREF="#interrupted">interrupted</A>
+&middot; <A HREF="#invalid_argument">invalid_argument</A>
+&middot; <A HREF="#invalid_seek">invalid_seek</A>
+&middot; <A HREF="#io_error">io_error</A>
+&middot; <A HREF="#is_a_directory">is_a_directory</A>
+&middot; <A HREF="#message_size">message_size</A>
+&middot; <A HREF="#network_down">network_down</A>
+&middot; <A HREF="#network_reset">network_reset</A>
+&middot; <A HREF="#network_unreachable">network_unreachable</A>
+&middot; <A HREF="#no_buffer_space">no_buffer_space</A>
+&middot; <A HREF="#no_child_process">no_child_process</A>
+&middot; <A HREF="#no_link">no_link</A>
+&middot; <A HREF="#no_lock_available">no_lock_available</A>
+&middot; <A HREF="#no_message_available">no_message_available</A>
+&middot; <A HREF="#no_message">no_message</A>
+&middot; <A HREF="#no_protocol_option">no_protocol_option</A>
+&middot; <A HREF="#no_space_on_device">no_space_on_device</A>
+&middot; <A HREF="#no_stream_resources">no_stream_resources</A>
+&middot; <A HREF="#no_such_device_or_address">no_such_device_or_address</A>
+&middot; <A HREF="#no_such_device">no_such_device</A>
+&middot; <A HREF="#no_such_file_or_directory">no_such_file_or_directory</A>
+&middot; <A HREF="#no_such_process">no_such_process</A>
+&middot; <A HREF="#not_a_directory">not_a_directory</A>
+&middot; <A HREF="#not_a_socket">not_a_socket</A>
+&middot; <A HREF="#not_a_stream">not_a_stream</A>
+&middot; <A HREF="#not_connected">not_connected</A>
+&middot; <A HREF="#not_enough_memory">not_enough_memory</A>
+&middot; <A HREF="#not_supported">not_supported</A>
+&middot; <A HREF="#operation_canceled">operation_canceled</A>
+&middot; <A HREF="#operation_in_progress">operation_in_progress</A>
+&middot; <A HREF="#operation_not_permitted">operation_not_permitted</A>
+&middot; <A HREF="#operation_not_supported">operation_not_supported</A>
+&middot; <A HREF="#operation_would_block">operation_would_block</A>
+&middot; <A HREF="#owner_dead">owner_dead</A>
+&middot; <A HREF="#permission_denied">permission_denied</A>
+&middot; <A HREF="#protocol_error">protocol_error</A>
+&middot; <A HREF="#protocol_not_supported">protocol_not_supported</A>
+&middot; <A HREF="#read_only_file_system">read_only_file_system</A>
+&middot; <A HREF="#resource_deadlock_would_occur">resource_deadlock_would_occur</A>
+&middot; <A HREF="#resource_unavailable_try_again">resource_unavailable_try_again</A>
+&middot; <A HREF="#result_out_of_range">result_out_of_range</A>
+&middot; <A HREF="#state_not_recoverable">state_not_recoverable</A>
+&middot; <A HREF="#stream_timeout">stream_timeout</A>
+&middot; <A HREF="#text_file_busy">text_file_busy</A>
+&middot; <A HREF="#timed_out">timed_out</A>
+&middot; <A HREF="#too_many_files_open_in_system">too_many_files_open_in_system</A>
+&middot; <A HREF="#too_many_files_open">too_many_files_open</A>
+&middot; <A HREF="#too_many_links">too_many_links</A>
+&middot; <A HREF="#too_many_symbolic_link_levels">too_many_symbolic_link_levels</A>
+&middot; <A HREF="#value_too_large">value_too_large</A>
+&middot; <A HREF="#wrong_protocol_type">wrong_protocol_type</A>
+</CODE></B></P>
+
+<HR>
+
+<P>Include the header <B><CODE>&lt;system_error&gt;</CODE></B> to define
+the exception class <CODE>system_error</CODE> and related templates
+for processing low-level system errors.</P>
+
+<PRE>namespace std {
+    // TYPES
+enum class <B><A HREF="#errc">errc</A></B>;
+typedef errc <B><A HREF="#generic_errno">generic_errno</A></B>;
+
+class <B><A HREF="#error_code">error_code</A></B>;
+class <B><A HREF="#error_condition">error_condition</A></B>;
+class <B><A HREF="#error_category">error_category</A></B>;
+class <B><A HREF="#system_error">system_error</A></B>;
+
+template&lt;Enum&gt;
+    class <B><A HREF="#is_error_code_enum">is_error_code_enum</A></B>;
+template&lt;Enum&gt;
+    class <B><A HREF="#is_error_condition_enum">is_error_condition_enum</A></B>;
+
+template&lt;&gt;
+    struct <B><A HREF="#hash">hash</A>&lt;error_code&gt;</B>
+        : public <A HREF="functio2.html#unary_function">unary_function</A>&lt;bitset&lt;Bits&gt;, size_t&gt; {
+    size_t <B>operator()</B>(error_code val) const;
+    };
+    // FUNCTIONS
+const error_category&amp; <B><A HREF="#generic_category_func">generic_category</A></B>() noexcept;
+const error_category&amp; <B><A HREF="#system_category_func">system_category</A></B>() noexcept;
+
+bool <B><A HREF="#operator22">operator==</A></B>(const error_code&amp; left, const error_condition&amp; right) noexcept;
+bool <B><A HREF="#operator22">operator==</A></B>(const error_condition&amp; left, const error_code&amp; right) noexcept;
+bool <B><A HREF="#operator!2">operator!=</A></B>(const error_code&amp; left, const error_condition&amp; right) noexcept;
+bool <B><A HREF="#operator!2">operator!=</A></B>(const error_condition&amp; left, const error_code&amp; right) noexcept;
+
+error_code <B><A HREF="#make_error_code">make_error_code</A></B>(generic_errno errval) noexcept;
+error_condition <B><A HREF="#make_error_condition">make_error_condition</A></B>(generic_errno errval) noexcept;
+
+template&lt;class Elem,
+    class Traits&gt;
+    basic_ostream&lt;Elem, Traits&gt;&amp;
+        <B><A HREF="#operator&lt;&lt;">operator&lt;&lt;</A></B>(basic_ostream&lt;Elem, Traits&gt;&amp; ostr,
+            const error_code&amp; code);
+}  // namespace std</PRE>
+
+<H2><CODE><A NAME="errc"></A>errc</CODE></H2>
+
+<PRE>enum class <B>errc</B> {
+    <B><A NAME="address_family_not_supported"></A>address_family_not_supported</B> = EAFNOSUPPORT,
+    <B><A NAME="address_in_use"></A>address_in_use</B> = EADDRINUSE,
+    <B><A NAME="address_not_available"></A>address_not_available</B> = EADDRNOTAVAIL,
+    <B><A NAME="already_connected"></A>already_connected</B> = EISCONN,
+    <B><A NAME="argument_list_too_long"></A>argument_list_too_long</B> = E2BIG,
+    <B><A NAME="argument_out_of_domain"></A>argument_out_of_domain</B> = EDOM,
+    <B><A NAME="bad_address"></A>bad_address</B> = EFAULT,
+    <B><A NAME="bad_file_descriptor"></A>bad_file_descriptor</B> = EBADF,
+    <B><A NAME="bad_message"></A>bad_message</B> = EBADMSG,
+    <B><A NAME="broken_pipe"></A>broken_pipe</B> = EPIPE,
+    <B><A NAME="connection_aborted"></A>connection_aborted</B> = ECONNABORTED,
+    <B><A NAME="connection_already_in_progress"></A>connection_already_in_progress</B> = EALREADY,
+    <B><A NAME="connection_refused"></A>connection_refused</B> = ECONNREFUSED,
+    <B><A NAME="connection_reset"></A>connection_reset</B> = ECONNRESET,
+    <B><A NAME="cross_device_link"></A>cross_device_link</B> = EXDEV,
+    <B><A NAME="destination_address_required"></A>destination_address_required</B> = EDESTADDRREQ,
+    <B><A NAME="device_or_resource_busy"></A>device_or_resource_busy</B> = EBUSY,
+    <B><A NAME="directory_not_empty"></A>directory_not_empty</B> = ENOTEMPTY,
+    <B><A NAME="executable_format_error"></A>executable_format_error</B> = ENOEXEC,
+    <B><A NAME="file_exists"></A>file_exists</B> = EEXIST,
+    <B><A NAME="file_too_large"></A>file_too_large</B> = EFBIG,
+    <B><A NAME="filename_too_long"></A>filename_too_long</B> = ENAMETOOLONG,
+    <B><A NAME="function_not_supported"></A>function_not_supported</B> = ENOSYS,
+    <B><A NAME="host_unreachable"></A>host_unreachable</B> = EHOSTUNREACH,
+    <B><A NAME="identifier_removed"></A>identifier_removed</B> = EIDRM,
+    <B><A NAME="illegal_byte_sequence"></A>illegal_byte_sequence</B> = EILSEQ,
+    <B><A NAME="inappropriate_io_control_operation"></A>inappropriate_io_control_operation</B> = ENOTTY,
+    <B><A NAME="interrupted"></A>interrupted</B> = EINTR,
+    <B><A NAME="invalid_argument"></A>invalid_argument</B> = EINVAL,
+    <B><A NAME="invalid_seek"></A>invalid_seek</B> = ESPIPE,
+    <B><A NAME="io_error"></A>io_error</B> = EIO,
+    <B><A NAME="is_a_directory"></A>is_a_directory</B> = EISDIR,
+    <B><A NAME="message_size"></A>message_size</B> = EMSGSIZE,
+    <B><A NAME="network_down"></A>network_down</B> = ENETDOWN,
+    <B><A NAME="network_reset"></A>network_reset</B> = ENETRESET,
+    <B><A NAME="network_unreachable"></A>network_unreachable</B> = ENETUNREACH,
+    <B><A NAME="no_buffer_space"></A>no_buffer_space</B> = ENOBUFS,
+    <B><A NAME="no_child_process"></A>no_child_process</B> = ECHILD,
+    <B><A NAME="no_link"></A>no_link</B> = ENOLINK,
+    <B><A NAME="no_lock_available"></A>no_lock_available</B> = ENOLCK,
+    <B><A NAME="no_message_available"></A>no_message_available</B> = ENODATA,
+    <B><A NAME="no_message"></A>no_message</B> = ENOMSG,
+    <B><A NAME="no_protocol_option"></A>no_protocol_option</B> = ENOPROTOOPT,
+    <B><A NAME="no_space_on_device"></A>no_space_on_device</B> = ENOSPC,
+    <B><A NAME="no_stream_resources"></A>no_stream_resources</B> = ENOSR,
+    <B><A NAME="no_such_device_or_address"></A>no_such_device_or_address</B> = ENXIO,
+    <B><A NAME="no_such_device"></A>no_such_device</B> = ENODEV,
+    <B><A NAME="no_such_file_or_directory"></A>no_such_file_or_directory</B> = ENOENT,
+    <B><A NAME="no_such_process"></A>no_such_process</B> = ESRCH,
+    <B><A NAME="not_a_directory"></A>not_a_directory</B> = ENOTDIR,
+    <B><A NAME="not_a_socket"></A>not_a_socket</B> = ENOTSOCK,
+    <B><A NAME="not_a_stream"></A>not_a_stream</B> = ENOSTR,
+    <B><A NAME="not_connected"></A>not_connected</B> = ENOTCONN,
+    <B><A NAME="not_enough_memory"></A>not_enough_memory</B> = ENOMEM,
+    <B><A NAME="not_supported"></A>not_supported</B> = ENOTSUP,
+    <B><A NAME="operation_canceled"></A>operation_canceled</B> = ECANCELED,
+    <B><A NAME="operation_in_progress"></A>operation_in_progress</B> = EINPROGRESS,
+    <B><A NAME="operation_not_permitted"></A>operation_not_permitted</B> = EPERM,
+    <B><A NAME="operation_not_supported"></A>operation_not_supported</B> = EOPNOTSUPP,
+    <B><A NAME="operation_would_block"></A>operation_would_block</B> = EWOULDBLOCK,
+    <B><A NAME="owner_dead"></A>owner_dead</B> = EOWNERDEAD,
+    <B><A NAME="permission_denied"></A>permission_denied</B> = EACCES,
+    <B><A NAME="protocol_error"></A>protocol_error</B> = EPROTO,
+    <B><A NAME="protocol_not_supported"></A>protocol_not_supported</B> = EPROTONOSUPPORT,
+    <B><A NAME="read_only_file_system"></A>read_only_file_system</B> = EROFS,
+    <B><A NAME="resource_deadlock_would_occur"></A>resource_deadlock_would_occur</B> = EDEADLK,
+    <B><A NAME="resource_unavailable_try_again"></A>resource_unavailable_try_again</B> = EAGAIN,
+    <B><A NAME="result_out_of_range"></A>result_out_of_range</B> = ERANGE,
+    <B><A NAME="state_not_recoverable"></A>state_not_recoverable</B> = ENOTRECOVERABLE,
+    <B><A NAME="stream_timeout"></A>stream_timeout</B> = ETIME,
+    <B><A NAME="text_file_busy"></A>text_file_busy</B> = ETXTBSY,
+    <B><A NAME="timed_out"></A>timed_out</B> = ETIMEDOUT,
+    <B><A NAME="too_many_files_open_in_system"></A>too_many_files_open_in_system</B> = ENFILE,
+    <B><A NAME="too_many_files_open"></A>too_many_files_open</B> = EMFILE,
+    <B><A NAME="too_many_links"></A>too_many_links</B> = EMLINK,
+    <B><A NAME="too_many_symbolic_link_levels"></A>too_many_symbolic_link_levels</B> = ELOOP,
+    <B><A NAME="value_too_large"></A>value_too_large</B> = EOVERFLOW,
+    <B><A NAME="wrong_protocol_type"></A>wrong_protocol_type</B> = EPROTOTYPE,
+    };</PRE>
+
+<P>The scoped enumeration supplies symbolic names for all the error-code
+macros defined by Posix in <CODE>&lt;errno.h&gt;</CODE>.</P>
+
+<H2><CODE><A NAME="error_category"></A>error_category</CODE></H2>
+
+<PRE>class <B>error_category</B> {
+public:
+    <B>error_category</B>();
+    virtual ~<B>error_category</B>() noexcept;
+
+    virtual const char *<B><A HREF="#error_category__name">name</A></B>() const noexcept = 0;
+    virtual string <B><A HREF="#error_category__message">message</A></B>(int val) const = 0;
+
+    virtual error_condition 
+        <B><A HREF="#error_category__default_error_condition">default_error_condition</A></B>(int errval) const noexcept;
+    virtual bool <B><A HREF="#error_category__equivalent">equivalent</A></B>(int errval,
+        const error_condition&amp; code) const noexcept;
+    virtual bool <B><A HREF="#error_category__equivalent">equivalent</A></B>(const error_code&amp; code,
+        int errval) const noexcept;
+
+    bool <B><A HREF="#error_category__operator22">operator==</A></B>(const error_category&amp; right) const noexcept;
+    bool <B><A HREF="#error_category__operator!2">operator!=</A></B>(const error_category&amp; right) const noexcept;
+    bool <B><A HREF="#error_category__operator&lt;">operator&lt;</A></B>(const error_category&amp; right) const noexcept;
+
+    error_category(const error_category&amp;) = delete;
+    error_category&amp; operator=(const error_category&amp;) = delete;
+    };</PRE>
+
+<P>The abstract class is the common base for objects that characterize a
+<B><A NAME="category_of_error_codes"></A>category of error codes</B>.
+Two such objects are predefined, one for the
+<B><A NAME="generic_category"></A>generic category</B> and one for the
+<B><A NAME="system_category"></A>system category</B>.</P>
+
+<H3><CODE><A NAME="error_category__default_error_condition"></A>error_category::default_error_condition</CODE></H3>
+
+<PRE>virtual error_condition
+    <B>default_error_condition</B>(int errval) const noexcept;</PRE>
+
+<P>The member function returns
+<CODE><A HREF="#error_condition">error_condition</A>(errval, *this)</CODE>.
+For the <A HREF="#system_category">system category</A> class,
+if <CODE>errval</CODE> corresponds to a Posix code,
+the function returns
+<CODE>error_condition(errval,
+<A HREF="#generic_category_func">generic_category</A>())</CODE>.
+Otherwise, it returns
+<CODE>error_condition(errval,
+<A HREF="#system_category_func">system_category</A>())</CODE>.</P>
+
+<H3><CODE><A NAME="error_category__equivalent"></A>error_category::equivalent</CODE></H3>
+
+<PRE>virtual bool <B>equivalent</B>(int errval,
+    const error_condition&amp; code) const noexcept;
+virtual bool <B>equivalent</B>(const error_code&amp; code,
+    int errval) const noexcept;</PRE>
+
+<P>The member function returns
+<CODE>*this == code.category() &amp;&amp; code.value() == errval</CODE>.</P>
+
+<H3><CODE><A NAME="error_category__message"></A>error_category::message</CODE></H3>
+
+<PRE>virtual string <B>message</B>(int val) const = 0;</PRE>
+
+<P>The virtual function returns a description of the error code
+<CODE>val</CODE> for the category.</P>
+
+<H3><CODE><A NAME="error_category__name"></A>error_category::name</CODE></H3>
+
+<PRE>virtual const char *<B>name</B>() const noexcept = 0;</PRE>
+
+<P>The virtual function returns the name of the category as an NTBS.
+For the <A HREF="#generic_category">generic category</A> class,
+the function returns a pointer to the NTBS <CODE>"generic"</CODE>.
+For the <A HREF="#system_category">system category</A> class,
+the function returns a pointer to the NTBS <CODE>"system"</CODE>.</P>
+
+<H3><CODE><A NAME="error_category__operator22"></A>error_category::operator==</CODE></H3>
+
+<PRE>bool <B>operator==</B>(const error_category&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>this == &amp;right</CODE>.</P>
+
+<H3><CODE><A NAME="error_category__operator!2"></A>error_category::operator!=</CODE></H3>
+
+<PRE>bool <B>operator!=</B>(const error_category&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>(!*this == right)</CODE>.</P>
+
+<H3><CODE><A NAME="error_category__operator&lt;"></A>error_category::operator&lt;</CODE></H3>
+
+<PRE>bool <B>operator&lt;</B>(const error_category&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>this &lt; &amp;right</CODE>.</P>
+
+<H2><CODE><A NAME="error_code"></A>error_code</CODE></H2>
+
+<PRE>class <B>error_code</B> {
+public:
+    <B><A HREF="#error_code__error_code">error_code</A></B>() noexcept;
+    <B><A HREF="#error_code__error_code">error_code</A></B>(int val, const error_category&amp; cat) noexcept;
+    template&lt;class Enum&gt;
+        <B><A HREF="#error_code__error_code">error_code</A></B>(Enum error) noexcept;
+
+    void <B><A HREF="#error_code__assign">assign</A></B>(int val, const error_category&amp; cat) noexcept;
+    template&lt;class Enum&gt;
+        error_code&amp; <B><A HREF="#error_code__operator2">operator=</A></B>(Enum error) noexcept;
+    void <B><A HREF="#error_code__clear">clear</A></B>() noexcept;
+
+    int <B><A HREF="#error_code__value">value</A></B>() const noexcept;
+    const error_category&amp; <B><A HREF="#error_code__category">category</A></B>() const noexcept;
+    error_condition <B><A HREF="#error_code__default_error_condition">default_error_condition</A></B>() const noexcept;
+    string <B><A HREF="#error_code__message">message</A></B>() const;
+    explicit <B><A HREF="#error_code__operator_bool">operator bool</A></B>() const noexcept;
+
+    bool <B><A HREF="#error_code__operator22">operator==</A></B>(const error_code&amp; right) const noexcept;
+    bool <B><A HREF="#error_code__operator!2">operator!=</A></B>(const error_code&amp; right) const noexcept;
+    bool <B><A HREF="#error_code__operator&lt;">operator&lt;</A></B>(const error_code&amp; right) const noexcept;
+    };</PRE>
+
+<P>The class stores an error code value and a pointer to an object that
+characterizes a
+<A HREF="#category_of_error_codes">category of error codes</A>
+to characterize a reported low-level system error.</P>
+
+<H3><A NAME="error_code__assign"></A><CODE>error_code::assign</CODE></H3>
+
+<PRE>void <B>assign</B>(int val, const error_category&amp; cat) noexcept;</PRE>
+
+<P>The member function stores <CODE>val</CODE> as the error code value
+and a pointer to <CODE>cat</CODE>.</P>
+
+<H3><A NAME="error_code__category"></A><CODE>error_code::category</CODE></H3>
+
+<PRE>const error_category&amp; <B>category</B>() const noexcept;</PRE>
+
+<P>The member function returns a reference to the stored category.</P>
+
+<H3><A NAME="error_code__clear"></A><CODE>error_code::clear</CODE></H3>
+
+<PRE><B>clear</B>() noexcept;</PRE>
+
+<P>The member function stores a zero error code value and a pointer to the
+<CODE><A HREF="#system_category">system category</A></CODE>.</P>
+
+<H3><A NAME="error_code__default_error_condition"></A><CODE>error_code::default_error_condition</CODE></H3>
+
+<PRE>error_condition <B>default_error_condition</B>() const noexcept;</PRE>
+
+<P>The member function returns
+<CODE><A HREF="#error_code__category">category</A>().
+<A HREF="#error_category__default_error_condition">default_error_condition</A>(
+<A HREF="#error_code__value">value</A>())</CODE>.</P>
+
+<H3><A NAME="error_code__error_code"></A><CODE>error_code::error_code</CODE></H3>
+
+<PRE><B>error_code</B>() noexcept;
+<B>error_code</B>(int val, const error_category&amp; cat) noexcept;
+template&lt;class Enum&gt;
+    <B>error_code</B>(Enum error) noexcept;</PRE>
+
+<P>The first constructor stores a zero error code value and a pointer to the
+<CODE><A HREF="#system_category">system category</A></CODE>.</P>
+
+<P>The second constructor stores <CODE>val</CODE> as the error code value
+and a pointer to <CODE>cat</CODE>.</P>
+
+<P>The third constructor assigns
+<CODE><A HREF="#make_error_code">make_error_code</A>(error)</CODE>
+to <CODE>*this</CODE>.
+Unless <CODE>is_error_code_enum&lt;Enum&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>,
+the constructor does not participate in overload resolution.</P>
+
+<H3><A NAME="error_code__message"></A><CODE>error_code::message</CODE></H3>
+
+<PRE>string <B>message</B>() const noexcept;</PRE>
+
+<P>The member function returns
+<CODE><A HREF="#error_code__category">category</A>().
+<A HREF="#error_category__message">message</A>(
+<A HREF="#error_code__value">value</A>())</CODE>.</P>
+
+<H3><A NAME="error_code__operator_bool"></A><CODE>error_code::operator bool</CODE></H3>
+
+<PRE>explicit <B>operator bool</B>() const noexcept;</PRE>
+
+<P>The operator returns a value convertible to <CODE>true</CODE> only if
+<CODE><A HREF="#error_code__value">value</A>() != 0</CODE>.
+The return type is convertible only to <CODE>bool</CODE>,
+not to <CODE>void *</CODE> or other known scalar type.</P>
+
+<H3><A NAME="error_code__operator2"></A><CODE>error_code::operator=</CODE></H3>
+
+<PRE>template&lt;class Enum&gt;
+    error_code&amp; <B>operator=</B>(Enum error) noexcept;</PRE>
+
+<P>The member operator assigns
+<CODE><A HREF="#make_error_code">make_error_code</A>(error)</CODE>
+to <CODE>*this</CODE>.
+It returns <CODE>*this</CODE>.
+Unless <CODE>is_error_code_enum&lt;Enum&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>,
+the operator does not participate in overload resolution.</P>
+
+<H3><A NAME="error_code__operator22"></A><CODE>error_code::operator==</CODE></H3>
+
+<PRE>bool <B>operator==</B>(const error_code&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>category() == right.category()
+&amp;&amp; value == right.value()</CODE>.</P>
+
+<H3><A NAME="error_code__operator!2"></A><CODE>error_code::operator!=</CODE></H3>
+
+<PRE>bool <B>operator!=</B>(const error_code&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>!(*this == right)</CODE>.</P>
+
+<H3><A NAME="error_code__operator&lt;"></A><CODE>error_code::operator&lt;</CODE></H3>
+
+<PRE>bool <B>operator&lt;</B>(const error_code&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>category() &lt; right.category()
+|| category() == right.category()
+&amp;&amp; value &lt; right.value()</CODE>.</P>
+
+<H3><A NAME="error_code__value"></A><CODE>error_code::value</CODE></H3>
+
+<PRE>int <B>value</B>() const noexcept;</PRE>
+
+<P>The member function returns the stored error code value.</P>
+
+<H2><CODE><A NAME="error_condition"></A>error_condition</CODE></H2>
+
+<PRE>class <B>error_condition</B> {
+public:
+    <B><A HREF="#error_condition__error_condition">error_condition</A></B>() noexcept;
+    <B><A HREF="#error_condition__error_condition">error_condition</A></B>(int val, const error_category&amp; cat) noexcept;
+    template&lt;class Enum&gt;
+        <B><A HREF="#error_condition__error_condition">error_condition</A></B>(Enum error) noexcept;
+
+    void <B><A HREF="#error_condition__assign">assign</A></B>(int val, const error_category&amp; cat) noexcept;
+    template&lt;class Enum&gt;
+        error_condition&amp; <B><A HREF="#error_condition__operator2">operator=</A></B>(Enum error) noexcept;
+    void <B><A HREF="#error_condition__clear">clear</A></B>();
+
+    int <B><A HREF="#error_condition__value">value</A></B>() const noexcept;
+    const error_category&amp; <B><A HREF="#error_condition__category">category</A></B>() const noexcept;
+    string <B><A HREF="#error_condition__message">message</A></B>() const;
+    explicit <B><A HREF="#error_condition__operator_bool">operator bool</A></B>() const noexcept;
+
+    bool <B><A HREF="#error_condition__operator22">operator==</A></B>(const error_condition&amp; right) const noexcept;
+    bool <B><A HREF="#error_condition__operator!2">operator!=</A></B>(const error_condition&amp; right) const noexcept;
+    bool <B><A HREF="#error_condition__operator&lt;">operator&lt;</A></B>(const error_condition&amp; right) const noexcept;
+    };</PRE>
+
+<P>The class stores an error code value and a pointer to an object that
+characterizes a
+<A HREF="#category_of_error_codes">category of error codes</A>
+to characterize a reported user-defined error.</P>
+
+<H3><A NAME="error_condition__assign"></A><CODE>error_condition::assign</CODE></H3>
+
+<PRE>void <B>assign</B>(int val, const error_category&amp; cat) noexcept;</PRE>
+
+<P>The member function stores <CODE>val</CODE> as the error code value
+and a pointer to <CODE>cat</CODE>.</P>
+
+<H3><A NAME="error_condition__category"></A><CODE>error_condition::category</CODE></H3>
+
+<PRE>const error_category&amp; <B>category</B>() const noexcept;</PRE>
+
+<P>The member function returns a reference to the stored category.</P>
+
+<H3><A NAME="error_condition__clear"></A><CODE>error_condition::clear</CODE></H3>
+
+<PRE><B>clear</B>() noexcept;</PRE>
+
+<P>The member function stores a zero error code value and a pointer to the
+<CODE><A HREF="#generic_category">generic category</A></CODE>.</P>
+
+<H3><A NAME="error_condition__error_condition"></A><CODE>error_condition::error_condition</CODE></H3>
+
+<PRE><B>error_condition</B>() noexcept;
+<B>error_condition</B>(int val, const error_category&amp; cat) noexcept;
+template&lt;class Enum&gt;
+    <B>error_condition</B>(Enum error) noexcept;</PRE>
+
+<P>The first constructor stores a zero error code value and a pointer to the
+<CODE><A HREF="#generic_category">generic category</A></CODE>.</P>
+
+<P>The second constructor stores <CODE>val</CODE> as the error code value
+and a pointer to <CODE>error_category</CODE>.</P>
+
+<P>The third constructor assigns
+<CODE><A HREF="#make_error_code">make_error_code</A>(error)</CODE>
+to <CODE>*this</CODE>.
+Unless <CODE>is_error_condition_enum&lt;Enum&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>,
+the constructor does not participate in overload resolution.</P>
+
+<H3><A NAME="error_condition__message"></A><CODE>error_condition::message</CODE></H3>
+
+<PRE>string <B>message</B>() const;</PRE>
+
+<P>The member function returns
+<CODE><A HREF="#error_condition__category">category</A>().
+<A HREF="#error_category__message">message</A>(
+<A HREF="#error_condition__value">value</A>())</CODE>.</P>
+
+<H3><A NAME="error_condition__operator_bool"></A><CODE>error_condition::operator bool</CODE></H3>
+
+<PRE>explicit <B>operator bool</B>() const noexcept;</PRE>
+
+<P>The operator returns a value convertible to <CODE>true</CODE> only if
+<CODE><A HREF="#error_condition__value">value</A>() != 0</CODE>.
+The return type is convertible only to <CODE>bool</CODE>,
+not to <CODE>void *</CODE> or other known scalar type.</P>
+
+<H3><A NAME="error_condition__operator2"></A><CODE>error_condition::operator=</CODE></H3>
+
+<PRE>template&lt;class Enum&gt;
+    error_condition&amp; <B>operator=</B>(Enum error) noexcept;</PRE>
+
+<P>The member operator assigns
+<CODE><A HREF="#make_error_code">make_error_code</A>(error)</CODE>
+to <CODE>*this</CODE>.
+It returns <CODE>*this</CODE>.
+Unless <CODE>is_error_condition_enum&lt;Enum&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>,
+the operator does not participate in overload resolution.</P>
+
+<H3><A NAME="error_condition__operator22"></A><CODE>error_condition::operator==</CODE></H3>
+
+<PRE>bool <B>operator==</B>(const error_condition&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>category() == right.category()
+&amp;&amp; value == right.value()</CODE>.</P>
+
+<H3><A NAME="error_condition__operator!2"></A><CODE>error_condition::operator!=</CODE></H3>
+
+<PRE>bool <B>operator!=</B>(const error_condition&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>!(*this == right)</CODE>.</P>
+
+<H3><A NAME="error_condition__operator&lt;"></A><CODE>error_condition::operator&lt;</CODE></H3>
+
+<PRE>bool <B>operator&lt;</B>(const error_condition&amp; right) const noexcept;</PRE>
+
+<P>The member operator returns <CODE>category() &lt; right.category()
+|| category() == right.category()
+&amp;&amp; value &lt; right.value()</CODE>.</P>
+
+<H3><A NAME="error_condition__value"></A><CODE>error_condition::value</CODE></H3>
+
+<PRE>int <B>value</B>() const noexcept;</PRE>
+
+<P>The member function returns the stored error code value.</P>
+
+<H2><CODE><A NAME="generic_category_func"></A>generic_category</CODE></H2>
+
+<PRE>const error_category&amp; <B>generic_category</B>() noexcept;</PRE>
+
+<P>The function returns a reference to the
+<CODE><A HREF="#generic_category">generic category</A></CODE>.</P>
+
+<H2><CODE><A NAME="generic_errno"></A>generic_errno</CODE></H2>
+
+<PRE>typedef errc <B>generic_error</B>;</PRE>
+
+<P>The type is a synonym for
+<CODE><A HREF="#errc">errc</A></CODE>.</P>
+
+<H2><A NAME="hash"></A><CODE>hash</CODE></H2>
+
+<PRE>template&lt;&gt;
+    struct <B>hash&lt;error_code&gt;</B>
+        : public <A HREF="functio2.html#unary_function">unary_function</A>&lt;bitset&lt;Bits&gt;, size_t&gt; {
+    size_t <B>operator()</B>(error_code val) const;
+    };</PRE>
+
+<P>The template class defines its member function as returning
+a value uniquely determined by <CODE>val</CODE>. The member function defines a
+<A HREF="functio2.html#hash_function">hash function</A>, suitable for mapping values of type
+<CODE><A HREF="#error_code">error_code</A></CODE>
+to a distribution of index values.</P>
+
+<H2><CODE><A NAME="is_error_code_enum"></A>is_error_code_enum</CODE></H2>
+
+<PRE>template&lt;Enum&gt;
+    class <B>is_error_code_enum</B>;</PRE>
+
+<P>An instance of the <A HREF="typetrait.html#type_predicate">type predicate</A>
+<A HREF="typetrait.html#holds_true">holds true</A> if the type <CODE>Enum</CODE> is
+an enumeration suitable for storing in an object of type
+<CODE><A HREF="#error_code">error_code</A></CODE>.</P>
+
+<P>It is permissible to add specializations to this type for
+user-defined types.</P>
+
+<H2><CODE><A NAME="is_error_condition_enum"></A>is_error_condition_enum</CODE></H2>
+
+<PRE>template&lt;Enum&gt;
+    class <B>is_error_condition_enum</B>;</PRE>
+
+<P>An instance of the <A HREF="typetrait.html#type_predicate">type predicate</A>
+<A HREF="typetrait.html#holds_true">holds true</A> if the type <CODE>Enum</CODE> is
+an enumeration suitable for storing in an object of type
+<CODE><A HREF="#error_condition">error_condition</A></CODE>.</P>
+
+<P>It is permissible to add specializations to this type for
+user-defined types.</P>
+
+<H2><CODE><A NAME="make_error_code"></A>make_error_code</CODE></H2>
+
+<PRE>error_code <B>make_error_code</B>(generic_errno errval) noexcept;</PRE>
+
+<P>The function returns
+<CODE><A HREF="#error_code">error_code</A>(errval,
+<A HREF="#generic_category_func">generic_category</A>())</CODE>.</P>
+
+<P>It is permissible to add specializations to this function for
+user-defined types.</P>
+
+<H2><CODE><A NAME="make_error_condition"></A>make_error_condition</CODE></H2>
+
+<PRE>error_condition <B>make_error_condition</B>(generic_errno errval) noexcept;</PRE>
+
+<P>The function returns
+<CODE><A HREF="#error_condition">error_condition</A>(errval,
+<A HREF="#generic_category_func">generic_category</A>())</CODE>.</P>
+
+<H2><CODE><A NAME="operator&lt;&lt;"></A>operator&lt;&lt;</CODE></H2>
+
+<PRE>template&lt;class Elem,
+    class Traits&gt;
+    basic_ostream&lt;Elem, Traits&gt;&amp;
+        <B>operator&lt;&lt;</B>(basic_ostream&lt;Elem, Traits&gt;&amp; ostr,
+            const error_code&amp; code);</PRE>
+
+<P>The template function returns
+<CODE>ostr &lt;&lt; code.category() &lt;&lt; ':' &lt;&lt; code.value()</CODE>.</P>
+
+<H2><CODE><A NAME="operator22"></A>operator==</CODE></H2>
+
+<PRE>bool <B>operator==</B>(const error_code&amp; left, const error_condition&amp; right) noexcept;
+bool <B>operator==</B>(const error_condition&amp; left, const error_code&amp; right) noexcept;</PRE>
+
+<P>The function returns <CODE>left.category().equivalent(left.value(), right)
+|| right.category().equivalent(left, right.value())</CODE>.</P>
+
+<H2><CODE><A NAME="operator!2"></A>operator!=</CODE></H2>
+
+<PRE>bool <B>operator!=</B>(const error_code&amp; left, const error_condition&amp; right);
+bool <B>operator!=</B>(const error_condition&amp; left, const error_code&amp; right);</PRE>
+
+<P>The function returns <CODE>!(left == right)</CODE>.</P>
+
+<H2><CODE><A NAME="system_category_func"></A>system_category</CODE></H2>
+
+<PRE>const error_category&amp; <B>system_category</B>() noexcept;</PRE>
+
+<P>The function returns a reference to the
+<CODE><A HREF="#system_category">system category</A></CODE>.</P>
+
+<H2><A NAME="system_error"></A><CODE>system_error</CODE></H2>
+
+<PRE>class <B>system_error</B> : public <A HREF="stdexcep.html#runtime_error">runtime_error</A> {
+public:
+    <B>system_error</B>(error_code code);
+    <B>system_error</B>(error_code code, const string&amp; message);
+    <B>system_error</B>(error_code code, const char *message);
+    <B>system_error</B>(int val, const error_category&amp; cat);
+    <B>system_error</B>(int val, const error_category&amp; cat,
+        const string&amp; message);
+    <B>system_error</B>(int val, const error_category&amp; cat,
+        const char *message);
+
+    const error_code&amp; <B><A NAME="system_error__code"></A>code</B>() const noexcept;
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+to report a low-level system overflow. The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is constructed from
+<CODE>message</CODE> and the stored object of type
+<CODE><A HREF="#error_code">error_code</A></CODE>
+(either <CODE>code</CODE> or <CODE>error_code(val, cat)</CODE>).</P>
+
+<P>The member function <CODE>code()</CODE> returns the stored <CODE>error_code</CODE>
+object.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by Dinkumware, Ltd. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

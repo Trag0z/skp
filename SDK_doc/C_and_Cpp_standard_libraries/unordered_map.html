@@ -1,0 +1,1579 @@
+<HTML><HEAD>
+<TITLE>&lt;unordered_map&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;unordered_map&gt;"></A><CODE>&lt;unordered_map&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P>Include the <A HREF="index.html#STL">STL</A>
+standard header <B><CODE>&lt;unordered_map&gt;</CODE></B> to define the
+<A HREF="lib_cont.html#Containers">container</A>
+template classes <CODE>unordered_map</CODE> and
+<CODE>unordered_multimap</CODE>, and their supporting
+templates.</P>
+
+<PRE>namespace std {
+        // DECLARATIONS
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    class <B><A HREF="#unordered_map">unordered_map</A></B>;
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    class <B><A HREF="#unordered_multimap">unordered_multimap</A></B>;
+
+        // TEMPLATE FUNCTIONS
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    void <B><A HREF="#swap">swap</A></B>(
+        unordered_map&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        unordered_map&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    void <B><A HREF="#swap">swap</A></B>(
+        unordered_multimap&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        unordered_multimap&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);
+
+        // TEMPLATE OPERATORS
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>( <B>[added with C++11]</B>
+        const unordered_map&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        const unordered_map&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>( <B>[added with C++11]</B>
+        const unordered_multimap&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        const unordered_multimap&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);
+
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>( <B>[added with C++11]</B>
+        const unordered_map&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        const unordered_map&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>( <B>[added with C++11]</B>
+        const unordered_multimap&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        const unordered_multimap&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);
+    namespace tr1 {
+using std::unordered_map; using std::unordered_multimap; <B>[added with C++11]</B>
+    }  // namespace tr1
+}  // namespace std</PRE>
+
+<H2><A NAME="operator22"></A><CODE>operator==</CODE></H2>
+
+<PRE>template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    bool <B>operator==</B>( <B>[added with C++11]</B>
+        const unordered_map&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        const unordered_map&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    bool <B>operator==</B>( <B>[added with C++11]</B>
+        const unordered_multimap&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        const unordered_multimap&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);</PRE>
+
+<P>The first template function overloads <CODE>operator==</CODE>
+to compare two objects of template class
+<CODE><A HREF="#unordered_map">unordered_map</A></CODE>.
+The function returns true only if
+<CODE>left.<A HREF="#unordered_map__size">size</A>() ==
+right.size()</CODE> and,
+for each element <CODE>X</CODE> in <CODE>left</CODE>,
+<CODE>right.<A HREF="#unordered_map__find">find</A>(X-&gt;first)</CODE>
+exists and compares equal to <CODE>X</CODE> using <CODE>operator==</CODE>.</P>
+
+<P>The second template function overloads <CODE>operator==</CODE>
+to compare two objects of template class
+<CODE><A HREF="#unordered_multimap">unordered_multimap</A></CODE>.
+The function returns true only if
+<CODE>left.<A HREF="#unordered_map__size">size</A>() ==
+right.size()</CODE> and,
+for each element <CODE>X</CODE> in
+<CODE>left.<A HREF="#unordered_map__equal_range">equal_range</A>(X.first)</CODE>,
+<CODE>right.equal_range(X.first)</CODE> is a permutation,
+using <CODE><A HREF="algorith.html#is_permutation">is_permutation</A></CODE>.</P>
+
+<H2><A NAME="operator!2"></A><CODE>operator!=</CODE></H2>
+
+<PRE>template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    bool <B>operator!=</B>( <B>[added with C++11]</B>
+        const unordered_map&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        const unordered_map&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    bool <B>operator!=</B>( <B>[added with C++11]</B>
+        const unordered_multimap&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        const unordered_multimap&lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);</PRE>
+
+<P>The template functions both return <CODE>!(left == right)</CODE>.</P>
+
+<H2><A NAME="swap"></A><CODE>swap</CODE></H2>
+
+<PRE>template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    void <B>swap</B>(
+        unordered_multimap &lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        unordered_multimap &lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);
+template&lt;class Key, class Ty, class Hash, class Pred, class Alloc&gt;
+    void <B>swap</B>(
+        unordered_map &lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; left,
+        unordered_map &lt;Key, Ty, Hash, Pred, Alloc&gt;&amp; right);</PRE>
+
+<P>The template function executes
+<CODE>left.swap(right)</CODE>.</P>
+
+<H2><A NAME="unordered_map"></A><CODE>unordered_map</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#unordered_map__allocator_type">allocator_type</A>
+&middot; <A HREF="#unordered_map__at">at</A>
+&middot; <A HREF="#unordered_map__begin">begin</A>
+&middot; <A HREF="#unordered_map__bucket">bucket</A>
+&middot; <A HREF="#unordered_map__bucket_count">bucket_count</A>
+&middot; <A HREF="#unordered_map__bucket_size">bucket_size</A>
+&middot; <A HREF="#unordered_map__cbegin">cbegin</A>
+&middot; <A HREF="#unordered_map__cend">cend</A>
+&middot; <A HREF="#unordered_map__clear">clear</A>
+&middot; <A HREF="#unordered_map__const_iterator">const_iterator</A>
+&middot; <A HREF="#unordered_map__const_local_iterator">const_local_iterator</A>
+&middot; <A HREF="#unordered_map__const_pointer">const_pointer</A>
+&middot; <A HREF="#unordered_map__const_reference">const_reference</A>
+&middot; <A HREF="#unordered_map__count">count</A>
+&middot; <A HREF="#unordered_map__difference_type">difference_type</A>
+&middot; <A HREF="#unordered_map__emplace">emplace</A>
+&middot; <A HREF="#unordered_map__emplace_hint">emplace_hint</A>
+&middot; <A HREF="#unordered_map__empty">empty</A>
+&middot; <A HREF="#unordered_map__end">end</A>
+&middot; <A HREF="#unordered_map__equal_range">equal_range</A>
+&middot; <A HREF="#unordered_map__erase">erase</A>
+&middot; <A HREF="#unordered_map__find">find</A>
+&middot; <A HREF="#unordered_map__get_allocator">get_allocator</A>
+&middot; <A HREF="#unordered_map__hasher">hasher</A>
+&middot; <A HREF="#unordered_map__hash_function">hash_function</A>
+&middot; <A HREF="#unordered_map__insert">insert</A>
+&middot; <A HREF="#unordered_map__iterator">iterator</A>
+&middot; <A HREF="#unordered_map__key_eq">key_eq</A>
+&middot; <A HREF="#unordered_map__key_equal">key_equal</A>
+&middot; <A HREF="#unordered_map__key_type">key_type</A>
+&middot; <A HREF="#unordered_map__load_factor">load_factor</A>
+&middot; <A HREF="#unordered_map__local_iterator">local_iterator</A>
+&middot; <A HREF="#unordered_map__mapped_type">mapped_type</A>
+&middot; <A HREF="#unordered_map__max_bucket_count">max_bucket_count</A>
+&middot; <A HREF="#unordered_map__max_load_factor">max_load_factor</A>
+&middot; <A HREF="#unordered_map__max_size">max_size</A>
+&middot; <A HREF="#unordered_map__operator2">operator=</A>
+&middot; <A HREF="#unordered_map__operator[]">operator[]</A>
+&middot; <A HREF="#unordered_map__pointer">pointer</A>
+&middot; <A HREF="#unordered_map__reference">reference</A>
+&middot; <A HREF="#unordered_map__rehash">rehash</A>
+&middot; <A HREF="#unordered_map__reserve">reserve</A>
+&middot; <A HREF="#unordered_map__size">size</A>
+&middot; <A HREF="#unordered_map__size_type">size_type</A>
+&middot; <A HREF="#unordered_map__swap">swap</A>
+&middot; <A HREF="#unordered_map__unordered_map">unordered_map</A>
+&middot; <A HREF="#unordered_map__value_type">value_type</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Key,
+    class Ty,
+    class Hash = hash&lt;Key&gt;,
+    class Pred = equal_to&lt;Key&gt;,
+    class Alloc = allocator&lt;pair&lt;const Key, Ty&gt; &gt; &gt;
+    class <B>unordered_map</B> {
+public:
+    typedef Key <B><A HREF="#unordered_map__key_type">key_type</A></B>;
+    typedef Ty <B><A HREF="#unordered_map__mapped_type">mapped_type</A></B>;
+    typedef pair&lt;const Key, Ty&gt; <B><A HREF="#unordered_map__value_type">value_type</A></B>;
+    typedef Hash <B><A HREF="#unordered_map__hasher">hasher</A></B>;
+    typedef Pred <B><A HREF="#unordered_map__key_equal">key_equal</A></B>;
+    typedef Alloc <B><A HREF="#unordered_map__allocator_type">allocator_type</A></B>;
+
+    typedef typename Alloc::pointer <B><A HREF="#unordered_map__pointer">pointer</A></B>;
+    typedef typename Alloc::const_pointer <B><A HREF="#unordered_map__const_pointer">const_pointer</A></B>;
+    typedef typename Alloc::reference <B><A HREF="#unordered_map__reference">reference</A></B>;
+    typedef typename Alloc::const_reference <B><A HREF="#unordered_map__const_reference">const_reference</A></B>;
+    typedef typename Alloc::size_type <B><A HREF="#unordered_map__size_type">size_type</A></B>;
+    typedef typename Alloc::difference_type <B><A HREF="#unordered_map__difference_type">difference_type</A></B>;
+
+    typedef T0 <B><A HREF="#unordered_map__iterator">iterator</A></B>;
+    typedef T1 <B><A HREF="#unordered_map__const_iterator">const_iterator</A></B>;
+    typedef T2 <B><A HREF="#unordered_map__local_iterator">local_iterator</A></B>;
+    typedef T3 <B><A HREF="#unordered_map__const_local_iterator">const_local_iterator</A></B>;
+
+    explicit <B><A HREF="#unordered_map__unordered_map">unordered_map</A></B>(
+        size_type nbuckets = N0,
+        const Hash&amp; hfn = Hash(),
+        const Pred&amp; comp = Pred(),
+        const Alloc&amp; al = Alloc());
+    explicit <B><A HREF="#unordered_map__unordered_map">unordered_map</A></B>(const Alloc&amp; al); <B>[added with C++11]</B>&nbsp;
+
+    <B><A HREF="#unordered_map__unordered_map">unordered_map</A></B>(const unordered_map&amp; right);
+    <B><A HREF="#unordered_map__unordered_map">unordered_map</A></B>(const unordered_map&amp; right, const Alloc&amp; al); <B>[added with C++11]</B>&nbsp;
+    <B><A HREF="#unordered_map__unordered_map">unordered_map</A></B>(unordered_map&amp;&amp; right); <B>[added with C++11]</B>&nbsp;
+    <B><A HREF="#unordered_map__unordered_map">unordered_map</A></B>(unordered_map&amp;&amp; right, const Alloc&amp; al); <B>[added with C++11]</B>
+
+    template&lt;class InIt&gt;
+        <B><A HREF="#unordered_map__unordered_map">unordered_map</A></B>(
+        InIt first, InIt last,
+        size_type nbuckets = N0,
+        const Hash&amp; hfn = Hash(),
+        const Pred&amp; comp = Pred(),
+        const Alloc&amp; al = Alloc());
+    <B><A HREF="#unordered_map__unordered_map">unordered_map</A></B>(
+        initializer_list&lt;value_type&gt; init,
+        size_type nbuckets = N0,
+        const Hash&amp; hfn = Hash(),
+        const Pred&amp; comp = Pred(),
+        const Alloc&amp; al = Alloc()); <B>[added with C++11]</B>
+
+    unordered_map&amp; <B><A HREF="#unordered_map__operator2">operator=</A></B>(const unordered_map&amp; right);
+    unordered_map&amp; <B><A HREF="#unordered_map__operator2">operator=</A></B>(initializer_list&lt;value_type&gt; init) <B>[added with C++11]</B>
+    unordered_map&amp; <B><A HREF="#unordered_map__operator2">operator=</A></B>(unordered_map&amp;&amp; right); <B>[added with C++11]</B>
+
+    iterator <B><A HREF="#unordered_map__begin">begin</A></B>() noexcept;
+    const_iterator <B><A HREF="#unordered_map__begin">begin</A></B>() const noexcept;
+    local_iterator <B><A HREF="#unordered_map__begin">begin</A></B>(size_type nbucket);
+    const_local_iterator <B><A HREF="#unordered_map__begin">begin</A></B>(size_type nbucket) const;
+
+    const_iterator <B><A HREF="#unordered_map__cbegin">cbegin</A></B>() const noexcept; <B>[added with C++11]</B>
+    const_local_iterator <B><A HREF="#unordered_map__cbegin">cbegin</A></B>(size_type nbucket) const; <B>[added with C++11]</B>
+
+    iterator <B><A HREF="#unordered_map__end">end</A></B>() noexcept;
+    const_iterator <B><A HREF="#unordered_map__end">end</A></B>() const noexcept;
+    local_iterator <B><A HREF="#unordered_map__end">end</A></B>(size_type nbucket);
+    const_local_iterator <B><A HREF="#unordered_map__end">end</A></B>(size_type nbucket) const;
+
+    const_iterator <B><A HREF="#unordered_map__cend">cend</A></B>() const noexcept; <B>[added with C++11]</B>
+    const_local_iterator <B><A HREF="#unordered_map__cend">cend</A></B>(size_type nbucket) const; <B>[added with C++11]</B>
+
+    size_type <B><A HREF="#unordered_map__size">size</A></B>() const noexcept;
+    size_type <B><A HREF="#unordered_map__max_size">max_size</A></B>() const noexcept;
+    bool <B><A HREF="#unordered_map__empty">empty</A></B>() const noexcept;
+
+    size_type <B><A HREF="#unordered_map__bucket_count">bucket_count</A></B>() const noexcept;
+    size_type <B><A HREF="#unordered_map__max_bucket_count">max_bucket_count</A></B>() const noexcept;
+    size_type <B><A HREF="#unordered_map__bucket">bucket</A></B>(const Key&amp; keyval) const;
+    size_type <B><A HREF="#unordered_map__bucket_size">bucket_size</A></B>(size_type nbucket) const;
+
+    Hash <B><A HREF="#unordered_map__hash_function">hash_function</A></B>() const;
+    Pred <B><A HREF="#unordered_map__key_eq">key_eq</A></B>() const;
+    Alloc <B><A HREF="#unordered_map__get_allocator">get_allocator</A></B>() const noexcept;
+
+    float <B><A HREF="#unordered_map__load_factor">load_factor</A></B>() const noexcept;
+    float <B><A HREF="#unordered_map__max_load_factor">max_load_factor</A></B>() const noexcept;
+    void <B><A HREF="#unordered_map__max_load_factor">max_load_factor</A></B>(float factor);
+    void <B><A HREF="#unordered_map__rehash">rehash</A></B>(size_type nbuckets);
+    void <B><A HREF="#unordered_map__reserve">reserve</A></B>(size_type nelements); <B>[added with C++11]</B>
+
+    mapped_type&amp; <B><A HREF="#unordered_map__operator[]">operator[]</A></B>(const Key&amp; keyval);
+    mapped_type&amp; <B><A HREF="#unordered_map__operator[]">operator[]</A></B>(Key&amp;&amp; keyval); <B>[added with C++11]</B>
+
+    mapped_type&amp; <B><A HREF="#unordered_map__at">at</A></B>(const Key&amp; keyval); <B>[added with C++11]</B>
+    const mapped_type&amp; <B><A HREF="#unordered_map__at">at</A></B>(const Key&amp; keyval); const <B>[added with C++11]</B>
+
+    pair&lt;iterator, bool&gt; <B><A HREF="#unordered_map__insert">insert</A></B>(const value_type&amp; val);
+    iterator <B><A HREF="#unordered_map__insert">insert</A></B>(const_iterator where, const value_type&amp; val);
+    template&lt;class InIt&gt;
+        void <B><A HREF="#unordered_map__insert">insert</A></B>(InIt first, InIt last);
+    void <B><A HREF="#unordered_map__insert">insert</A></B>(initializer_list&lt;value_type&gt; init) <B>[added with C++11]</B>
+    template&lt;class Valty&gt;
+        pair&lt;iterator, bool&gt; <B><A HREF="#unordered_map__insert">insert</A></B>(Valty&amp;&amp; val); <B>[added with C++11]</B>
+    template&lt;class Valty&gt;
+        iterator <B><A HREF="#unordered_map__insert">insert</A></B>(const_iterator where, Valty&amp;&amp; val); <B>[added with C++11]</B>
+
+    template&lt;class... Valty&gt;
+        pair&lt;iterator, bool&gt; <B><A HREF="#unordered_map__emplace">emplace</A></B>(Valty&amp;&amp;... val); <B>[added with C++11]</B>
+    template&lt;class... Valty&gt;
+        iterator <B><A HREF="#unordered_map__emplace_hint">emplace_hint</A></B>(const_iterator where, Valty&amp;&amp;... val); <B>[added with C++11]</B>
+
+    iterator <B><A HREF="#unordered_map__erase">erase</A></B>(const_iterator where);
+    iterator <B><A HREF="#unordered_map__erase">erase</A></B>(const_iterator first, const_iterator last);
+    size_type <B><A HREF="#unordered_map__erase">erase</A></B>(const Key&amp; keyval);
+    void <B><A HREF="#unordered_map__clear">clear</A></B>() noexcept;
+
+    void <B><A HREF="#unordered_map__swap">swap</A></B>(unordered_map&amp; right);
+
+    iterator <B><A HREF="#unordered_map__find">find</A></B>(const Key&amp; keyval);
+    const_iterator <B><A HREF="#unordered_map__find">find</A></B>(const Key&amp; keyval) const;
+    size_type <B><A HREF="#unordered_map__count">count</A></B>(const Key&amp; keyval) const;
+    pair&lt;iterator, iterator&gt;
+        <B><A HREF="#unordered_map__equal_range">equal_range</A></B>(const Key&amp; keyval);
+    pair&lt;const_iterator, const_iterator&gt;
+        <B><A HREF="#unordered_map__equal_range">equal_range</A></B>(const Key&amp; keyval) const;
+    };</PRE>
+
+<P>The template class describes an object that controls a
+varying-length sequence of elements of type
+<CODE>pair&lt;const Key, Ty&gt;</CODE>.
+The sequence is weakly
+<A HREF="lib_stl.html#sequence_ordering">ordered by</A> a <B>hash function</B>,
+which partitions the sequence into an ordered set of subsequences called
+<B>buckets</B>. Within each bucket a <B>comparison function</B> determines
+whether any pair of elements has
+<A HREF="lib_stl.html#equivalent_ordering">equivalent ordering</A>.
+Each element stores two objects, a <B>sort key</B> and a <B>value</B>.
+The sequence is represented in a way that permits lookup, insertion,
+and removal of an arbitrary element with a number of operations that can be
+independent of the number of elements in the sequence (constant time),
+at least when all buckets are of roughly equal length.
+In the worst case, when all of the elements are in one bucket,
+the number of operations is proportional to the number of elements
+in the sequence (linear time). Moreover, inserting an element
+invalidates no iterators unless rehashing occurs, and removing an element
+invalidates only those iterators which point at the removed element.</P>
+
+<P>The object orders the sequence it controls by calling two stored objects,
+a comparison function object of type
+<A HREF="#unordered_map__key_equal">key_equal</A>
+and a hash function object of type
+<A HREF="#unordered_map__hasher">hasher</A>.
+You access the first stored object by calling the member function
+<CODE><A HREF="#unordered_map__key_eq">key_eq</A>()</CODE>;
+and you access the second stored object by calling the member function
+<CODE><A HREF="#unordered_map__hash_function">hash_function</A>()</CODE>.
+Specifically, for all values <CODE>X</CODE> and <CODE>Y</CODE> of type <CODE>Key</CODE>,
+the call <CODE>key_eq()(X, Y)</CODE> returns true only if
+the two argument values have equivalent ordering;
+the call <CODE>hash_function()(keyval)</CODE> yields a distribution
+of values of type <CODE>size_t</CODE>.
+Unlike template class <CODE><A HREF="#unordered_multimap">unordered_multimap</A></CODE>,
+an object of template class <CODE>unordered_map</CODE> ensures that
+<CODE>key_eq()(X, Y)</CODE> is always false for any two elements of the controlled sequence.
+(Keys are unique.)</P>
+
+<P>The object also stores a <B>maximum load factor</B>, which specifies the
+maximum desired average number of elements per bucket. If inserting an element
+causes <CODE><A HREF="#unordered_map__load_factor">load_factor</A>()</CODE>
+to exceed the maximum load factor, the container increases the number of
+buckets and rebuilds the hash table as needed.</P>
+
+<P>The actual order of elements in the controlled sequence depends on the
+hash function, the comparison function, the order of insertion,
+the maximum load factor, and the current number of buckets.
+You cannot in general predict the order of elements
+in the controlled sequence. You can always be assured, however, that any
+subset of elements that have equivalent ordering
+are adjacent in the controlled sequence.</P>
+
+<P>The object allocates and frees storage for the sequence it controls
+through a stored <A HREF="memory.html#allocator_object">allocator object</A>
+of type <A HREF="#unordered_map__allocator_type">allocator_type</A>.
+Such an allocator object must have
+the same external interface as an object of template class
+<A HREF="memory.html#allocator"><CODE>allocator</CODE></A>.</P>
+
+<H3><CODE><A NAME="unordered_map__allocator_type"></A>unordered_map::allocator_type</CODE></H3>
+
+<PRE>typedef Alloc <B>allocator_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Alloc</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__at"></A>unordered_map::at</CODE></H3>
+
+<PRE>const mapped_type&amp; <B>at</B>(const Key&amp; keyval) const; <B>[added with C++11]</B>
+mapped_type&amp; <B>at</B>(const Key&amp; keyval); <B>[added with C++11]</B></PRE>
+
+<P>The member function effectively determines the iterator <CODE>where</CODE>
+as the return value of
+<CODE><A HREF="#unordered_map__find">find</A>(keyval)</CODE>.
+If that iterator does not designate an element whose sort key has
+<A HREF="lib_stl.html#equivalent_ordering">equivalent ordering</A>
+to <CODE>keyval</CODE>, the function throws an object of class
+<CODE>out_of_range</CODE>. Otherwise, it returns a reference to
+<CODE>(*where).<A HREF="utility.html#pair__second">second</A></CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__begin"></A>unordered_map::begin</CODE></H3>
+
+<PRE>iterator <B>begin</B>() noexcept;
+const_iterator <B>begin</B>() const noexcept;
+local_iterator <B>begin</B>(size_type nbucket);
+const_local_iterator <B>begin</B>(size_type nbucket) const;</PRE>
+
+<P>The first two member functions return a forward iterator that points at
+the first element of the sequence (or just beyond the end of an empty
+sequence). The last two member functions return a forward iterator that points at
+the first element of bucket <CODE>nbucket</CODE> (or just beyond the end of an empty
+bucket).</P>
+
+<H3><CODE><A NAME="unordered_map__bucket"></A>unordered_map::bucket</CODE></H3>
+
+<PRE>size_type <B>bucket</B>(const Key&amp; keyval) const;</PRE>
+
+<P>The member function returns the bucket number currently corresponding
+to the key value <CODE>keyval</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__bucket_count"></A>unordered_map::bucket_count</CODE></H3>
+
+<PRE>size_type <B>bucket_count</B>() const noexcept;</PRE>
+
+<P>The member function returns the current number of buckets.</P>
+
+<H3><CODE><A NAME="unordered_map__bucket_size"></A>unordered_map::bucket_size</CODE></H3>
+
+<PRE>size_type <B>bucket_size</B>(size_type nbucket) const;</PRE>
+
+<P>The member functions returns the size of bucket number <CODE>nbucket</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__cbegin"></A>unordered_map::cbegin</CODE></H3>
+
+<PRE>const_iterator <B>cbegin</B>() const noexcept; <B>[added with C++11]</B>
+const_local_iterator <B>cbegin</B>(size_type nbucket) const; <B>[added with C++11]</B></PRE>
+
+<P>The first member function returns a forward iterator that points at
+the first element of the sequence (or just beyond the end of an empty
+sequence). The second member function returns a forward iterator that points at
+the first element of bucket <CODE>nbucket</CODE> (or just beyond the end of an empty
+bucket).</P>
+
+<H3><CODE><A NAME="unordered_map__cend"></A>unordered_map::cend</CODE></H3>
+
+<PRE>const_reference <B>cend</B>() const noexcept; <B>[added with C++11]</B>
+const_local_iterator <B>cend</B>(size_type nbucket) const; <B>[added with C++11]</B></PRE>
+
+<P>The first member function returns a forward iterator that points
+just beyond the end of the sequence.
+The second member function returns a forward iterator that points
+just beyond the end of bucket <CODE>nbucket</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__clear"></A>unordered_map::clear</CODE></H3>
+
+<PRE>void <B>clear</B>() noexcept;</PRE>
+
+<P>The member function calls
+<CODE><A HREF="#unordered_map__erase">erase</A>(
+<A HREF="#unordered_map__begin">begin</A>(),
+<A HREF="#unordered_map__end">end</A>())</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__const_iterator"></A>unordered_map::const_iterator</CODE></H3>
+
+<PRE>typedef T1 <B>const_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant
+forward iterator for the controlled sequence.
+It is described here as a
+synonym for the implementation-defined type <CODE>T1</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__const_local_iterator"></A>unordered_map::const_local_iterator</CODE></H3>
+
+<PRE>typedef T3 <B>const_local_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant
+forward iterator for a bucket.
+It is described here as a
+synonym for the implementation-defined type <CODE>T3</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__const_pointer"></A>unordered_map::const_pointer</CODE></H3>
+
+<PRE>typedef typename Alloc::const_pointer <B>const_pointer</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant pointer
+to an element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_map__const_reference"></A>unordered_map::const_reference</CODE></H3>
+
+<PRE>typedef typename Alloc::const_reference <B>const_reference</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant reference
+to an element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_map__count"></A>unordered_map::count</CODE></H3>
+
+<PRE>size_type <B>count</B>(const Key&amp; keyval) const;</PRE>
+
+<P>The member function returns the number of elements in the range delimited by
+<CODE><A HREF="#unordered_map__equal_range">equal_range</A>(keyval)</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__difference_type"></A>unordered_map::difference_type</CODE></H3>
+
+<PRE>typedef typename Alloc::difference_type <B>difference_type</B>;</PRE>
+
+<P>The signed integer type describes an object that can represent the
+difference between the addresses of any two elements in the controlled
+sequence.</P>
+
+<H3><CODE><A NAME="unordered_map__emplace"></A>unordered_map::emplace</CODE></H3>
+
+<PRE>template&lt;class... Valty&gt;
+    pair&lt;iterator, bool&gt; <B>emplace</B>(Valty&amp;&amp;... val); <B>[added with C++11]</B></PRE>
+
+<P>The member function effectively returns
+<CODE><A HREF="#unordered_map__insert">insert</A>(value_type(forward&lt;Valty&gt;(val)...))</CODE>,
+except that the element value is constructed in place.</P>
+
+<H3><CODE><A NAME="unordered_map__emplace_hint"></A>unordered_map::emplace_hint</CODE></H3>
+
+<PRE>template&lt;class... Valty&gt;
+    iterator <B>emplace_hint</B>(const_iterator where, Valty&amp;&amp;... val); <B>[added with C++11]</B></PRE>
+
+<P>The member function effectively returns
+<CODE><A HREF="#unordered_map__insert">insert</A>(where, value_type(forward&lt;Valty&gt;(val)...))</CODE>,
+except that the element value is constructed in place.</P>
+
+<H3><CODE><A NAME="unordered_map__empty"></A>unordered_map::empty</CODE></H3>
+
+<PRE>bool <B>empty</B>() const noexcept;</PRE>
+
+<P>The member function returns true for an empty controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_map__end"></A>unordered_map::end</CODE></H3>
+
+<PRE>iterator <B>end</B>() noexcept;
+const_iterator <B>end</B>() const noexcept;
+local_iterator <B>end</B>(size_type nbucket);
+const_local_iterator <B>end</B>(size_type nbucket) const;</PRE>
+
+<P>The first two member functions return a forward iterator that points
+just beyond the end of the sequence.
+The last two member functions return a forward iterator that points
+just beyond the end of bucket <CODE>nbucket</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__equal_range"></A>unordered_map::equal_range</CODE></H3>
+
+<PRE>pair&lt;iterator, iterator&gt;
+    <B>equal_range</B>(const Key&amp; keyval);
+pair&lt;const_iterator, const_iterator&gt;
+    <B>equal_range</B>(const Key&amp; keyval) const;</PRE>
+
+<P>The member function returns a pair of iterators <CODE>X</CODE>
+such that <CODE>[X.<A HREF="utility.html#pair__first">first</A>,
+X.<A HREF="utility.html#pair__second">second</A>)</CODE>
+delimits just those elements of the controlled sequence that have
+equivalent ordering with <CODE>keyval</CODE>. If no such elements exist,
+both iterators are <CODE>end()</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__erase"></A>unordered_map::erase</CODE></H3>
+
+<PRE>iterator <B>erase</B>(const_iterator where);
+iterator <B>erase</B>(const_iterator first, const_iterator last);
+size_type <B>erase</B>(const Key&amp; keyval);</PRE>
+
+<P>The first member function removes the element of the controlled
+sequence pointed to by <CODE>where</CODE>.
+The second member function removes the elements
+in the range <CODE>[first, last)</CODE>.
+Both return an iterator that designates the first element remaining
+beyond any elements removed, or
+<CODE><A HREF="#unordered_map__end">end</A>()</CODE> if no such element exists.</P>
+
+<P>The third member removes the elements in the range delimited by
+<CODE><A HREF="#unordered_map__equal_range">equal_range</A>(keyval)</CODE>.
+It returns the number of elements it removes.</P>
+
+<P>The member functions never throw an exception.</P>
+
+<H3><CODE><A NAME="unordered_map__find"></A>unordered_map::find</CODE></H3>
+
+<PRE>iterator <B>find</B>(const Key&amp; keyval);
+const_iterator <B>find</B>(const Key&amp; keyval) const;</PRE>
+
+<P>The member functions return
+<CODE><A HREF="#unordered_map__equal_range">equal_range</A>(keyval).first</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__get_allocator"></A>unordered_map::get_allocator</CODE></H3>
+
+<PRE>Alloc <B>get_allocator</B>() const noexcept;</PRE>
+
+<P>The member function returns the stored
+<A HREF="memory.html#allocator_object">allocator object</A>.</P>
+
+<H3><CODE><A NAME="unordered_map__hash_function"></A>unordered_map::hash_function</CODE></H3>
+
+<PRE>Hash <B>hash_function</B>() const;</PRE>
+
+<P>The member function returns the stored hash function object.</P>
+
+<H3><CODE><A NAME="unordered_map__hasher"></A>unordered_map::hasher</CODE></H3>
+
+<PRE>typedef Hash <B>hasher</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Hash</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__insert"></A>unordered_map::insert</CODE></H3>
+
+<PRE>pair&lt;iterator, bool&gt; <B>insert</B>(const value_type&amp; val);
+iterator <B>insert</B>(const_iterator where, const value_type&amp; val);
+template&lt;class InIt&gt;
+    void <B>insert</B>(InIt first, InIt last);
+void <B>insert</B>(initializer_list&lt;value_type&gt; init) <B>[added with C++11]</B>
+template&lt;class Valty&gt;
+    pair&lt;iterator, bool&gt; <B>insert</B>(Valty&amp;&amp; val); <B>[added with C++11]</B>
+template&lt;class Valty&gt;
+    iterator <B>insert</B>(const_iterator where, Valty&amp;&amp; val); <B>[added with C++11]</B></PRE>
+
+<P>The first member function determines whether an element <CODE>X</CODE>
+exists in the sequence whose key has
+<A HREF="lib_stl.html#equivalent_ordering">equivalent ordering</A>
+to that of <CODE>val</CODE>. If not, it creates such
+an element <CODE>X</CODE> and initializes it with <CODE>val</CODE>.
+The function then determines the iterator <CODE>where</CODE> that
+designates <CODE>X</CODE>. If an insertion occurred, the function
+returns <CODE><A HREF="utility.html#pair">pair</A>(where, true)</CODE>.
+Otherwise, it returns <CODE>pair(where, false)</CODE>.</P>
+
+<P>The second member function returns <CODE>insert(val).first</CODE>,
+using <CODE>where</CODE> as a starting place within the controlled
+sequence to search for the insertion point. (Insertion can
+possibly occur somewhat faster, if the
+insertion point immediately precedes or follows <CODE>where</CODE>.)</P>
+
+<P>The third member function
+inserts the sequence of element values,
+for each <CODE>where</CODE> in the range <CODE>[first, last)</CODE>,
+by calling <CODE>insert(*where)</CODE>.</P>
+
+<P>The fourth member function inserts the sequence
+specified by an object of class
+<CODE><B><A HREF="lib_cpp.html#initializer_list">initializer_list</A></B>&lt;value_type&gt;</CODE>.</P>
+
+<P>The last two member functions behave the same as the first two
+but with an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.
+If, however, <CODE>is_convertible&lt;Valty, value_type&gt;::value</CODE>
+is false, these member functions do not participate in overload resolution.</P>
+
+<P>If an exception is thrown during the
+insertion of a single element, the container is left unaltered
+and the exception is rethrown.
+If an exception is thrown during the
+insertion of multiple elements, the container is left in a stable
+but unspecified state and the exception is rethrown.</P>
+
+<H3><CODE><A NAME="unordered_map__iterator"></A>unordered_map::iterator</CODE></H3>
+
+<PRE>typedef T0 <B>iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a forward
+iterator for the controlled sequence.
+It is described here as a
+synonym for the implementation-defined type <CODE>T0</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__key_eq"></A>unordered_map::key_eq</CODE></H3>
+
+<PRE>Pred <B>key_eq</B>() const;</PRE>
+
+<P>The member function returns the stored comparison function object.</P>
+
+<H3><CODE><A NAME="unordered_map__key_equal"></A>unordered_map::key_equal</CODE></H3>
+
+<PRE>typedef Pred <B>key_equal</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Pred</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__key_type"></A>unordered_map::key_type</CODE></H3>
+
+<PRE>typedef Key <B>key_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Key</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__load_factor"></A>unordered_map::load_factor</CODE></H3>
+
+<PRE>float <B>load_factor</B>() const noexcept;</PRE>
+
+<P>The member function returns
+<CODE>(float)<A HREF="#unordered_map__size">size</A>() /
+(float)<A HREF="#unordered_map__bucket_count">bucket_count</A>()</CODE>,
+the average number of elements per bucket.</P>
+
+<H3><CODE><A NAME="unordered_map__local_iterator"></A>unordered_map::local_iterator</CODE></H3>
+
+<PRE>typedef T2 <B>local_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a
+forward iterator for a bucket.
+It is described here as a
+synonym for the implementation-defined type <CODE>T2</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__mapped_type"></A>unordered_map::mapped_typer</CODE></H3>
+
+<PRE>typedef Ty <B>mapped_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Ty</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__max_bucket_count"></A>unordered_map::max_bucket_count</CODE></H3>
+
+<PRE>size_type <B>max_bucket_count</B>() const noexcept;</PRE>
+
+<P>The member function returns the maximum number of buckets currently permitted.</P>
+
+<H3><CODE><A NAME="unordered_map__max_load_factor"></A>unordered_map::max_load_factor</CODE></H3>
+
+<PRE>float <B>max_load_factor</B>() const noexcept;
+void <B>max_load_factor</B>(float factor);</PRE>
+
+<P>The first member function returns the stored maximum load factor.
+The second member function replaces the stored maximum load factor with <CODE>factor</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__max_size"></A>unordered_map::max_size</CODE></H3>
+
+<PRE>size_type <B>max_size</B>() const noexcept;</PRE>
+
+<P>The member function returns the length of the longest sequence that
+the object can control.</P>
+
+<H3><CODE><A NAME="unordered_map__operator2"></A>unordered_map::operator=</CODE></H3>
+
+<PRE>unordered_map&amp; <B>operator=</B>(const unordered_map&amp; right);
+unordered_map&amp; <B>operator=</B>(initializer_list&lt;value_type&gt; init) <B>[added with C++11]</B>
+unordered_map&amp; <B>operator=</B>(unordered_map&amp;&amp; right); <B>[added with C++11]</B></PRE>
+
+<P>The first member operator replaces the controlled sequence
+with a copy of the sequence controlled by <CODE>right</CODE>.</P>
+
+<P>The second member operator replaces the controlled sequence
+from an object of class
+<CODE><B><A HREF="lib_cpp.html#initializer_list">initializer_list</A></B>&lt;value_type&gt;</CODE>.</P>
+
+<P>The third member operator is the same as the first, but with an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<H3><CODE><A NAME="unordered_map__operator[]"></A>unordered_map::operator[]</CODE></H3>
+
+<PRE>mapped_type&amp; <B>operator[]</B>(const Key&amp; keyval);
+mapped_type&amp; <B>operator[]</B>(Key&amp;&amp; keyval); <B>[added with C++11]</B></PRE>
+
+<P>The first member function determines the iterator <CODE>where</CODE>
+as the return value of
+<CODE><A HREF="#unordered_map__insert">insert</A>(
+<A HREF="#unordered_map__value_type">value_type</A>(keyval, Ty())</CODE>.
+(It inserts an element with the specified key if no such element
+exists.) It then returns a reference to
+<CODE>(*where).<A HREF="utility.html#pair__second">second</A></CODE>.</P>
+
+<P>The second member operator is the same as the first, but with an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<H3><CODE><A NAME="unordered_map__pointer"></A>unordered_map::pointer</CODE></H3>
+
+<PRE>typedef typename Alloc::pointer <B>pointer</B>;</PRE>
+
+<P>The type describes an object that can serve as a pointer to an
+element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_map__reference"></A>unordered_map::reference</CODE></H3>
+
+<PRE>typedef typename Alloc::reference <B>reference</B>;</PRE>
+
+<P>The type describes an object that can serve as a reference to an
+element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_map__rehash"></A>unordered_map::rehash</CODE></H3>
+
+<PRE>void <B>rehash</B>(size_type nbuckets);</PRE>
+
+<P>The member function alters the number of buckets to be at least <CODE>nbuckets</CODE>
+and rebuilds the hash table as needed.</P>
+
+<H3><CODE><A NAME="unordered_map__reserve"></A>unordered_map::reserve</CODE></H3>
+
+<PRE>void <B>reserve</B>(size_type nelements); <B>[added with C++11]</B></PRE>
+
+<P>The member function returns 
+<CODE><A HREF="#unordered_map__rehash">rehash</A>(ceil(nelements /
+<A HREF="#unordered_map__max_load_factor">max_load_factor</A>()))</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__size"></A>unordered_map::size</CODE></H3>
+
+<PRE>size_type <B>size</B>() const noexcept;</PRE>
+
+<P>The member function returns the length of the controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_map__size_type"></A>unordered_map::size_type</CODE></H3>
+
+<PRE>typedef typename Alloc::size_type <B>size_type</B>;</PRE>
+
+<P>The unsigned integer type describes an object that can represent the
+length of any controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_map__swap"></A>unordered_map::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(unordered_map&amp; right);</PRE>
+
+<P>The member function swaps the controlled sequences between
+<CODE>*this</CODE> and <CODE>right</CODE>. If
+<CODE><A HREF="#unordered_map__get_allocator">get_allocator</A>()
+== right.get_allocator()</CODE>, it does so in constant time,
+it throws an exception only as a result of copying the stored
+traits object of type <CODE>Tr</CODE>, and it invalidates no references, pointers,
+or iterators that designate elements in the two controlled sequences.
+Otherwise, it performs a number of element assignments and constructor calls
+proportional to the number of elements in the two controlled sequences.</P>
+
+<H3><CODE><A NAME="unordered_map__unordered_map"></A>unordered_map::unordered_map</CODE></H3>
+
+<PRE>explicit <B>unordered_map</B>(
+    size_type nbuckets = N0,
+    const Hash&amp; hfn = Hash(),
+    const Pred&amp; comp = Pred(),
+    const Alloc&amp; al = Alloc());
+explicit <B>unordered_map</B>(const Alloc&amp; al); <B>[added with C++11]</B>&nbsp;
+
+<B>unordered_map</B>(const unordered_map&amp; right);
+<B>unordered_map</B>(const unordered_map&amp; right, const Alloc&amp; al); <B>[added with C++11]</B>&nbsp;
+<B>unordered_map</B>(unordered_map&amp;&amp; right); <B>[added with C++11]</B>&nbsp;
+<B>unordered_map</B>(unordered_map&amp;&amp; right, const Alloc&amp; al); <B>[added with C++11]</B>
+
+template&lt;class InIt&gt;
+    <B>unordered_map</B>(
+    InIt first, InIt last,
+    size_type nbuckets = N0,
+    const Hash&amp; hfn = Hash(),
+    const Pred&amp; comp = Pred(),
+    const Alloc&amp; al = Alloc());
+<B>unordered_map</B>(
+    initializer_list&lt;value_type&gt; init,
+    size_type nbuckets = N0,
+    const Hash&amp; hfn = Hash(),
+    const Pred&amp; comp = Pred(),
+    const Alloc&amp; al = Alloc()); <B>[added with C++11]</B></PRE>
+
+<P>All constructors initialize several stored values.
+For the copy constructor, the values are obtained from <CODE>right</CODE>.
+Otherwise:</P>
+
+<UL>
+<LI>the minimum number of buckets is the argument <CODE>nbuckets</CODE>, if present;
+otherwise it is a default value described here as the implementation-defined
+value <CODE>N0</CODE>.</LI>
+
+<LI>the hash function object is the argument <CODE>hfn</CODE>, if present;
+otherwise it is <CODE>Hash()</CODE>.</LI>
+
+<LI>the comparison function object is the argument <CODE>comp</CODE>, if present;
+otherwise it is <CODE>Pred()</CODE>.</LI>
+
+<LI>the allocator object is the argument <CODE>al</CODE>, if present;
+For the copy constructor, it is
+<CODE>right.<A HREF="#unordered_map__get_allocator">get_allocator</A>()</CODE>.
+Otherwise, it is <CODE>Alloc()</CODE>.</LI>
+</UL>
+
+<P>The first two constructors specify an
+empty initial controlled sequence.</P>
+
+<P>The next four constructors specify
+a copy of the sequence controlled by <CODE>right</CODE>.
+The last two of these constructors are the same as the first two, but with an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<P>The next constructor specifies the sequence of element values
+<CODE>[first, last)</CODE>.</P>
+
+<P>The last constructor specifies the initial controlled sequence
+with an object of class
+<CODE><B><A HREF="lib_cpp.html#initializer_list">initializer_list</A></B>&lt;value_type&gt;</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_map__value_type"></A>unordered_map::value_type</CODE></H3>
+
+<PRE>typedef pair&lt;const Key, Ty&gt; <B>value_type</B>;</PRE>
+
+<P>The type describes an element of the controlled sequence.</P>
+
+<H2><A NAME="unordered_multimap"></A><CODE>unordered_multimap</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#unordered_multimap__allocator_type">allocator_type</A>
+&middot; <A HREF="#unordered_multimap__begin">begin</A>
+&middot; <A HREF="#unordered_multimap__bucket">bucket</A>
+&middot; <A HREF="#unordered_multimap__bucket_count">bucket_count</A>
+&middot; <A HREF="#unordered_multimap__bucket_size">bucket_size</A>
+&middot; <A HREF="#unordered_multimap__cbegin">cbegin</A>
+&middot; <A HREF="#unordered_multimap__cend">cend</A>
+&middot; <A HREF="#unordered_multimap__clear">clear</A>
+&middot; <A HREF="#unordered_multimap__const_iterator">const_iterator</A>
+&middot; <A HREF="#unordered_multimap__const_local_iterator">const_local_iterator</A>
+&middot; <A HREF="#unordered_multimap__const_pointer">const_pointer</A>
+&middot; <A HREF="#unordered_multimap__const_reference">const_reference</A>
+&middot; <A HREF="#unordered_multimap__count">count</A>
+&middot; <A HREF="#unordered_multimap__difference_type">difference_type</A>
+&middot; <A HREF="#unordered_multimap__emplace">emplace</A>
+&middot; <A HREF="#unordered_multimap__emplace_hint">emplace_hint</A>
+&middot; <A HREF="#unordered_multimap__empty">empty</A>
+&middot; <A HREF="#unordered_multimap__end">end</A>
+&middot; <A HREF="#unordered_multimap__equal_range">equal_range</A>
+&middot; <A HREF="#unordered_multimap__erase">erase</A>
+&middot; <A HREF="#unordered_multimap__find">find</A>
+&middot; <A HREF="#unordered_multimap__get_allocator">get_allocator</A>
+&middot; <A HREF="#unordered_multimap__hasher">hasher</A>
+&middot; <A HREF="#unordered_multimap__hash_function">hash_function</A>
+&middot; <A HREF="#unordered_multimap__insert">insert</A>
+&middot; <A HREF="#unordered_multimap__iterator">iterator</A>
+&middot; <A HREF="#unordered_multimap__key_eq">key_eq</A>
+&middot; <A HREF="#unordered_multimap__key_equal">key_equal</A>
+&middot; <A HREF="#unordered_multimap__key_type">key_type</A>
+&middot; <A HREF="#unordered_multimap__load_factor">load_factor</A>
+&middot; <A HREF="#unordered_multimap__local_iterator">local_iterator</A>
+&middot; <A HREF="#unordered_multimap__mapped_type">mapped_type</A>
+&middot; <A HREF="#unordered_multimap__max_bucket_count">max_bucket_count</A>
+&middot; <A HREF="#unordered_multimap__max_load_factor">max_load_factor</A>
+&middot; <A HREF="#unordered_multimap__max_size">max_size</A>
+&middot; <A HREF="#unordered_multimap__operator2">operator=</A>
+&middot; <A HREF="#unordered_multimap__pointer">pointer</A>
+&middot; <A HREF="#unordered_multimap__reference">reference</A>
+&middot; <A HREF="#unordered_multimap__rehash">rehash</A>
+&middot; <A HREF="#unordered_multimap__reserve">reserve</A>
+&middot; <A HREF="#unordered_multimap__size">size</A>
+&middot; <A HREF="#unordered_multimap__size_type">size_type</A>
+&middot; <A HREF="#unordered_multimap__swap">swap</A>
+&middot; <A HREF="#unordered_multimap__unordered_multimap">unordered_multimap</A>
+&middot; <A HREF="#unordered_multimap__value_type">value_type</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Key,
+    class Ty,
+    class Hash = hash&lt;Key&gt;,
+    class Pred = equal_to&lt;Key&gt;,
+    class Alloc = allocator&lt;pair&lt;const Key, Ty&gt; &gt; &gt;
+    class <B>unordered_multimap</B> {
+public:
+    typedef Key <B><A HREF="#unordered_multimap__key_type">key_type</A></B>;
+    typedef Ty <B><A HREF="#unordered_multimap__mapped_type">mapped_type</A></B>;
+    typedef pair&lt;const Key, Ty&gt; <B><A HREF="#unordered_multimap__value_type">value_type</A></B>;
+    typedef Hash <B><A HREF="#unordered_multimap__hasher">hasher</A></B>;
+    typedef Pred <B><A HREF="#unordered_multimap__key_equal">key_equal</A></B>;
+    typedef Alloc <B><A HREF="#unordered_multimap__allocator_type">allocator_type</A></B>;
+
+    typedef typename Alloc::pointer <B><A HREF="#unordered_multimap__pointer">pointer</A></B>;
+    typedef typename Alloc::const_pointer <B><A HREF="#unordered_multimap__const_pointer">const_pointer</A></B>;
+    typedef typename Alloc::reference <B><A HREF="#unordered_multimap__reference">reference</A></B>;
+    typedef typename Alloc::const_reference <B><A HREF="#unordered_multimap__const_reference">const_reference</A></B>;
+    typedef typename Alloc::size_type <B><A HREF="#unordered_multimap__size_type">size_type</A></B>;
+    typedef typename Alloc::difference_type <B><A HREF="#unordered_multimap__difference_type">difference_type</A></B>;
+
+    typedef T0 <B><A HREF="#unordered_multimap__iterator">iterator</A></B>;
+    typedef T1 <B><A HREF="#unordered_multimap__const_iterator">const_iterator</A></B>;
+    typedef T2 <B><A HREF="#unordered_multimap__local_iterator">local_iterator</A></B>;
+    typedef T3 <B><A HREF="#unordered_multimap__const_local_iterator">const_local_iterator</A></B>;
+
+    explicit <B><A HREF="#unordered_multimap__unordered_multimap">unordered_multimap</A></B>(
+        size_type nbuckets = N0,
+        const Hash&amp; hfn = Hash(),
+        const Pred&amp; comp = Pred(),
+        const Alloc&amp; al = Alloc());
+    explicit <B><A HREF="#unordered_multimap__unordered_multimap">unordered_multimap</A></B>(const Alloc&amp; al);
+
+    <B><A HREF="#unordered_multimap__unordered_multimap">unordered_multimap</A></B>(const unordered_multimap&amp; right);
+    <B><A HREF="#unordered_multimap__unordered_multimap">unordered_multimap</A></B>(const unordered_multimap&amp; right, const Alloc&amp; al); <B>[added with C++11]</B>&nbsp;
+    <B><A HREF="#unordered_multimap__unordered_multimap">unordered_multimap</A></B>(unordered_multimap&amp;&amp; right); <B>[added with C++11]</B>&nbsp;
+    <B><A HREF="#unordered_multimap__unordered_multimap">unordered_multimap</A></B>(unordered_multimap&amp;&amp; right, const Alloc&amp; al); <B>[added with C++11]</B>&nbsp;
+
+    <B><A HREF="#unordered_multimap__unordered_multimap">unordered_multimap</A></B>(
+        initializer_list&lt;value_type&gt; init,
+        size_type nbuckets = N0,
+        const Hash&amp; hfn = Hash(),
+        const Pred&amp; comp = Pred(),
+        const Alloc&amp; al = Alloc()); <B>[added with C++11]</B>
+    template&lt;class InIt&gt;
+        <B><A HREF="#unordered_multimap__unordered_multimap">unordered_multimap</A></B>(
+        InIt first, InIt last,
+        size_type nbuckets = N0,
+        const Hash&amp; hfn = Hash(),
+        const Pred&amp; comp = Pred(),
+        const Alloc&amp; al = Alloc());
+
+    unordered_multimap&amp; <B><A HREF="#unordered_multimap__operator2">operator=</A></B>(const unordered_multimap&amp; right);
+    unordered_multimap&amp; <B><A HREF="#unordered_multimap__operator2">operator=</A></B>(initializer_list&lt;value_type&gt; init) <B>[added with C++11]</B>
+    unordered_multimap&amp; <B><A HREF="#unordered_multimap__operator2">operator=</A></B>(unordered_multimap&amp;&amp; right); <B>[added with C++11]</B>
+
+    iterator <B><A HREF="#unordered_multimap__begin">begin</A></B>() noexcept;
+    const_iterator <B><A HREF="#unordered_multimap__begin">begin</A></B>() const noexcept;
+    local_iterator <B><A HREF="#unordered_multimap__begin">begin</A></B>(size_type nbucket);
+    const_local_iterator <B><A HREF="#unordered_multimap__begin">begin</A></B>(size_type nbucket) const;
+
+    const_iterator <B><A HREF="#unordered_multimap__cbegin">cbegin</A></B>() const noexcept; <B>[added with C++11]</B>
+    const_local_iterator <B><A HREF="#unordered_multimap__cbegin">cbegin</A></B>(size_type nbucket) const; <B>[added with C++11]</B>
+
+    iterator <B><A HREF="#unordered_multimap__end">end</A></B>() noexcept;
+    const_iterator <B><A HREF="#unordered_multimap__end">end</A></B>() const noexcept;
+    local_iterator <B><A HREF="#unordered_multimap__end">end</A></B>(size_type nbucket);
+    const_local_iterator <B><A HREF="#unordered_multimap__end">end</A></B>(size_type nbucket) const;
+
+    const_iterator <B><A HREF="#unordered_multimap__cend">cend</A></B>() const noexcept; <B>[added with C++11]</B>
+    const_local_iterator <B><A HREF="#unordered_multimap__cend">cend</A></B>(size_type nbucket) const; <B>[added with C++11]</B>
+
+    size_type <B><A HREF="#unordered_multimap__size">size</A></B>() const noexcept;
+    size_type <B><A HREF="#unordered_multimap__max_size">max_size</A></B>() const noexcept;
+    bool <B><A HREF="#unordered_multimap__empty">empty</A></B>() const noexcept;
+
+    size_type <B><A HREF="#unordered_multimap__bucket_count">bucket_count</A></B>() const noexcept;
+    size_type <B><A HREF="#unordered_multimap__max_bucket_count">max_bucket_count</A></B>() const noexcept;
+    size_type <B><A HREF="#unordered_multimap__bucket">bucket</A></B>(const Key&amp; keyval) const;
+    size_type <B><A HREF="#unordered_multimap__bucket_size">bucket_size</A></B>(size_type nbucket) const;
+
+    Hash <B><A HREF="#unordered_multimap__hash_function">hash_function</A></B>() const;
+    Pred <B><A HREF="#unordered_multimap__key_eq">key_eq</A></B>() const;
+    Alloc <B><A HREF="#unordered_multimap__get_allocator">get_allocator</A></B>() const noexcept;
+
+    float <B><A HREF="#unordered_multimap__load_factor">load_factor</A></B>() const noexcept;
+    float <B><A HREF="#unordered_multimap__max_load_factor">max_load_factor</A></B>() const noexcept;
+    void <B><A HREF="#unordered_multimap__max_load_factor">max_load_factor</A></B>(float factor);
+    void <B><A HREF="#unordered_multimap__rehash">rehash</A></B>(size_type nbuckets);
+    void <B><A HREF="#unordered_multimap__reserve">reserve</A></B>(size_type nelements); <B>[added with C++11]</B>
+
+    iterator <B><A HREF="#unordered_multimap__insert">insert</A></B>(const value_type&amp; val);
+    iterator <B><A HREF="#unordered_multimap__insert">insert</A></B>(const_iterator where, const value_type&amp; val);
+    template&lt;class InIt&gt;
+        void <B><A HREF="#unordered_multimap__insert">insert</A></B>(InIt first, InIt last);
+    void <B><A HREF="#unordered_multimap__insert">insert</A></B>(initializer_list&lt;value_type&gt; init) <B>[added with C++11]</B>
+    template&lt;class Valty&gt;
+        iterator <B><A HREF="#unordered_multimap__insert">insert</A></B>(Valty&amp;&amp; val); <B>[added with C++11]</B>
+    template&lt;class Valty&gt;
+        iterator <B><A HREF="#unordered_multimap__insert">insert</A></B>(const_iterator where, Valty&amp;&amp; val); <B>[added with C++11]</B>
+
+    template&lt;class... Valty&gt;
+        iterator <B><A HREF="#unordered_multimap__emplace">emplace</A></B>(Valty&amp;&amp;... val); <B>[added with C++11]</B>
+    template&lt;class... Valty&gt;
+        iterator <B><A HREF="#unordered_multimap__emplace_hint">emplace_hint</A></B>(const_iterator where, Valty&amp;&amp;... val); <B>[added with C++11]</B>
+
+    iterator <B><A HREF="#unordered_multimap__erase">erase</A></B>(const_iterator where);
+    iterator <B><A HREF="#unordered_multimap__erase">erase</A></B>(const_iterator first, const_iterator last);
+    size_type <B><A HREF="#unordered_multimap__erase">erase</A></B>(const Key&amp; keyval);
+    void <B><A HREF="#unordered_multimap__clear">clear</A></B>() noexcept;
+
+    void <B><A HREF="#unordered_multimap__swap">swap</A></B>(unordered_multimap&amp; right);
+
+    iterator <B><A HREF="#unordered_multimap__find">find</A></B>(const Key&amp; keyval);
+    const_iterator <B><A HREF="#unordered_multimap__find">find</A></B>(const Key&amp; keyval) const;
+    size_type <B><A HREF="#unordered_multimap__count">count</A></B>(const Key&amp; keyval) const;
+    pair&lt;iterator, iterator&gt;
+        <B><A HREF="#unordered_multimap__equal_range">equal_range</A></B>(const Key&amp; keyval);
+    pair&lt;const_iterator, const_iterator&gt;
+        <B><A HREF="#unordered_multimap__equal_range">equal_range</A></B>(const Key&amp; keyval) const;
+    };</PRE>
+
+<P>The template class describes an object that controls a
+varying-length sequence of elements of type
+<CODE>pair&lt;const Key, Ty&gt;</CODE>.
+The sequence is weakly
+<A HREF="lib_stl.html#sequence_ordering">ordered by</A> a <B>hash function</B>,
+which partitions the sequence into an ordered set of subsequences called
+<B>buckets</B>. Within each bucket a <B>comparison function</B> determines
+whether any pair of elements has
+<A HREF="lib_stl.html#equivalent_ordering">equivalent ordering</A>.
+Each element stores two objects, a <B>sort key</B> and a <B>value</B>.
+The sequence is represented in a way that permits lookup, insertion,
+and removal of an arbitrary element with a number of operations that can be
+independent of the number of elements in the sequence (constant time),
+at least when all buckets are of roughly equal length.
+In the worst case, when all of the elements are in one bucket,
+the number of operations is proportional to the number of elements
+in the sequence (linear time). Moreover, inserting an element
+invalidates no iterators unless rehashing occurs, and removing an element
+invalidates only those iterators which point at the removed element.</P>
+
+<P>The object orders the sequence it controls by calling two stored objects,
+a comparison function object of type
+<A HREF="#unordered_multimap__key_equal">key_equal</A>
+and a hash function object of type
+<A HREF="#unordered_multimap__hasher">hasher</A>.
+You access the first stored object by calling the member function
+<CODE><A HREF="#unordered_multimap__key_eq">key_eq</A>()</CODE>;
+and you access the second stored object by calling the member function
+<CODE><A HREF="#unordered_multimap__hash_function">hash_function</A>()</CODE>.
+Specifically, for all values <CODE>X</CODE> and <CODE>Y</CODE> of type <CODE>Key</CODE>,
+the call <CODE>key_eq()(X, Y)</CODE> returns true only if
+the two argument values have equivalent ordering;
+the call <CODE>hash_function()(keyval)</CODE> yields a distribution
+of values of type <CODE>size_t</CODE>.
+Unlike template class <CODE><A HREF="#unordered_map">unordered_map</A></CODE>,
+an object of template class <CODE>unordered_multimap</CODE> does not ensure that
+<CODE>key_eq()(X, Y)</CODE> is always false for any two elements of the controlled sequence.
+(Keys need not be unique.)</P>
+
+<P>The object also stores a <B>maximum load factor</B>, which specifies the
+maximum desired average number of elements per bucket. If inserting an element
+causes <CODE><A HREF="#unordered_multimap__load_factor">load_factor</A>()</CODE>
+to exceed the maximum load factor, the container increases the number of
+buckets and rebuilds the hash table as needed.</P>
+
+<P>The actual order of elements in the controlled sequence depends on the
+hash function, the comparison function, the order of insertion,
+the maximum load factor, and the current number of buckets.
+You cannot in general predict the order of elements
+in the controlled sequence. You can always be assured, however, that any
+subset of elements that have equivalent ordering
+are adjacent in the controlled sequence.</P>
+
+<P>The object allocates and frees storage for the sequence it controls
+through a stored <A HREF="memory.html#allocator_object">allocator object</A>
+of type <A HREF="#unordered_multimap__allocator_type">allocator_type</A>.
+Such an allocator object must have
+the same external interface as an object of template class
+<A HREF="memory.html#allocator"><CODE>allocator</CODE></A>.</P>
+
+<P>Inserting and erasing elements, and rehashing, preserves the order of
+elements with equivalent ordering.</P>
+
+<H3><CODE><A NAME="unordered_multimap__allocator_type"></A>unordered_multimap::allocator_type</CODE></H3>
+
+<PRE>typedef Alloc <B>allocator_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Alloc</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__begin"></A>unordered_multimap::begin</CODE></H3>
+
+<PRE>iterator <B>begin</B>() noexcept;
+const_iterator <B>begin</B>() const noexcept;
+local_iterator <B>begin</B>(size_type nbucket);
+const_local_iterator <B>begin</B>(size_type nbucket) const;</PRE>
+
+<P>The first two member functions return a forward iterator that points at
+the first element of the sequence (or just beyond the end of an empty
+sequence). The last two member functions return a forward iterator that points at
+the first element of bucket <CODE>nbucket</CODE> (or just beyond the end of an empty
+bucket).</P>
+
+<H3><CODE><A NAME="unordered_multimap__bucket"></A>unordered_multimap::bucket</CODE></H3>
+
+<PRE>size_type <B>bucket</B>(const Key&amp; keyval) const;</PRE>
+
+<P>The member function returns the bucket number currently corresponding
+to the key value <CODE>keyval</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__bucket_count"></A>unordered_multimap::bucket_count</CODE></H3>
+
+<PRE>size_type <B>bucket_count</B>() const noexcept;</PRE>
+
+<P>The member function returns the current number of buckets.</P>
+
+<H3><CODE><A NAME="unordered_multimap__bucket_size"></A>unordered_multimap::bucket_size</CODE></H3>
+
+<PRE>size_type <B>bucket_size</B>(size_type nbucket) const;</PRE>
+
+<P>The member functions returns the size of bucket number <CODE>nbucket</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__cbegin"></A>unordered_multimap::cbegin</CODE></H3>
+
+<PRE>const_iterator <B>cbegin</B>() const noexcept; <B>[added with C++11]</B>
+const_local_iterator <B>cbegin</B>(size_type nbucket) const; <B>[added with C++11]</B></PRE>
+
+<P>The first member function returns a forward iterator that points at
+the first element of the sequence (or just beyond the end of an empty
+sequence). The second member function returns a forward iterator that points at
+the first element of bucket <CODE>nbucket</CODE> (or just beyond the end of an empty
+bucket).</P>
+
+<H3><CODE><A NAME="unordered_multimap__cend"></A>unordered_multimap::cend</CODE></H3>
+
+<PRE>const_reference <B>cend</B>() const noexcept; <B>[added with C++11]</B>
+const_local_iterator <B>cend</B>(size_type nbucket) const; <B>[added with C++11]</B></PRE>
+
+<P>The first member function returns a forward iterator that points
+just beyond the end of the sequence.
+The second member function returns a forward iterator that points
+just beyond the end of bucket <CODE>nbucket</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__clear"></A>unordered_multimap::clear</CODE></H3>
+
+<PRE>void <B>clear</B>() noexcept;</PRE>
+
+<P>The member function calls
+<CODE><A HREF="#unordered_multimap__erase">erase</A>(
+<A HREF="#unordered_multimap__begin">begin</A>(),
+<A HREF="#unordered_multimap__end">end</A>())</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__const_iterator"></A>unordered_multimap::const_iterator</CODE></H3>
+
+<PRE>typedef T1 <B>const_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant
+forward iterator for the controlled sequence.
+It is described here as a
+synonym for the implementation-defined type <CODE>T1</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__const_local_iterator"></A>unordered_multimap::const_local_iterator</CODE></H3>
+
+<PRE>typedef T3 <B>const_local_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant
+forward iterator for a bucket.
+It is described here as a
+synonym for the implementation-defined type <CODE>T3</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__const_pointer"></A>unordered_multimap::const_pointer</CODE></H3>
+
+<PRE>typedef typename Alloc::const_pointer <B>const_pointer</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant pointer
+to an element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_multimap__const_reference"></A>unordered_multimap::const_reference</CODE></H3>
+
+<PRE>typedef typename Alloc::const_reference <B>const_reference</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant reference
+to an element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_multimap__count"></A>unordered_multimap::count</CODE></H3>
+
+<PRE>size_type <B>count</B>(const Key&amp; keyval) const;</PRE>
+
+<P>The member function returns the number of elements in the range delimited by
+<CODE><A HREF="#unordered_multimap__equal_range">equal_range</A>(keyval)</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__difference_type"></A>unordered_multimap::difference_type</CODE></H3>
+
+<PRE>typedef typename Alloc::difference_type <B>difference_type</B>;</PRE>
+
+<P>The signed integer type describes an object that can represent the
+difference between the addresses of any two elements in the controlled
+sequence.</P>
+
+<H3><CODE><A NAME="unordered_multimap__emplace"></A>unordered_multimap::emplace</CODE></H3>
+
+<PRE>template&lt;class... Valty&gt;
+    iterator <B>emplace</B>(Valty&amp;&amp;... val); <B>[added with C++11]</B></PRE>
+
+<P>The member function effectively returns
+<CODE><A HREF="#unordered_multimap__insert">insert</A>(value_type(forward&lt;Valty&gt;(val)...))</CODE>,
+except that the element value is constructed in place.</P>
+
+<H3><CODE><A NAME="unordered_multimap__emplace_hint"></A>unordered_multimap::emplace_hint</CODE></H3>
+
+<PRE>template&lt;class... Valty&gt;
+    iterator <B>emplace_hint</B>(const_iterator where, Valty&amp;&amp;... val); <B>[added with C++11]</B></PRE>
+
+<P>The member function effectively returns
+<CODE><A HREF="#unordered_multimap__insert">insert</A>(where, value_type(forward&lt;Valty&gt;(val)...))</CODE>,
+except that the element value is constructed in place.</P>
+
+<H3><CODE><A NAME="unordered_multimap__empty"></A>unordered_multimap::empty</CODE></H3>
+
+<PRE>bool <B>empty</B>() const noexcept;</PRE>
+
+<P>The member function returns true for an empty controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_multimap__end"></A>unordered_multimap::end</CODE></H3>
+
+<PRE>iterator <B>end</B>() noexcept;
+const_iterator <B>end</B>() const noexcept;
+local_iterator <B>end</B>(size_type nbucket);
+const_local_iterator <B>end</B>(size_type nbucket) const;</PRE>
+
+<P>The first two member functions return a forward iterator that points
+just beyond the end of the sequence.
+The last two member functions return a forward iterator that points
+just beyond the end of bucket <CODE>nbucket</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__equal_range"></A>unordered_multimap::equal_range</CODE></H3>
+
+<PRE>pair&lt;iterator, iterator&gt;
+    <B>equal_range</B>(const Key&amp; keyval);
+pair&lt;const_iterator, const_iterator&gt;
+    <B>equal_range</B>(const Key&amp; keyval) const;</PRE>
+
+<P>The member function returns a pair of iterators <CODE>X</CODE>
+such that <CODE>[X.<A HREF="utility.html#pair__first">first</A>,
+X.<A HREF="utility.html#pair__second">second</A>)</CODE>
+delimits just those elements of the controlled sequence that have
+equivalent ordering with <CODE>keyval</CODE>. If no such elements exist,
+both iterators are <CODE>end()</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__erase"></A>unordered_multimap::erase</CODE></H3>
+
+<PRE>iterator <B>erase</B>(const_iterator where);
+iterator <B>erase</B>(const_iterator first, const_iterator last);
+size_type <B>erase</B>(const Key&amp; keyval);</PRE>
+
+<P>The first member function removes the element of the controlled
+sequence pointed to by <CODE>where</CODE>.
+The second member function removes the elements
+in the range <CODE>[first, last)</CODE>.
+Both return an iterator that designates the first element remaining
+beyond any elements removed, or
+<CODE><A HREF="#unordered_multimap__end">end</A>()</CODE> if no such element exists.</P>
+
+<P>The third member removes the elements in the range delimited by
+<CODE><A HREF="#unordered_multimap__equal_range">equal_range</A>(keyval)</CODE>.
+It returns the number of elements it removes.</P>
+
+<P>The member functions never throw an exception.</P>
+
+<H3><CODE><A NAME="unordered_multimap__find"></A>unordered_multimap::find</CODE></H3>
+
+<PRE>iterator <B>find</B>(const Key&amp; keyval);
+const_iterator <B>find</B>(const Key&amp; keyval) const;</PRE>
+
+<P>The member functions return
+<CODE><A HREF="#unordered_multimap__equal_range">equal_range</A>(keyval).first</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__get_allocator"></A>unordered_multimap::get_allocator</CODE></H3>
+
+<PRE>Alloc <B>get_allocator</B>() const noexcept;</PRE>
+
+<P>The member function returns the stored
+<A HREF="memory.html#allocator_object">allocator object</A>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__hash_function"></A>unordered_multimap::hash_function</CODE></H3>
+
+<PRE>Hash <B>hash_function</B>() const;</PRE>
+
+<P>The member function returns the stored hash function object.</P>
+
+<H3><CODE><A NAME="unordered_multimap__hasher"></A>unordered_multimap::hasher</CODE></H3>
+
+<PRE>typedef Hash <B>hasher</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Hash</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__insert"></A>unordered_multimap::insert</CODE></H3>
+
+<PRE>iterator <B>insert</B>(const value_type&amp; val);
+iterator <B>insert</B>(const_iterator where, const value_type&amp; val);
+template&lt;class InIt&gt;
+    void <B>insert</B>(InIt first, InIt last);
+void <B>insert</B>(initializer_list&lt;value_type&gt; init) <B>[added with C++11]</B>
+template&lt;class Valty&gt;
+    iterator <B>insert</B>(Valty&amp;&amp; val); <B>[added with C++11]</B>
+template&lt;class Valty&gt;
+    iterator <B>insert</B>(const_iterator where, Valty&amp;&amp; val); <B>[added with C++11]</B></PRE>
+
+<P>The first member function inserts the element <CODE>val</CODE>
+in the controlled sequence, then returns
+the iterator that designates the inserted element.</P>
+
+<P>The second member function returns <CODE>insert(val)</CODE>,
+using <CODE>where</CODE> as a starting place within the controlled
+sequence to search for the insertion point. (Insertion can
+possibly occur somewhat faster, if the
+insertion point immediately precedes or follows <CODE>where</CODE>.)</P>
+
+<P>The third member function
+inserts the sequence of element values,
+for each <CODE>where</CODE> in the range <CODE>[first, last)</CODE>,
+by calling <CODE>insert(*where)</CODE>.</P>
+
+<P>The fourth member function inserts the sequence
+specified by an object of class
+<CODE><B><A HREF="lib_cpp.html#initializer_list">initializer_list</A></B>&lt;value_type&gt;</CODE>.</P>
+
+<P>The last two member functions behave the same as the first two
+but with an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.
+If, however, <CODE>is_convertible&lt;Valty, value_type&gt;::value</CODE>
+is false, these member functions do not participate in overload resolution.</P>
+
+<P>If an exception is thrown during the
+insertion of a single element, the container is left unaltered
+and the exception is rethrown.
+If an exception is thrown during the
+insertion of multiple elements, the container is left in a stable
+but unspecified state and the exception is rethrown.</P>
+
+<H3><CODE><A NAME="unordered_multimap__iterator"></A>unordered_multimap::iterator</CODE></H3>
+
+<PRE>typedef T0 <B>iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a forward
+iterator for the controlled sequence.
+It is described here as a
+synonym for the implementation-defined type <CODE>T0</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__key_eq"></A>unordered_multimap::key_eq</CODE></H3>
+
+<PRE>Pred <B>key_eq</B>() const;</PRE>
+
+<P>The member function returns the stored comparison function object.</P>
+
+<H3><CODE><A NAME="unordered_multimap__key_equal"></A>unordered_multimap::key_equal</CODE></H3>
+
+<PRE>typedef Pred <B>key_equal</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Pred</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__key_type"></A>unordered_multimap::key_type</CODE></H3>
+
+<PRE>typedef Key <B>key_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Key</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__load_factor"></A>unordered_multimap::load_factor</CODE></H3>
+
+<PRE>float <B>load_factor</B>() const noexcept;</PRE>
+
+<P>The member function returns
+<CODE>(float)<A HREF="#unordered_multimap__size">size</A>() /
+(float)<A HREF="#unordered_multimap__bucket_count">bucket_count</A>()</CODE>,
+the average number of elements per bucket.</P>
+
+<H3><CODE><A NAME="unordered_multimap__local_iterator"></A>unordered_multimap::local_iterator</CODE></H3>
+
+<PRE>typedef T2 <B>local_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a
+forward iterator for a bucket.
+It is described here as a
+synonym for the implementation-defined type <CODE>T2</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__mapped_type"></A>unordered_multimap::mapped_type</CODE></H3>
+
+<PRE>typedef Ty <B>mapped_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Ty</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__max_bucket_count"></A>unordered_multimap::max_bucket_count</CODE></H3>
+
+<PRE>size_type <B>max_bucket_count</B>() const noexcept;</PRE>
+
+<P>The member function returns the maximum number of buckets currently permitted.</P>
+
+<H3><CODE><A NAME="unordered_multimap__max_load_factor"></A>unordered_multimap::max_load_factor</CODE></H3>
+
+<PRE>float <B>max_load_factor</B>() const noexcept;
+void <B>max_load_factor</B>(float factor);</PRE>
+
+<P>The first member function returns the stored maximum load factor.
+The second member function replaces the stored maximum load factor with <CODE>factor</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__max_size"></A>unordered_multimap::max_size</CODE></H3>
+
+<PRE>size_type <B>max_size</B>() const noexcept;</PRE>
+
+<P>The member function returns the length of the longest sequence that
+the object can control.</P>
+
+<H3><CODE><A NAME="unordered_multimap__operator2"></A>unordered_multimap::operator=</CODE></H3>
+
+<PRE>unordered_multimap&amp; <B>operator=</B>(const unordered_multimap&amp; right);
+unordered_multimap&amp; <B>operator=</B>(initializer_list&lt;value_type&gt; init) <B>[added with C++11]</B>
+unordered_multimap&amp; <B>operator=</B>(unordered_multimap&amp;&amp; right); <B>[added with C++11]</B></PRE>
+
+<P>The first member operator replaces the controlled sequence
+with a copy of the sequence controlled by <CODE>right</CODE>.</P>
+
+<P>The second member operator replaces the controlled sequence
+from an object of class
+<CODE><B><A HREF="lib_cpp.html#initializer_list">initializer_list</A></B>&lt;value_type&gt;</CODE>.</P>
+
+<P>The third member operator is the same as the first, but with an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__pointer"></A>unordered_multimap::pointer</CODE></H3>
+
+<PRE>typedef typename Alloc::pointer <B>pointer</B>;</PRE>
+
+<P>The type describes an object that can serve as a pointer to an
+element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_multimap__reference"></A>unordered_multimap::reference</CODE></H3>
+
+<PRE>typedef typename Alloc::reference <B>reference</B>;</PRE>
+
+<P>The type describes an object that can serve as a reference to an
+element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_multimap__rehash"></A>unordered_multimap::rehash</CODE></H3>
+
+<PRE>void <B>rehash</B>(size_type nbuckets);</PRE>
+
+<P>The member function alters the number of buckets to be at least <CODE>nbuckets</CODE>
+and rebuilds the hash table as needed.</P>
+
+<H3><CODE><A NAME="unordered_multimap__reserve"></A>unordered_multimap::reserve</CODE></H3>
+
+<PRE>void <B>reserve</B>(size_type nelements); <B>[added with C++11]</B></PRE>
+
+<P>The member function returns 
+<CODE><A HREF="#unordered_multimap__rehash">rehash</A>(ceil(nelements /
+<A HREF="#unordered_multimap__max_load_factor">max_load_factor</A>()))</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__size"></A>unordered_multimap::size</CODE></H3>
+
+<PRE>size_type <B>size</B>() const noexcept;</PRE>
+
+<P>The member function returns the length of the controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_multimap__size_type"></A>unordered_multimap::size_type</CODE></H3>
+
+<PRE>typedef typename Alloc::size_type <B>size_type</B>;</PRE>
+
+<P>The unsigned integer type describes an object that can represent the
+length of any controlled sequence.</P>
+
+<H3><CODE><A NAME="unordered_multimap__swap"></A>unordered_multimap::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(unordered_multimap&amp; right);</PRE>
+
+<P>The member function swaps the controlled sequences between
+<CODE>*this</CODE> and <CODE>right</CODE>. If
+<CODE><A HREF="#unordered_multimap__get_allocator">get_allocator</A>()
+== right.get_allocator()</CODE>, it does so in constant time,
+it throws an exception only as a result of copying the stored
+traits object of type <CODE>Tr</CODE>, and it invalidates no references, pointers,
+or iterators that designate elements in the two controlled sequences.
+Otherwise, it performs a number of element assignments and constructor calls
+proportional to the number of elements in the two controlled sequences.</P>
+
+<H3><CODE><A NAME="unordered_multimap__unordered_multimap"></A>unordered_multimap::unordered_multimap</CODE></H3>
+
+<PRE>explicit <B>unordered_multimap</B>(
+    size_type nbuckets = N0,
+    const Hash&amp; hfn = Hash(),
+    const Pred&amp; comp = Pred(),
+    const Alloc&amp; al = Alloc());
+explicit <B>unordered_multimap</B>(const Alloc&amp; al);
+
+<B>unordered_multimap</B>(const unordered_multimap&amp; right);
+<B>unordered_multimap</B>(const unordered_multimap&amp; right, const Alloc&amp; al); <B>[added with C++11]</B>&nbsp;
+<B>unordered_multimap</B>(unordered_multimap&amp;&amp; right); <B>[added with C++11]</B>&nbsp;
+<B>unordered_multimap</B>(unordered_multimap&amp;&amp; right, const Alloc&amp; al); <B>[added with C++11]</B>
+
+template&lt;class InIt&gt;
+    <B>unordered_multimap</B>(
+    InIt first, InIt last,
+    size_type nbuckets = N0,
+    const Hash&amp; hfn = Hash(),
+    const Pred&amp; comp = Pred(),
+    const Alloc&amp; al = Alloc());
+<B>unordered_multimap</B>(
+    initializer_list&lt;value_type&gt; init,
+    size_type nbuckets = N0,
+    const Hash&amp; hfn = Hash(),
+    const Pred&amp; comp = Pred(),
+    const Alloc&amp; al = Alloc()); <B>[added with C++11]</B></PRE>
+
+<P>All constructors initialize several stored values.
+For the copy constructor, the values are obtained from <CODE>right</CODE>.
+Otherwise:</P>
+
+<UL>
+<LI>the minimum number of buckets is the argument <CODE>nbuckets</CODE>, if present;
+otherwise it is a default value described here as the implementation-defined
+value <CODE>N0</CODE>.</LI>
+
+<LI>the hash function object is the argument <CODE>hfn</CODE>, if present;
+otherwise it is <CODE>Hash()</CODE>.</LI>
+
+<LI>the comparison function object is the argument <CODE>comp</CODE>, if present;
+otherwise it is <CODE>Pred()</CODE>.</LI>
+
+<LI>the allocator object is the argument <CODE>al</CODE>, if present;
+For the copy constructor, it is
+<CODE>right.<A HREF="#unordered_multimap__get_allocator">get_allocator</A>()</CODE>.
+Otherwise, it is <CODE>Alloc()</CODE>.</LI>
+</UL>
+
+<P>The first two constructors specify an
+empty initial controlled sequence.</P>
+
+<P>The next four constructors specify
+a copy of the sequence controlled by <CODE>right</CODE>.
+The last two of these constructors are the same as the first two, but with an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<P>The next constructor specifies the sequence of element values
+<CODE>[first, last)</CODE>.</P>
+
+<P>The last constructor specifies the initial controlled sequence
+with an object of class
+<CODE><B><A HREF="lib_cpp.html#initializer_list">initializer_list</A></B>&lt;value_type&gt;</CODE>.</P>
+
+<H3><CODE><A NAME="unordered_multimap__value_type"></A>unordered_multimap::value_type</CODE></H3>
+
+<PRE>typedef pair&lt;const Key, Ty&gt; <B>value_type</B>;</PRE>
+
+<P>The type describes an element of the controlled sequence.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

@@ -1,0 +1,162 @@
+<HTML><HEAD>
+<TITLE>&lt;initializer_list&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;initializer_list&gt;"></A><CODE>&lt;initializer_list&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P>Include the standard
+header <B><CODE>&lt;initializer_list&gt;</CODE></B> to define
+template class <CODE>initializer_list</CODE>, which describes a
+brace-enclosed list of initializers, plus two support functions.</P>
+
+<PRE>namespace std {
+template&lt;class Ty&gt;
+    class <B><A HREF="#initializer_list">initializer_list</A></B>;
+
+template&lt;class Ty&gt;
+    const Ty *<B><A HREF="#begin">begin</A></B>(initializer_list&lt;Ty&gt; init) noexcept;
+template&lt;class Ty&gt;
+    const Ty *<B><A HREF="#end">end</A></B>(initializer_list&lt;Ty&gt; init) noexcept;
+}  // namespace std</PRE>
+
+<H2><CODE><A NAME="begin"></A>begin</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    const Ty *<B>begin</B>(initializer_list&lt;Ty&gt; init) noexcept;</PRE>
+
+<P>The function returns a pointer to the first element of the
+sequence controlled by the <CODE>initializer_list</CODE> object.</P>
+
+<H2><CODE><A NAME="end"></A>end</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    const Ty *<B>end</B>(initializer_list&lt;Ty&gt; init) noexcept;</PRE>
+
+<P>The function returns a pointer just past the last element of the
+sequence controlled by the <CODE>initializer_list</CODE> object.</P>
+
+<H2><CODE><A NAME="initializer_list"></A>initializer_list</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#initializer_list__begin">begin</A>
+&middot; <A HREF="#initializer_list__const_iterator">const_iterator</A>
+&middot; <A HREF="#initializer_list__const_reference">const_reference</A>
+&middot; <A HREF="#initializer_list__end">end</A>
+&middot; <A HREF="#initializer_list__initializer_list">initializer_list</A>
+&middot; <A HREF="#initializer_list__iterator">iterator</A>
+&middot; <A HREF="#initializer_list__reference">reference</A>
+&middot; <A HREF="#initializer_list__size">size</A>
+&middot; <A HREF="#initializer_list__size_type">size_type</A>
+&middot; <A HREF="#initializer_list__value_type">value_type</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Ty&gt;
+    class <B>initializer_list</B> {
+public:
+    typedef size_t <B><A HREF="#initializer_list__size_type">size_type</A></B>;
+    typedef const Ty&amp; <B><A HREF="#initializer_list__reference">reference</A></B>;
+    typedef const Ty&amp; <B><A HREF="#initializer_list__const_reference">const_reference</A></B>;
+    typedef const Ty *<B><A HREF="#initializer_list__iterator">iterator</A></B>;
+    typedef const Ty *<B><A HREF="#initializer_list__const_iterator">const_iterator</A></B>;
+    typedef Ty <B><A HREF="#initializer_list__value_type">value_type</A></B>;
+
+    <B><A HREF="#initializer_list__initializer_list">initializer_list</A></B>() noexcept;
+
+    const Ty *<B><A HREF="#initializer_list__begin">begin</A></B>() const noexcept;
+    const Ty *<B><A HREF="#initializer_list__end">end</A></B>() const noexcept;
+
+    size_type <B><A HREF="#initializer_list__size">size</A></B>() const noexcept;
+    };</PRE>
+
+<P>The template class describes an object that controls a sequence of
+length <CODE>N</CODE> of elements of type <CODE>Ty</CODE>. The object
+effectively stores a pair of pointers delimiting the sequence.
+The translator replaces a brace-enclosed list of expressions convertible to
+<CODE>Ty</CODE> with an object of type <CODE>initializer_list&lt;Ty&gt;</CODE>
+that designates an array of type <CODE>const Ty[N}</CODE> containing
+the expression values.</P>
+
+<H3><CODE><A NAME="initializer_list__begin"></A>initializer_list::begin</CODE></H3>
+
+<PRE>const Ty *<B>begin</B>() const noexcept;</PRE>
+
+<P>The member functions return a const pointer that points at the
+first element of the sequence (or just beyond the end of an empty sequence).</P>
+
+<H3><CODE><A NAME="initializer_list__const_iterator"></A>initializer_list::const_iterator</CODE></H3>
+
+<PRE>typedef const Ty *<B>const_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant random-access
+iterator for the controlled sequence.</P>
+
+<H3><CODE><A NAME="initializer_list__const_reference"></A>initializer_list::const_reference</CODE></H3>
+
+<PRE>typedef const Ty&amp; <B>const_reference</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant reference to an
+element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="initializer_list__end"></A>initializer_list::end</CODE></H3>
+
+<PRE>const Ty *<B>end</B>() const noexcept;</PRE>
+
+<P>The member functions return a random-access iterator that points just
+beyond the end of the sequence.</P>
+
+<H3><CODE><A NAME="initializer_list__initializer_list"></A>initializer_list::initializer_list</CODE></H3>
+
+<PRE><B>initializer_list</B>() noexcept;</PRE>
+
+<P>The default constructor initializes the object so that it designates
+an empty controlled sequence. How the translator constructs an object
+that designates a non-empty controlled sequence is unspecified.</P>
+
+<H3><CODE><A NAME="initializer_list__iterator"></A>initializer_list::iterator</CODE></H3>
+
+<PRE>typedef const Ty *<B>iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a random-access
+iterator for the controlled sequence.</P>
+
+<H3><CODE><A NAME="initializer_list__reference"></A>initializer_list::reference</CODE></H3>
+
+<PRE>typedef const Ty&amp; <B>reference</B>;</PRE>
+
+<P>The type describes an object that can serve as a reference to an
+element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="initializer_list__size"></A>initializer_list::size</CODE></H3>
+
+<PRE>size_type <B>size</B>() const noexcept;</PRE>
+
+<P>The member function returns <CODE>N</CODE>.</P>
+
+<H3><CODE><A NAME="initializer_list__size_type"></A>initializer_list::size_type</CODE></H3>
+
+<PRE>typedef size_t <B>size_type</B>;</PRE>
+
+<P>The unsigned integer type describes an object that can represent the length
+of any controlled sequence. It is a synonym for the type <CODE>size_t</CODE>.</P>
+
+<H3><CODE><A NAME="initializer_list__value_type"></A>initializer_list::value_type</CODE></H3>
+
+<PRE>typedef Ty <B>value_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Ty</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

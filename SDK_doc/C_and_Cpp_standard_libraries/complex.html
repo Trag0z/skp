@@ -1,0 +1,855 @@
+<HTML><HEAD>
+<TITLE>&lt;complex&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;complex&gt;"></A><CODE>&lt;complex&gt;</CODE></H1><HR>
+
+<P><B><CODE><A HREF="#abs">abs</A>
+&middot; <A HREF="#acos">acos</A>
+&middot; <A HREF="#acosh">acosh</A>
+&middot; <A HREF="#arg">arg</A>
+&middot; <A HREF="#asin">asin</A>
+&middot; <A HREF="#asinh">asinh</A>
+&middot; <A HREF="#atan">atan</A>
+&middot; <A HREF="#atanh">atanh</A>
+&middot; <A HREF="#complex">complex</A>
+&middot; <A HREF="#complex&lt;double&gt;">complex&lt;double&gt;</A>
+&middot; <A HREF="#complex&lt;float&gt;">complex&lt;float&gt;</A>
+&middot; <A HREF="#complex&lt;long_double&gt;">complex&lt;long double&gt;</A>
+&middot; <A HREF="#conj">conj</A>
+&middot; <A HREF="#cos">cos</A>
+&middot; <A HREF="#cosh">cosh</A>
+&middot; <A HREF="#exp">exp</A>
+&middot; <A HREF="#imag">imag</A>
+&middot; <A HREF="#log">log</A>
+&middot; <A HREF="#log10">log10</A>
+&middot; <A HREF="#norm">norm</A>
+&middot; <A HREF="#operator!2">operator!=</A>
+&middot; <A HREF="#operator*">operator*</A>
+&middot; <A HREF="#operator+">operator+</A>
+&middot; <A HREF="#operator-">operator-</A>
+&middot; <A HREF="#operator_slash">operator/</A>
+&middot; <A HREF="#operator&lt;&lt;">operator&lt;&lt;</A>
+&middot; <A HREF="#operator22">operator==</A>
+&middot; <A HREF="#operator&gt;&gt;">operator&gt;&gt;</A>
+&middot; <A HREF="#polar">polar</A>
+&middot; <A HREF="#pow">pow</A>
+&middot; <A HREF="#proj">proj</A>
+&middot; <A HREF="#real">real</A>
+&middot; <A HREF="#sin">sin</A>
+&middot; <A HREF="#sinh">sinh</A>
+&middot; <A HREF="#sqrt">sqrt</A>
+&middot; <A HREF="#tan">tan</A>
+&middot; <A HREF="#tanh">tanh</A>
+&middot; <A HREF="#__STD_COMPLEX">__STD_COMPLEX</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the standard header <B><CODE>&lt;complex&gt;</CODE></B>
+to define template class <CODE>complex</CODE> and a host of
+supporting template functions.
+Unless otherwise specified,
+functions that can return multiple values return an imaginary
+part in the half-open interval <CODE>(-pi, pi]</CODE>.</P>
+
+<P>Beginning with <B>C++11</B>,
+some functions and constructors declared in this header
+use <CODE>constexpr</CODE> to signal that they are treated as
+compile-time constants.</P>
+
+<P>Many of the functions declared in this header have
+<B><A NAME="additional_overloads"></A>additional overloads</B>,
+which behave much like the generic functions defined in the C99 header
+<CODE>&lt;tgmath.h&gt;</CODE>.
+The following functions have such additional overloads:</P>
+
+<PRE>
+abs      conj     polar    tanh
+acos     cos      pow
+acosh    cosh     proj
+arg      exp      real
+asin     imag     sin
+asinh    log      sinh
+atan     log10    sqrt
+atanh    norm     tan</PRE>
+
+<P>[These additional overloads are added with C++11]</P>
+<HR>
+
+<PRE>namespace std {
+#define <B><A HREF="#__STD_COMPLEX">__STD_COMPLEX</A></B>
+
+        // TEMPLATE CLASSES
+template&lt;class Ty&gt;
+    class <B><A HREF="#complex">complex</A></B>;
+template&lt;&gt;
+    class <B><A HREF="#complex&lt;float&gt;">complex&lt;float&gt;</A></B>;
+template&lt;&gt;
+    class <B><A HREF="#complex&lt;double&gt;">complex&lt;double&gt;</A></B>;
+template&lt;&gt;
+    class <B><A HREF="#complex&lt;long_double&gt;">complex&lt;long double&gt;</A></B>;
+
+        // TEMPLATE FUNCTIONS
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator+">operator+</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator+">operator+</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator+">operator+</A></B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator-">operator-</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator-">operator-</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator-">operator-</A></B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator*">operator*</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator*">operator*</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator*">operator*</A></B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator_slash">operator/</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator_slash">operator/</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator_slash">operator/</A></B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator+">operator+</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#operator-">operator-</A></B>(const complex&lt;Ty&gt;&amp; left);
+
+template&lt;class Ty&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+
+template&lt;class Ty&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+
+template&lt;class Ty, class Elem, class Tr&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp;
+        <B><A HREF="#operator&gt;&gt;">operator&gt;&gt;</A></B>(basic_istream&lt;Elem, Tr&gt;&amp; istr,
+            complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty, class Elem, class Tr&gt;
+    basic_ostream&lt;Elem, Tr&gt;&amp;
+        <B><A HREF="#operator&lt;&lt;">operator&lt;&lt;</A></B>(basic_ostream&lt;Elem, Tr&gt;&amp; ostr,
+            const complex&lt;Ty&gt;&amp; right);
+
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#real">real</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#imag">imag</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#abs">abs</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#arg">arg</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    Ty <B><A HREF="#norm">norm</A></B>(const complex&lt;Ty&gt;&amp; left);
+
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#conj">conj</A></B>(const complex&lt;Ty&gt;&amp; left);
+double <B><A HREF="#conj">conj</A></B>(const double&amp;left); <B>[added with C++11]</B>
+float <B><A HREF="#conj">conj</A></B>(const float&amp;left); <B>[added with C++11]</B>
+long double <B><A HREF="#conj">conj</A></B>(const long double&amp;left); <B>[added with C++11]</B>
+
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#proj">proj</A></B>(const complex&lt;Ty&gt;&amp; left);
+double <B><A HREF="#proj">proj</A></B>(const double&amp;left); <B>[added with C++11]</B>
+float <B><A HREF="#proj">proj</A></B>(const float&amp;left); <B>[added with C++11]</B>
+long double <B><A HREF="#proj">proj</A></B>(const long double&amp;left); <B>[added with C++11]</B>
+
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#acos">acos</A></B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#acosh">acosh</A></B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#asin">asin</A></B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#asinh">asinh</A></B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#atan">atan</A></B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#atanh">atanh</A></B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B>
+
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#polar">polar</A></B>(const Ty&amp; rho, const Ty&amp; theta = 0);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#cos">cos</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#cosh">cosh</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#exp">exp</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#log">log</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#log10">log10</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#pow">pow</A></B>(const complex&lt;Ty&gt;&amp; left, const Ty&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#pow">pow</A></B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#pow">pow</A></B>(const Ty&amp; left, const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#sin">sin</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#sinh">sinh</A></B>(const complex&lt;Ty&gt;&amp; left);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B><A HREF="#sqrt">sqrt</A></B>(const complex&lt;Ty&gt;&amp; left);
+}  // namespace std</PRE>
+
+<H2><A NAME="abs"></A><CODE>abs</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>abs</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the magnitude of <CODE>left</CODE>.</P>
+
+<H2><A NAME="acos"></A><CODE>acos</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>acos</B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B></PRE>
+
+<P>The function returns the arccosine of <CODE>left</CODE>.</P>
+
+<H2><A NAME="acosh"></A><CODE>acosh</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>acosh</B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B></PRE>
+
+<P>The function returns the hyperbolic arccosine of <CODE>left</CODE>.</P>
+
+<H2><A NAME="arg"></A><CODE>arg</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>arg</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the phase angle of <CODE>left</CODE>.</P>
+
+<H2><A NAME="asin"></A><CODE>asin</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>asin</B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B></PRE>
+
+<P>The function returns the arcsine of <CODE>left</CODE>.</P>
+
+<H2><A NAME="asinh"></A><CODE>asinh</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>asinh</B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B></PRE>
+
+<P>The function returns the hyperbolic arcsine of <CODE>left</CODE>.</P>
+
+<H2><A NAME="atan"></A><CODE>atan</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>atan</B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B></PRE>
+
+<P>The function returns the arctangent of <CODE>left</CODE>.</P>
+
+<H2><A NAME="atanh"></A><CODE>atanh</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>atanh</B>(const complex&lt;Ty&gt;&amp; left); <B>[added with C++11]</B></PRE>
+
+<P>The function returns the hyperbolic arctangent of <CODE>left</CODE>.</P>
+
+<H2><A NAME="complex"></A><CODE>complex</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    class <B>complex</B> {
+public:
+    typedef Ty <B><A HREF="#complex__value_type">value_type</A></B>;
+
+    Ty <B><A HREF="#complex__real">real</A></B>() const;
+    void <B><A HREF="#complex__real">real</A></B>(Ty val);
+    Ty <B><A HREF="#complex__imag">imag</A></B>() const;
+    void <B><A HREF="#complex__imag">imag</A></B>(Ty val);
+
+    <B><A HREF="#complex__complex">complex</A></B>(const Ty&amp; realval = 0, const Ty&amp; imagval = 0);
+    template&lt;class Other&gt;
+        <B><A HREF="#complex__complex">complex</A></B>(const complex&lt;Other&gt;&amp; right);
+    template&lt;class Other&gt;
+        complex&amp; <B><A HREF="#complex__operator2">operator=</A></B>(const complex&lt;Other&gt;&amp; right);
+    template&lt;class Other&gt;
+        complex&amp; <B><A HREF="#complex__operator+2">operator+=</A></B>(const complex&lt;Other&gt;&amp; right);
+    template&lt;class Other&gt;
+        complex&amp; <B><A HREF="#complex__operator-2">operator-=</A></B>(const complex&lt;Other&gt;&amp; right);
+    template&lt;class Other&gt;
+        complex&amp; <B><A HREF="#complex__operator*2">operator*=</A></B>(const complex&lt;Other&gt;&amp; right);
+    template&lt;class Other&gt;
+        complex&amp; <B><A HREF="#complex__operator_slash2">operator/=</A></B>(const complex&lt;Other&gt;&amp; right);
+    complex&amp; <B><A HREF="#complex__operator2">operator=</A></B>(const Ty&amp; right);
+    complex&amp; <B><A HREF="#complex__operator+2">operator+=</A></B>(const Ty&amp; right);
+    complex&amp; <B><A HREF="#complex__operator-2">operator-=</A></B>(const Ty&amp; right);
+    complex&amp; <B><A HREF="#complex__operator*2">operator*=</A></B>(const Ty&amp; right);
+    complex&amp; <B><A HREF="#complex__operator_slash2">operator/=</A></B>(const Ty&amp; right);
+    };</PRE>
+
+<P>The template class describes an object that stores two objects
+of type <B><CODE>Ty</CODE></B>, one that represents the real part
+of a complex number and one that represents the imaginary part.
+An object of class <CODE>Ty</CODE>:</P>
+
+<UL>
+<LI>has a public default constructor, destructor,
+copy constructor, and assignment operator -- with
+conventional behavior</LI>
+
+<LI>can be assigned integer or floating-point values, or
+type cast to such values -- with
+conventional behavior</LI>
+
+<LI>defines the arithmetic operators and math functions, as needed,
+that are defined for the floating-point
+types -- with conventional behavior</LI>
+</UL>
+
+<P>In particular, no subtle differences may exist between copy construction
+and default construction followed by assignment. And none of the operations
+on objects of class <CODE>Ty</CODE> may throw exceptions.</P>
+
+<P>Explicit specializations of template class <CODE>complex</CODE>
+exist for the three floating-point types. In this
+implementation, a value of any other
+type <CODE>Ty</CODE> is type cast to <I>double</I> for actual calculations,
+with the <I>double</I> result assigned back to the stored object
+of type <CODE>Ty</CODE>.</P>
+
+<H3><A NAME="complex__complex"></A><CODE>complex::complex</CODE></H3>
+
+<PRE><B>complex</B>(const Ty&amp; realval = 0, const Ty&amp; imagval = 0);
+template&lt;class Other&gt;
+    <B>complex</B>(const complex&lt;Other&gt;&amp; right);</PRE>
+
+<P>The first constructor initializes the stored real part to
+<CODE>realval</CODE> and the stored imaginary part to <CODE>imagval</CODE>.
+The second constructor initializes the stored real part to
+<CODE>right.real()</CODE> and the stored imaginary part to
+<CODE>right.imag()</CODE>.</P>
+
+
+<H3><A NAME="complex__imag"></A><CODE>complex::imag</CODE></H3>
+
+<PRE>Ty <B>imag</B>() const;
+void <B>imag</B>(Ty val);</PRE>
+
+<P>The first member function returns the stored imaginary part.
+The second member function stores <CODE>val</CODE> in the imaginary part.</P>
+
+<H3><A NAME="complex__operator*2"></A><CODE>complex::operator*=</CODE></H3>
+
+<PRE>template&lt;class Other&gt;
+    complex&amp; <B>operator*=</B>(const complex&lt;Other&gt;&amp; right);
+complex&amp; <B>operator*=</B>(const Ty&amp; right);</PRE>
+
+<P>The first member function replaces the stored real and imaginary parts
+with those corresponding to the complex product of <CODE>*this</CODE>
+and <CODE>right</CODE>. It then returns <CODE>*this</CODE>.</P>
+
+<P>The second member function multiplies both the stored real part
+and the stored imaginary part with <CODE>right</CODE>.
+It then returns <CODE>*this</CODE>.</P>
+
+
+<H3><A NAME="complex__operator+2"></A><CODE>complex::operator+=</CODE></H3>
+
+<PRE>template&lt;class Other&gt;
+    complex&amp; <B>operator+=</B>(const complex&lt;Other&gt;&amp; right);
+complex&amp; <B>operator+=</B>(const Ty&amp; right);</PRE>
+
+<P>The first member function replaces the stored real and imaginary parts
+with those corresponding to the complex sum of <CODE>*this</CODE>
+and <CODE>right</CODE>. It then returns <CODE>*this</CODE>.</P>
+
+<P>The second member function adds <CODE>right</CODE> to the stored real part.
+It then returns <CODE>*this</CODE>.</P>
+
+
+<H3><A NAME="complex__operator-2"></A><CODE>complex::operator-=</CODE></H3>
+
+<PRE>template&lt;class Other&gt;
+    complex&amp; <B>operator-=</B>(const complex&lt;Other&gt;&amp; right);
+complex&amp; <B>operator-=</B>(const Ty&amp; right);</PRE>
+
+<P>The first member function replaces the stored real and imaginary parts
+with those corresponding to the complex difference of <CODE>*this</CODE>
+and <CODE>right</CODE>. It then returns <CODE>*this</CODE>.</P>
+
+<P>The second member function subtracts <CODE>right</CODE> from
+the stored real part. It then returns <CODE>*this</CODE>.</P>
+
+
+<H3><A NAME="complex__operator_slash2"></A><CODE>complex::operator/=</CODE></H3>
+
+<PRE>template&lt;class Other&gt;
+    complex&amp; <B>operator/=</B>(const complex&lt;Other&gt;&amp; right);
+complex&amp; <B>operator/=</B>(const Ty&amp; right);</PRE>
+
+<P>The first member function replaces the stored real and imaginary parts
+with those corresponding to the complex quotient of <CODE>*this</CODE>
+and <CODE>right</CODE>. It then returns <CODE>*this</CODE>.</P>
+
+<P>The second member function multiplies both the stored real part
+and the stored imaginary part with <CODE>right</CODE>.
+It then returns <CODE>*this</CODE>.</P>
+
+
+<H3><A NAME="complex__operator2"></A><CODE>complex::operator=</CODE></H3>
+
+<PRE>template&lt;class Other&gt;
+    complex&amp; <B>operator=</B>(const complex&lt;Other&gt;&amp; right);
+complex&amp; <B>operator=</B>(const Ty&amp; right);</PRE>
+
+<P>The first member function replaces the stored real part with
+<CODE>right.real()</CODE> and the stored imaginary part
+with <CODE>right.imag()</CODE>. It then returns <CODE>*this</CODE>.</P>
+
+<P>The second member function replaces the stored real part with
+<CODE>right</CODE> and the stored imaginary part
+with zero. It then returns <CODE>*this</CODE>.</P>
+
+
+<H3><A NAME="complex__real"></A><CODE>complex::real</CODE></H3>
+
+<PRE>Ty <B>real</B>() const;
+void <B>real</B>(Ty val);</PRE>
+
+<P>The first member function returns the stored real part.
+The second member function stores <CODE>val</CODE> in the real part.</P>
+
+<H3><A NAME="complex__value_type"></A><CODE>complex::value_type</CODE></H3>
+
+<PRE>typedef Ty <B>value_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Ty</CODE>.</P>
+
+<H2><A NAME="complex&lt;double&gt;"></A><CODE>complex&lt;double&gt;</CODE></H2>
+
+<PRE>template&lt;&gt;
+    class <B>complex&lt;double&gt;</B> {
+public:
+    constexpr <B>complex</B>(double realval = 0, double imagval = 0);
+    constexpr <B>complex</B>(const complex&lt;float&gt;&amp; right);
+    constexpr explicit <B>complex</B>(const complex&lt;long double&gt;&amp; right);
+
+    constexpr double real() const;
+    constexpr double imag() const;
+// rest same as template class complex
+    };</PRE>
+
+<P>The explicitly specialized template class
+describes an object that stores two objects
+of type <I>double,</I> one that represents the real part
+of a complex number and one that represents the imaginary part. The
+explicit specialization differs only in the constructors it defines.
+The first constructor initializes the stored real part to
+<CODE>realval</CODE> and the stored imaginary part to <CODE>imagval</CODE>.
+The remaining two constructors initialize the stored real part to
+<CODE>right.real()</CODE> and the stored imaginary part to
+<CODE>right.imag()</CODE>.</P>
+
+<H2><A NAME="complex&lt;float&gt;"></A><CODE>complex&lt;float&gt;</CODE></H2>
+
+<PRE>template&lt;&gt;
+    class <B>complex&lt;float&gt;</B> {
+public:
+    constexpr <B>complex</B>(float realval = 0, float imagval = 0);
+    constexpr explicit <B>complex</B>(const complex&lt;double&gt;&amp; right);
+    constexpr explicit <B>complex</B>(const complex&lt;long double&gt;&amp; right);
+
+    constexpr float real() const;
+    constexpr float imag() const;
+// rest same as template class complex
+    };</PRE>
+
+<P>The explicitly specialized template class
+describes an object that stores two objects
+of type <I>float,</I> one that represents the real part
+of a complex number and one that represents the imaginary part. The
+explicit specialization differs only in the constructors it defines.
+The first constructor initializes the stored real part to
+<CODE>realval</CODE> and the stored imaginary part to <CODE>imagval</CODE>.
+The remaining two constructors initialize the stored real part to
+<CODE>right.real()</CODE> and the stored imaginary part to
+<CODE>right.imag()</CODE>.</P>
+
+<H2><A NAME="complex&lt;long_double&gt;"></A><CODE>complex&lt;long double&gt;</CODE></H2>
+
+<PRE>template&lt;&gt;
+    class <B>complex&lt;long double&gt;</B> {
+public:
+    constexpr <B>complex</B>(long double realval = 0, long double imagval = 0);
+    constexpr <B>complex</B>(const complex&lt;float&gt;&amp; right);
+    constexpr <B>complex</B>(const complex&lt;double&gt;&amp; right);
+
+    constexpr long double real() const;
+    constexpr long double imag() const;
+// rest same as template class complex
+    };</PRE>
+
+<P>The explicitly specialized template class
+describes an object that stores two objects
+of type <I>long double,</I> one that represents the real part
+of a complex number and one that represents the imaginary part. The
+explicit specialization differs only in the constructors it defines.
+The first constructor initializes the stored real part to
+<CODE>realval</CODE> and the stored imaginary part to <CODE>imagval</CODE>.
+The remaining two constructors initialize the stored real part to
+<CODE>right.real()</CODE> and the stored imaginary part to
+<CODE>right.imag()</CODE>.</P>
+
+<H2><A NAME="conj"></A><CODE>conj</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>conj</B>(const complex&lt;Ty&gt;&amp; left);
+double <B>conj</B>(const double&amp;left); <B>[added with C++11]</B>
+float_complex <B>conj</B>(const float_complex&amp; left);
+float <B>conj</B>(const float&amp;left); <B>[added with C++11]</B>
+long double <B>conj</B>(const long double&amp;left); <B>[added with C++11]</B></PRE>
+
+<P>The function returns the conjugate of <CODE>left</CODE>.</P>
+
+<H2><A NAME="cos"></A><CODE>cos</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>cos</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the cosine of <CODE>left</CODE>.</P>
+
+<H2><A NAME="cosh"></A><CODE>cosh</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>cosh</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the hyperbolic cosine of <CODE>left</CODE>.</P>
+
+
+<H2><A NAME="exp"></A><CODE>exp</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>exp</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the exponential of <CODE>left</CODE>.</P>
+
+
+<H2><A NAME="imag"></A><CODE>imag</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>imag</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the imaginary part of <CODE>left</CODE>.</P>
+
+<H2><A NAME="log"></A><CODE>log</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>log</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the logarithm of <CODE>left</CODE>.
+The branch cuts are along the negative real axis.</P>
+
+<H2><A NAME="log10"></A><CODE>log10</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>log10</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the base 10
+logarithm of <CODE>left</CODE>.
+The branch cuts are along the negative real axis.</P>
+
+<H2><A NAME="norm"></A><CODE>norm</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>norm</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the squared magnitude of <CODE>left</CODE>.</P>
+
+<H2><A NAME="operator!2"></A><CODE>operator!=</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>operator!=</B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    bool <B>operator!=</B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    bool <B>operator!=</B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);</PRE>
+
+<P>The operators each return true only if
+<CODE><A HREF="#real">real</A>(left) != real(right) ||
+<A HREF="#imag">imag</A>(left) != imag(right)</CODE>.</P>
+
+<H2><A NAME="operator*"></A><CODE>operator*</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator*</B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator*</B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator*</B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);</PRE>
+
+<P>The operators each convert both operands to the return type,
+then return the complex product
+of the converted <CODE>left</CODE> and <CODE>right</CODE>.</P>
+
+<H2><A NAME="operator+"></A><CODE>operator+</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator+</B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator+</B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator+</B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator+</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The binary operators each convert both operands to the return type,
+then return the complex sum
+of the converted <CODE>left</CODE> and <CODE>right</CODE>.</P>
+
+<P>The unary operator returns <CODE>left</CODE>.</P>
+
+<H2><A NAME="operator-"></A><CODE>operator-</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator-</B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator-</B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator-</B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator-</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The binary operators each convert both operands to the return type,
+then return the complex difference
+of the converted <CODE>left</CODE> and <CODE>right</CODE>.</P>
+
+<P>The unary operator returns a value whose real part is
+<CODE>-<A HREF="#real">real</A>(left)</CODE> and whose imaginary part is
+<CODE>-<A HREF="#imag">imag</A>(left)</CODE>.</P>
+
+<H2><A NAME="operator_slash"></A><CODE>operator/</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator/</B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator/</B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>operator/</B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);</PRE>
+
+<P>The operators each convert both operands to the return type,
+then return the complex quotient
+of the converted <CODE>left</CODE> and <CODE>right</CODE>.</P>
+
+<H2><A NAME="operator&lt;&lt;"></A><CODE>operator&lt;&lt;</CODE></H2>
+
+<PRE>template&lt;class Ty, class Elem, class Tr&gt;
+    basic_ostream&lt;Elem, Tr&gt;&amp;
+        <B><A HREF="#operator&lt;&lt;">operator&lt;&lt;</A></B>(basic_ostream&lt;Elem, Tr&gt;&amp; ostr,
+            const complex&lt;Ty&gt;&amp; right);</PRE>
+
+<P>The template function inserts the complex value <CODE>right</CODE>
+in the output stream <CODE>os</CODE>, effectively by executing:</P>
+
+<PRE>basic_ostringstream&lt;Elem, Tr&gt; osstr;
+osstr.flags(ostr.flags());
+osstr.precision(ostr.precision());
+osstr &lt;&lt; '(' &lt;&lt; real(right) &lt;&lt; ','
+    &lt;&lt; imag(right) &lt;&lt; ')';
+ostr &lt;&lt; osstr.str().c_str();</PRE>
+
+<P>Thus, if
+<CODE>ostr.<A HREF="ios.html#ios_base__width">width</A>()</CODE> is
+greater than zero, any padding occurs either before or after the
+parenthesized pair of values, which itself contains no padding.
+The function returns <CODE>ostr</CODE>.</P>
+
+<H2><A NAME="operator22"></A><CODE>operator==</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    bool <B>operator==</B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    bool <B>operator==</B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    bool <B>operator==</B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);</PRE>
+
+<P>The operators each return true only if
+<CODE><A HREF="#real">real</A>(left) == real(right) &amp;&amp;
+<A HREF="#imag">imag</A>(left) == imag(right)</CODE>.</P>
+
+<H2><A NAME="operator&gt;&gt;"></A><CODE>operator&gt;&gt;</CODE></H2>
+
+<PRE>template&lt;class Ty, class Elem, class Tr&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp;
+        <B>operator&gt;&gt;</B>(basic_istream&lt;Elem, Tr&gt;&amp; istr,
+            complex&lt;Ty&gt;&amp; right);</PRE>
+
+<P>The template function attempts to extract a complex value
+from the input stream <CODE>istr</CODE>, effectively by executing:</P>
+
+<PRE>istr &gt;&gt; ch &amp;&amp; ch == '('
+    &amp;&amp; istr &gt;&gt; re &gt;&gt; ch &amp;&amp; ch == ','
+    &amp;&amp; istr &gt;&gt; im &gt;&gt; ch &amp;&amp; ch == ')'</PRE>
+
+<P>Here, <CODE>ch</CODE> is an object of type <CODE>Elem</CODE>,
+and <CODE>re</CODE> and <CODE>im</CODE> are objects of type <CODE>Ty</CODE>.</P>
+
+<P>If the result of this expression is true, the function stores
+<CODE>re</CODE> in the real part and <CODE>im</CODE> in the
+imaginary part of <CODE>right</CODE>. In any event, the function
+returns <CODE>istr</CODE>.</P>
+
+<H2><A NAME="polar"></A><CODE>polar</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>polar</B>(const Ty&amp; rho,
+        const Ty&amp; theta = 0);</PRE>
+
+<P>The function returns the complex value whose magnitude
+is <CODE>rho</CODE> and whose phase angle is <CODE>theta</CODE>.</P>
+
+<H2><A NAME="pow"></A><CODE>pow</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>pow</B>(const complex&lt;Ty&gt;&amp; left,
+        const Ty&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>pow</B>(const complex&lt;Ty&gt;&amp; left,
+        const complex&lt;Ty&gt;&amp; right);
+template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>pow</B>(const Ty&amp; left,
+        const complex&lt;Ty&gt;&amp; right);</PRE>
+
+<P>The functions each effectively convert both operands to
+the return type, then return the converted
+<CODE>left</CODE> to the power <CODE>right</CODE>.
+The branch cut for <CODE>left</CODE> is along the negative real axis.</P>
+
+<H2><A NAME="proj"></A><CODE>proj</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>proj</B>(const complex&lt;Ty&gt;&amp; left);
+double <B>proj</B>(const double&amp;left); <B>[added with C++11]</B>
+float_complex <B>proj</B>(const float_complex&amp; left);
+float <B>proj</B>(const float&amp;left); <B>[added with C++11]</B>
+long double <B>proj</B>(const long double&amp;left); <B>[added with C++11]</B></PRE>
+
+<P>The function returns the projection of <CODE>left</CODE>
+on the Riemann sphere:</P>
+
+<UL>
+<LI>If the real value is negative infinity, it is changed to infinity;
+otherwise the real value is unchanged.</LI>
+
+<LI>If the imginary value is negative, it is changed to negative zero;
+otherwise the imaginary value is changed to zero.</LI>
+</UL>
+
+<H2><A NAME="real"></A><CODE>real</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    Ty <B>real</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the real part of <CODE>left</CODE>.</P>
+
+<H2><A NAME="sin"></A><CODE>sin</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>sin</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the sine of <CODE>left</CODE>.</P>
+
+<H2><A NAME="sinh"></A><CODE>sinh</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>sinh</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the hyperbolic sine of <CODE>left</CODE>.</P>
+
+<H2><A NAME="sqrt"></A><CODE>sqrt</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>sqrt</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the square root of <CODE>left</CODE>,
+with phase angle in the half-open interval <CODE>(-pi/2, pi/2]</CODE>.
+The branch cuts are along the negative real axis.</P>
+
+<H2><A NAME="__STD_COMPLEX"></A><CODE>__STD_COMPLEX</CODE></H2>
+
+<PRE>#define <B>__STD_COMPLEX</B></PRE>
+
+<P>The macro is defined, with an unspecified expansion, to indicate
+compliance with the specifications of this header.</P>
+
+<H2><A NAME="tan"></A><CODE>tan</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>tan</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the tangent of <CODE>left</CODE>.</P>
+
+<H2><A NAME="tanh"></A><CODE>tanh</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+    complex&lt;Ty&gt; <B>tanh</B>(const complex&lt;Ty&gt;&amp; left);</PRE>
+
+<P>The function returns the hyperbolic tangent of <CODE>left</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

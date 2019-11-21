@@ -1,0 +1,16 @@
+﻿Der Buildvorgang wurde am 31.10.2019 15:18:29 gestartet.
+     1>Projekt "H:\SKP\Samples\Triangle\HelloClear\HelloClear.vcxproj" auf Knoten "2", Build Ziel(e).
+     1>CustomBuild:
+         Compiling Fragment Shader: "H:\SKP\Samples\Triangle\HelloClear\graph\basic_f.cg"
+     1>graph\basic_f.cg(11,9): error D5476: ambiguous call to 'tex2D'. Found 2 possible candidates:
+            return tex2D(normalTex, vTexCoord);
+                   ^~~~~                        
+         graph\basic_f.cg(11,9) : function was called with params: (sampler2D, float4)
+         could be: half4 tex2D(sampler2D, float3)
+         or      : half4 tex2D(sampler2D, float2)
+         Compiling Vertex Shader: "H:\SKP\Samples\Triangle\HelloClear\graph\basic_v .cg"
+     1>Die Erstellung des Projekts "H:\SKP\Samples\Triangle\HelloClear\HelloClear.vcxproj" ist abgeschlossen, Build Ziel(e) -- FEHLER.
+
+Fehler beim Buildvorgang.
+
+Verstrichene Zeit 00:00:00.33

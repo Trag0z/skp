@@ -1,0 +1,494 @@
+<HTML><HEAD>
+<TITLE>&lt;scoped_allocator&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;scoped_allocator&gt;"></A><CODE>&lt;scoped_allocator&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P><B><CODE><A HREF="#operator!2">operator!=</A>
+&middot; <A HREF="#operator22">operator==</A>
+&middot; <A HREF="#scoped_allocator_adaptor">scoped_allocator_adaptor</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the standard
+header <B><CODE>&lt;scoped_allocator&gt;</CODE></B> to define the
+template class <CODE>scoped_allocator_adaptor</CODE>
+and two supporting templates.</P>
+
+<PRE>namespace std {
+template&lt;class Outer, class... Inner&gt;
+    class <B><A HREF="#scoped_allocator_adaptor">scoped_allocator_adaptor</A></B>;
+
+        // TEMPLATE FUNCTIONS
+template&lt;class Outer1, class Outer2, class... Inner&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(
+        const scoped_allocator_adaptor&lt;Outer1, Inner...&gt;&amp; left,
+        const scoped_allocator_adaptor&lt;Outer2, Inner...&gt;&amp; right) noexcept;
+template&lt;class Outer1, class Outer2, class... Inner&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(
+        const scoped_allocator_adaptor&lt;Outer1, Inner...&gt;&amp; left,
+        const scoped_allocator_adaptor&lt;Outer2, Inner...&gt;&amp; right) noexcept;
+}  // namespace std</PRE>
+
+<H2><CODE><A NAME="operator!2"></A>operator!=</CODE></H2>
+
+<PRE>template&lt;class Outer1, class Outer2, class... Inner&gt;
+    bool <B>operator!=</B>(
+        const scoped_allocator_adaptor&lt;Outer1, Inner...&gt;&amp; left,
+        const scoped_allocator_adaptor&lt;Outer2, Inner...&gt;&amp; right) noexcept;</PRE>
+
+<P>The template function returns <CODE>!(left == right)</CODE>.</P>
+
+<H2><CODE><A NAME="operator22"></A>operator==</CODE></H2>
+
+<PRE>template&lt;class Outer1, class Outer2, class... Inner&gt;
+    bool <B>operator==</B>(
+        const scoped_allocator_adaptor&lt;Outer1, Inner...&gt;&amp; left,
+        const scoped_allocator_adaptor&lt;Outer2, Inner...&gt;&amp; right) noexcept;</PRE>
+
+<P>The template function returns
+<CODE>left.outer_allocator() == right.outer_allocator()
+&amp;&amp; left.inner_allocator() == right.inner_allocator()</CODE>.</P>
+
+<H2><CODE><A NAME="scoped_allocator_adaptor"></A>scoped_allocator_adaptor</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#scoped_allocator_adaptor__allocate">allocate</A>
+&middot; <A HREF="#scoped_allocator_adaptor__const_pointer">const_pointer</A>
+&middot; <A HREF="#scoped_allocator_adaptor__const_void_pointer">const_void_pointer</A>
+&middot; <A HREF="#scoped_allocator_adaptor__construct">construct</A>
+&middot; <A HREF="#scoped_allocator_adaptor__deallocate">deallocate</A>
+&middot; <A HREF="#scoped_allocator_adaptor__destroy">destroy</A>
+&middot; <A HREF="#scoped_allocator_adaptor__difference_type">difference_type</A>
+&middot; <A HREF="#scoped_allocator_adaptor__inner_allocator">inner_allocator</A>
+&middot; <A HREF="#scoped_allocator_adaptor__inner_allocator_type">inner_allocator_type</A>
+&middot; <A HREF="#scoped_allocator_adaptor__max_size">max_size</A>
+&middot; <A HREF="#scoped_allocator_adaptor__outer_allocator">outer_allocator</A>
+&middot; <A HREF="#scoped_allocator_adaptor__outer_allocator_type">outer_allocator_type</A>
+&middot; <A HREF="#scoped_allocator_adaptor__pointer">pointer</A>
+&middot; <A HREF="#scoped_allocator_adaptor__propagate_on_container_copy_assignment">propagate_on_container_copy_assignment</A>
+&middot; <A HREF="#scoped_allocator_adaptor__propagate_on_container_move_assignment">propagate_on_container_move_assignment</A>
+&middot; <A HREF="#scoped_allocator_adaptor__propagate_on_container_swap">propagate_on_container_swap</A>
+&middot; <A HREF="#scoped_allocator_adaptor__rebind">rebind</A>
+&middot; <A HREF="#scoped_allocator_adaptor__scoped_allocator_adaptor">scoped_allocator_adaptor</A>
+&middot; <A HREF="#scoped_allocator_adaptor__select_on_container_copy_construction">select_on_container_copy_construction</A>
+&middot; <A HREF="#scoped_allocator_adaptor__size_type">size_type</A>
+&middot; <A HREF="#scoped_allocator_adaptor__value_type">value_type</A>
+&middot; <A HREF="#scoped_allocator_adaptor__void_pointer">void_pointer</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Outer, class... Inner&gt;
+    class <B>scoped_allocator_adaptor</B> {
+    typedef T0 <B>Outermost</B>;  // exposition only
+    typedef allocator_traits&lt;Outer&gt; <B>Outer_traits</B>;  // exposition only
+    typedef allocator_traits&lt;Outermost&gt; <B>Outermost_traits</B>;  // exposition only
+
+public:
+    typedef typename Outer_traits::value_type <B><A HREF="#scoped_allocator_adaptor__value_type">value_type</A></B>;
+
+    typedef typename Outer_traits::pointer <B><A HREF="#scoped_allocator_adaptor__pointer">pointer</A></B>;
+    typedef typename Outer_traits::const_pointer <B><A HREF="#scoped_allocator_adaptor__const_pointer">const_pointer</A></B>;
+    typedef typename Outer_traits::void_pointer <B><A HREF="#scoped_allocator_adaptor__void_pointer">void_pointer</A></B>;
+    typedef typename Outer_traits::const_void_pointer <B><A HREF="#scoped_allocator_adaptor__const_void_pointer">const_void_pointer</A></B>;
+
+    typedef typename Outer_traits::size_type <B><A HREF="#scoped_allocator_adaptor__size_type">size_type</A></B>;
+    typedef typename Outer_traits::difference_type <B><A HREF="#scoped_allocator_adaptor__difference_type">difference_type</A></B>;
+
+    template&lt;class Other&gt;
+        struct <B><A HREF="#scoped_allocator_adaptor__rebind">rebind</A></B>;
+
+    typedef T1 <B><A HREF="#scoped_allocator_adaptor__propagate_on_container_copy_assignment">propagate_on_container_copy_assignment</A></B>;
+    typedef T2 <B><A HREF="#scoped_allocator_adaptor__propagate_on_container_move_assignment">propagate_on_container_move_assignment</A></B>;
+    typedef T3 <B><A HREF="#scoped_allocator_adaptor__propagate_on_container_swap">propagate_on_container_swap</A></B>;
+
+    <B><A HREF="#scoped_allocator_adaptor__scoped_allocator_adaptor">scoped_allocator_adaptor</A></B>();
+    <B><A HREF="#scoped_allocator_adaptor__scoped_allocator_adaptor">scoped_allocator_adaptor</A></B>(const scoped_allocator_adaptor&amp; right) noexcept;
+    template&lt;class Outer2&gt;
+        <B><A HREF="#scoped_allocator_adaptor__scoped_allocator_adaptor">scoped_allocator_adaptor</A></B>(
+            const scoped_allocator_adaptor&lt;Outer2, Inner...&gt;&amp; right) noexcept;
+    template&lt;class Outer2&gt;
+        <B><A HREF="#scoped_allocator_adaptor__scoped_allocator_adaptor">scoped_allocator_adaptor</A></B>(
+            scoped_allocator_adaptor&lt;Outer2, Inner...&gt;&amp;&amp; right) noexcept;
+    template&lt;class Outer2&gt;
+        <B><A HREF="#scoped_allocator_adaptor__scoped_allocator_adaptor">scoped_allocator_adaptor</A></B>(Outer2&amp;&amp; al,
+            const Inner&amp;... rest) noexcept;
+
+    inner_allocator_type&amp; <B><A HREF="#scoped_allocator_adaptor__inner_allocator">inner_allocator</A></B>() noexcept;
+    const inner_allocator_type&amp; <B><A HREF="#scoped_allocator_adaptor__inner_allocator">inner_allocator</A></B>() const noexcept;
+    outer_allocator_type&amp; <B><A HREF="#scoped_allocator_adaptor__outer_allocator">outer_allocator</A></B>() noexcept;
+    const outer_allocator_type&amp; <B><A HREF="#scoped_allocator_adaptor__outer_allocator">outer_allocator</A></B>() const noexcept;
+
+    pointer <B><A HREF="#scoped_allocator_adaptor__allocate">allocate</A></B>(size_type count);
+    pointer <B><A HREF="#scoped_allocator_adaptor__allocate">allocate</A></B>(size_type count, const_void_pointer hint);
+    void <B><A HREF="#scoped_allocator_adaptor__deallocate">deallocate</A></B>(pointer ptr, size_type count);
+    size_type <B><A HREF="#scoped_allocator_adaptor__max_size">max_size</A></B>();
+
+    template&lt;class Ty, class... Atypes&gt;
+        void <B><A HREF="#scoped_allocator_adaptor__construct">construct</A></B>(Ty *ptr, Atypes&amp;&amp;... args);
+    template&lt;class Ty1, class Ty2, class... Atypes1, class... Atypes2&gt;
+        void <B><A HREF="#scoped_allocator_adaptor__construct">construct</A></B>(pair&lt;Ty1, Ty2&gt; *ptr, piecewise_construct_t,
+            tuple&lt;Atypes1&amp;&amp;...&gt; first, tuple&lt;Atypes1&amp;&amp;...&gt; second);
+    template&lt;class Ty1, class Ty2&gt;
+        void <B><A HREF="#scoped_allocator_adaptor__construct">construct</A></B>(pair&lt;Ty1, Ty2&gt; *ptr);
+    template&lt;class Ty1, class Ty2, class Uy1, class Uy2&gt;
+        void <B><A HREF="#scoped_allocator_adaptor__construct">construct</A></B>(pair&lt;Ty1, Ty2&gt; *ptr,
+            class Uy1&amp;&amp; first, class Uy2&amp;&amp; second);
+    template&lt;class Ty1, class Ty2, class Uy1, class Uy2&gt;
+        void <B><A HREF="#scoped_allocator_adaptor__construct">construct</A></B>(pair&lt;Ty1, Ty2&gt; *ptr, const pair&lt;Uy1, Uy2&gt;&amp; right);
+    template&lt;class Ty1, class Ty2, class Uy1, class Uy2&gt;
+        void <B><A HREF="#scoped_allocator_adaptor__construct">construct</A></B>(pair&lt;Ty1, Ty2&gt; *ptr, pair&lt;Uy1, Uy2&gt;&amp;&amp; right);
+
+    template&lt;class Ty&gt;
+        void <B><A HREF="#scoped_allocator_adaptor__destroy">destroy</A></B>(Ty *ptr);
+
+    scoped_allocator_adaptor <B><A HREF="#scoped_allocator_adaptor__select_on_container_copy_construction">select_on_container_copy_construction</A></B>();
+    };</PRE>
+
+<P>The template class encapsulates a nest of one or more allocators.
+Each such class has an outermost allocator of type <CODE>outer_allocator_type</CODE>
+(a synonym for <CODE>Outer</CODE>),
+which is a public base of the <CODE>scoped_allocator_adaptor</CODE> object.
+You can obtain a reference to this allocator base object by calling the member function
+<CODE>outer_allocator()</CODE>.</P>
+
+<P>The remainder of the nest has type <CODE>inner_allocator_type</CODE>.
+You can obtain a reference to the stored object of this type
+by calling the member function <CODE>inner_allocator()</CODE>.
+If <CODE>Inner...</CODE> is not empty, <CODE>inner_allocator_type</CODE>
+has type <CODE>scoped_allocator_adaptor&lt;Inner...&gt;</CODE>, and
+<CODE>inner_allocator()</CODE> designates a member object. Otherwise,
+<CODE>inner_allocator_type</CODE> has type
+<CODE>scoped_allocator_adaptor&lt;Outer&gt;</CODE>, and
+<CODE>inner_allocator()</CODE> designates the entire object.</P>
+
+<P>Thus, the nest behaves as if it has arbitrary depth, replicating its
+innermost encapsulated allocator as needed.</P>
+
+<P>Several concepts, not a part of the visible interface, aid in describing
+the behavior of this template class:</P>
+
+<P>An <B>outermost allocator</B> mediates all calls to the member functions
+<CODE>construct</CODE> and <CODE>destroy</CODE>. It is effectively defined
+by the recursive function <CODE>OUTERMOST(X)</CODE>:</P>
+
+<UL>
+<LI>If <CODE>X.outer_allocator()</CODE> is well formed, then
+<CODE>OUTERMOST(X)</CODE> is <CODE>OUTERMOST(X.outer_allocator())</CODE>.</LI>
+
+<LI>Otherwise, <CODE>OUTERMOST(X)</CODE> is <CODE>X</CODE>.</LI>
+</UL>
+
+<P>Three types are defined for the sake of exposition:</P>
+
+<UL>
+<LI><CODE>Outermost</CODE> -- the type of <CODE>OUTERMOST(*this)</CODE>
+(It is described above as a
+synonym for the implementation-defined type <CODE>T0</CODE>.)</LI>
+
+<LI><CODE>Outermost_traits</CODE> -- <CODE>allocator_traits&lt;Outermost&gt;</CODE></LI>
+
+<LI><CODE>Outer_traits</CODE> -- <CODE>allocator_traits&lt;Outer&gt;</CODE></LI>
+</UL>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__allocate"></A>scoped_allocator_adaptor::allocate</CODE></H3>
+
+<PRE>pointer <B>allocate</B>(size_type count);
+pointer <B>allocate</B>(size_type count, const_void_pointer hint);</PRE>
+
+<P>The first member function returns
+<CODE>Outer_traits::allocate(outer_allocator(), count)</CODE>.
+The second member function returns
+<CODE>Outer_traits::allocate(outer_allocator(), count, hint)</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__const_pointer"></A>scoped_allocator_adaptor::const_pointer</CODE></H3>
+
+<PRE>typedef typename Outer_traits::const_pointer <B>const_pointer</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>const_pointer</CODE>
+associated with the allocator <CODE>Outer</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__const_void_pointer"></A>scoped_allocator_adaptor::const_void_pointer</CODE></H3>
+
+<PRE>typedef typename Outer_traits::const_void_pointer <B>const_void_pointer</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>const_void_pointer</CODE>
+associated with the allocator <CODE>Outer</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__construct"></A>scoped_allocator_adaptor::construct</CODE></H3>
+
+<PRE>template&lt;class Ty, class... Atypes&gt;
+    void <B>construct</B>(Ty *ptr, Atypes&amp;&amp;... args);
+template&lt;class Ty1, class Ty2, class... Atypes1, class... Atypes2&gt;
+    void <B>construct</B>(pair&lt;Ty1, Ty2&gt; *ptr, piecewise_construct_t,
+        tuple&lt;Atypes1&amp;&amp;...&gt; first, tuple&lt;Atypes1&amp;&amp;...&gt; second);
+template&lt;class Ty1, class Ty2&gt;
+    void <B>construct</B>(pair&lt;Ty1, Ty2&gt; *ptr);
+template&lt;class Ty1, class Ty2, class Uy1, class Uy2&gt;
+    void <B>construct</B>(pair&lt;Ty1, Ty2&gt; *ptr,
+        class Uy1&amp;&amp; first, class Uy2&amp;&amp; second);
+template&lt;class Ty1, class Ty2, class Uy1, class Uy2&gt;
+    void <B>construct</B>(pair&lt;Ty1, Ty2&gt; *ptr, const pair&lt;Uy1, Uy2&gt;&amp; right);
+template&lt;class Ty1, class Ty2, class Uy1, class Uy2&gt;
+    void <B>construct</B>(pair&lt;Ty1, Ty2&gt; *ptr, pair&lt;Uy1, Uy2&gt;&amp;&amp; right);</PRE>
+
+<P>The member function:</P>
+
+<PRE>template&lt;class Ty, class... Atypes&gt;
+    void <B>construct</B>(Ty *ptr, Atypes&amp;&amp;... args);</PRE>
+
+<P>constructs the object at <CODE>ptr</CODE> by calling
+<CODE>Outermost_traits::construct(OUTERMOST(*this), ptr, xargs...)</CODE>,
+where <CODE>xargs...</CODE> is <CODE>args...</CODE> modified in one of
+three ways:</P>
+
+<UL>
+<LI>If <CODE><A HREF="memory.html#uses_allocator">uses_allocator</A>&lt;Ty,
+inner_allocator_type&gt;</CODE>
+<A HREF="typetrait.html#holds_false">holds false</A>,
+then <CODE>xargs...</CODE> is <CODE>args...</CODE>.</LI>
+
+<LI>If <CODE>uses_allocator&lt;Ty, inner_allocator_type&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>,
+and <CODE>is_constructible&lt;Ty, allocator_arg_t, inner_allocator_type, args...&gt;</CODE>
+holds true,
+then <CODE>xargs...</CODE> is <CODE>allocator_arg, inner_allocator(), args...</CODE>.</LI>
+
+<LI>If <CODE>uses_allocator&lt;Ty, inner_allocator_type&gt;</CODE>
+holds true,
+and <CODE>is_constructible&lt;Ty, args..., inner_allocator()&gt;</CODE>
+holds true,
+then <CODE>xargs...</CODE> is <CODE>args..., inner_allocator()</CODE>.</LI>
+</UL>
+
+<P>The member function:</P>
+
+<PRE>template&lt;class Ty1, class Ty2, class... Atypes1, class... Atypes2&gt;
+    void <B>construct</B>(pair&lt;Ty1, Ty2&gt; *ptr, piecewise_construct_t,
+        tuple&lt;Atypes1&amp;&amp;...&gt; first, tuple&lt;Atypes1&amp;&amp;...&gt; second);</PRE>
+
+<P>constructs the pair object at <CODE>ptr</CODE> by calling
+<CODE>Outermost_traits::construct(OUTERMOST(*this), &amp;ptr-&gt;first, xargs...)</CODE>,
+where <CODE>xargs...</CODE> is <CODE>first...</CODE> modified as above, and
+<CODE>Outermost_traits::construct(OUTERMOST(*this), &amp;ptr-&gt;second, xargs...)</CODE>,
+where <CODE>xargs...</CODE> is <CODE>second...</CODE> modified as above.</P>
+
+<P>The member function:</P>
+
+<PRE>template&lt;class Ty1, class Ty2&gt;
+    void <B>construct</B>(pair&lt;Ty1, Ty2&gt; *ptr);</PRE>
+
+<P>behaves the same as <CODE>this-&gt;construct(ptr, piecewise_construct,
+tuple&lt;&gt;, tuple&lt;&gt;)</CODE>.</P>
+
+<P>The member function:</P>
+
+<PRE>template&lt;class Ty1, class Ty2, class Uy1, class Uy2&gt;
+    void <B>construct</B>(pair&lt;Ty1, Ty2&gt; *ptr,
+        class Uy1&amp;&amp; first, class Uy2&amp;&amp; second);</PRE>
+
+<P>behaves the same as <CODE>this-&gt;construct(ptr, piecewise_construct,
+forward_as_tuple(std::forward&lt;Uy1&gt;(first),
+forward_as_tuple(std::forward&lt;Uy2&gt;(second))</CODE>.</P>
+
+<P>The member function:</P>
+
+<PRE>template&lt;class Ty1, class Ty2, class Uy1, class Uy2&gt;
+    void <B>construct</B>(pair&lt;Ty1, Ty2&gt; *ptr, const pair&lt;Uy1, Uy2&gt;&amp; right);</PRE>
+
+<P>behaves the same as <CODE>this-&gt;construct(ptr, piecewise_construct,
+forward_as_tuple(right.first),
+forward_as_tuple(right.second))</CODE>.</P>
+
+<P>The member function:</P>
+
+<PRE>template&lt;class Ty1, class Ty2, class Uy1, class Uy2&gt;
+    void <B>construct</B>(pair&lt;Ty1, Ty2&gt; *ptr, pair&lt;Uy1, Uy2&gt;&amp;&amp; right);</PRE>
+
+<P>behaves the same as <CODE>this-&gt;construct(ptr, piecewise_construct,
+forward_as_tuple(std::forward&lt;Uy1&gt;(right.first),
+forward_as_tuple(std::forward&lt;Uy2&gt;(right.second))</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__deallocate"></A>scoped_allocator_adaptor::deallocate</CODE></H3>
+
+<PRE>void <B>deallocate</B>(pointer ptr, size_type count);</PRE>
+
+<P>The member function calls
+<CODE>Outer_traits::deallocate(outer_allocator(), ptr, count)</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__destroy"></A>scoped_allocator_adaptor::destroy</CODE></H3>
+
+<PRE>template&lt;class Ty&gt;
+    void <B>destroy</B>(Ty *ptr);</PRE>
+
+<P>The member function calls
+<CODE>Outermost_traits::destroy(OUTERMOST(*this), ptr)</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__difference_type"></A>scoped_allocator_adaptor::difference_type</CODE></H3>
+
+<PRE>typedef typename Outer_traits::difference_type <B>difference_type</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>difference_type</CODE>
+associated with the allocator <CODE>Outer</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__inner_allocator"></A>scoped_allocator_adaptor::inner_allocator</CODE></H3>
+
+<PRE>inner_allocator_type&amp; <B>inner_allocator</B>() noexcept;
+const inner_allocator_type&amp; <B>inner_allocator</B>() const noexcept;</PRE>
+
+<P>The member function returns a reference to the (effective) stored object of
+type <CODE>inner_allocator_type</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__inner_allocator_type"></A>scoped_allocator_adaptor::inner_allocator_type</CODE></H3>
+
+<PRE>typedef T4 <B>inner_allocator_type</B>;</PRE>
+
+<P>The type is a synonym for the (effective) type of the nested adaptor
+<CODE>scoped_allocator_adaptor&lt;Inner...&gt;</CODE>.
+It is described here as a
+synonym for the implementation-defined type <CODE>T4</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__max_size"></A>scoped_allocator_adaptor::max_size</CODE></H3>
+
+<PRE>size_type <B>max_size</B>();</PRE>
+
+<P>The member function returns
+<CODE>Outer_traits::max_size(outer_allocator())</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__outer_allocator"></A>scoped_allocator_adaptor::outer_allocator</CODE></H3>
+
+<PRE>outer_allocator_type&amp; <B>outer_allocator</B>() noexcept;
+const outer_allocator_type&amp; <B>outer_allocator</B>() const noexcept;</PRE>
+
+<P>The member function returns a reference to the stored (base) object of
+type <CODE>outer_allocator_type</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__outer_allocator_type"></A>scoped_allocator_adaptor::outer_allocator_type</CODE></H3>
+
+<PRE>typedef Outer <B>outer_allocator_type</B>;</PRE>
+
+<P>The type is a synonym for the type of the (base) allocator
+<CODE>Outer</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__pointer"></A>scoped_allocator_adaptor::pointer</CODE></H3>
+
+<PRE>typedef typename Outer_traits::pointer <B>pointer</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>pointer</CODE>
+associated with the allocator <CODE>Outer</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__propagate_on_container_copy_assignment"></A>scoped_allocator_adaptor::propagate_on_container_copy_assignment</CODE></H3>
+
+<PRE>typedef T1 <B>propagate_on_container_copy_assignment</B>;</PRE>
+
+<P>The type
+<A HREF="typetrait.html#holds_true">holds true</A> only if
+<CODE>Outer_traits::propagate_on_container_copy_assignment</CODE> holds true or
+<CODE>inner_allocator_type::propagate_on_container_copy_assignment</CODE> holds true.
+It is described here as a
+synonym for the implementation-defined type <CODE>T1</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__propagate_on_container_move_assignment"></A>scoped_allocator_adaptor::propagate_on_container_move_assignment</CODE></H3>
+
+<PRE>typedef T2 <B>propagate_on_container_move_assignment</B>;</PRE>
+
+<P>The type
+<A HREF="typetrait.html#holds_true">holds true</A> only if
+<CODE>Outer_traits::propagate_on_container_move_assignment</CODE> holds true or
+<CODE>inner_allocator_type::propagate_on_container_move_assignment</CODE> holds true.
+It is described here as a
+synonym for the implementation-defined type <CODE>T2</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__propagate_on_container_swap"></A>scoped_allocator_adaptor::propagate_on_container_swap</CODE></H3>
+
+<PRE>typedef T3 <B>propagate_on_container_swap</B>;</PRE>
+
+<P>The type
+<A HREF="typetrait.html#holds_true">holds true</A> only if
+<CODE>Outer_traits::propagate_on_container_swap</CODE> holds true or
+<CODE>inner_allocator_type::propagate_on_container_swap</CODE> holds true.
+It is described here as a
+synonym for the implementation-defined type <CODE>T3</CODE>.</P>
+
+<H3><A NAME="scoped_allocator_adaptor__rebind"></A><CODE>scoped_allocator_adaptor::rebind</CODE></H3>
+
+<PRE>template&lt;class Other&gt;
+    struct <B>rebind</B> {
+    typedef Other_traits::rebind&lt;Other&gt; Other_alloc;
+    typedef scoped_allocator_adaptor&lt;Other_alloc, Inner...&gt; <B>other</B>;
+    };</PRE>
+
+<P>The member template class defines the type
+<CODE>Outer::rebind&lt;Other&gt;::other</CODE> as a synonym for
+<CODE>scoped_allocator_adaptor&lt;Other, Inner...&gt;</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__scoped_allocator_adaptor"></A>scoped_allocator_adaptor::scoped_allocator_adaptor</CODE></H3>
+
+<PRE><B>scoped_allocator_adaptor</B>();
+<B>scoped_allocator_adaptor</B>(const scoped_allocator_adaptor&amp; right) noexcept;
+template&lt;class Outer2&gt;
+    <B>scoped_allocator_adaptor</B>(
+        const scoped_allocator_adaptor&lt;Outer2, Inner...&gt;&amp; right) noexcept;
+template&lt;class Outer2&gt;
+    <B>scoped_allocator_adaptor</B>(
+        scoped_allocator_adaptor&lt;Outer2, Inner...&gt;&amp;&amp; right) noexcept;
+template&lt;class Outer2&gt;
+    <B>scoped_allocator_adaptor</B>(Outer2&amp;&amp; al,
+        const Inner&amp;... rest) noexcept;</PRE>
+
+<P>The first constructor default constructs its stored allocator objects.
+Each of the next three constructors constructs its stored allocator objects
+from the corresponding objects in <CODE>right</CODE>.
+The last constructor constructs its stored allocator objects from the
+corresponding arguments in the argument list.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__select_on_container_copy_construction"></A>scoped_allocator_adaptor::select_on_container_copy_construction</CODE></H3>
+
+<PRE>scoped_allocator_adaptor <B>select_on_container_copy_construction</B>();</PRE>
+
+<P>The member function effectively returns:</P>
+
+<PRE>scoped_allocator_adaptor(
+    Outer_traits::select_on_container_copy_construction(*this),
+    inner_allocator().select_on_container_copy_construction())</PRE>
+
+<P>The result is a new <CODE>scoped_allocator_adaptor</CODE> object
+with each stored allocator object initialized by calling
+<CODE>al.select_on_container_copy_construction()</CODE> for the
+corresponding allocator <CODE>al</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__size_type"></A>scoped_allocator_adaptor::size_type</CODE></H3>
+
+<PRE>typedef typename Outer_traits::size_type <B>size_type</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>size_type</CODE>
+associated with the allocator <CODE>Outer</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__value_type"></A>scoped_allocator_adaptor::value_type</CODE></H3>
+
+<PRE>typedef typename Outer_traits::value_type <B>value_type</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>value_type</CODE>
+associated with the allocator <CODE>Outer</CODE>.</P>
+
+<H3><CODE><A NAME="scoped_allocator_adaptor__void_pointer"></A>scoped_allocator_adaptor::void_pointer</CODE></H3>
+
+<PRE>typedef typename Outer_traits::void_pointer <B>void_pointer</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>void_pointer</CODE>
+associated with the allocator <CODE>Outer</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by Dinkumware, Ltd. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

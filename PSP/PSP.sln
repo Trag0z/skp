@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloMemory", "HelloWorld\HelloWorld.vcxproj", "{74D56B71-8493-4E87-88DA-4C9454FA964D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloJoypad", "HelloJoypad\HelloJoypad.vcxproj", "{0EDF1911-4234-4B7C-A247-8BF1FF1BCE40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|PSVita = Debug|PSVita
+		Release|PSVita = Release|PSVita
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74D56B71-8493-4E87-88DA-4C9454FA964D}.Debug|PSVita.ActiveCfg = Debug|PSVita
+		{74D56B71-8493-4E87-88DA-4C9454FA964D}.Debug|PSVita.Build.0 = Debug|PSVita
+		{74D56B71-8493-4E87-88DA-4C9454FA964D}.Release|PSVita.ActiveCfg = Release|PSVita
+		{74D56B71-8493-4E87-88DA-4C9454FA964D}.Release|PSVita.Build.0 = Release|PSVita
+		{0EDF1911-4234-4B7C-A247-8BF1FF1BCE40}.Debug|PSVita.ActiveCfg = Debug|PSVita
+		{0EDF1911-4234-4B7C-A247-8BF1FF1BCE40}.Debug|PSVita.Build.0 = Debug|PSVita
+		{0EDF1911-4234-4B7C-A247-8BF1FF1BCE40}.Release|PSVita.ActiveCfg = Release|PSVita
+		{0EDF1911-4234-4B7C-A247-8BF1FF1BCE40}.Release|PSVita.Build.0 = Release|PSVita
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

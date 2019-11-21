@@ -1,0 +1,2303 @@
+<HTML><HEAD>
+<TITLE>&lt;string&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;string&gt;"></A><CODE>&lt;string&gt;</CODE></H1><HR>
+
+<P><B><CODE><A HREF="#basic_string">basic_string</A>
+&middot; <A HREF="#char_traits">char_traits</A>
+&middot; <A HREF="#char_traits&lt;char&gt;">char_traits&lt;char&gt;</A>
+&middot; <A HREF="#char_traits&lt;wchar_t&gt;">char_traits&lt;wchar_t&gt;</A>
+&middot; <A HREF="#char_traits&lt;char16_t&gt;">char_traits&lt;char16_t&gt;</A>
+&middot; <A HREF="#char_traits&lt;char32_t&gt;">char_traits&lt;char32_t&gt;</A>
+&middot; <A HREF="#getline">getline</A>
+&middot; <A HREF="#operator+">operator+</A>
+&middot; <A HREF="#operator!2">operator!=</A>
+&middot; <A HREF="#operator22">operator==</A>
+&middot; <A HREF="#operator&lt;">operator&lt;</A>
+&middot; <A HREF="#operator&lt;&lt;">operator&lt;&lt;</A>
+&middot; <A HREF="#operator&lt;2">operator&lt;=</A>
+&middot; <A HREF="#operator&gt;">operator&gt;</A>
+&middot; <A HREF="#operator&gt;2">operator&gt;=</A>
+&middot; <A HREF="#operator&gt;&gt;">operator&gt;&gt;</A>
+&middot; <A HREF="#stod">stod</A>
+&middot; <A HREF="#stof">stof</A>
+&middot; <A HREF="#stoi">stoi</A>
+&middot; <A HREF="#stol">stol</A>
+&middot; <A HREF="#stold">stold</A>
+&middot; <A HREF="#stoll">stoll</A>
+&middot; <A HREF="#stoul">stoul</A>
+&middot; <A HREF="#stoull">stoull</A>
+&middot; <A HREF="#string">string</A>
+&middot; <A HREF="#swap">swap</A>
+&middot; <A HREF="#to_string">to_string</A>
+&middot; <A HREF="#to_wstring">to_wstring</A>
+&middot; <A HREF="#u16streampos">u16streampos</A>
+&middot; <A HREF="#u16string">u16string</A>
+&middot; <A HREF="#u32streampos">u32streampos</A>
+&middot; <A HREF="#u32string">u32string</A>
+&middot; <A HREF="#wstring">wstring</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the standard header <B><CODE>&lt;string&gt;</CODE></B>
+to define the
+<A HREF="lib_cont.html#Containers">container</A>
+template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A> and various
+supporting templates.</P>
+
+<PRE>namespace std {
+template&lt;class Elem&gt;
+    class <B><A HREF="#char_traits">char_traits</A></B>;
+template&lt;&gt;
+    class <B><A HREF="#char_traits&lt;char&gt;">char_traits&lt;char&gt;</A></B>;
+template&lt;&gt;
+    class <B><A HREF="#char_traits&lt;wchar_t&gt;">char_traits&lt;wchar_t&gt;</A></B>;
+
+template&lt;class Elem,
+    class Tr = char_traits&lt;Elem&gt;,
+    class Alloc = allocator&lt;Elem&gt; &gt;
+    class <B><A HREF="#basic_string">basic_string</A></B>;
+typedef basic_string&lt;char&gt; <B><A HREF="#string">string</A></B>;
+typedef basic_string&lt;wchar_t&gt; <B><A HREF="#wstring">wstring</A></B>;
+
+        // TEMPLATE FUNCTIONS
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt; <B><A HREF="#operator+">operator+</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt; <B><A HREF="#operator+">operator+</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt; <B><A HREF="#operator+">operator+</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        Elem right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt; <B><A HREF="#operator+">operator+</A></B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt; <B><A HREF="#operator+">operator+</A></B>(
+        Elem left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B><A HREF="#operator+">operator+</A></B>( <B>[added with C++11]</B>
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B><A HREF="#operator+">operator+</A></B>( <B>[added with C++11]</B>
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B><A HREF="#operator+">operator+</A></B>( <B>[added with C++11]</B>
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B><A HREF="#operator+">operator+</A></B>( <B>[added with C++11]</B>
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B><A HREF="#operator+">operator+</A></B>( <B>[added with C++11]</B>
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; left,
+        Elem right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B><A HREF="#operator+">operator+</A></B>( <B>[added with C++11]</B>
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B><A HREF="#operator+">operator+</A></B>( <B>[added with C++11]</B>
+        Elem left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; right);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&lt;">operator&lt;</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&lt;">operator&lt;</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&lt;">operator&lt;</A></B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&gt;2">operator&gt;=</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&gt;2">operator&gt;=</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&gt;2">operator&gt;=</A></B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&gt;">operator&gt;</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&gt;">operator&gt;</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&gt;">operator&gt;</A></B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&lt;2">operator&lt;=</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&lt;2">operator&lt;=</A></B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B><A HREF="#operator&lt;2">operator&lt;=</A></B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    void <B><A HREF="#swap">swap</A></B>(
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_ostream&lt;Elem&gt;&amp; <B><A HREF="#operator&lt;&lt;">operator&lt;&lt;</A></B>(
+        basic_ostream&lt;Elem&gt;&amp; ostr,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; str);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_istream&lt;Elem&gt;&amp; <B><A HREF="#operator&gt;&gt;">operator&gt;&gt;</A></B>(
+        basic_istream&lt;Elem&gt;&amp; istr,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; str);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp; <B><A HREF="#getline">getline</A></B>(
+        basic_istream&lt;Elem, Tr&gt;&amp; istr,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; str);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp; <B><A HREF="#getline">getline</A></B>(
+        basic_istream&lt;Elem, Tr&gt;&amp; istr,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; str,
+        Elem delim); <B>[replaced with C++11]</B>
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp; <B><A HREF="#getline">getline</A></B>(
+        basic_istream&lt;Elem, Tr&gt;&amp;&amp; istr,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; str); <B>[added with C++11]</B>
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp; <B><A HREF="#getline">getline</A></B>(
+        basic_istream&lt;Elem, Tr&gt;&amp;&amp; istr,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; str,
+        Elem delim); <B>[added with C++11]</B>
+
+template&lt;&gt;
+    class <B><A HREF="#char_traits&lt;char16_t&gt;">char_traits&lt;char16_t&gt;</A></B>; <B>[added with C++11]</B>
+template&lt;&gt;
+    class <B><A HREF="#char_traits&lt;char32_t&gt;">char_traits&lt;char32_t&gt;</A></B>; <B>[added with C++11]</B>
+
+typedef basic_string&lt;char16_t&gt; <B><A HREF="#u16string">u16string</A></B>; <B>[added with C++11]</B>
+typedef basic_string&lt;char32_t&gt; <B><A HREF="#u32string">u32string</A></B>; <B>[added with C++11]</B>
+
+typedef streampos <B><A HREF="#u16streampos">u16streampos</A></B>; <B>[added with C++11]</B>
+typedef streampos <B><A HREF="#u32streampos">u32streampos</A></B>; <B>[added with C++11]</B>
+
+        // NARROW FUNCTIONS
+int <B><A HREF="#stoi">stoi</A></B>(const string&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+long <B><A HREF="#stol">stol</A></B>(const string&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+unsigned long <B><A HREF="#stoul">stoul</A></B>(const string&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+long long <B><A HREF="#stoll">stoll</A></B>(const string&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+unsigned long long <B><A HREF="#stoull">stoull</A></B>(const string&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+
+float <B><A HREF="#stof">stof</A></B>(const string&amp; str, size_t *pidx = 0); <B>[added with C++11]</B>
+double <B><A HREF="#stod">stod</A></B>(const string&amp; str, size_t *pidx = 0); <B>[added with C++11]</B>
+long double <B><A HREF="#stold">stold</A></B>(const string&amp; str, size_t *pidx = 0); <B>[added with C++11]</B>
+
+string <B><A HREF="#to_string">to_string</A></B>(int val); <B>[added with C++11]</B>
+string <B><A HREF="#to_string">to_string</A></B>(unsigned int val); <B>[added with C++11]</B>
+string <B><A HREF="#to_string">to_string</A></B>(long val); <B>[added with C++11]</B>
+string <B><A HREF="#to_string">to_string</A></B>(unsigned long long val); <B>[added with C++11]</B>
+string <B><A HREF="#to_string">to_string</A></B>(long long val); <B>[added with C++11]</B>
+string <B><A HREF="#to_string">to_string</A></B>(unsigned long long val); <B>[added with C++11]</B>
+string <B><A HREF="#to_string">to_string</A></B>(float val); <B>[added with C++11]</B>
+string <B><A HREF="#to_string">to_string</A></B>(double val); <B>[added with C++11]</B>
+string <B><A HREF="#to_string">to_string</A></B>(long double val); <B>[added with C++11]</B>
+
+        // WIDE FUNCTIONS
+int <B><A HREF="#stoi">stoi</A></B>(const wstring&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+long <B><A HREF="#stol">stol</A></B>(const wstring&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+unsigned long <B><A HREF="#stoul">stoul</A></B>(const wstring&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+long long <B><A HREF="#stoll">stoll</A></B>(const wstring&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+unsigned long long <B><A HREF="#stoull">stoull</A></B>(const wstring&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+
+float <B><A HREF="#stof">stof</A></B>(const wstring&amp; str, size_t *pidx = 0); <B>[added with C++11]</B>
+double <B><A HREF="#stod">stod</A></B>(const wstring&amp; str, size_t *pidx = 0); <B>[added with C++11]</B>
+long double <B><A HREF="#stold">stold</A></B>(const wstring&amp; str, size_t *pidx = 0); <B>[added with C++11]</B>
+
+wstring <B><A HREF="#to_wstring">to_wstring</A></B>(int val); <B>[added with C++11]</B>
+wstring <B><A HREF="#to_wstring">to_wstring</A></B>(unsigned int val); <B>[added with C++11]</B>
+wstring <B><A HREF="#to_wstring">to_wstring</A></B>(long val); <B>[added with C++11]</B>
+wstring <B><A HREF="#to_wstring">to_wstring</A></B>(unsigned long long val); <B>[added with C++11]</B>
+wstring <B><A HREF="#to_wstring">to_wstring</A></B>(long long val); <B>[added with C++11]</B>
+wstring <B><A HREF="#to_wstring">to_wstring</A></B>(unsigned long long val); <B>[added with C++11]</B>
+wstring <B><A HREF="#to_wstring">to_wstring</A></B>(float val); <B>[added with C++11]</B>
+wstring <B><A HREF="#to_wstring">to_wstring</A></B>(double val); <B>[added with C++11]</B>
+wstring <B><A HREF="#to_wstring">to_wstring</A></B>(long double val); <B>[added with C++11]</B>
+}  // namespace std</PRE>
+
+<H2><A NAME="basic_string"></A><CODE>basic_string</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#basic_string__basic_string">basic_string</A>
+&middot; <A HREF="#basic_string__allocator_type">allocator_type</A>
+&middot; <A HREF="#basic_string__append">append</A>
+&middot; <A HREF="#basic_string__assign">assign</A>
+&middot; <A HREF="#basic_string__at">at</A>
+&middot; <A HREF="#basic_string__back">back</A>
+&middot; <A HREF="#basic_string__begin">begin</A>
+&middot; <A HREF="#basic_string__cbegin">cbegin</A>
+&middot; <A HREF="#basic_string__cend">cend</A>
+&middot; <A HREF="#basic_string__c_str">c_str</A>
+&middot; <A HREF="#basic_string__capacity">capacity</A>
+&middot; <A HREF="#basic_string__clear">clear</A>
+&middot; <A HREF="#basic_string__compare">compare</A>
+&middot; <A HREF="#basic_string__const_iterator">const_iterator</A>
+&middot; <A HREF="#basic_string__const_pointer">const_pointer</A>
+&middot; <A HREF="#basic_string__const_reference">const_reference</A>
+&middot; <A HREF="#basic_string__const_reverse_iterator">const_reverse_iterator</A>
+&middot; <A HREF="#basic_string__copy">copy</A>
+&middot; <A HREF="#basic_string__crbegin">crbegin</A>
+&middot; <A HREF="#basic_string__crend">crend</A>
+&middot; <A HREF="#basic_string__data">data</A>
+&middot; <A HREF="#basic_string__difference_type">difference_type</A>
+&middot; <A HREF="#basic_string__empty">empty</A>
+&middot; <A HREF="#basic_string__end">end</A>
+&middot; <A HREF="#basic_string__erase">erase</A>
+&middot; <A HREF="#basic_string__find">find</A>
+&middot; <A HREF="#basic_string__find_first_not_of">find_first_not_of</A>
+&middot; <A HREF="#basic_string__find_first_of">find_first_of</A>
+&middot; <A HREF="#basic_string__find_last_not_of">find_last_not_of</A>
+&middot; <A HREF="#basic_string__find_last_of">find_last_of</A>
+&middot; <A HREF="#basic_string__front">front</A>
+&middot; <A HREF="#basic_string__get_allocator">get_allocator</A>
+&middot; <A HREF="#basic_string__insert">insert</A>
+&middot; <A HREF="#basic_string__iterator">iterator</A>
+&middot; <A HREF="#basic_string__length">length</A>
+&middot; <A HREF="#basic_string__max_size">max_size</A>
+&middot; <A HREF="#basic_string__npos">npos</A>
+&middot; <A HREF="#basic_string__operator+2">operator+=</A>
+&middot; <A HREF="#basic_string__operator2">operator=</A>
+&middot; <A HREF="#basic_string__operator[]">operator[]</A>
+&middot; <A HREF="#basic_string__pointer">pointer</A>
+&middot; <A HREF="#basic_string__pop_back">pop_back</A>
+&middot; <A HREF="#basic_string__push_back">push_back</A>
+&middot; <A HREF="#basic_string__rbegin">rbegin</A>
+&middot; <A HREF="#basic_string__reference">reference</A>
+&middot; <A HREF="#basic_string__rend">rend</A>
+&middot; <A HREF="#basic_string__replace">replace</A>
+&middot; <A HREF="#basic_string__reserve">reserve</A>
+&middot; <A HREF="#basic_string__resize">resize</A>
+&middot; <A HREF="#basic_string__reverse_iterator">reverse_iterator</A>
+&middot; <A HREF="#basic_string__rfind">rfind</A>
+&middot; <A HREF="#basic_string__shrink_to_fit">shrink_to_fit</A>
+&middot; <A HREF="#basic_string__size">size</A>
+&middot; <A HREF="#basic_string__size_type">size_type</A>
+&middot; <A HREF="#basic_string__substr">substr</A>
+&middot; <A HREF="#basic_string__swap">swap</A>
+&middot; <A HREF="#basic_string__traits_type">traits_type</A>
+&middot; <A HREF="#basic_string__value_type">value_type</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Elem,
+    class Tr = <A HREF="#char_traits">char_traits</A>&lt;Elem&gt;,
+    class Alloc = allocator&lt;Elem&gt; &gt;
+    class <B>basic_string</B> {
+public:
+    typedef Tr <B><A HREF="#basic_string__traits_type">traits_type</A></B>;
+    typedef Alloc <B><A HREF="#basic_string__allocator_type">allocator_type</A></B>;
+    typedef typename allocator_type::pointer <B><A HREF="#basic_string__pointer">pointer</A></B>;
+    typedef typename allocator_type::const_pointer <B><A HREF="#basic_string__const_pointer">const_pointer</A></B>;
+    typedef typename allocator_type::reference <B><A HREF="#basic_string__reference">reference</A></B>;
+    typedef typename allocator_type::const_reference <B><A HREF="#basic_string__const_reference">const_reference</A></B>;
+    typedef typename allocator_type::value_type <B><A HREF="#basic_string__value_type">value_type</A></B>;
+    typedef typename allocator_type::size_type <B><A HREF="#basic_string__size_type">size_type</A></B>;
+    typedef typename allocator_type::difference_type <B><A HREF="#basic_string__difference_type">difference_type</A></B>;
+
+    typedef T0 <B><A HREF="#basic_string__iterator">iterator</A></B>;
+    typedef T1 <B><A HREF="#basic_string__const_iterator">const_iterator</A></B>;
+    typedef reverse_iterator&lt;iterator&gt;
+        <B><A HREF="#basic_string__reverse_iterator">reverse_iterator</A></B>;
+    typedef reverse_iterator&lt;const_iterator&gt;
+        <B><A HREF="#basic_string__const_reverse_iterator">const_reverse_iterator</A></B>;
+
+    static const size_type <B><A HREF="#basic_string__npos">npos</A></B> = -1;
+
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>();
+    explicit <B><A HREF="#basic_string__basic_string">basic_string</A></B>(const allocator_type&amp; al);
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(const basic_string&amp; right);
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(const basic_string&amp; right, const allocator_type&amp; al); <B>[added with C++11]</B>&nbsp;
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(basic_string&amp;&amp; right, const allocator_type&amp; al); <B>[added with C++11]</B>&nbsp;
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(basic_string&amp;&amp; right) noexcept; <B>[added with C++11]</B>&nbsp;
+
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(const basic_string&amp; right, size_type roff,
+        size_type count = npos);
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(const basic_string&amp; right, size_type roff,
+        size_type count, const allocator_type&amp; al);
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(const value_type *ptr, size_type count);
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(const value_type *ptr, size_type count,
+        const allocator_type&amp; al);
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(const value_type *ptr);
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(const value_type *ptr,
+        const allocator_type&amp; al);
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(size_type count, value_type ch);
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(size_type count, value_type ch,
+        const allocator_type&amp; al);
+
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(initializer_list init); <B>[added with C++11]</B>&nbsp;
+    <B><A HREF="#basic_string__basic_string">basic_string</A></B>(initializer_list init,
+        const allocator_type&amp; al); <B>[added with C++11]</B>
+    template &lt;class InIt&gt;
+        <B><A HREF="#basic_string__basic_string">basic_string</A></B>(InIt first, InIt last);
+    template &lt;class InIt&gt;
+        <B><A HREF="#basic_string__basic_string">basic_string</A></B>(InIt first, InIt last,
+            const allocator_type&amp; al);
+
+    allocator_type <B><A HREF="#basic_string__get_allocator">get_allocator</A></B>() const noexcept;
+
+    basic_string&amp; <B><A HREF="#basic_string__operator2">operator=</A></B>(const basic_string&amp; right);
+    basic_string&amp; <B><A HREF="#basic_string__operator2">operator=</A></B>(basic_string&amp;&amp; right) noexcept; <B>[added with C++11]</B>
+    basic_string&amp; <B><A HREF="#basic_string__operator2">operator=</A></B>(const value_type *ptr);
+    basic_string&amp; <B><A HREF="#basic_string__operator2">operator=</A></B>(value_type ch);
+    basic_string&amp; <B><A HREF="#basic_string__operator2">operator=</A></B>(initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B>
+
+    iterator <B><A HREF="#basic_string__begin">begin</A></B>() noexcept;
+    const_iterator <B><A HREF="#basic_string__begin">begin</A></B>() const noexcept;
+    iterator <B><A HREF="#basic_string__end">end</A></B>() noexcept;
+    const_iterator <B><A HREF="#basic_string__end">end</A></B>() const noexcept;
+    reverse_iterator <B><A HREF="#basic_string__rbegin">rbegin</A></B>() noexcept;
+    const_reverse_iterator <B><A HREF="#basic_string__rbegin">rbegin</A></B>() const noexcept;
+    reverse_iterator <B><A HREF="#basic_string__rend">rend</A></B>() noexcept;
+    const_reverse_iterator <B><A HREF="#basic_string__rend">rend</A></B>() const noexcept;
+
+    const_iterator <B><A HREF="#basic_string__cbegin">cbegin</A></B>() const noexcept; <B>[added with C++11]</B>
+    const_iterator <B><A HREF="#basic_string__cend">cend</A></B>() const noexcept; <B>[added with C++11]</B>
+    const_reverse_iterator <B><A HREF="#basic_string__crbegin">crbegin</A></B>() const noexcept; <B>[added with C++11]</B>
+    const_reverse_iterator <B><A HREF="#basic_string__crend">crend</A></B>() const noexcept; <B>[added with C++11]</B>
+
+    const_reference <B><A HREF="#basic_string__front">front</A></B>() const; <B>[added with C++11]</B>
+    reference <B><A HREF="#basic_string__front">front</A></B>(); <B>[added with C++11]</B>
+    const_reference <B><A HREF="#basic_string__back">back</A></B>() const; <B>[added with C++11]</B>
+    reference <B><A HREF="#basic_string__back">back</A></B>(); <B>[added with C++11]</B>
+
+    const_reference <B><A HREF="#basic_string__at">at</A></B>(size_type off) const;
+    reference <B><A HREF="#basic_string__at">at</A></B>(size_type off);
+    const_reference <B><A HREF="#basic_string__operator[]">operator[]</A></B>(size_type off) const;
+    reference <B><A HREF="#basic_string__operator[]">operator[]</A></B>(size_type off);
+
+    const value_type *<B><A HREF="#basic_string__c_str">c_str</A></B>() const noexcept;
+    const value_type *<B><A HREF="#basic_string__data">data</A></B>() const noexcept;
+
+    size_type <B><A HREF="#basic_string__length">length</A></B>() const noexcept;
+    size_type <B><A HREF="#basic_string__size">size</A></B>() const noexcept;
+    size_type <B><A HREF="#basic_string__max_size">max_size</A></B>() const noexcept;
+
+    void <B><A HREF="#basic_string__shrink_to_fit">shrink_to_fit</A></B>(); <B>[added with C++11]</B>
+    void <B><A HREF="#basic_string__resize">resize</A></B>(size_type newsize, value_type ch = value_type());
+    size_type <B><A HREF="#basic_string__capacity">capacity</A></B>() const noexcept;
+    void <B><A HREF="#basic_string__reserve">reserve</A></B>(size_type count = 0);
+    bool <B><A HREF="#basic_string__empty">empty</A></B>() const noexcept;
+
+    basic_string&amp; <B><A HREF="#basic_string__operator+2">operator+=</A></B>(const basic_string&amp; right);
+    basic_string&amp; <B><A HREF="#basic_string__operator+2">operator+=</A></B>(const value_type *ptr);
+    basic_string&amp; <B><A HREF="#basic_string__operator+2">operator+=</A></B>(value_type ch);
+    basic_string&amp; <B><A HREF="#basic_string__operator+2">operator+=</A></B>(initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B>
+
+    void <B><A HREF="#basic_string__pop_back">pop_back</A></B>(); <B>[added with C++11]</B>
+    void <B><A HREF="#basic_string__push_back">push_back</A></B>(value_type ch);</PRE>
+
+<PRE>    basic_string&amp; <B><A HREF="#basic_string__append">append</A></B>(const basic_string&amp; right);
+    basic_string&amp; <B><A HREF="#basic_string__append">append</A></B>(const basic_string&amp; right,
+        size_type roff, size_type count);
+    basic_string&amp; <B><A HREF="#basic_string__append">append</A></B>(const value_type *ptr,
+        size_type count);
+    basic_string&amp; <B><A HREF="#basic_string__append">append</A></B>(const value_type *ptr);
+    basic_string&amp; <B><A HREF="#basic_string__append">append</A></B>(size_type count, value_type ch);
+    basic_string&amp; <B><A HREF="#basic_string__append">append</A></B>(initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B>
+    template&lt;class InIt&gt;
+        basic_string&amp; <B><A HREF="#basic_string__append">append</A></B>(InIt first, InIt last);
+
+    basic_string&amp; <B><A HREF="#basic_string__assign">assign</A></B>(const basic_string&amp; right);
+    basic_string&amp; <B><A HREF="#basic_string__assign">assign</A></B>(basic_string&amp;&amp; right) noexcept; <B>[added with C++11]</B>
+    basic_string&amp; <B><A HREF="#basic_string__assign">assign</A></B>(const basic_string&amp; right,
+        size_type roff, size_type count);
+    basic_string&amp; <B><A HREF="#basic_string__assign">assign</A></B>(const value_type *ptr,
+        size_type count);
+    basic_string&amp; <B><A HREF="#basic_string__assign">assign</A></B>(const value_type *ptr);
+    basic_string&amp; <B><A HREF="#basic_string__assign">assign</A></B>(size_type count, value_type ch);
+    basic_string&amp; <B><A HREF="#basic_string__assign">assign</A></B>(initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B>
+    template&lt;class InIt&gt;
+        basic_string&amp; <B><A HREF="#basic_string__assign">assign</A></B>(InIt first, InIt last);
+
+    basic_string&amp; <B><A HREF="#basic_string__insert">insert</A></B>(size_type off,
+        const basic_string&amp; right);
+    basic_string&amp; <B><A HREF="#basic_string__insert">insert</A></B>(size_type off,
+        const basic_string&amp; right, size_type roff,
+            size_type count);
+    basic_string&amp; <B><A HREF="#basic_string__insert">insert</A></B>(size_type off,
+        const value_type *ptr, size_type count);
+    basic_string&amp; <B><A HREF="#basic_string__insert">insert</A></B>(size_type off,
+        const value_type *ptr);
+    basic_string&amp; <B><A HREF="#basic_string__insert">insert</A></B>(size_type off,
+        size_type count, value_type ch);
+    iterator <B><A HREF="#basic_string__insert">insert</A></B>(const_iterator where,
+        value_type ch = value_type());
+    iterator <B><A HREF="#basic_string__insert">insert</A></B>(const_iterator where, size_type count, value_type ch);
+    iterator <B><A HREF="#basic_string__insert">insert</A></B>(const_iterator where,
+        initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B>
+    template&lt;class InIt&gt;
+        iterator <B><A HREF="#basic_string__insert">insert</A></B>(const_iterator where,
+            InIt first, InIt last);
+
+    basic_string&amp; <B><A HREF="#basic_string__erase">erase</A></B>(size_type off = 0,
+        size_type count = npos);
+    iterator <B><A HREF="#basic_string__erase">erase</A></B>(const_iterator where);
+    iterator <B><A HREF="#basic_string__erase">erase</A></B>(const_iterator first, const_iterator last);
+    void <B><A HREF="#basic_string__clear">clear</A></B>() noexcept;
+
+    basic_string&amp; <B><A HREF="#basic_string__replace">replace</A></B>(size_type off, size_type n0,
+        const basic_string&amp; right);
+    basic_string&amp; <B><A HREF="#basic_string__replace">replace</A></B>(size_type off, size_type n0,
+        const basic_string&amp; right, size_type roff,
+            size_type count);
+    basic_string&amp; <B><A HREF="#basic_string__replace">replace</A></B>(size_type off, size_type n0,
+        const value_type *ptr, size_type count);
+    basic_string&amp; <B><A HREF="#basic_string__replace">replace</A></B>(size_type off, size_type n0,
+        const value_type *ptr);
+    basic_string&amp; <B><A HREF="#basic_string__replace">replace</A></B>(size_type off, size_type n0,
+        size_type count, value_type ch);
+    basic_string&amp; <B><A HREF="#basic_string__replace">replace</A></B>(const_iterator first, const_iterator last,
+        const basic_string&amp; right);
+    basic_string&amp; <B><A HREF="#basic_string__replace">replace</A></B>(const_iterator first, const_iterator last,
+        const value_type *ptr, size_type count);
+    basic_string&amp; <B><A HREF="#basic_string__replace">replace</A></B>(const_iterator first, const_iterator last,
+        const value_type *ptr);
+    basic_string&amp; <B><A HREF="#basic_string__replace">replace</A></B>(const_iterator first, const_iterator last,
+        size_type count, value_type ch);
+    basic_string&amp; <B><A HREF="#basic_string__replace">replace</A></B>(const_iterator first, const_iterator last,
+        initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B>
+    template&lt;class InIt&gt;
+        basic_string&amp;
+            <B><A HREF="#basic_string__replace">replace</A></B>(const_iterator first, const_iterator last,
+                InIt first2, InIt last2);
+
+    size_type <B><A HREF="#basic_string__copy">copy</A></B>(value_type *ptr, size_type count,
+        size_type off = 0) const;
+    void <B><A HREF="#basic_string__swap">swap</A></B>(basic_string&amp; right);</PRE>
+
+<PRE>    size_type <B><A HREF="#basic_string__find">find</A></B>(const basic_string&amp; right,
+        size_type off = 0) const noexcept;
+    size_type <B><A HREF="#basic_string__find">find</A></B>(const value_type *ptr, size_type off,
+        size_type count) const;
+    size_type <B><A HREF="#basic_string__find">find</A></B>(const value_type *ptr,
+        size_type off = 0) const;
+    size_type <B><A HREF="#basic_string__find">find</A></B>(value_type ch, size_type off = 0) const;
+
+    size_type <B><A HREF="#basic_string__rfind">rfind</A></B>(const basic_string&amp; right,
+        size_type off = npos) const noexcept;
+    size_type <B><A HREF="#basic_string__rfind">rfind</A></B>(const value_type *ptr, size_type off,
+        size_type count = npos) const;
+    size_type <B><A HREF="#basic_string__rfind">rfind</A></B>(const value_type *ptr,
+        size_type off = npos) const;
+    size_type <B><A HREF="#basic_string__rfind">rfind</A></B>(value_type ch,
+        size_type off = npos) const;
+
+    size_type <B><A HREF="#basic_string__find_first_of">find_first_of</A></B>(const basic_string&amp; right,
+        size_type off = 0) const noexcept;
+    size_type <B><A HREF="#basic_string__find_first_of">find_first_of</A></B>(const value_type *ptr,
+        size_type off, size_type count) const;
+    size_type <B><A HREF="#basic_string__find_first_of">find_first_of</A></B>(const value_type *ptr,
+        size_type off = 0) const;
+    size_type <B><A HREF="#basic_string__find_first_of">find_first_of</A></B>(value_type ch,
+        size_type off = 0) const;
+
+    size_type <B><A HREF="#basic_string__find_last_of">find_last_of</A></B>(const basic_string&amp; right,
+        size_type off = npos) const noexcept;
+    size_type <B><A HREF="#basic_string__find_last_of">find_last_of</A></B>(const value_type *ptr,
+        size_type off, size_type count = npos) const;
+    size_type <B><A HREF="#basic_string__find_last_of">find_last_of</A></B>(const value_type *ptr,
+        size_type off = npos) const;
+    size_type <B><A HREF="#basic_string__find_last_of">find_last_of</A></B>(value_type ch,
+        size_type off = npos) const;
+
+    size_type <B><A HREF="#basic_string__find_first_not_of">find_first_not_of</A></B>(const basic_string&amp; right,
+        size_type off = 0) const noexcept;
+    size_type <B><A HREF="#basic_string__find_first_not_of">find_first_not_of</A></B>(const value_type *ptr,
+        size_type off, size_type count) const;
+    size_type <B><A HREF="#basic_string__find_first_not_of">find_first_not_of</A></B>(const value_type *ptr,
+        size_type off = 0) const;
+    size_type <B><A HREF="#basic_string__find_first_not_of">find_first_not_of</A></B>(value_type ch,
+        size_type off = 0) const;
+
+    size_type <B><A HREF="#basic_string__find_last_not_of">find_last_not_of</A></B>(const basic_string&amp; right,
+        size_type off = npos) const noexcept;
+    size_type <B><A HREF="#basic_string__find_last_not_of">find_last_not_of</A></B>(const value_type *ptr,
+        size_type off, size_type count) const;
+    size_type <B><A HREF="#basic_string__find_last_not_of">find_last_not_of</A></B>(const value_type *ptr,
+        size_type off = npos) const;
+    size_type <B><A HREF="#basic_string__find_last_not_of">find_last_not_of</A></B>(value_type ch,
+        size_type off = npos) const;
+
+    basic_string <B><A HREF="#basic_string__substr">substr</A></B>(size_type off = 0,
+        size_type count = npos) const;
+
+    int <B><A HREF="#basic_string__compare">compare</A></B>(const basic_string&amp; right) const noexcept;
+    int <B><A HREF="#basic_string__compare">compare</A></B>(size_type off, size_type n0,
+        const basic_string&amp; right) const;
+    int <B><A HREF="#basic_string__compare">compare</A></B>(size_type off, size_type n0,
+        const basic_string&amp; right, size_type roff, size_type count) const;
+    int <B><A HREF="#basic_string__compare">compare</A></B>(const value_type *ptr) const;
+    int <B><A HREF="#basic_string__compare">compare</A></B>(size_type off, size_type n0,
+        const value_type *ptr) const;
+    int <B><A HREF="#basic_string__compare">compare</A></B>(size_type off, size_type n0,
+        const value_type *ptr, size_type roff) const;
+    };</PRE>
+
+<P>The template class describes an object that controls a
+varying-length sequence of elements of type <CODE>Elem</CODE>,
+also known as
+<CODE><A HREF="#basic_string__value_type">value_type</A></CODE>.
+Such an element type must not require explicit construction or
+destruction, and it must be suitable for use as the <CODE>Elem</CODE>
+parameter to
+<A HREF="istream.html#basic_istream"><CODE>basic_istream</CODE></A> or
+<A HREF="ostream.html#basic_ostream"><CODE>basic_ostream</CODE></A>.
+(A ``plain old data structure,'' or
+<B><A NAME="POD"></A>POD</B>, from C generally meets
+this criterion.)
+The Standard C++ library provides two specializations of this template
+class, with the type definitions
+<A HREF="#string"><CODE>string</CODE></A>,
+for elements of type <I>char,</I> and
+<A HREF="#wstring"><CODE>wstring</CODE></A>, for elements of type
+<CODE>wchar_t</CODE>.</P>
+<P>Beginning with <B>C++11</B>, the library
+also provides the type definition
+<CODE><A HREF="string2.html#u16string">u16string</A></CODE>,
+for elements of type <CODE>char16_t</CODE>, and
+<CODE><A HREF="string2.html#u32string">u32string</A></CODE>,
+for elements of type <CODE>char32_t</CODE>.</P>
+
+<P>Various important properties of the elements
+in a <CODE>basic_string</CODE>
+specialization are described by the class <CODE>Tr</CODE>, also known as
+<CODE><A HREF="#basic_string__traits_type">traits_type</A></CODE>.
+A class that specifies these
+<A HREF="#character_traits">character traits</A> must
+have the same external interface as an object of template class
+<A HREF="#char_traits"><CODE>char_traits</CODE></A>.</P>
+
+<P>The object allocates and frees storage for the sequence it controls
+through a stored <A HREF="memory.html#allocator_object">allocator object</A>
+of class <CODE>Alloc</CODE>, also known as
+<CODE><A HREF="#basic_string__allocator_type">allocator_type</A></CODE>.
+Such an allocator object must have
+the same external interface as an object of template class
+<A HREF="memory.html#allocator"><CODE>allocator</CODE></A>.</P>
+
+<P>The sequences controlled by an object of template class
+<CODE>basic_string</CODE> are usually called
+<B><A NAME="strings"></A>strings</B>. These objects should not be
+confused, however, with the null-terminated
+<A HREF="lib_over.html#C_string">C strings</A> used throughout the
+Standard C++ library.</P>
+
+<P>Many member functions require an
+<B><A NAME="operand_sequence"></A>operand sequence</B> of elements.
+You can specify such an operand sequence several
+ways:</P>
+
+<UL>
+<LI><CODE>ch</CODE> -- one element
+with value <CODE>ch</CODE></LI>
+
+<LI><CODE>count, ch</CODE> -- a repetition of <CODE>count</CODE> elements each
+with value <CODE>ch</CODE></LI>
+
+<LI><CODE>ptr</CODE> -- a null-terminated sequence
+(such as a <A HREF="lib_over.html#C_string">C string</A>,
+for <CODE>Elem</CODE> of type <I>char</I>) beginning at
+<CODE>ptr</CODE> (which must not be a null pointer),
+where the terminating element is the value
+<CODE>value_type()</CODE> and is not part of
+the operand sequence</LI>
+
+<LI><CODE>ptr, count</CODE> -- a sequence of <CODE>count</CODE> elements
+beginning at <CODE>ptr</CODE> (which must not be a null pointer)</LI>
+
+<LI><CODE>right</CODE> -- the sequence specified by the
+<CODE>basic_string</CODE> object <CODE>right</CODE></LI>
+
+<LI><CODE>right, roff, count</CODE> -- the substring of the
+<CODE>basic_string</CODE> object <CODE>right</CODE> with up to <CODE>count</CODE>
+elements (or through the end of the string, whichever comes first)
+beginning at position <CODE>roff</CODE></LI>
+
+<LI><CODE>first, last</CODE> -- a sequence of elements delimited
+by the iterators <CODE>first</CODE> and <CODE>last</CODE>, in the
+range <CODE>[first, last)</CODE>, which <I>may</I> overlap
+the sequence controlled by the string object whose member function
+is being called</LI>
+
+<LI><CODE>init</CODE> [beginning with <B>C++11</B>] --
+a sequence of elements controlled by an object of type
+<CODE>initializer_list&lt;Elem&gt;</CODE></LI>
+</UL>
+
+<P>If a <B><A NAME="position_argument"></A>position argument</B>
+(such as <CODE>roff</CODE> above) is beyond the end of the string on a
+call to a <CODE>basic_string</CODE> member function, the function
+reports an
+<B><A NAME="out-of-range_error"></A>out-of-range error</B> by
+throwing an object of class
+<A HREF="stdexcep.html#out_of_range"><CODE>out_of_range</CODE></A>.</P>
+
+<P>If a function is asked to generate a sequence longer than
+<CODE><A HREF="#basic_string__max_size">max_size</A>()</CODE> elements,
+the function reports a
+<B><A NAME="length_error"></A>length error</B> by
+throwing an object of class
+<A HREF="stdexcep.html#length_error"><CODE>length_error</CODE></A>.</P>
+
+<P>References, pointers, and iterators that designate elements of the
+controlled sequence can become invalid after any call to a function
+that alters the controlled sequence, or after the first call to the
+non-const member functions
+<CODE><A HREF="#basic_string__at">at</A></CODE>,
+<CODE><A HREF="#basic_string__back">back</A></CODE>,
+<CODE><A HREF="#basic_string__begin">begin</A></CODE>,
+<CODE><A HREF="#basic_string__end">end</A></CODE>,
+<CODE><A HREF="#basic_string__front">front</A></CODE>,
+<CODE><A HREF="#basic_string__operator[]">operator[]</A></CODE>,
+<CODE><A HREF="#basic_string__rbegin">rbegin</A></CODE>, or
+<CODE><A HREF="#basic_string__rend">rend</A></CODE>.
+(The idea is to permit (but not require)
+multiple strings to share the same representation
+until one string becomes a candidate for change, at which point that string
+makes a private copy of the representation, using a discipline called
+<B><A NAME="copy_on_write"></A>copy on write</B>.)</P>
+
+<H3><CODE><A NAME="basic_string__allocator_type"></A>basic_string::allocator_type</CODE></H3>
+
+<PRE>typedef Alloc <B>allocator_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Alloc</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__append"></A>basic_string::append</CODE></H3>
+
+<PRE>basic_string&amp; <B>append</B>(const value_type *ptr);
+basic_string&amp; <B>append</B>(const value_type *ptr,
+    size_type count);
+basic_string&amp; <B>append</B>(const basic_string&amp; right,
+    size_type roff, size_type count);
+basic_string&amp; <B>append</B>(const basic_string&amp; right);
+basic_string&amp; <B>append</B>(size_type count, value_type ch);
+basic_string&amp; <B>append</B>(initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B>
+template&lt;class InIt&gt;
+    basic_string&amp; <B>append</B>(InIt first, InIt last);</PRE>
+
+<P>The member functions each append to the sequence
+controlled by <CODE>*this</CODE>
+the <A HREF="#operand_sequence">operand sequence</A>,
+then returns <CODE>*this</CODE>.
+If <CODE>InIt</CODE> is not an iterator type, however,
+the member template function does not participate in overload resolution.</P>
+
+
+<H3><CODE><A NAME="basic_string__assign"></A>basic_string::assign</CODE></H3>
+
+<PRE>basic_string&amp; <B>assign</B>(const basic_string&amp; right);
+basic_string&amp; <B>assign</B>(basic_string&amp;&amp; right) noexcept; <B>[added with C++11]</B>
+basic_string&amp; <B>assign</B>(const basic_string&amp; right,
+    size_type roff, size_type count);
+basic_string&amp; <B>assign</B>(const value_type *ptr);
+basic_string&amp; <B>assign</B>(const value_type *ptr,
+    size_type count);
+basic_string&amp; <B>assign</B>(size_type count, value_type ch);
+basic_string&amp; <B>assign</B>(initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B>
+template&lt;class InIt&gt;
+    basic_string&amp; <B>assign</B>(InIt first, InIt last);</PRE>
+
+<P>The member functions each replace the sequence
+controlled by <CODE>*this</CODE> with
+the <A HREF="#operand_sequence">operand sequence</A>,
+then returns <CODE>*this</CODE>.
+If <CODE>InIt</CODE> is not an iterator type, however,
+the member template function does not participate in overload resolution.</P>
+
+
+<H3><CODE><A NAME="basic_string__at"></A>basic_string::at</CODE></H3>
+
+<PRE>const_reference <B>at</B>(size_type off) const;
+reference <B>at</B>(size_type off);</PRE>
+
+<P>The member functions each return a reference to the element of the
+controlled sequence at position <CODE>off</CODE>,
+or report an <A HREF="#out-of-range_error">out-of-range error</A>.</P>
+
+<H3><CODE><A NAME="basic_string__back"></A>basic_string::back</CODE></H3>
+
+<PRE>const_reference <B>back</B>() const; <B>[added with C++11]</B>
+reference <B>back</B>(); <B>[added with C++11]</B></PRE>
+
+<P>The member functions each return a reference to the last element of the
+controlled sequence, which must be non-empty.</P>
+
+<H3><CODE><A NAME="basic_string__basic_string"></A>basic_string::basic_string</CODE></H3>
+
+<PRE><B>basic_string</B>();
+explicit <B>basic_string</B>(const allocator_type&amp; al);
+<B>basic_string</B>(const basic_string&amp; right);
+<B>basic_string</B>(const basic_string&amp; right, const allocator_type&amp; al); <B>[added with C++11]</B>&nbsp;
+<B>basic_string</B>(basic_string&amp;&amp; right); <B>[added with C++11]</B>&nbsp;
+<B>basic_string</B>(basic_string&amp;&amp; right, const allocator_type&amp; al) noexcept; <B>[added with C++11]</B>&nbsp;
+
+<B>basic_string</B>(const basic_string&amp; right, size_type roff,
+    size_type count = npos);
+<B>basic_string</B>(const basic_string&amp; right, size_type roff,
+    size_type count, const allocator_type&amp; al);
+<B>basic_string</B>(const value_type *ptr, size_type count);
+<B>basic_string</B>(const value_type *ptr, size_type count,
+    const allocator_type&amp; al);
+<B>basic_string</B>(const value_type *ptr);
+<B>basic_string</B>(const value_type *ptr,
+    const allocator_type&amp; al);
+<B>basic_string</B>(size_type count, value_type ch);
+<B>basic_string</B>(size_type count, value_type ch,
+    const allocator_type&amp; al);
+<B>basic_string</B>(initializer_list init); <B>[added with C++11]</B>&nbsp;
+<B>basic_string</B>(initializer_list init,
+    const allocator_type&amp; al); <B>[added with C++11]</B>
+template &lt;class InIt&gt;
+    <B>basic_string</B>(InIt first, InIt last);
+template &lt;class InIt&gt;
+    <B>basic_string</B>(InIt first, InIt last, const allocator_type&amp; al);</PRE>
+
+<P>All constructors store an
+<A HREF="memory.html#allocator_object">allocator object</A> and
+initialize the controlled sequence. The allocator object is the argument
+<CODE>al</CODE>, if present. For the copy constructor, it is
+<CODE>right.<A HREF="#basic_string__get_allocator">get_allocator</A>()</CODE>.
+Otherwise, it is <CODE>Alloc()</CODE>.</P>
+
+<P>The controlled sequence is initialized to a copy of the
+<A HREF="#operand_sequence">operand sequence</A> specified by the
+remaining operands. A constructor with no operand sequence specifies an
+empty initial controlled sequence.
+If <CODE>InIt</CODE> is not an iterator type, however,
+the constructor does not participate in overload resolution.</P>
+
+
+<H3><CODE><A NAME="basic_string__begin"></A>basic_string::begin</CODE></H3>
+
+<PRE>const_iterator <B>begin</B>() const noexcept;
+iterator <B>begin</B>() noexcept;</PRE>
+
+<P>The member functions each return a random-access iterator that points at
+the first element of the sequence (or just beyond the end of an empty
+sequence).</P>
+
+<H3><CODE><A NAME="basic_string__cbegin"></A>basic_string::cbegin</CODE></H3>
+
+<PRE>const_iterator <B>cbegin</B>() const noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The member functions return a random-access iterator that points at the
+first element of the sequence (or just beyond the end of an empty sequence).</P>
+
+<H3><CODE><A NAME="basic_string__cend"></A>basic_string::cend</CODE></H3>
+
+<PRE>const_reference <B>cend</B>() const noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The member functions return a random-access iterator that points just
+beyond the end of the sequence.</P>
+
+<H3><CODE><A NAME="basic_string__c_str"></A>basic_string::c_str</CODE></H3>
+
+<PRE>const value_type <B>*c_str</B>() const noexcept;</PRE>
+
+<P>The member function returns a pointer to a non-modifiable
+<A HREF="lib_over.html#C_string">C string</A> constructed by adding a
+terminating null element
+(<CODE>value_type()</CODE>) to the controlled
+sequence. Calling any non-const member function for
+<CODE>*this</CODE> can invalidate the pointer.</P>
+
+<H3><CODE><A NAME="basic_string__capacity"></A>basic_string::capacity</CODE></H3>
+
+<PRE>size_type <B>capacity</B>() const noexcept;</PRE>
+
+<P>The member function returns the storage currently allocated to hold
+the controlled sequence, a value at least as large as
+<CODE><A HREF="#basic_string__size">size</A>()</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__clear"></A>basic_string::clear</CODE></H3>
+
+<PRE>void <B>clear</B>() noexcept;</PRE>
+
+<P>The member function calls
+<CODE><A HREF="#basic_string__erase">erase</A>(
+<A HREF="#basic_string__begin">begin</A>(),
+<A HREF="#basic_string__end">end</A>())</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__compare"></A>basic_string::compare</CODE></H3>
+
+<PRE>int <B>compare</B>(const basic_string&amp; right) const noexcept;
+int <B>compare</B>(size_type off, size_type n0,
+    const basic_string&amp; right) const;
+int <B>compare</B>(size_type off, size_type n0,
+    const basic_string&amp; right, size_type roff, size_type count) const;
+int <B>compare</B>(const value_type *ptr) const;
+int <B>compare</B>(size_type off, size_type n0,
+    const value_type *ptr) const;
+int <B>compare</B>(size_type off, size_type n0,
+    const value_type *ptr, size_type roff) const;</PRE>
+
+<P>The member functions each compare up to <CODE>n0</CODE> elements of the
+controlled sequence beginning with position <CODE>off</CODE>, or the
+entire controlled sequence if these arguments are not supplied,
+to the <A HREF="#operand_sequence">operand sequence</A>.
+Each function returns:</P>
+
+<UL>
+<LI>a negative value if the first differing element in the controlled
+sequence compares less than the corresponding element in the operand
+sequence (as determined by
+<CODE>traits_type::<A HREF="#char_traits__compare">compare</A></CODE>), or if the
+two have a common prefix but the operand sequence is longer</LI>
+
+<LI>zero if the two compare equal element by element and are the same
+length</LI>
+
+<LI>a positive value otherwise</LI>
+</UL>
+
+<H3><CODE><A NAME="basic_string__const_iterator"></A>basic_string::const_iterator</CODE></H3>
+
+<PRE>typedef T1 <B>const_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant
+random-access iterator for the controlled sequence.
+It is described here as a
+synonym for the implementation-defined type <CODE>T1</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__const_pointer"></A>basic_string::const_pointer</CODE></H3>
+
+<PRE>typedef typename allocator_type::const_pointer <B>const_pointer</B>;</PRE>
+
+<P>The type describes a pointer to a const element.</P>
+
+<H3><CODE><A NAME="basic_string__const_reference"></A>basic_string::const_reference</CODE></H3>
+
+<PRE>typedef typename allocator_type::const_reference
+    <B>const_reference</B>;</PRE>
+
+<P>The type describes a reference to an element.</P>
+
+<H3><CODE><A NAME="basic_string__const_reverse_iterator"></A>basic_string::const_reverse_iterator</CODE></H3>
+
+<PRE>typedef reverse_iterator&lt;const_iterator&gt; <B>const_reverse_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant reverse
+iterator for the controlled sequence.</P>
+
+<H3><CODE><A NAME="basic_string__copy"></A>basic_string::copy</CODE></H3>
+
+<PRE>size_type <B>copy</B>(value_type *ptr, size_type count,
+    size_type off = 0) const;</PRE>
+
+<P>The member function copies up to <CODE>count</CODE> elements from the
+controlled sequence, beginning at position <CODE>off</CODE>, to the
+array of <CODE>value_type</CODE> beginning at <CODE>ptr</CODE>. It returns the
+number of elements actually copied.</P>
+
+<H3><CODE><A NAME="basic_string__crbegin"></A>basic_string::crbegin</CODE></H3>
+
+<PRE>const_reverse_iterator <B>crbegin</B>() const noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The member functions return a reverse iterator that points just beyond
+the end of the controlled sequence. Hence, it designates the beginning
+of the reverse sequence.</P>
+
+<H3><CODE><A NAME="basic_string__crend"></A>basic_string::crend</CODE></H3>
+
+<PRE>const_reverse_iterator <B>crend</B>() const noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The member functions return a reverse iterator that points at the first
+element of the sequence (or just beyond the end of an empty sequence)). Hence,
+it designates the end of the reverse sequence.</P>
+
+<H3><CODE><A NAME="basic_string__data"></A>basic_string::data</CODE></H3>
+
+<PRE>const value_type <B>*data</B>() const noexcept;</PRE>
+
+<P>The member function returns a pointer to the first element
+of the sequence (or, for an empty sequence, a non-null pointer
+that cannot be dereferenced).</P>
+
+<H3><CODE><A NAME="basic_string__difference_type"></A>basic_string::difference_type</CODE></H3>
+
+<PRE>typedef typename allocator_type::difference_type <B>difference_type</B>;</PRE>
+
+<P>The signed integer type describes an object that can represent the
+difference between the addresses of any two elements in the controlled
+sequence.</P>
+
+<H3><CODE><A NAME="basic_string__empty"></A>basic_string::empty</CODE></H3>
+
+<PRE>bool <B>empty</B>() const noexcept;</PRE>
+
+<P>The member function returns true for an empty controlled sequence.</P>
+
+<H3><CODE><A NAME="basic_string__end"></A>basic_string::end</CODE></H3>
+
+<PRE>const_iterator <B>end</B>() const noexcept;
+iterator <B>end</B>() noexcept;</PRE>
+
+<P>The member functions each return a random-access iterator that points
+just beyond the end of the sequence.</P>
+
+<H3><CODE><A NAME="basic_string__erase"></A>basic_string::erase</CODE></H3>
+
+<PRE>iterator <B>erase</B>(const_iterator first, const_iterator last);
+iterator <B>erase</B>(const_iterator where);
+basic_string&amp; <B>erase</B>(size_type off = 0,
+    size_type count = npos);</PRE>
+
+<P>The first member function removes the elements of the controlled
+sequence in the range <CODE>[first, last)</CODE>.
+The second member function removes the element of the controlled
+sequence pointed to by <CODE>where</CODE>.
+Both return an iterator that designates the first element remaining
+beyond any elements removed, or
+<CODE><A HREF="#basic_string__end">end</A>()</CODE>
+if no such element exists.</P>
+
+<P>The third member function removes up to <CODE>count</CODE> elements of
+the controlled sequence beginning at position <CODE>off</CODE>, then
+returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__find"></A>basic_string::find</CODE></H3>
+
+<PRE>size_type <B>find</B>(value_type ch, size_type off = 0) const noexcept;
+size_type <B>find</B>(const value_type *ptr,
+    size_type off = 0) const;
+size_type <B>find</B>(const value_type *ptr, size_type off,
+    size_type count) const;
+size_type <B>find</B>(const basic_string&amp; right,
+    size_type off = 0) const;</PRE>
+
+<P>The member functions each find the first (lowest beginning position)
+subsequence in the controlled sequence, beginning on or after position
+<CODE>off</CODE>, that matches the
+<A HREF="#operand_sequence">operand sequence</A> specified by the
+remaining operands. If it succeeds, it returns the position where the
+matching subsequence begins. Otherwise, the function returns
+<CODE><A HREF="#basic_string__npos">npos</A></CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__find_first_not_of"></A>basic_string::find_first_not_of</CODE></H3>
+
+<PRE>size_type <B>find_first_not_of</B>(value_type ch,
+    size_type off = 0) const noexcept;
+size_type <B>find_first_not_of</B>(const value_type *ptr,
+    size_type off = 0) const;
+size_type <B>find_first_not_of</B>(const value_type *ptr,
+    size_type off, size_type count) const;
+size_type <B>find_first_not_of</B>(const basic_string&amp; right,
+    size_type off = 0) const;</PRE>
+
+<P>The member functions each find the first (lowest position) element of the
+controlled sequence, at or after position <CODE>off</CODE>, that
+matches <I>none</I> of the elements in the
+<A HREF="#operand_sequence">operand sequence</A> specified by the
+remaining operands. If it succeeds, it returns the position. Otherwise,
+the function returns
+<CODE><A HREF="#basic_string__npos">npos</A></CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__find_first_of"></A>basic_string::find_first_of</CODE></H3>
+
+<PRE>size_type <B>find_first_of</B>(value_type ch,
+    size_type off = 0) const noexcept;
+size_type <B>find_first_of</B>(const value_type *ptr,
+    size_type off = 0) const;
+size_type <B>find_first_of</B>(const value_type *ptr,
+    size_type off, size_type count) const;
+size_type <B>find_first_of</B>(const basic_string&amp; right,
+    size_type off = 0) const;</PRE>
+
+<P>The member functions each find the first (lowest position) element of the
+controlled sequence, at or after position <CODE>off</CODE>, that
+matches <I>any</I> of the elements in the
+<A HREF="#operand_sequence">operand sequence</A> specified by the
+remaining operands. If it succeeds, it returns the position. Otherwise,
+the function returns
+<CODE><A HREF="#basic_string__npos">npos</A></CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__find_last_not_of"></A>basic_string::find_last_not_of</CODE></H3>
+
+<PRE>size_type <B>find_last_not_of</B>(value_type ch,
+    size_type off = npos) const noexcept;
+size_type <B>find_last_not_of</B>(const value_type *ptr,
+    size_type off = npos) const;
+size_type <B>find_last_not_of</B>(const value_type *ptr,
+    size_type off, size_type count) const;
+size_type <B>find_last_not_of</B>(const basic_string&amp; right,
+    size_type off = npos) const;</PRE>
+
+<P>The member functions each find the last (highest position) element of the
+controlled sequence, at or before position <CODE>off</CODE>, that
+matches <I>none</I> of the elements in the
+<A HREF="#operand_sequence">operand sequence</A> specified by the
+remaining operands. If it succeeds, it returns the position. Otherwise,
+the function returns
+<CODE><A HREF="#basic_string__npos">npos</A></CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__find_last_of"></A>basic_string::find_last_of</CODE></H3>
+
+<PRE>size_type <B>find_last_of</B>(value_type ch,
+    size_type off = npos) const noexcept;
+size_type <B>find_last_of</B>(const value_type *ptr,
+    size_type off = npos) const;
+size_type <B>find_last_of</B>(const value_type *ptr,
+    size_type off, size_type count = npos) const;
+size_type <B>find_last_of</B>(const basic_string&amp; right,
+    size_type off = npos) const;</PRE>
+
+<P>The member functions each find the last (highest position) element of the
+controlled sequence, at or before position <CODE>off</CODE>, that
+matches <I>any</I> of the elements in the
+<A HREF="#operand_sequence">operand sequence</A> specified by the
+remaining operands. If it succeeds, it returns the position. Otherwise,
+the function returns
+<CODE><A HREF="#basic_string__npos">npos</A></CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__front"></A>basic_string::front</CODE></H3>
+
+<PRE>const_reference <B>front</B>() const; <B>[added with C++11]</B>
+reference <B>front</B>(); <B>[added with C++11]</B></PRE>
+
+<P>The member functions each return a reference to the first element of the
+controlled sequence, which must be non-empty.</P>
+
+<H3><CODE><A NAME="basic_string__get_allocator"></A>basic_string::get_allocator</CODE></H3>
+
+<PRE>allocator_type <B>get_allocator</B>() const noexcept;</PRE>
+
+<P>The member function returns the stored
+<A HREF="memory.html#allocator_object">allocator object</A>.</P>
+
+<H3><CODE><A NAME="basic_string__insert"></A>basic_string::insert</CODE></H3>
+
+<PRE>basic_string&amp; <B>insert</B>(size_type off, const value_type *ptr);
+basic_string&amp; <B>insert</B>(size_type off, const value_type *ptr,
+    size_type count);
+basic_string&amp; <B>insert</B>(size_type off,
+    const basic_string&amp; right);
+basic_string&amp; <B>insert</B>(size_type off,
+    const basic_string&amp; right, size_type roff, size_type count);
+basic_string&amp; <B>insert</B>(size_type off,
+    size_type count, value_type ch);
+iterator <B>insert</B>(const_iterator where,
+    value_type ch = value_type());
+iterator <B>insert</B>(const_iterator where,
+    initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B>
+template&lt;class InIt&gt;
+    iterator <B>insert</B>(const_iterator where, InIt first, InIt last);
+void <B>insert</B>(const_iterator where, size_type count, value_type ch);</PRE>
+
+<P>The member functions each insert, before position <CODE>off</CODE> or
+before the element pointed to by <CODE>where</CODE> in the controlled
+sequence, the
+<A HREF="#operand_sequence">operand sequence</A> specified by the
+remaining operands. A function that returns a value of type
+<CODE>basic_string&amp;</CODE> returns
+<CODE>*this</CODE>,
+while a function that returns a value of type <CODE>iterator</CODE>
+returns an iterator
+designating the first element in the inserted sequence, or <CODE>where</CODE>
+if the inserted sequence is empty.
+If <CODE>InIt</CODE> is not an iterator type, however,
+the member template function does not participate in overload resolution.</P>
+
+
+<H3><CODE><A NAME="basic_string__iterator"></A>basic_string::iterator</CODE></H3>
+
+<PRE>typedef T0 <B>iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a random-access
+iterator for the controlled sequence.
+It is described here as a
+synonym for the implementation-defined type <CODE>T0</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__length"></A>basic_string::length</CODE></H3>
+
+<PRE>size_type <B>length</B>() const noexcept;</PRE>
+
+<P>The member function returns the length of the controlled sequence
+(same as <CODE><A HREF="#basic_string__size">size</A>()</CODE>).</P>
+
+<H3><CODE><A NAME="basic_string__max_size"></A>basic_string::max_size</CODE></H3>
+
+<PRE>size_type <B>max_size</B>() const noexcept;</PRE>
+
+<P>The member function returns the length of the longest sequence that
+the object can control.</P>
+
+<H3><CODE><A NAME="basic_string__npos"></A>basic_string::npos</CODE></H3>
+
+<PRE>static const size_type <B>npos</B> = -1;</PRE>
+
+<P>The constant is the largest representable value of type
+<A HREF="#basic_string__size_type"><CODE>size_type</CODE></A>. It is
+assuredly larger than
+<CODE><A HREF="#basic_string__max_size">max_size</A>()</CODE>, hence
+it serves as either a very large value or as a special code.</P>
+
+<H3><CODE><A NAME="basic_string__operator+2"></A>basic_string::operator+=</CODE></H3>
+
+<PRE>basic_string&amp; <B>operator+=</B>(value_type ch);
+basic_string&amp; <B>operator+=</B>(const value_type *ptr);
+basic_string&amp; <B>operator+=</B>(const basic_string&amp; right);
+basic_string&amp; <B>operator+=</B>(initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B></PRE>
+
+<P>The operators each append the
+<A HREF="#operand_sequence">operand sequence</A> to the end of the
+sequence controlled by <CODE>*this</CODE>, then return <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__operator2"></A>basic_string::operator=</CODE></H3>
+
+<PRE>basic_string&amp; <B>operator=</B>(const basic_string&amp; right);
+basic_string&amp; <B>operator=</B>(basic_string&amp;&amp; right) noexcept; <B>[added with C++11]</B>
+basic_string&amp; <B>operator=</B>(const value_type *ptr);
+basic_string&amp; <B>operator=</B>(value_type ch);
+basic_string&amp; <B>operator=</B>(initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B></PRE>
+
+<P>The operators each replace the sequence controlled by <CODE>*this</CODE>
+with the
+<A HREF="#operand_sequence">operand sequence</A>,
+then return <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__operator[]"></A>basic_string::operator[]</CODE></H3>
+
+<PRE>const_reference <B>operator[]</B>(size_type off) const;
+reference <B>operator[]</B>(size_type off);</PRE>
+
+<P>The member functions each return a reference to the element of the
+controlled sequence at position <CODE>off</CODE>. If that position is
+invalid, the behavior is undefined.</P>
+
+<P>The member functions throw nothing.</P>
+
+<H3><CODE><A NAME="basic_string__pointer"></A>basic_string::pointer</CODE></H3>
+
+<PRE>typedef typename allocator_type::pointer <B>pointer</B>;</PRE>
+
+<P>The type describes a pointer to an element.</P>
+
+<H3><CODE><A NAME="basic_string__pop_back"></A>basic_string::pop_back</CODE></H3>
+
+<PRE>void <B>pop_back</B>();</PRE>
+
+<P>The member function effectively calls
+<CODE><A HREF="#basic_string__erase">erase</A>(
+<A HREF="#basic_string__size">size</A>() - 1)</CODE> to
+erase the last element of the sequence, which must be non-empty.</P>
+
+<H3><CODE><A NAME="basic_string__push_back"></A>basic_string::push_back</CODE></H3>
+
+<PRE>void <B>push_back</B>(value_type ch);</PRE>
+
+<P>The member function effectively calls
+<CODE><A HREF="#basic_string__insert">insert</A>(
+<A HREF="#basic_string__end">end</A>(), ch)</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__rbegin"></A>basic_string::rbegin</CODE></H3>
+
+<PRE>const_reverse_iterator <B>rbegin</B>() const noexcept;
+reverse_iterator <B>rbegin</B>() noexcept;</PRE>
+
+<P>The member function returns a reverse iterator that points just
+beyond the end of the controlled sequence. Hence, it designates the
+beginning of the reverse sequence.</P>
+
+<H3><CODE><A NAME="basic_string__reference"></A>basic_string::reference</CODE></H3>
+
+<PRE>typedef typename allocator_type::reference <B>reference</B>;</PRE>
+
+<P>The type describes a reference to an element.</P>
+
+<H3><CODE><A NAME="basic_string__rend"></A>basic_string::rend</CODE></H3>
+
+<PRE>const_reverse_iterator <B>rend</B>() const noexcept;
+reverse_iterator <B>rend</B>() noexcept;</PRE>
+
+<P>The member functions each return a reverse iterator that points at the
+first element of the sequence (or just beyond the end of an empty
+sequence). Hence, the function designates the end of the reverse sequence.</P>
+
+<H3><CODE><A NAME="basic_string__replace"></A>basic_string::replace</CODE></H3>
+
+<PRE>basic_string&amp; <B>replace</B>(size_type off, size_type n0,
+    const value_type *ptr);
+basic_string&amp; <B>replace</B>(size_type off, size_type n0,
+    const value_type *ptr, size_type count);
+basic_string&amp; <B>replace</B>(size_type off, size_type n0,
+    const basic_string&amp; right);
+basic_string&amp; <B>replace</B>(size_type off, size_type n0,
+    const basic_string&amp; right, size_type roff, size_type count);
+basic_string&amp; <B>replace</B>(size_type off, size_type n0,
+    size_type count, value_type ch);
+basic_string&amp; <B>replace</B>(const_iterator first, const_iterator last,
+    const value_type *ptr);
+basic_string&amp; <B>replace</B>(const_iterator first, const_iterator last,
+    const value_type *ptr, size_type count);
+basic_string&amp; <B>replace</B>(const_iterator first, const_iterator last,
+    const basic_string&amp; right);
+basic_string&amp; <B>replace</B>(const_iterator first, const_iterator last,
+    size_type count, value_type ch);
+basic_string&amp; <B>replace</B>(const_iterator first, const_iterator last,
+    initializer_list&lt;Elem&gt; init); <B>[added with C++11]</B>
+template&lt;class InIt&gt;
+    basic_string&amp;
+        <B>replace</B>(const_iterator first, const_iterator last,
+            InIt first2, InIt last2);</PRE>
+
+<P>The member functions each replace up to <CODE>n0</CODE> elements of the
+controlled sequence beginning with position <CODE>off</CODE>, or the
+elements of the controlled sequence beginning with the one pointed to by
+<CODE>first</CODE>, up to but not including <CODE>last</CODE>. The
+replacement is the
+<A HREF="#operand_sequence">operand sequence</A> specified by the
+remaining operands. The function then returns
+<CODE>*this</CODE>.
+If <CODE>InIt</CODE> is not an iterator type, however,
+the member template function does not participate in overload resolution.</P>
+
+
+<H3><CODE><A NAME="basic_string__reserve"></A>basic_string::reserve</CODE></H3>
+
+<PRE>void <B>reserve</B>(size_type count = 0);</PRE>
+
+<P>The member function ensures that
+<CODE><A HREF="#basic_string__capacity">capacity</A>()</CODE>
+henceforth returns at least <CODE>count</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__resize"></A>basic_string::resize</CODE></H3>
+
+<PRE>void <B>resize</B>(size_type newsize, value_type ch = value_type());</PRE>
+
+<P>The member function ensures that
+<CODE><A HREF="#basic_string__size">size</A>()</CODE> henceforth
+returns <CODE>newsize</CODE>. If it must make the controlled sequence longer,
+it appends elements with value <CODE>ch</CODE>.
+To make the controlled sequence shorter, the member function effectively calls
+<CODE><A HREF="#basic_string__erase">erase</A>(begin() + newsize, end())</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__reverse_iterator"></A>basic_string::reverse_iterator</CODE></H3>
+
+<PRE>typedef reverse_iterator&lt;iterator&gt;
+    <B>reverse_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a reverse
+iterator for the controlled sequence.</P>
+
+<H3><CODE><A NAME="basic_string__rfind"></A>basic_string::rfind</CODE></H3>
+
+<PRE>size_type <B>rfind</B>(value_type ch, size_type off = npos) const noexcept;
+size_type <B>rfind</B>(const value_type *ptr,
+    size_type off = npos) const noexcept;
+size_type <B>rfind</B>(const value_type *ptr,
+    size_type off, size_type count = npos) const noexcept;
+size_type <B>rfind</B>(const basic_string&amp; right,
+    size_type off = npos) const noexcept;</PRE>
+
+<P>The member functions each find the last
+(highest beginning position) subsequence in
+the controlled sequence, beginning on or before position <CODE>off</CODE>,
+that matches the
+<A HREF="#operand_sequence">operand sequence</A> specified by the
+remaining operands. If it succeeds, the function returns the position where the
+matching subsequence begins. Otherwise, it returns
+<CODE><A HREF="#basic_string__npos">npos</A></CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__shrink_to_fit"></A>basic_string::shrink_to_fit</CODE></H3>
+
+<PRE>void <B>shrink_to_fit</B>();</PRE>
+
+<P>The member function eliminates any unneeded storage in the container.</P>
+
+<H3><CODE><A NAME="basic_string__size"></A>basic_string::size</CODE></H3>
+
+<PRE>size_type <B>size</B>() const noexcept;</PRE>
+
+<P>The member function returns the length of the controlled sequence.</P>
+
+<H3><CODE><A NAME="basic_string__size_type"></A>basic_string::size_type</CODE></H3>
+
+<PRE>typedef typename allocator_type::size_type <B>size_type</B>;</PRE>
+
+<P>The unsigned integer type describes an object that can represent the
+length of any controlled sequence.</P>
+
+<H3><CODE><A NAME="basic_string__substr"></A>basic_string::substr</CODE></H3>
+
+<PRE>basic_string <B>substr</B>(size_type off = 0,
+    size_type count = npos) const;</PRE>
+
+<P>The member function returns an object whose controlled sequence is a
+copy of up to <CODE>count</CODE> elements of the controlled sequence
+beginning at position <CODE>off</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__swap"></A>basic_string::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(basic_string&amp; right);</PRE>
+
+<P>The member function swaps the controlled sequences between
+<CODE>*this</CODE> and <CODE>str</CODE>. If
+<CODE><A HREF="#basic_string__get_allocator">get_allocator</A>()
+== right.get_allocator()</CODE>, they do so in constant time,
+it throws no exceptions, and it invalidates no references, pointers,
+or iterators that designate elements in the two controlled sequences.
+Otherwise, it performs a number of element assignments and constructor calls
+proportional to the number of elements in the two controlled sequences.</P>
+
+<P>The function throws nothing.</P>
+
+<H3><CODE><A NAME="basic_string__traits_type"></A>basic_string::traits_type</CODE></H3>
+
+<PRE>typedef Tr <B>traits_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Tr</CODE>.</P>
+
+<H3><CODE><A NAME="basic_string__value_type"></A>basic_string::value_type</CODE></H3>
+
+<PRE>typedef typename allocator_type::value_type <B>value_type</B>;</PRE>
+
+<P>The type describes an element.</P>
+
+
+<H2><A NAME="char_traits"></A><CODE>char_traits</CODE></H2>
+
+<PRE>template&lt;class Elem&gt;
+    class <B>char_traits</B> {
+public:
+    typedef Elem <B><A HREF="#char_traits__char_type">char_type</A></B>;
+    typedef T1 <B><A HREF="#char_traits__int_type">int_type</A></B>;
+    typedef T2 <B><A HREF="#char_traits__pos_type">pos_type</A></B>;
+    typedef T3 <B><A HREF="#char_traits__off_type">off_type</A></B>;
+    typedef T4 <B><A HREF="#char_traits__state_type">state_type</A></B>;
+    static void <B><A HREF="#char_traits__assign">assign</A></B>(char_type&amp; left,
+        const char_type&amp; right) noexcept;
+    static char_type *<B><A HREF="#char_traits__assign">assign</A></B>(char_type *first, size_t count,
+        char_type ch);
+    static int <B><A HREF="#char_traits__compare">compare</A></B>(const char_type *first1,
+        const char_type *first2, size_t count);
+    static size_t <B><A HREF="#char_traits__length">length</A></B>(const char_type *first);
+    static char_type *<B><A HREF="#char_traits__copy">copy</A></B>(char_type *first1,
+        const char_type *first2, size_t count);
+    static char_type *<B><A HREF="#char_traits__move">move</A></B>(char_type *first1,
+        const char_type *first2, size_t count);
+    static const char_type *<B><A HREF="#char_traits__find">find</A></B>(const char_type *first,
+        size_t count, const char_type&amp; ch);
+
+    static bool <B><A HREF="#char_traits__eq">eq</A></B>(const char_type&amp; left,
+        const char_type&amp; right); <B>[replaced with C++11]</B>
+    static constexpr bool <B><A HREF="#char_traits__eq">eq</A></B>(char_type left,
+        char_type right) noexcept; <B>[added with C++11]</B>
+
+    static bool <B><A HREF="#char_traits__lt">lt</A></B>(const char_type&amp; left,
+        const char_type&amp; right); <B>[replaced with C++11]</B>
+    static constexpr bool <B><A HREF="#char_traits__lt">lt</A></B>(char_type left,
+        char_type right) noexcept; <B>[added with C++11]</B>
+
+    static char_type <B><A HREF="#char_traits__to_char_type">to_char_type</A></B>(const int_type&amp; meta); <B>[replaced with C++11]</B>
+    static constexpr char_type <B><A HREF="#char_traits__to_char_type">to_char_type</A></B>(int_type meta) noexcept; <B>[added with C++11]</B>
+
+    static int_type <B><A HREF="#char_traits__to_int_type">to_int_type</A></B>(const char_type&amp; ch); <B>[replaced with C++11]</B>
+    static constexpr int_type <B><A HREF="#char_traits__to_int_type">to_int_type</A></B>(char_type ch) noexcept; <B>[added with C++11]</B>
+
+    static bool <B><A HREF="#char_traits__eq_int_type">eq_int_type</A></B>(const int_type&amp; left,
+        const int_type&amp; right); <B>[replaced with C++11]</B>
+    static constexpr bool <B><A HREF="#char_traits__eq_int_type">eq_int_type</A></B>( int_type left,
+        int_type right) noexcept; <B>[added with C++11]</B>
+
+    static int_type <B><A HREF="#char_traits__not_eof">not_eof</A></B>(const int_type&amp; meta); <B>[replaced with C++11]</B>
+    static constexpr int_type <B><A HREF="#char_traits__not_eof">not_eof</A></B>(int_type meta) noexcept; <B>[added with C++11]</B>
+
+    static int_type <B><A HREF="#char_traits__eof">eof</A></B>(); <B>[replaced with C++11]</B>
+    static constexpr int_type <B><A HREF="#char_traits__eof">eof</A></B>() noexcept; <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The template class describes various
+<B><A NAME="character_traits"></A>character traits</B>
+for type <CODE>Elem</CODE>.
+The template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A>
+as well as several iostreams template classes, including
+<A HREF="ios.html#basic_ios"><CODE>basic_ios</CODE></A>, use this information
+to manipulate elements of type <CODE>Elem</CODE>.
+Such an element type must not require explicit construction or
+destruction. It must supply a default constructor, a copy constructor,
+and an assignment operator, with the expected semantics.
+A bitwise copy must have the same effect as an assignment.</P>
+
+<P>Note that the C++ Standard requires <B>only</B>
+the explicit specializations
+<CODE>char_traits&lt;char&gt;</CODE>,
+<CODE>char_traits&lt;wchar_t&gt;</CODE>,
+and, beginning with <B>C++11</B>,
+<CODE>char_traits&lt;char16_t&gt;</CODE> and
+<CODE>char_traits&lt;char32_t&gt;</CODE>.</P>
+
+<P>This
+implementation, also supplies
+the template version, with:</P>
+
+<UL>
+<LI><CODE>int_type</CODE> defined as <CODE>long</CODE></LI>
+
+<LI><CODE>eof()</CODE> defined as <CODE>(int_type)EOF</CODE></LI>
+</UL>
+
+<P>If these choices don't meet your needs, you must supply your own
+traits class.</P>
+
+<P>Not all parts of the Standard C++ Library rely completely upon the member
+functions of <CODE>char_traits&lt;Elem&gt;</CODE> to manipulate an element.
+Specifically,
+<A HREF="istream.html#formatted_input_functions">formatted input functions</A> and
+<A HREF="ostream.html#formatted_output_functions">formatted output functions</A>
+make use of the following additional operations,
+also with the expected semantics:</P>
+
+<UL>
+<LI><CODE>operator==(Elem)</CODE> and <CODE>operator!=(Elem)</CODE>
+to compare elements</LI>
+
+<LI><CODE>(char)ch</CODE> to convert an element <CODE>ch</CODE>
+to its corresponding single-byte character code,
+or <CODE>'\0'</CODE> if no such code exists</LI>
+
+<LI><CODE>(Elem)ch</CODE> to convert a <CODE>char</CODE> value <CODE>ch</CODE> to
+its corresponding character code of type <CODE>Elem</CODE></LI>
+</UL>
+
+<P>None of the member functions of class <CODE>char_traits</CODE> may
+throw exceptions.</P>
+
+<H3><CODE><A NAME="char_traits__assign"></A>char_traits::assign</CODE></H3>
+
+<PRE>static void <B>assign</B>(char_type&amp; left,
+    const char_type&amp; right) noexcept;
+static char_type *<B>assign</B>(char_type *first, size_t count,
+    char_type ch);</PRE>
+
+<P>The first static member function assigns <CODE>right</CODE>
+to <CODE>left</CODE>. The second static member function assigns <CODE>ch</CODE>
+to each element <CODE>X[N]</CODE> for <CODE>N</CODE>
+in the range <CODE>[0, count)</CODE>, then returns <CODE>first</CODE></P>
+
+<H3><CODE><A NAME="char_traits__char_type"></A>char_traits::char_type</CODE></H3>
+
+<PRE>typedef Elem <B>char_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Elem</CODE>.</P>
+
+<H3><CODE><A NAME="char_traits__compare"></A>char_traits::compare</CODE></H3>
+
+<PRE>static int <B>compare</B>(const char_type *first1,
+    const char_type *first2, size_t count);</PRE>
+
+<P>The static member function compares the sequence of length <CODE>count</CODE>
+beginning at <CODE>first1</CODE>to the sequence of the same length beginning
+at <CODE>first2</CODE>. The function returns:</P>
+
+<UL>
+<LI>a negative value if the first differing element in <CODE>first1</CODE>
+(as determined by
+<CODE><A HREF="#char_traits__eq">eq</A></CODE>) compares less
+than the corresponding element in <CODE>first2</CODE> (as determined by
+<CODE><A HREF="#char_traits__lt">lt</A></CODE>)</LI>
+
+<LI>zero if the two compare equal element by element</LI>
+
+<LI>a positive value otherwise</LI>
+</UL>
+
+<H3><CODE><A NAME="char_traits__copy"></A>char_traits::copy</CODE></H3>
+
+<PRE>static char_type <B>*copy</B>(char_type *first1, const char_type *first2,
+    size_t count);</PRE>
+
+<P>The static member function copies the sequence of <CODE>count</CODE>
+elements beginning at <CODE>first2</CODE> to the array beginning at <CODE>first1</CODE>,
+then returns <CODE>first1</CODE>. The source and destination
+must not overlap.</P>
+
+<H3><A NAME="char_traits__eof"></A><CODE>char_traits::eof</CODE></H3>
+
+<PRE>static int_type <B>eof</B>(); <B>[replaced with C++11]</B>
+static constexpr int_type <B>eof</B>() noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The static member function returns a value that represents
+end-of-file (such as <CODE><A HREF="stdio.html#EOF">EOF</A></CODE> or
+<CODE><A HREF="wchar.html#WEOF">WEOF</A></CODE>). If the value is also
+representable as type <CODE>Elem</CODE>,
+it must correspond to no <I>valid</I> value of that type.</P>
+
+<H3><CODE><A NAME="char_traits__eq"></A>char_traits::eq</CODE></H3>
+
+<PRE>static bool <B>eq</B>(const char_type&amp; left, const char_type&amp; right); <B>[replaced with C++11]</B>
+static constexpr bool <B>eq</B>(char_type left, char_type right) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The static member function returns true if <CODE>left</CODE> compares
+equal to <CODE>right</CODE>.</P>
+
+<H3><A NAME="char_traits__eq_int_type"></A><CODE>char_traits::eq_int_type</CODE></H3>
+
+<PRE>static bool <B>eq_int_type</B>(const int_type&amp; left, const int_type&amp; right); <B>[replaced with C++11]</B>
+static constexpr bool <B>eq_int_type</B>(int_type left, int_type right) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The static member function returns true if
+<CODE>left</CODE> compares equal to <CODE>right</CODE>.</P>
+
+<H3><CODE><A NAME="char_traits__find"></A>char_traits::find</CODE></H3>
+
+<PRE>static const char_type *<B>find</B>(const char_type *first,
+    size_t count, const char_type&amp; ch);</PRE>
+
+<P>The static member function determines the lowest <CODE>N</CODE>
+in the range <CODE>[0, count)</CODE> for which
+<CODE><A HREF="#char_traits__eq">eq</A>(first[N], ch)</CODE>
+is true. If successful, it returns <CODE>first + N</CODE>. Otherwise,
+it returns a null pointer.</P>
+
+<H3><A NAME="char_traits__int_type"></A><CODE>char_traits::int_type</CODE></H3>
+
+<PRE>typedef T1 <B>int_type</B>;</PRE>
+
+<P>The type is (typically) an integer type <CODE>T1</CODE> that
+describes an object that can represent any element of the controlled
+sequence as well as the value returned by <CODE><A HREF="#char_traits__eof">
+eof</A>()</CODE>.</P>
+
+<H3><CODE><A NAME="char_traits__length"></A>char_traits::length</CODE></H3>
+
+<PRE>static size_t <B>length</B>(const char_type *first);</PRE>
+
+<P>The static member function returns the number of elements
+<CODE>N</CODE> in the sequence beginning at <CODE>first</CODE>
+up to but not including the element <CODE>first[N]</CODE> which
+compares equal to <CODE>char_type()</CODE>.</P>
+
+<H3><CODE><A NAME="char_traits__lt"></A>char_traits::lt</CODE></H3>
+
+<PRE>static bool <B>lt</B>(const char_type&amp; left, const char_type&amp; right); <B>[replaced with C++11]</B>
+static constexpr bool <B>lt</B>(char_type left, char_type right) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The static member function returns true if <CODE>left</CODE> compares
+less than <CODE>right</CODE>.</P>
+
+<H3><CODE><A NAME="char_traits__move"></A>char_traits::move</CODE></H3>
+
+<PRE>static char_type <B>*move</B>(char_type *first1, const char_type *first2,
+    size_t count);</PRE>
+
+<P>The static member function copies the sequence of <CODE>count</CODE>
+elements beginning at <CODE>first2</CODE> to the array beginning at <CODE>first1</CODE>,
+then returns <CODE>first1</CODE>. The source and destination may overlap.</P>
+
+<H3><A NAME="char_traits__not_eof"></A><CODE>char_traits::not_eof</CODE></H3>
+
+<PRE>static int_type <B>not_eof</B>(const int_type&amp; meta); <B>[replaced with C++11]</B>
+static constexpr int_type <B>not_eof</B>(int_type meta) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>If
+<CODE>!<A HREF="#char_traits__eq_int_type">eq_int_type</A>(
+<A HREF="#char_traits__eof">eof</A>(), meta)</CODE>,
+the static member function returns <CODE>meta</CODE>.
+Otherwise, it returns a value other than
+<CODE>eof()</CODE>.</P>
+
+<H3><A NAME="char_traits__off_type"></A><CODE>char_traits::off_type</CODE></H3>
+
+<PRE>typedef T3 <B>off_type</B>;</PRE>
+
+<P>The type is a signed integer type <CODE>T3</CODE> that describes an
+object that can store a byte offset involved in various stream
+positioning operations. It is typically a synonym for
+<CODE><A HREF="ios.html#streamoff">streamoff</A></CODE>, but in any case it
+has essentially the same properties as that type.</P>
+
+<H3><A NAME="char_traits__pos_type"></A><CODE>char_traits::pos_type</CODE></H3>
+
+<PRE>typedef T2 <B>pos_type</B>;</PRE>
+
+<P>The type is an opaque type <CODE>T2</CODE> that describes an object
+that can store all the information needed to restore an arbitrary
+<A HREF="lib_file.html#file-position_indicator">file-position indicator</A>
+within a stream. It is typically a synonym for
+<CODE><A HREF="ios.html#streampos">streampos</A></CODE>, but in any case it
+has essentially the same properties as that type.</P>
+
+<H3><A NAME="char_traits__state_type"></A><CODE>char_traits::state_type</CODE></H3>
+
+<PRE>typedef T4 <B>state_type</B>;</PRE>
+
+<P>The type is an opaque type <CODE>T4</CODE> that describes an object
+that can represent a
+<A HREF="charset.html#conversion_state">conversion state</A>. It is
+typically a synonym for
+<CODE><A HREF="wchar.html#mbstate_t">mbstate_t</A></CODE>, but in any
+case it has essentially the same properties as that type.</P>
+
+<H3><A NAME="char_traits__to_char_type"></A><CODE>char_traits::to_char_type</CODE></H3>
+
+<PRE>static char_type <B>to_char_type</B>(const int_type&amp; meta); <B>[replaced with C++11]</B>
+static constexpr char_type <B>to_char_type</B>(int_type meta) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The static member function returns <CODE>meta</CODE> represented as
+type <CODE>Elem</CODE>. A value of <CODE>meta</CODE> that cannot be so
+represented yields an unspecified result.</P>
+
+<H3><A NAME="char_traits__to_int_type"></A><CODE>char_traits::to_int_type</CODE></H3>
+
+<PRE>static int_type <B>to_int_type</B>(const char_type&amp; meta); <B>[replaced with C++11]</B>
+static constexpr int_type <B>to_int_type</B>(char_type meta) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The static member function returns <CODE>ch</CODE> represented as
+type <CODE>int_type</CODE>. It must be possible to convert any value <CODE>ch</CODE> of type
+<CODE>Elem</CODE> to <CODE>int_type</CODE> (by evaluating
+<CODE>meta = <A HREF="#char_traits__to_int_type">to_int_type</A>(ch)</CODE>)
+then back to <CODE>Elem</CODE> (by evaluating
+<CODE>ch = <A HREF="#char_traits__to_char_type">to_char_type</A>(meta)</CODE>)
+and obtain a value that compares equal to <CODE>ch</CODE>.</P>
+
+<H2><A NAME="char_traits&lt;char&gt;"></A><CODE>char_traits&lt;char&gt;</CODE></H2>
+
+<PRE>template&lt;&gt;
+    class <B>char_traits&lt;char&gt;</B>;</PRE>
+
+<P>The class is an explicit specialization of template class
+<A HREF="#char_traits"><CODE>char_traits</CODE></A>
+for elements of type <I>char,</I> (so that it
+can take advantage of library functions that manipulate objects of this
+type).</P>
+
+<H2><A NAME="char_traits&lt;char16_t&gt;"></A><CODE>char_traits&lt;char16_t&gt;</CODE></H2>
+
+<PRE>template&lt;&gt;
+    class <B>char_traits&lt;char16_t&gt;</B>; <B>[added with C++11]</B></PRE>
+
+<P>The class is an explicit specialization of template class
+<A HREF="#char_traits"><CODE>char_traits</CODE></A>
+for elements of type <CODE>char16_t</CODE> (so
+that it can take advantage of library functions that manipulate objects
+of this type).</P>
+
+<H2><A NAME="char_traits&lt;char32_t&gt;"></A><CODE>char_traits&lt;char32_t&gt;</CODE></H2>
+
+<PRE>template&lt;&gt;
+    class <B>char_traits&lt;char32_t&gt;</B>; <B>[added with C++11]</B></PRE>
+
+<P>The class is an explicit specialization of template class
+<A HREF="#char_traits"><CODE>char_traits</CODE></A>
+for elements of type <CODE>char32_t</CODE> (so
+that it can take advantage of library functions that manipulate objects
+of this type).</P>
+
+<H2><A NAME="char_traits&lt;wchar_t&gt;"></A><CODE>char_traits&lt;wchar_t&gt;</CODE></H2>
+
+<PRE>template&lt;&gt;
+    class <B>char_traits&lt;wchar_t&gt;</B>;</PRE>
+
+<P>The class is an explicit specialization of template class
+<A HREF="#char_traits"><CODE>char_traits</CODE></A>
+for elements of type <CODE>wchar_t</CODE> (so
+that it can take advantage of library functions that manipulate objects
+of this type).</P>
+
+<H2><A NAME="getline"></A><CODE>getline</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp; <B>getline</B>(
+        basic_istream&lt;Elem, Tr&gt;&amp; istr,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; str);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp; <B>getline</B>(
+        basic_istream&lt;Elem, Tr&gt;&amp; istr,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; str,
+        Elem delim); <B>[replaced with C++11]</B>
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp; <B>getline</B>(
+        basic_istream&lt;Elem, Tr&gt;&amp;&amp; istr,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; str); <B>[added with C++11]</B>
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp; <B>getline</B>(
+        basic_istream&lt;Elem, Tr&gt;&amp;&amp; istr,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; str,
+        Elem delim); <B>[added with C++11]</B></PRE>
+
+<P>The first function returns <CODE>getline(istr, str, istr.widen('\n'))</CODE>.</P>
+
+<P>The second function replaces the sequence controlled by
+<CODE>str</CODE> with a sequence of elements extracted from the stream
+<CODE>istr</CODE>. In order of testing, extraction stops:</P>
+
+<OL>
+<LI>at end of file</LI>
+
+<LI>after the function extracts an element that compares equal to
+<CODE>delim</CODE>, in which case the element is neither put back nor
+appended to the controlled sequence</LI>
+
+<LI>after the function extracts
+<CODE>str.<A HREF="#basic_string__max_size">max_size</A>()</CODE>
+elements, in which case the function calls
+<CODE><A HREF="ios.html#basic_ios__setstate">setstate</A>(ios_base::failbit)</CODE>.</LI>
+</OL>
+
+<P>If the function extracts no elements, it calls
+<CODE>setstate(failbit)</CODE>.
+In any case, it returns <CODE>istr</CODE>.</P>
+
+<P>The remaining functions are analogs to earlier ones, but with
+<A HREF="lib_cpp.html#rvalue_references">rvalue references</A>.</P>
+
+<H2><A NAME="operator+"></A><CODE>operator+</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt; <B>operator+</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt; <B>operator+</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt; <B>operator+</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        Elem right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt; <B>operator+</B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt; <B>operator+</B>(
+        Elem left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B>operator+</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; right); <B>[added with C++11]</B>
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B>operator+</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right); <B>[added with C++11]</B>
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B>operator+</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; right); <B>[added with C++11]</B>
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B>operator+</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; left,
+        const Elem *right); <B>[added with C++11]</B>
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B>operator+</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; left,
+        Elem right); <B>[added with C++11]</B>
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B>operator+</B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; right); <B>[added with C++11]</B>
+template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; <B>operator+</B>(
+        Elem left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp;&amp; right); <B>[added with C++11]</B></PRE>
+
+<P>The functions each overload <CODE>operator+</CODE> to
+concatenate two objects of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A>.
+All effectively return <CODE>basic_string&lt;Elem, Tr,
+Alloc&gt;(left).<A HREF="#basic_string__append">append</A>(right)</CODE>.</P>
+
+<H2><A NAME="operator!2"></A><CODE>operator!=</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator!=</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator!=</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator!=</B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);</PRE>
+
+<P>The template functions each overload <CODE>operator!=</CODE> to compare
+two objects of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A>. All effectively
+return <CODE>basic_string&lt;Elem, Tr,
+Alloc&gt;(left).<A HREF="#basic_string__compare">compare</A>(right) != 0</CODE>.</P>
+
+<H2><A NAME="operator22"></A><CODE>operator==</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator==</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator==</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator==</B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);</PRE>
+
+<P>The template functions each overload <CODE>operator==</CODE> to compare
+two objects of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A>. All effectively
+return <CODE>basic_string&lt;Elem, Tr,
+Alloc&gt;(left).<A HREF="#basic_string__compare">compare</A>(right) == 0</CODE>.</P>
+
+<H2><A NAME="operator&lt;"></A><CODE>operator&lt;</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&lt;</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&lt;</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&lt;</B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);</PRE>
+
+<P>The template functions each overload <CODE>operator&lt;</CODE> to
+compare two objects of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A>. All effectively
+return <CODE>basic_string&lt;Elem, Tr,
+Alloc&gt;(left).<A HREF="#basic_string__compare">compare</A>(right)
+&lt; 0</CODE>.</P>
+
+<H2><A NAME="operator&lt;&lt;"></A><CODE>operator&lt;&lt;</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_ostream&lt;Elem, Tr&gt;&amp; <B>operator&lt;&lt;</B>(
+        basic_ostream&lt;Elem, Tr&gt;&amp; ostr,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; str);</PRE>
+
+<P>The template function overloads <CODE>operator&lt;&lt;</CODE> to
+insert an object <CODE>str</CODE> of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A> into the stream
+<CODE>ostr</CODE> The function effectively returns
+<CODE>ostr.<A HREF="ostream.html#basic_ostream__write">write</A>(
+str.<A HREF="#basic_string__c_str">c_str</A>(),
+str.<A HREF="#basic_string__size">size</A>())</CODE>.</P>
+
+<H2><A NAME="operator&lt;2"></A><CODE>operator&lt;=</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&lt;=</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&lt;=</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&lt;=</B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);</PRE>
+
+<P>The template functions each overload <CODE>operator&lt;=</CODE> to
+compare two objects of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A>. All effectively
+return <CODE>basic_string&lt;Elem, Tr,
+Alloc&gt;(left).<A HREF="#basic_string__compare">compare</A>(right)
+&lt;= 0</CODE>.</P>
+
+<H2><A NAME="operator&gt;"></A><CODE>operator&gt;</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&gt;</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&gt;</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&gt;</B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);</PRE>
+
+<P>The template functions each overload <CODE>operator&gt;</CODE> to
+compare two objects of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A>. All effectively
+return <CODE>basic_string&lt;Elem, Tr,
+Alloc&gt;(left).<A HREF="#basic_string__compare">compare</A>(right)
+&gt; 0</CODE>.</P>
+
+<H2><A NAME="operator&gt;2"></A><CODE>operator&gt;=</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&gt;=</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&gt;=</B>(
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; left,
+        const Elem *right);
+template&lt;class Elem, class Tr, class Alloc&gt;
+    bool <B>operator&gt;=</B>(
+        const Elem *left,
+        const basic_string&lt;Elem, Tr, Alloc&gt;&amp; right);</PRE>
+
+<P>The template functions each overload <CODE>operator&gt;=</CODE> to
+compare two objects of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A>. All effectively
+return <CODE>basic_string&lt;Elem, Tr,
+Alloc&gt;(left).<A HREF="#basic_string__compare">compare</A>(right)
+&gt;= 0</CODE>.</P>
+
+<H2><A NAME="operator&gt;&gt;"></A><CODE>operator&gt;&gt;</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr, class Alloc&gt;
+    basic_istream&lt;Elem, Tr&gt;&amp; <B>operator&gt;&gt;</B>(
+        basic_istream&lt;Elem, Tr&gt;&amp; istr,
+        basic_string&lt;Elem, Tr, Alloc&gt;&amp; str);</PRE>
+
+<P>The template function overloads <CODE>operator&gt;&gt;</CODE> to
+replace the sequence controlled by <CODE>str</CODE> with a sequence of
+elements extracted from the stream <CODE>istr</CODE>. Extraction stops:</P>
+
+<UL>
+<LI>at end of file</LI>
+
+<LI>after the function extracts
+<CODE>istr.<A HREF="ios.html#ios_base__width">width</A>()</CODE>
+elements, if that value is nonzero</LI>
+
+<LI>after the function extracts
+<CODE>istr.<A HREF="#basic_string__max_size">max_size</A>()</CODE>
+elements</LI>
+
+<LI>after the function extracts an element <CODE>ch</CODE> for which
+<CODE><A HREF="ctype.html#isspace">isspace</A>((unsigned char)<A HREF="ios.html#basic_ios__narrow">narrow</A>(ch, '\0'))</CODE>
+is true, in which case the character is put back</LI>
+</UL>
+
+<P>If the function extracts no elements, it calls
+<CODE><A HREF="ios.html#basic_ios__setstate">setstate</A>(ios_base::failbit)</CODE>.
+In any case, it calls <CODE>istr.width(0)</CODE> and
+returns <CODE>*this</CODE>.</P>
+
+<H2><A NAME="stod"></A><CODE>stod</CODE></H2>
+
+<PRE>double <B>stod</B>(const string&amp; str, size_t *pidx = 0); <B>[added with C++11]</B>
+double <B>stod</B>(const wstring&amp; str, size_t *pidx = 0); <B>[added with C++11]</B></PRE>
+
+<P>The function converts the sequence of elements in <CODE>str</CODE>
+to a value <CODE>val</CODE> of type <CODE>double</CODE> as if by calling
+<CODE>strtod(str.c_str(), eptr)</CODE>, where <CODE>eptr</CODE>
+is an object internal to the function.
+If <CODE>str.c_str() == *eptr</CODE> it throws an object of type
+<CODE>invalid_argument</CODE>. If such a call would set <CODE>errno</CODE>,
+it throws an object of type <CODE>out_of_range</CODE>. Otherwise, if
+<CODE>pidx</CODE> is not a null pointer, the function stores
+<CODE>*eptr - str.c_str()</CODE> in <CODE>*pidx</CODE> and
+returns <CODE>val</CODE>.</P>
+
+<H2><A NAME="stof"></A><CODE>stof</CODE></H2>
+
+<PRE>float <B>stof</B>(const string&amp; str, size_t *pidx = 0); <B>[added with C++11]</B>
+float <B>stof</B>(const wstring&amp; str, size_t *pidx = 0); <B>[added with C++11]</B></PRE>
+
+<P>The function converts the sequence of elements in <CODE>str</CODE>
+to a value <CODE>val</CODE> of type <CODE>float</CODE> as if by calling
+<CODE>strtof(str.c_str(), eptr)</CODE>, where <CODE>eptr</CODE>
+is an object internal to the function.
+If <CODE>str.c_str() == *eptr</CODE> it throws an object of type
+<CODE>invalid_argument</CODE>. If such a call would set <CODE>errno</CODE>,
+it throws an object of type <CODE>out_of_range</CODE>. Otherwise, if
+<CODE>pidx</CODE> is not a null pointer, the function stores
+<CODE>*eptr - str.c_str()</CODE> in <CODE>*pidx</CODE> and
+returns <CODE>val</CODE>.</P>
+
+<H2><A NAME="stoi"></A><CODE>stoi</CODE></H2>
+
+<PRE>int <B>stoi</B>(const string&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+int <B>stoi</B>(const wstring&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B></PRE>
+
+<P>The function converts the sequence of elements in <CODE>str</CODE>
+to a value <CODE>val</CODE> of type <CODE>long</CODE> as if by calling
+<CODE>strtol(str.c_str(), eptr, base)</CODE>, where <CODE>eptr</CODE>
+is an object internal to the function.
+If <CODE>str.c_str() == *eptr</CODE> it throws an object of type
+<CODE>invalid_argument</CODE>. If such a call would set <CODE>errno</CODE>,
+of if <CODE>val</CODE> cannot be represented as an object of type <CODE>int</CODE>,
+it throws an object of type <CODE>out_of_range</CODE>. Otherwise, if
+<CODE>pidx</CODE> is not a null pointer, the function stores
+<CODE>*eptr - str.c_str()</CODE> in <CODE>*pidx</CODE> and
+returns <CODE>val</CODE>.</P>
+
+<H2><A NAME="stol"></A><CODE>stol</CODE></H2>
+
+<PRE>long <B>stol</B>(const string&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+long <B>stol</B>(const wstring&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B></PRE>
+
+<P>The function converts the sequence of elements in <CODE>str</CODE>
+to a value <CODE>val</CODE> of type <CODE>long</CODE> as if by calling
+<CODE>strtol(str.c_str(), eptr, base)</CODE>, where <CODE>eptr</CODE>
+is an object internal to the function.
+If <CODE>str.c_str() == *eptr</CODE> it throws an object of type
+<CODE>invalid_argument</CODE>. If such a call would set <CODE>errno</CODE>,
+it throws an object of type <CODE>out_of_range</CODE>. Otherwise, if
+<CODE>pidx</CODE> is not a null pointer, the function stores
+<CODE>*eptr - str.c_str()</CODE> in <CODE>*pidx</CODE> and
+returns <CODE>val</CODE>.</P>
+
+<H2><A NAME="stoll"></A><CODE>stoll</CODE></H2>
+
+<PRE>long long <B>stoll</B>(const string&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+long long <B>stoll</B>(const wstring&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B></PRE>
+
+<P>The function converts the sequence of elements in <CODE>str</CODE>
+to a value <CODE>val</CODE> of type <CODE>long long</CODE> as if by calling
+<CODE>strtoll(str.c_str(), eptr, base)</CODE>, where <CODE>eptr</CODE>
+is an object internal to the function.
+If <CODE>str.c_str() == *eptr</CODE> it throws an object of type
+<CODE>invalid_argument</CODE>. If such a call would set <CODE>errno</CODE>,
+it throws an object of type <CODE>out_of_range</CODE>. Otherwise, if
+<CODE>pidx</CODE> is not a null pointer, the function stores
+<CODE>*eptr - str.c_str()</CODE> in <CODE>*pidx</CODE> and
+returns <CODE>val</CODE>.</P>
+
+<H2><A NAME="stold"></A><CODE>stold</CODE></H2>
+
+<PRE>double <B>stold</B>(const string&amp; str, size_t *pidx = 0); <B>[added with C++11]</B>
+double <B>stold</B>(const wstring&amp; str, size_t *pidx = 0); <B>[added with C++11]</B></PRE>
+
+<P>The function converts the sequence of elements in <CODE>str</CODE>
+to a value <CODE>val</CODE> of type <CODE>long double</CODE> as if by calling
+<CODE>strtold(str.c_str(), eptr)</CODE>, where <CODE>eptr</CODE>
+is an object internal to the function.
+If <CODE>str.c_str() == *eptr</CODE> it throws an object of type
+<CODE>invalid_argument</CODE>. If such a call would set <CODE>errno</CODE>,
+it throws an object of type <CODE>out_of_range</CODE>. Otherwise, if
+<CODE>pidx</CODE> is not a null pointer, the function stores
+<CODE>*eptr - str.c_str()</CODE> in <CODE>*pidx</CODE> and
+returns <CODE>val</CODE>.</P>
+
+<H2><A NAME="stoul"></A><CODE>stoul</CODE></H2>
+
+<PRE>unsigned long <B>stoul</B>(const string&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+unsigned long <B>stoul</B>(const wstring&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B></PRE>
+
+<P>The function converts the sequence of elements in <CODE>str</CODE>
+to a value <CODE>val</CODE> of type <CODE>unsigned long</CODE> as if by calling
+<CODE>strtoul(str.c_str(), eptr, base)</CODE>, where <CODE>eptr</CODE>
+is an object internal to the function.
+If <CODE>str.c_str() == *eptr</CODE> it throws an object of type
+<CODE>invalid_argument</CODE>. If such a call would set <CODE>errno</CODE>,
+it throws an object of type <CODE>out_of_range</CODE>. Otherwise, if
+<CODE>pidx</CODE> is not a null pointer, the function stores
+<CODE>*eptr - str.c_str()</CODE> in <CODE>*pidx</CODE> and
+returns <CODE>val</CODE>.</P>
+
+<H2><A NAME="stoull"></A><CODE>stoull</CODE></H2>
+
+<PRE>unsigned long long <B>stoull</B>(const string&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B>
+unsigned long long <B>stoull</B>(const wstring&amp; str, size_t *pidx = 0,
+    int base = 10); <B>[added with C++11]</B></PRE>
+
+<P>The function converts the sequence of elements in <CODE>str</CODE>
+to a value <CODE>val</CODE> of type <CODE>unsigned long long</CODE> as if by calling
+<CODE>strtoull(str.c_str(), eptr, base)</CODE>, where <CODE>eptr</CODE>
+is an object internal to the function.
+If <CODE>str.c_str() == *eptr</CODE> it throws an object of type
+<CODE>invalid_argument</CODE>. If such a call would set <CODE>errno</CODE>,
+it throws an object of type <CODE>out_of_range</CODE>. Otherwise, if
+<CODE>pidx</CODE> is not a null pointer, the function stores
+<CODE>*eptr - str.c_str()</CODE> in <CODE>*pidx</CODE> and
+returns <CODE>val</CODE>.</P>
+
+<H2><A NAME="string"></A><CODE>string</CODE></H2>
+
+<PRE>typedef basic_string&lt;char&gt; <B>string</B>;</PRE>
+
+<P>The type describes a specialization of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A> specialized for
+elements of type <I>char.</I></P>
+
+<H2><A NAME="swap"></A><CODE>swap</CODE></H2>
+
+<PRE>template&lt;class Tr, class Alloc&gt;
+    void <B>swap</B>(
+        basic_string&amp; left,
+        basic_string&amp; right);</PRE>
+
+<P>The template function executes
+<CODE>left.<A HREF="#basic_string__swap">swap</A>(right)</CODE>.</P>
+
+<H2><A NAME="to_string"></A><CODE>to_string</CODE></H2>
+
+<PRE>string <B>to_string</B>(int val); <B>[added with C++11]</B>
+string <B>to_string</B>(unsigned int val); <B>[added with C++11]</B>
+string <B>to_string</B>(long val); <B>[added with C++11]</B>
+string <B>to_string</B>(unsigned long long val); <B>[added with C++11]</B>
+string <B>to_string</B>(long long val); <B>[added with C++11]</B>
+string <B>to_string</B>(unsigned long long val); <B>[added with C++11]</B>
+string <B>to_string</B>(float val); <B>[added with C++11]</B>
+string <B>to_string</B>(double val); <B>[added with C++11]</B>
+string <B>to_string</B>(long double val); <B>[added with C++11]</B></PRE>
+
+<P>The function converts <CODE>val</CODE> to a sequence of elements
+stored in an array object <CODE>buf</CODE>
+internal to the function as if by calling
+<CODE>sprintf(buf, fmt, val)</CODE>, where <CODE>fmt</CODE>
+is <CODE>"%lld"</CODE> if <CODE>val</CODE> has type <CODE>long long</CODE>,
+<CODE>"%llu"</CODE> if <CODE>val</CODE> has type <CODE>unsigned long long</CODE>, or
+<CODE>"%Lg"</CODE> if <CODE>val</CODE> has type <CODE>long double</CODE>.
+The function returns <CODE>string(buf)</CODE>.</P>
+
+<H2><A NAME="to_wstring"></A><CODE>to_wstring</CODE></H2>
+
+<PRE>wstring <B>to_wstring</B>(int val); <B>[added with C++11]</B>
+wstring <B>to_wstring</B>(unsigned int val); <B>[added with C++11]</B>
+wstring <B>to_wstring</B>(long val); <B>[added with C++11]</B>
+wstring <B>to_wstring</B>(unsigned long long val); <B>[added with C++11]</B>
+wstring <B>to_wstring</B>(long long val); <B>[added with C++11]</B>
+wstring <B>to_wstring</B>(unsigned long long val); <B>[added with C++11]</B>
+wstring <B>to_wstring</B>(float val); <B>[added with C++11]</B>
+wstring <B>to_wstring</B>(double val); <B>[added with C++11]</B>
+wstring <B>to_wstring</B>(long double val); <B>[added with C++11]</B></PRE>
+
+<P>The function converts <CODE>val</CODE> to a sequence of elements
+stored in an array object <CODE>buf</CODE> of size <CODE>len</CODE>
+internal to the function as if by calling
+<CODE>swprintf(buf, len, fmt, val)</CODE>, where <CODE>fmt</CODE>
+is <CODE>L"%lld"</CODE> if <CODE>val</CODE> has type <CODE>long long</CODE>,
+<CODE>L"%llu"</CODE> if <CODE>val</CODE> has type <CODE>unsigned long long</CODE>, or
+<CODE>L"%Lg"</CODE> if <CODE>val</CODE> has type <CODE>long double</CODE>.
+The function returns <CODE>wstring(buf)</CODE>.</P>
+
+<H2><A NAME="u16streampos"></A><CODE>u16streampos</CODE></H2>
+
+<PRE>typedef streampos <B>u16streampos</B>; <B>[added with C++11]</B></PRE>
+
+<P>The type describes <CODE>char_traits&lt;char16_t&gt;::off_type</CODE>.
+It is a synonym for <CODE><A HREF="ios.html#streampos">streampos</A></CODE>.</P>
+
+<H2><A NAME="u16string"></A><CODE>u16string</CODE></H2>
+
+<PRE>typedef basic_string&lt;char16_t&gt; <B>u16string</B>; <B>[added with C++11]</B></PRE>
+
+<P>The type describes a specialization of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A> for
+elements of type <CODE>char16_t</CODE>.</P>
+
+<H2><A NAME="u32streampos"></A><CODE>u32streampos</CODE></H2>
+
+<PRE>typedef streampos <B>u32streampos</B>; <B>[added with C++11]</B></PRE>
+
+<P>The type describes <CODE>char_traits&lt;char32_t&gt;::off_type</CODE>.
+It is a synonym for <CODE><A HREF="ios.html#streampos">streampos</A></CODE>.</P>
+
+<H2><A NAME="u32string"></A><CODE>u32string</CODE></H2>
+
+<PRE>typedef basic_string&lt;char32_t&gt; <B>u32string</B>; <B>[added with C++11]</B></PRE>
+
+<P>The type describes a specialization of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A> for
+elements of type <CODE>char32_t</CODE>.</P>
+
+<H2><A NAME="wstring"></A><CODE>wstring</CODE></H2>
+
+<PRE>typedef basic_string&lt;wchar_t&gt; <B>wstring</B>;</PRE>
+
+<P>The type describes a specialization of template class
+<A HREF="#basic_string"><CODE>basic_string</CODE></A> for
+elements of type <CODE>wchar_t</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

@@ -1,0 +1,897 @@
+<HTML><HEAD>
+<TITLE>&lt;forward_list&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;forward_list&gt;"></A><CODE>&lt;forward_list&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<PRE>namespace std {
+template&lt;class Ty, class Alloc&gt;
+    class <B><A HREF="#forward_list">forward_list</A></B>;
+
+        // TEMPLATE FUNCTIONS
+template&lt;class Ty, class Alloc&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(
+        const forward_list&lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list&lt;Ty, Alloc&gt;&amp; rhs);
+template&lt;class Ty, class Alloc&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(
+        const forward_list&lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list&lt;Ty, Alloc&gt;&amp; rhs);
+template&lt;class Ty, class Alloc&gt;
+    bool <B><A HREF="#operator&lt;">operator&lt;</A></B>(
+        const forward_list&lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list&lt;Ty, Alloc&gt;&amp; rhs);
+template&lt;class Ty, class Alloc&gt;
+    bool <B><A HREF="#operator&gt;">operator&gt;</A></B>(
+        const forward_list&lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list&lt;Ty, Alloc&gt;&amp; rhs);
+template&lt;class Ty, class Alloc&gt;
+    bool <B><A HREF="#operator&lt;2">operator&lt;=</A></B>(
+        const forward_list&lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list&lt;Ty, Alloc&gt;&amp; rhs);
+template&lt;class Ty, class Alloc&gt;
+    bool <B><A HREF="#operator&gt;2">operator&gt;=</A></B>(
+        const forward_list&lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list&lt;Ty, Alloc&gt;&amp; rhs);
+
+template&lt;class Ty, class Alloc&gt;
+    void <B><A HREF="#swap">swap</A></B>(
+        forward_list&lt;Ty, Alloc&gt;&amp; lhs,
+        forward_list&lt;Ty, Alloc&gt;&amp; rhs);
+}  // namespace std</PRE>
+
+<P>Include the <A HREF="index.html#STL">STL</A>
+standard header <B><CODE>&lt;forward_list&gt;</CODE></B> to define the
+<A HREF="lib_cont.html#Containers">container</A>
+template class <CODE>forward_list</CODE> and several supporting
+templates.</P>
+
+<H2><A NAME="forward_list"></A><CODE>forward_list</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#forward_list__allocator_type">allocator_type</A>
+&middot; <A HREF="#forward_list__assign">assign</A>
+&middot; <A HREF="#forward_list__cbefore_begin">cbefore_begin</A>
+&middot; <A HREF="#forward_list__before_begin">before_begin</A>
+&middot; <A HREF="#forward_list__begin">begin</A>
+&middot; <A HREF="#forward_list__cbegin">cbegin</A>
+&middot; <A HREF="#forward_list__cend">cend</A>
+&middot; <A HREF="#forward_list__clear">clear</A>
+&middot; <A HREF="#forward_list__const_iterator">const_iterator</A>
+&middot; <A HREF="#forward_list__const_pointer">const_pointer</A>
+&middot; <A HREF="#forward_list__const_reference">const_reference</A>
+&middot; <A HREF="#forward_list__difference_type">difference_type</A>
+&middot; <A HREF="#forward_list__emplace_after">emplace_after</A>
+&middot; <A HREF="#forward_list__emplace_front">emplace_front</A>
+&middot; <A HREF="#forward_list__empty">empty</A>
+&middot; <A HREF="#forward_list__end">end</A>
+&middot; <A HREF="#forward_list__erase_after">erase_after</A>
+&middot; <A HREF="#forward_list__front">front</A>
+&middot; <A HREF="#forward_list__get_allocator">get_allocator</A>
+&middot; <A HREF="#forward_list__insert_after">insert_after</A>
+&middot; <A HREF="#forward_list__iterator">iterator</A>
+&middot; <A HREF="#forward_list__forward_list">forward_list</A>
+&middot; <A HREF="#forward_list__max_size">max_size</A>
+&middot; <A HREF="#forward_list__merge">merge</A>
+&middot; <A HREF="#forward_list__operator2">operator=</A>
+&middot; <A HREF="#forward_list__pointer">pointer</A>
+&middot; <A HREF="#forward_list__pop_front">pop_front</A>
+&middot; <A HREF="#forward_list__push_front">push_front</A>
+&middot; <A HREF="#forward_list__reference">reference</A>
+&middot; <A HREF="#forward_list__remove">remove</A>
+&middot; <A HREF="#forward_list__remove_if">remove_if</A>
+&middot; <A HREF="#forward_list__resize">resize</A>
+&middot; <A HREF="#forward_list__reverse">reverse</A>
+&middot; <A HREF="#forward_list__size_type">size_type</A>
+&middot; <A HREF="#forward_list__sort">sort</A>
+&middot; <A HREF="#forward_list__splice_after">splice_after</A>
+&middot; <A HREF="#forward_list__swap">swap</A>
+&middot; <A HREF="#forward_list__unique">unique</A>
+&middot; <A HREF="#forward_list__value_type">value_type</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Ty, class Alloc = allocator&lt;Ty&gt; &gt;
+    class <B>forward_list</B> {
+public:
+    typedef Alloc <B><A HREF="#forward_list__allocator_type">allocator_type</A></B>;
+    typedef typename Alloc::pointer <B><A HREF="#forward_list__pointer">pointer</A></B>;
+    typedef typename Alloc::const_pointer
+        <B><A HREF="#forward_list__const_pointer">const_pointer</A></B>;
+    typedef typename Alloc::reference <B><A HREF="#forward_list__reference">reference</A></B>;
+    typedef typename Alloc::const_reference <B><A HREF="#forward_list__const_reference">const_reference</A></B>;
+    typedef typename Alloc::value_type <B><A HREF="#forward_list__value_type">value_type</A></B>;
+    typedef typename Alloc::size_type <B><A HREF="#forward_list__size_type">size_type</A></B>;
+    typedef typename Alloc::difference_type <B><A HREF="#forward_list__difference_type">difference_type</A></B>;
+
+    typedef T0 <B><A HREF="#forward_list__iterator">iterator</A></B>;
+    typedef T1 <B><A HREF="#forward_list__const_iterator">const_iterator</A></B>;
+
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>();
+    explicit <B><A HREF="#forward_list__forward_list">forward_list</A></B>(const Alloc&amp; al);
+
+    explicit <B><A HREF="#forward_list__forward_list">forward_list</A></B>(size_type n);
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>(size_type n, const Ty&amp; val);
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>(size_type n, const Ty&amp; val,
+        const Alloc&amp; al);
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>(const forward_list&amp; right);
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>(const forward_list&amp; right,
+        const Alloc&amp; al);
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>(list&amp;&amp; right);
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>(list&amp;&amp; right,
+        const Alloc&amp; al);
+
+    template&lt;class InIt&gt;
+        <B><A HREF="#forward_list__forward_list">forward_list</A></B>(InIt first, InIt last);
+    template&lt;class InIt&gt;
+        <B><A HREF="#forward_list__forward_list">forward_list</A></B>(InIt first, InIt last,
+            const Alloc&amp; al);
+
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>(initializer_list&lt;Ty&gt; init)
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>(initializer_list&lt;Ty&gt; init,
+        const Alloc&amp; al);
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>(list&amp;&amp; right);
+    <B><A HREF="#forward_list__forward_list">forward_list</A></B>(list&amp;&amp; right,
+        const Alloc&amp; al);
+
+    forward_list&amp; <B><A HREF="#forward_list__operator2">operator=</A></B>(const forward_list&amp; right);
+    forward_list&amp; <B><A HREF="#forward_list__operator2">operator=</A></B>(initializer_list&lt;Ty&gt; init)
+    forward_list&amp; <B><A HREF="#forward_list__operator2">operator=</A></B>(forward_list&amp;&amp; right);
+
+    iterator <B><A HREF="#forward_list__before_begin">before_begin</A></B>() noexcept;
+    const_iterator <B><A HREF="#forward_list__before_begin">before_begin</A></B>() const noexcept;
+    iterator <B><A HREF="#forward_list__begin">begin</A></B>() noexcept;
+    const_iterator <B><A HREF="#forward_list__begin">begin</A></B>() const noexcept;
+    iterator <B><A HREF="#forward_list__end">end</A></B>() noexcept;
+    const_iterator <B><A HREF="#forward_list__end">end</A></B>() const noexcept;
+
+    const_iterator <B><A HREF="#forward_list__cbefore_begin">cbefore_begin</A></B>() const noexcept;
+    const_iterator <B><A HREF="#forward_list__cbegin">cbegin</A></B>() const noexcept;
+    const_iterator <B><A HREF="#forward_list__cend">cend</A></B>() const noexcept;
+
+    void <B><A HREF="#forward_list__resize">resize</A></B>(size_type n);
+    void <B><A HREF="#forward_list__resize">resize</A></B>(size_type n, const Ty&amp; x);
+    size_type <B><A HREF="#forward_list__max_size">max_size</A></B>() const noexcept;
+    bool <B><A HREF="#forward_list__empty">empty</A></B>() const noexcept;
+
+    Alloc <B><A HREF="#forward_list__get_allocator">get_allocator</A></B>() const;
+
+    reference <B><A HREF="#forward_list__front">front</A></B>();
+    const_reference <B><A HREF="#forward_list__front">front</A></B>() const;
+
+    void <B><A HREF="#forward_list__push_front">push_front</A></B>(const Ty&amp; val);
+    void <B><A HREF="#forward_list__push_front">push_front</A></B>(Ty&amp;&amp; val);
+    template&lt;class... Valty&gt;
+        void <B><A HREF="#forward_list__emplace_front">emplace_front</A></B>(Valty&amp;&amp;... val);
+    void <B><A HREF="#forward_list__pop_front">pop_front</A></B>();
+
+    template&lt;class InIt&gt;
+        void <B><A HREF="#forward_list__assign">assign</A></B>(InIt first, InIt last);
+    void <B><A HREF="#forward_list__assign">assign</A></B>(size_type n, const Ty&amp; x);
+    void <B><A HREF="#forward_list__assign">assign</A></B>(initializer_list&lt;Ty&gt; init)
+
+    iterator <B><A HREF="#forward_list__insert_after">insert_after</A></B>(const_iterator where, const Ty&amp; x);
+    iterator <B><A HREF="#forward_list__insert_after">insert_after</A></B>(const_iterator where, size_type n, const Ty&amp; x);
+    template&lt;class InIt&gt;
+        iterator <B><A HREF="#forward_list__insert_after">insert_after</A></B>(const_iterator where, InIt first, InIt last);
+    iterator <B><A HREF="#forward_list__insert_after">insert_after</A></B>(const iterator where,
+        initializer_list&lt;Ty&gt; init)
+    iterator <B><A HREF="#forward_list__insert_after">insert_after</A></B>(const_iterator where, Ty&amp;&amp; x);
+
+    template&lt;class... Valty&gt;
+        iterator <B><A HREF="#forward_list__emplace_after">emplace_after</A></B>(const_iterator where, Valty&amp;&amp;... val);
+
+    iterator <B><A HREF="#forward_list__erase_after">erase_after</A></B>(const_iterator where);
+    iterator <B><A HREF="#forward_list__erase_after">erase_after</A></B>(const_iterator first,
+        const_iterator last);
+    void <B><A HREF="#forward_list__clear">clear</A></B>() noexcept;
+
+    void <B><A HREF="#forward_list__swap">swap</A></B>(forward_list&amp; right);
+
+    void <B><A HREF="#forward_list__splice_after">splice_after</A></B>(const_iterator where,
+        forward_list&amp; x);
+    void <B><A HREF="#forward_list__splice_after">splice_after</A></B>(const_iterator where,
+        forward_list&amp; x, iterator first);
+    void <B><A HREF="#forward_list__splice_after">splice_after</A></B>(const_iterator where,
+        forward_list&amp; x, iterator first, iterator last);
+
+    void <B><A HREF="#forward_list__splice_after">splice_after</A></B>(const_iterator where,
+        forward_list&amp;&amp; x);
+    void <B><A HREF="#forward_list__splice_after">splice_after</A></B>(const_iterator where,
+        forward_list&amp;&amp; x, iterator first);
+    void <B><A HREF="#forward_list__splice_after">splice_after</A></B>(const_iterator where,
+        forward_list&amp;&amp; x, iterator first, iterator last);
+
+    void <B><A HREF="#forward_list__remove">remove</A></B>(const Ty&amp; x);
+    template&lt;class Pred&gt;
+        void <B><A HREF="#forward_list__remove_if">remove_if</A></B>(Pred pr);
+    void <B><A HREF="#forward_list__unique">unique</A></B>();
+    template&lt;class Pred&gt;
+        void <B><A HREF="#forward_list__unique">unique</A></B>(Pred pr);
+
+    void <B><A HREF="#forward_list__merge">merge</A></B>(forward_list&amp; x);
+    template&lt;class Pred&gt;
+        void <B><A HREF="#forward_list__merge">merge</A></B>(forward_list&amp; x, Pred pr);
+
+    void <B><A HREF="#forward_list__merge">merge</A></B>(forward_list&amp;&amp; x);
+    template&lt;class Pred&gt;
+        void <B><A HREF="#forward_list__merge">merge</A></B>(forward_list&amp;&amp; x, Pred pr);
+
+    void <B><A HREF="#forward_list__sort">sort</A></B>();
+    template&lt;class Pred&gt;
+        void <B><A HREF="#forward_list__sort">sort</A></B>(Pred pr);
+    void <B><A HREF="#forward_list__reverse">reverse</A></B>() noexcept;
+    };</PRE>
+
+<P>The template class describes an object that controls a
+varying-length sequence of elements of type <CODE>Ty</CODE>.
+The sequence is stored as a singly linked list of elements,
+each containing a member of type <CODE>Ty</CODE>.</P>
+
+<P>The object allocates and frees storage for the sequence it controls
+through a stored <A HREF="memory.html#allocator_object">allocator object</A>
+of class <CODE>Alloc</CODE>. Such an allocator object must have
+the same external interface as an object of template class
+<A HREF="memory.html#allocator"><CODE>allocator</CODE></A>.</P>
+
+<P><B><A NAME="forward_list_reallocation"></A>List reallocation</B>
+occurs when a member function must insert, erase or splice elements of
+the controlled sequence. In all such cases, only iterators
+or references that designate erased or spliced elements
+of the controlled sequence become
+<B><A NAME="invalid_forward_list_iterators"></A>invalid</B>.</P>
+
+<P>All additions to the controlled sequence occur as if by calls to
+<CODE><A HREF="#forward_list__insert_after">insert_after</A></CODE>, which is the
+only member function that calls the constructor
+<CODE>Ty(const Ty&amp;)</CODE>. If such an expression throws
+an exception, the container object inserts no new elements and rethrows
+the exception. Thus, an object of template class <CODE>forward_list</CODE>
+is left in a known state when such exceptions occur.</P>
+
+<H3><CODE><A NAME="forward_list__allocator_type"></A>forward_list::allocator_type</CODE></H3>
+
+<PRE>typedef Alloc <B>allocator_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Alloc</CODE>.</P>
+
+<H3><CODE><A NAME="forward_list__assign"></A>forward_list::assign</CODE></H3>
+
+<PRE>template&lt;class InIt&gt;
+    void <B>assign</B>(InIt first, InIt last);
+void <B>assign</B>(size_type n, const Ty&amp; x);
+void <B>assign</B>(initializer_list&lt;Ty&gt; init)</PRE>
+
+<P>If <CODE>InIt</CODE> is an iterator type,
+the first member function replaces the sequence
+controlled by <CODE>*this</CODE> with the sequence
+<CODE>[first, last)</CODE>, which must <I>not</I> overlap
+the initial controlled sequence.
+Otherwise, it does not participate in overload resolution.</P>
+
+<P>The second member function replaces the sequence
+controlled by <CODE>*this</CODE> with a repetition of <CODE>n</CODE>
+elements of value <CODE>x</CODE>.</P>
+
+<P>The third member function replaces the controlled sequence
+from an object of class
+<CODE><B><A HREF="lib_cpp.html#initializer_list">initializer_list</A></B>&lt;Ty&gt;</CODE>.</P>
+
+<H3><CODE><A NAME="forward_list__before_begin"></A>forward_list::before_begin</CODE></H3>
+
+<PRE>const_iterator <B>before_begin</B>() const noexcept;
+iterator <B>before_begin</B>() noexcept;</PRE>
+
+<P>The member function returns a forward iterator that points just before
+the first element of the sequence (or just before the end of an empty
+sequence).</P>
+
+<H3><CODE><A NAME="forward_list__begin"></A>forward_list::begin</CODE></H3>
+
+<PRE>const_iterator <B>begin</B>() const noexcept;
+iterator <B>begin</B>() noexcept;</PRE>
+
+<P>The member function returns a forward iterator that points at
+the first element of the sequence (or just beyond the end of an empty
+sequence).</P>
+
+<H3><CODE><A NAME="forward_list__cbefore_begin"></A>forward_list::cbefore_begin</CODE></H3>
+
+<PRE>const_iterator <B>cbefore_begin</B>() const noexcept;</PRE>
+
+<P>The member function returns a forward iterator that points just before
+the first element of the sequence (or just before the end of an empty
+sequence).</P>
+
+<H3><CODE><A NAME="forward_list__cbegin"></A>forward_list::cbegin</CODE></H3>
+
+<PRE>const_iterator <B>cbegin</B>() const noexcept;</PRE>
+
+<P>The member functions return a forward iterator that points at the
+first element of the sequence (or just beyond the end of an empty sequence).</P>
+
+<H3><CODE><A NAME="forward_list__cend"></A>forward_list::cend</CODE></H3>
+
+<PRE>const_iterator <B>cend</B>() const noexcept;</PRE>
+
+<P>The member functions return a forward iterator that points just
+beyond the end of the sequence.</P>
+
+<H3><CODE><A NAME="forward_list__clear"></A>forward_list::clear</CODE></H3>
+
+<PRE>void <B>clear</B>() noexcept;</PRE>
+
+<P>The member function calls
+<CODE><A HREF="#forward_list__erase_after">erase_after</A>(
+<A HREF="#forward_list__before_begin">before_begin</A>(),
+<A HREF="#forward_list__end">end</A>())</CODE>.</P>
+
+<H3><CODE><A NAME="forward_list__const_iterator"></A>forward_list::const_iterator</CODE></H3>
+
+<PRE>typedef T1 <B>const_iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant
+forward iterator for the controlled sequence.
+It is described here as a
+synonym for the implementation-defined type <CODE>T1</CODE>.</P>
+
+<H3><CODE><A NAME="forward_list__const_pointer"></A>forward_list::const_pointer</CODE></H3>
+
+<PRE>typedef typename Alloc::const_pointer
+    <B>const_pointer</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant pointer
+to an element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="forward_list__const_reference"></A>forward_list::const_reference</CODE></H3>
+
+<PRE>typedef typename Alloc::const_reference <B>const_reference</B>;</PRE>
+
+<P>The type describes an object that can serve as a constant reference
+to an element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="forward_list__difference_type"></A>forward_list::difference_type</CODE></H3>
+
+<PRE>typedef typename Alloc::difference_type <B>difference_type</B>;</PRE>
+
+<P>The signed integer type describes an object that can represent the
+difference between the addresses of any two elements in the controlled
+sequence.</P>
+
+<H3><CODE><A NAME="forward_list__emplace_after"></A>forward_list::emplace_after</CODE></H3>
+
+<PRE>template&lt;class... Valty&gt;
+    iterator <B>emplace_after</B>(const_iterator where, Valty&amp;&amp;... val);</PRE>
+
+<P>The member function effectively returns
+<CODE><A HREF="#forward_list__insert_after">insert_after</A>(where, value_type(forward&lt;Valty&gt;(val)...))</CODE>,
+except that the element value is constructed in place.</P>
+
+<H3><CODE><A NAME="forward_list__emplace_front"></A>forward_list::emplace_front</CODE></H3>
+
+<PRE>template&lt;class... Valty&gt;
+    void <B>emplace_front</B>(Valty&amp;&amp;... val);</PRE>
+
+<P>The member function effectively returns
+<CODE><A HREF="#forward_list__insert_after">insert_after</A>(before_begin(), value_type(forward&lt;Valty&gt;(val)...))</CODE>,
+except that the element value is constructed in place.</P>
+
+<P>If an exception is thrown, the container is left unaltered
+and the exception is rethrown.</P>
+
+<H3><CODE><A NAME="forward_list__empty"></A>forward_list::empty</CODE></H3>
+
+<PRE>bool <B>empty</B>() const noexcept;</PRE>
+
+<P>The member function returns true for an empty controlled sequence.</P>
+
+<H3><CODE><A NAME="forward_list__end"></A>forward_list::end</CODE></H3>
+
+<PRE>const_iterator <B>end</B>() const noexcept;
+iterator <B>end</B>() noexcept;</PRE>
+
+<P>The member function returns a forward iterator that points
+just beyond the end of the sequence.</P>
+
+<H3><CODE><A NAME="forward_list__erase_after"></A>forward_list::erase_after</CODE></H3>
+
+<PRE>iterator <B>erase_after</B>(const_iterator where);
+iterator <B>erase_after</B>(const_iterator first,
+    const_iterator last);</PRE>
+
+<P>The first member function removes the element of the controlled
+sequence just after <CODE>where</CODE>. The second member function
+removes the elements of the controlled sequence
+in the range <CODE>(first, last)</CODE> (neither end point is included).
+Both return an iterator that designates the first element remaining
+beyond any elements removed, or
+<CODE><A HREF="#forward_list__end">end</A>()</CODE> if no such element exists.</P>
+
+<P>Erasing <CODE>N</CODE> elements causes
+<CODE>N</CODE> destructor calls.
+<A HREF="#forward_list_reallocation">Reallocation</A> occurs,
+so iterators and references become
+<A HREF="#invalid_forward_list_iterators">invalid</A> for the erased
+elements.</P>
+
+<P>The member functions throws nothing.</P>
+
+<H3><CODE><A NAME="forward_list__forward_list"></A>forward_list::forward_list</CODE></H3>
+
+<PRE><B>forward_list</B>();
+explicit <B>forward_list</B>(const Alloc&amp; al);
+
+explicit <B>forward_list</B>(size_type n);
+<B>forward_list</B>(size_type n, const Ty&amp; val);
+<B>forward_list</B>(size_type n, const Ty&amp; val,
+    const Alloc&amp; al);
+
+<B>forward_list</B>(const forward_list&amp; right);
+<B>forward_list</B>(const forward_list&amp; right,
+    const Alloc&amp; al);
+<B>forward_list</B>(forward_list&amp;&amp; right);
+<B>forward_list</B>(forward_list&amp;&amp; right,
+    const Alloc&amp; al);
+
+template&lt;class InIt&gt;
+    <B>forward_list</B>(InIt first, InIt last);
+template&lt;class InIt&gt;
+    <B>forward_list</B>(InIt first, InIt last, const Alloc&amp; al);
+
+<B>forward_list</B>(initializer_list&lt;Ty&gt; init)
+<B>forward_list</B>(initializer_list&lt;Ty&gt; init,
+    const Alloc&amp; al);</PRE>
+
+<P>All constructors store an
+<A HREF="memory.html#allocator_object">allocator object</A> and
+initialize the controlled sequence. The allocator object is the argument
+<CODE>al</CODE>, if present. Otherwise, for the copy and move constructors, it is
+<CODE>right.<A HREF="#forward_list__get_allocator">get_allocator</A>()</CODE>.
+Otherwise, it is <CODE>Alloc()</CODE>.</P>
+
+<P>The first two constructors specify an
+empty initial controlled sequence.</P>
+
+<P>The next three constructors specify
+a repetition of <CODE>count</CODE> elements of value <CODE>val</CODE>,
+if specified. Otherwise the repeated value is <CODE>Ty()</CODE>.</P>
+
+<P>The next four constructors specify
+a copy of the sequence controlled by <CODE>right</CODE>.
+The last two of these constructors are the same as the first two, but with an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<P>If <CODE>InIt</CODE> is an iterator type,
+the next two constructors specify the sequence
+<CODE>[first, last)</CODE>.
+Otherwise, they do not participate in overload resolution.</P>
+
+<P>The last two constructors specify the initial controlled sequence
+with an object of class
+<CODE><B><A HREF="lib_cpp.html#initializer_list">initializer_list</A></B>&lt;Ty&gt;</CODE>.</P>
+
+<H3><CODE><A NAME="forward_list__front"></A>forward_list::front</CODE></H3>
+
+<PRE>reference <B>front</B>();
+const_reference <B>front</B>() const;</PRE>
+
+<P>The member function returns a reference to the first element of the
+controlled sequence, which must be non-empty.</P>
+
+<H3><CODE><A NAME="forward_list__get_allocator"></A>forward_list::get_allocator</CODE></H3>
+
+<PRE>Alloc <B>get_allocator</B>() const;</PRE>
+
+<P>The member function returns the stored
+<A HREF="memory.html#allocator_object">allocator object</A>.</P>
+
+<H3><CODE><A NAME="forward_list__insert_after"></A>forward_list::insert_after</CODE></H3>
+
+<PRE>iterator <B>insert_after</B>(const_iterator where, const Ty&amp; x);
+iterator <B>insert_after</B>(const_iterator where, size_type n, const Ty&amp; x);
+template&lt;class InIt&gt;
+    iterator <B>insert_after</B>(const_iterator where, InIt first, InIt last);
+itereator <B>insert_after</B>(const iterator where,
+    initializer_list&lt;Ty&gt; init)
+iterator <B>insert_after</B>(const_iterator where, Ty&amp;&amp; x);</PRE>
+
+<P>Each of the member functions inserts, just after the element pointed to
+by <CODE>where</CODE> in the controlled sequence, a sequence
+specified by the remaining operands, and returns an iterator that
+designates the last inserted element.
+The first member function inserts
+a single element with value <CODE>x</CODE>. The second member function
+inserts a repetition of <CODE>n</CODE> elements of value <CODE>x</CODE>.</P>
+
+<P>If <CODE>InIt</CODE> is an iterator type,
+the third member function inserts the sequence
+<CODE>[first, last)</CODE>, which must <I>not</I> overlap
+the initial controlled sequence.
+Otherwise, it does not participate in overload resolution.</P>
+
+<P>The fourth member function inserts the sequence
+specified by an object of class
+<CODE><B><A HREF="lib_cpp.html#initializer_list">initializer_list</A></B>&lt;Ty&gt;</CODE>.</P>
+
+<P>The last member function is the same as the first, but with an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<P>Inserting <CODE>N</CODE> elements causes <CODE>N</CODE>
+constructor calls.
+<A HREF="#forward_list_reallocation">Reallocation</A> occurs,
+but no iterators or references become
+<A HREF="#invalid_forward_list_iterators">invalid</A>.</P>
+
+<P>If an exception is thrown during the
+insertion of one or more elements, the container is left unaltered
+and the exception is rethrown.</P>
+
+<H3><CODE><A NAME="forward_list__iterator"></A>forward_list::iterator</CODE></H3>
+
+<PRE>typedef T0 <B>iterator</B>;</PRE>
+
+<P>The type describes an object that can serve as a forward
+iterator for the controlled sequence.
+It is described here as a
+synonym for the implementation-defined type <CODE>T0</CODE>.</P>
+
+<H3><CODE><A NAME="forward_list__max_size"></A>forward_list::max_size</CODE></H3>
+
+<PRE>size_type <B>max_size</B>() const noexcept;</PRE>
+
+<P>The member function returns the length of the longest sequence that
+the object can control.</P>
+
+<H3><CODE><A NAME="forward_list__merge"></A>forward_list::merge</CODE></H3>
+
+<PRE>void <B>merge</B>(forward_list&amp; x);
+template&lt;class Pred&gt;
+    void <B>merge</B>(forward_list&amp; x, Pred pr);
+
+void <B>merge</B>(forward_list&amp;&amp; x);
+template&lt;class Pred&gt;
+    void <B>merge</B>(forward_list&amp;&amp; x, Pred pr);</PRE>
+
+<P>The first two member functions remove all elements from the sequence
+controlled by <CODE>x</CODE> and insert them in the controlled
+sequence. Both sequences must be
+<A HREF="lib_stl.html#sequence_ordering">ordered by</A> the same predicate,
+described below. The resulting sequence is also ordered by that
+predicate.</P>
+
+<P>The last two member functions are the same as the first, but with
+<A HREF="lib_cpp.html#rvalue_references">rvalue references</A>.</P>
+
+<P>For the iterators <CODE>Pi</CODE> and <CODE>Pj</CODE>
+designating elements at positions <CODE>i</CODE>
+and <CODE>j</CODE>, the first member function imposes the
+order <CODE>!(*Pj &lt; *Pi)</CODE> whenever <CODE>i &lt; j</CODE>.
+(The elements are sorted in <I>ascending</I> order.)
+The second member function imposes the order
+<CODE>!pr(*Pj, *Pi)</CODE> whenever <CODE>i &lt; j</CODE>.</P>
+
+<P>No pairs of elements in the original controlled sequence
+are reversed in the resulting controlled sequence. If a pair
+of elements in the resulting controlled sequence compares equal
+(<CODE>!(*Pi &lt; *Pj) &amp;&amp; !(*Pj &lt; *Pi)</CODE>),
+an element from the original controlled sequence appears before
+an element from the sequence controlled by <CODE>x</CODE>.</P>
+
+
+<P>An exception occurs only if <CODE>pr</CODE> throws an exception.
+In that case, the controlled sequence is left in unspecified order
+and the exception is rethrown.</P>
+
+<H3><CODE><A NAME="forward_list__operator2"></A>forward_list::operator=</CODE></H3>
+
+<PRE>forward_list&amp; <B>operator=</B>(const forward_list&amp; right);
+forward_list&amp; <B>operator=</B>(initializer_list&lt;Ty&gt; init)
+forward_list&amp; <B>operator=</B>(forward_list&amp;&amp; right);</PRE>
+
+<P>The first member operator replaces the controlled sequence
+with a copy of the sequence controlled by <CODE>right</CODE>.</P>
+
+<P>The second member operator replaces the controlled sequence
+from an object of class
+<CODE><B><A HREF="lib_cpp.html#initializer_list">initializer_list</A></B>&lt;Ty&gt;</CODE>.</P>
+
+<P>The third member operator is the same as the first, but with an
+<A HREF="lib_cpp.html#rvalue_references">rvalue reference</A>.</P>
+
+<H3><CODE><A NAME="forward_list__pointer"></A>forward_list::pointer</CODE></H3>
+
+<PRE>typedef typename Alloc::pointer <B>pointer</B>;</PRE>
+
+<P>The type describes an object that can serve as a pointer to an
+element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="forward_list__pop_front"></A>forward_list::pop_front</CODE></H3>
+
+<PRE>void <B>pop_front</B>();</PRE>
+
+<P>The member function removes the first element of the
+controlled sequence, which must be non-empty.</P>
+
+<P>The member function never throws an exception.</P>
+
+<H3><CODE><A NAME="forward_list__push_front"></A>forward_list::push_front</CODE></H3>
+
+<PRE>void <B>push_front</B>(const Ty&amp; val);
+void <B>push_front</B>(Ty&amp;&amp; val);</PRE>
+
+<P>The member function inserts an element with value <CODE>val</CODE>
+at the beginning of the controlled sequence.</P>
+
+<P>If an exception is thrown, the container is left unaltered
+and the exception is rethrown.</P>
+
+<H3><CODE><A NAME="forward_list__reference"></A>forward_list::reference</CODE></H3>
+
+<PRE>typedef typename Alloc::reference <B>reference</B>;</PRE>
+
+<P>The type describes an object that can serve as a reference to an
+element of the controlled sequence.</P>
+
+<H3><CODE><A NAME="forward_list__remove"></A>forward_list::remove</CODE></H3>
+
+<PRE>void <B>remove</B>(const Ty&amp; x);</PRE>
+
+<P>The member function removes from the controlled sequence
+all elements, designated by the iterator <CODE>P</CODE>, for which
+<CODE>*P == x</CODE>.</P>
+
+<P>The member function never throws an exception.</P>
+
+<H3><CODE><A NAME="forward_list__remove_if"></A>forward_list::remove_if</CODE></H3>
+
+<PRE>template&lt;class Pred&gt;
+    void <B>remove_if</B>(Pred pr);</PRE>
+
+<P>The member function removes from the controlled sequence
+all elements, designated by the iterator <CODE>P</CODE>, for which
+<CODE>pr(*P)</CODE> is true.</P>
+
+
+<P>An exception occurs only if <CODE>pr</CODE> throws an exception.
+In that case, the controlled sequence is left in an unspecified state
+and the exception is rethrown.</P>
+
+<H3><CODE><A NAME="forward_list__resize"></A>forward_list::resize</CODE></H3>
+
+<PRE>void <B>resize</B>(size_type n);
+void <B>resize</B>(size_type n, const Ty&amp; x);</PRE>
+
+<P>The member functions both ensure that the number of elements in the list
+henceforth is <CODE>n</CODE>. If it must make the controlled sequence longer,
+the first member function
+appends elements with value <CODE>T()</CODE>, while the second member function
+appends elements with value <CODE>x</CODE>.
+To make the controlled sequence shorter, both member functions effectively call
+<CODE><A HREF="#forward_list__erase_after">erase_after</A>(begin() + n - 1, end())</CODE>.</P>
+
+<H3><CODE><A NAME="forward_list__reverse"></A>forward_list::reverse</CODE></H3>
+
+<PRE>void <B>reverse</B>() noexcept;</PRE>
+
+<P>The member function reverses the order in which elements appear
+in the controlled sequence.</P>
+
+<H3><CODE><A NAME="forward_list__size_type"></A>forward_list::size_type</CODE></H3>
+
+<PRE>typedef typename Alloc::size_type <B>size_type</B>;</PRE>
+
+<P>The unsigned integer type describes an object that can represent the
+length of any controlled sequence.</P>
+
+<H3><CODE><A NAME="forward_list__sort"></A>forward_list::sort</CODE></H3>
+
+<PRE>void <B>sort</B>();
+template&lt;class Pred&gt;
+    void <B>sort</B>(Pred pr);</PRE>
+
+<P>Both member functions order the elements in the controlled
+sequence by a predicate, described below.</P>
+
+<P>For the iterators <CODE>Pi</CODE> and <CODE>Pj</CODE>
+designating elements at positions <CODE>i</CODE>
+and <CODE>j</CODE>, the first member function imposes the
+order <CODE>!(*Pj &lt; *Pi)</CODE> whenever <CODE>i &lt; j</CODE>.
+(The elements are sorted in <I>ascending</I> order.)
+The member template function imposes the order
+<CODE>!pr(*Pj, *Pi)</CODE> whenever <CODE>i &lt; j</CODE>.
+No ordered pairs of elements in the original controlled sequence
+are reversed in the resulting controlled sequence.
+(The sort is stable.)</P>
+
+
+<P>An exception occurs only if <CODE>pr</CODE> throws an exception.
+In that case, the controlled sequence is left in unspecified order
+and the exception is rethrown.</P>
+
+<H3><CODE><A NAME="forward_list__splice_after"></A>forward_list::splice_after</CODE></H3>
+
+<PRE>void <B>splice_after</B>(const_iterator where,
+    forward_list&amp; x);
+void <B>splice_after</B>(const_iterator where,
+    forward_list&amp; x, iterator first);
+void <B>splice_after</B>(const_iterator where,
+    forward_list&amp; x, iterator first, iterator last);
+
+void <B>splice_after</B>(const_iterator where,
+    forward_list&amp;&amp; x);
+void <B>splice_after</B>(const_iterator where,
+    forward_list&amp;&amp; x, iterator first);
+void <B>splice_after</B>(const_iterator where,
+    forward_list&amp;&amp; x, iterator first, iterator last);</PRE>
+
+<P>The first member function inserts the sequence controlled
+by <CODE>x</CODE> just after the element in the controlled sequence
+pointed to by <CODE>where</CODE>. It also removes all elements from
+<CODE>x</CODE>. (<CODE>&amp;x</CODE> must not equal <CODE>this</CODE>.)</P>
+
+<P>The second member function removes the element just after
+<CODE>first</CODE> in the sequence controlled by <CODE>x</CODE> and
+inserts it just after the element in the controlled sequence
+pointed to by <CODE>where</CODE>. (If <CODE>where == first || where == ++first</CODE>,
+no change occurs.)</P>
+
+<P>The third member function inserts the subrange
+designated by <CODE>(first, last)</CODE> from the sequence
+controlled by <CODE>x</CODE>
+just after the element in the controlled sequence pointed to by <CODE>where</CODE>.
+It also removes the original subrange from the sequence controlled
+by <CODE>x</CODE>. (If <CODE>&amp;x == this</CODE>,
+the range <CODE>(first, last)</CODE> must not include the element
+pointed to by <CODE>where</CODE>.)</P>
+
+<P>If the third member function inserts
+<CODE>N</CODE> elements, and <CODE>&amp;x != this</CODE>, an object of class
+<CODE><A HREF="#forward_list__iterator">iterator</A></CODE> is
+incremented <CODE>N</CODE> times.
+For all <CODE>splice_after</CODE> member functions, if
+<CODE><A HREF="#forward_list__get_allocator">get_allocator</A>()
+== str.get_allocator()</CODE>, no exception occurs.
+Otherwise, a copy and a destructor call also
+occur for each inserted element.</P>
+
+<P>The last three member functions are the same as the first, but with
+<A HREF="lib_cpp.html#rvalue_references">rvalue references</A>.</P>
+
+<P>No iterators or references that designate spliced elements become
+<B><A HREF="#invalid_forward_list_iterators">invalid</A></B>.</P>
+
+<P>The member functions throw nothing.</P>
+
+<H3><CODE><A NAME="forward_list__swap"></A>forward_list::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(forward_list&amp; right);</PRE>
+
+<P>The member function swaps the controlled sequences between
+<CODE>*this</CODE> and <CODE>right</CODE>. If
+<CODE><A HREF="#forward_list__get_allocator">get_allocator</A>()
+== right.get_allocator()</CODE>, it does so in constant time,
+it throws no exceptions, and it invalidates no references, pointers,
+or iterators that designate elements in the two controlled sequences.
+Otherwise, it performs a number of element assignments and constructor calls
+proportional to the number of elements in the two controlled sequences.</P>
+
+<H3><CODE><A NAME="forward_list__unique"></A>forward_list::unique</CODE></H3>
+
+<PRE>void <B>unique</B>();
+template&lt;class Pred&gt;
+    void <B><A HREF="#forward_list__unique">unique</A></B>(Pred pr);</PRE>
+
+<P>The first member function removes from the controlled sequence
+every element that compares equal to its preceding element.
+For the iterators <CODE>Pi</CODE> and <CODE>Pj</CODE>
+designating elements at positions <CODE>i</CODE>
+and <CODE>j</CODE>, the second member function removes every
+element for which <CODE>i + 1 == j &amp;&amp; pr(*Pi, *Pj)</CODE>.</P>
+
+
+<P>For a controlled sequence of length <CODE>N</CODE>
+(&gt; 0), the predicate <CODE>pr(*Pi, *Pj)</CODE>
+is evaluated <CODE>N - 1</CODE> times.</P>
+
+<P>An exception occurs only if <CODE>pr</CODE> throws an exception.
+In that case, the controlled sequence is left in an unspecified state
+and the exception is rethrown.</P>
+
+<H3><CODE><A NAME="forward_list__value_type"></A>forward_list::value_type</CODE></H3>
+
+<PRE>typedef typename Alloc::value_type <B>value_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Ty</CODE>.</P>
+
+<H2><A NAME="operator!2"></A><CODE>operator!=</CODE></H2>
+
+<PRE>template&lt;class Ty, class Alloc&gt;
+    bool <B>operator!=</B>(
+        const forward_list &lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list &lt;Ty, Alloc&gt;&amp; rhs);</PRE>
+
+<P>The template function returns <CODE>!(lhs == rhs)</CODE>.</P>
+
+<H2><A NAME="operator22"></A><CODE>operator==</CODE></H2>
+
+<PRE>template&lt;class Ty, class Alloc&gt;
+    bool <B>operator==</B>(
+        const forward_list &lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list &lt;Ty, Alloc&gt;&amp; rhs);</PRE>
+
+<P>The template function overloads <CODE>operator==</CODE> to compare
+two objects of template class
+<A HREF="#forward_list"><CODE>forward_list</CODE></A>. The function returns
+<CODE><A HREF="iterator.html#distance">distance</A>(
+lhs.<A HREF="#forward_list__begin">begin</A>(),
+<A HREF="#forward_list__end">end</A>()) ==
+distance(rhs.begin(), rhs.end()) &amp;&amp;
+<A HREF="algorith.html#equal">equal</A>(lhs.
+<A HREF="#forward_list__begin">begin</A>(), lhs.
+<A HREF="#forward_list__end">end</A>(), rhs.begin())</CODE>.</P>
+
+<H2><A NAME="operator&lt;"></A><CODE>operator&lt;</CODE></H2>
+
+<PRE>template&lt;class Ty, class Alloc&gt;
+    bool <B>operator&lt;</B>(
+        const forward_list &lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list &lt;Ty, Alloc&gt;&amp; rhs);</PRE>
+
+<P>The template function overloads <CODE>operator&lt;</CODE> to compare
+two objects of template class
+<A HREF="#forward_list"><CODE>forward_list</CODE></A>. The function returns
+<CODE><A HREF="algorith.html#lexicographical_compare">lexicographical_compare</A>(lhs.
+<A HREF="#forward_list__begin">begin</A>(), lhs.
+<A HREF="#forward_list__end">end</A>(), rhs.begin(), rhs.end())</CODE>.</P>
+
+<H2><A NAME="operator&lt;2"></A><CODE>operator&lt;=</CODE></H2>
+
+<PRE>template&lt;class Ty, class Alloc&gt;
+    bool <B>operator&lt;=</B>(
+        const forward_list &lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list &lt;Ty, Alloc&gt;&amp; rhs);</PRE>
+
+<P>The template function returns <CODE>!(rhs &lt; lhs)</CODE>.</P>
+
+<H2><A NAME="operator&gt;"></A><CODE>operator&gt;</CODE></H2>
+
+<PRE>template&lt;class Ty, class Alloc&gt;
+    bool <B>operator&gt;</B>(
+        const forward_list &lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list &lt;Ty, Alloc&gt;&amp; rhs);</PRE>
+
+<P>The template function returns <CODE>rhs &lt; lhs</CODE>.</P>
+
+<H2><A NAME="operator&gt;2"></A><CODE>operator&gt;=</CODE></H2>
+
+<PRE>template&lt;class Ty, class Alloc&gt;
+    bool <B>operator&gt;=</B>(
+        const forward_list &lt;Ty, Alloc&gt;&amp; lhs,
+        const forward_list &lt;Ty, Alloc&gt;&amp; rhs);</PRE>
+
+<P>The template function returns <CODE>!(lhs &lt; rhs)</CODE>.</P>
+
+<H2><A NAME="swap"></A><CODE>swap</CODE></H2>
+
+<PRE>template&lt;class Ty, class Alloc&gt;
+    void <B>swap</B>(
+        forward_list &lt;Ty, Alloc&gt;&amp; lhs,
+        forward_list &lt;Ty, Alloc&gt;&amp; rhs);</PRE>
+
+<P>The template function executes
+<CODE>lhs.<A HREF="#forward_list__swap">swap</A>(rhs)</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

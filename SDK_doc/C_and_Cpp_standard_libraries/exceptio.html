@@ -1,0 +1,316 @@
+<HTML><HEAD>
+<TITLE>&lt;exception&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;exception&gt;"></A><CODE>&lt;exception&gt;</CODE></H1><HR>
+
+<P>Include the standard header <B><CODE>&lt;exception&gt;</CODE></B>
+to define several types and functions related to the handling
+of exceptions.</P>
+
+<PRE>namespace std {
+class <B><A HREF="#exception">exception</A></B>;
+class <B><A HREF="#bad_exception">bad_exception</A></B>;
+
+typedef T1 <B><A HREF="#exception_ptr">exception_ptr</A></B>; <B>[added with C++11]</B>
+class <B><A HREF="#nested_exception">nested_exception</A></B>; <B>[added with C++11]</B>
+
+        // FUNCTIONS
+typedef void (*<B><A HREF="#terminate_handler_type">terminate_handler</A></B>)();
+typedef void (*<B><A HREF="#unexpected_handler_type">unexpected_handler</A></B>)(); <B>[deprecated with C++11]</B>
+terminate_handler
+    <B><A HREF="#get_terminate">get_terminate</A></B>() noexcept; <B>[added with C++11]</B>
+terminate_handler
+    <B><A HREF="#set_terminate">set_terminate</A></B>(terminate_handler pnew) throw();
+unexpected_handler
+    <B><A HREF="#get_unexpected">get_unexpected</A></B>() noexcept; <B>[added with C++11]</B>
+unexpected_handler
+    <B><A HREF="#set_unexpected">set_unexpected</A></B>(unexpected_handler pnew) throw(); <B>[deprecated with C++11]</B>
+void <B><A HREF="#terminate">terminate</A></B>() noexcept; <B>[does not return]</B>
+void <B><A HREF="#unexpected">unexpected</A></B>(); <B>[does not return]</B> <B>[deprecated with C++11]</B>
+bool <B><A HREF="#uncaught_exception">uncaught_exception</A></B>() throw();
+
+exception_ptr <B><A HREF="#current_exception">current_exception</A></B>() noexcept; <B>[added with C++11]</B>
+void <B><A HREF="#rethrow_exception">rethrow_exception</A></B>(exception_ptr ptr); <B>[does not return]</B> <B>[added with C++11]</B>
+template&lt;class Ex&gt;
+	exception_ptr <B><A HREF="#make_exception_ptr">make_exception_ptr</A></B>(Ex ex) noexcept; <B>[added with C++11]</B>
+template&lt;class Ex&gt;
+	void <B><A HREF="#rethrow_if_nested">rethrow_if_nested</A></B>(const Ex&amp; ex); <B>[added with C++11]</B>
+template&lt;class Ty&gt;
+	void <B><A HREF="#throw_with_nested">throw_with_nested</A></B>(Ty&amp;&amp; val); <B>[does not return]</B> <B>[added with C++11]</B>
+}  // namespace std</PRE>
+
+<H2><A NAME="bad_exception"></A><CODE>bad_exception</CODE></H2>
+
+<PRE>class <B>bad_exception</B>
+    : public <A HREF="#exception">exception</A> {
+    };</PRE>
+
+<P>The class describes an exception that can be thrown from an
+<A HREF="#unexpected_handler">unexpected handler</A>.
+The value returned by
+<CODE><A HREF="#exception__what">what</A>()</CODE>
+is an implementation-defined
+<A HREF="lib_over.html#C_string">C string</A>.
+None of the member functions throw any exceptions.</P>
+
+<H2><A NAME="exception"></A><CODE>exception</CODE></H2>
+
+<PRE>class <B>exception</B> {
+public:
+    <B>exception</B>() throw();
+    <B>exception</B>(const exception&amp; right) throw();
+    exception&amp; <B>operator=</B>(const exception&amp; right) throw();
+    virtual <B>~exception</B>() throw();
+    virtual const char *<B>what</B>() const throw();
+    };</PRE>
+
+<P>The class serves as the base class for all exceptions thrown
+by certain expressions and by the Standard C++ library. The
+<A HREF="lib_over.html#C_string">C string</A> value returned by
+<B><CODE><A NAME="exception__what"></A>what()</CODE></B>
+is left unspecified by the default constructor,
+but may be defined by the constructors for certain derived classes
+as an implementation-defined
+<A HREF="lib_over.html#C_string">C string</A>.
+A copy of an <CODE>exception</CODE> returns a C string from <CODE>what</CODE>
+that compares equal to the original.</P>
+
+<P>None of the member functions throw any exceptions.</P>
+
+<H2><A NAME="current_exception"></A><CODE>current_exception</CODE></H2>
+
+<PRE>exception_ptr <B>current_exception</B>() noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The function returns an
+<A HREF="#exception_pointer">exception pointer</A> that designates
+the current thrown exception, or a null exception pointer if no such
+exception exists.</P>
+
+<H2><A NAME="exception_ptr"></A><CODE>exception_ptr</CODE></H2>
+
+<PRE>typedef T1 <B>exception_ptr</B>; <B>[added with C++11]</B></PRE>
+
+<P>The typedef is a synonym for the unspecified type <CODE>T1</CODE>,
+which describes an
+<B><A NAME="exception_pointer"></A>exception pointer</B> that can designate
+a current thrown exception, or a null value if no such
+exception exists. The thrown exception object has a lifetime
+at least as long as that of the exception pointer.</P>
+
+<H2><A NAME="get_terminate"></A><CODE>get_terminate</CODE></H2>
+
+<PRE>terminate_handler
+    <B>get_terminate</B>() noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The function returns the stored address of the current
+<A HREF="#terminate_handler">terminate handler</A>.</P>
+
+<H2><A NAME="get_unexpected"></A><CODE>get_unexpected</CODE></H2>
+
+<PRE>unexpected_handler
+    <B>get_unexpected</B>() noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The function returns the stored address of the current
+<A HREF="#unexpected_handler">unexpected handler</A>.</P>
+
+<H2><A NAME="make_exception_ptr"></A><CODE>make_exception_ptr</CODE></H2>
+
+<PRE>template&lt;class Ex&gt;
+    exception_ptr <B>make_exception_ptr</B>(Ex ex) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The function returns an
+<A HREF="#exception_pointer">exception pointer</A> that designates
+the exception <CODE>Ex</CODE> as a thrown exception.</P>
+
+<H2><A NAME="nested_exception"></A><CODE>nested_exception</CODE></H2>
+
+<PRE>class <B>nested_exception</B> { <B>[added with C++11]</B>
+public:
+    <B>nested_exception</B>() noexcept;
+    <B>nested_exception</B>(const exception&amp;) noexcept = default;
+    nested_exception&amp; <B>operator=</B>(const nested_exception&amp; right) noexcept = default;
+    virtual <B>~nested_exception</B>() noexcept = default;
+
+    void <B>rethrow_nested</B>() const; <B>[does not return]</B>
+    exception_ptr <B>nested_ptr</B>() const noexcept;
+    };</PRE>
+
+<P>The class serves as a wrapper for the current thrown exception
+as an object of type
+<CODE><A HREF="#exception_ptr">exception_ptr</A></CODE>.
+The default constructor stores
+<CODE><A HREF="#current_exception">current_exception</A>()</CODE>
+which you can retrieve by calling the member function <CODE>nested_ptr()</CODE>
+or rethrow by calling the member function <CODE>rethrow_nested()</CODE>.
+An attempt to rethrow a null <CODE>nested_ptr()</CODE> instead calls
+<CODE><A HREF="#terminate">terminate</A>()</CODE>.</P>
+
+<H2><A NAME="rethrow_exception"></A><CODE>rethrow_exception</CODE></H2>
+
+<PRE>void <B>rethrow_exception</B>(exception_ptr ptr); <B>[does not return]</B> <B>[added with C++11]</B></PRE>
+
+<P>The function uses the
+<A HREF="#exception_pointer">exception pointer</A> <CODE>ptr</CODE>
+to rethrow an earlier thrown exception.</P>
+
+<P><CODE>rethrow_exception</CODE> never returns to its caller.</P>
+
+<H2><A NAME="rethrow_if_nested"></A><CODE>rethrow_if_nested</CODE></H2>
+
+<PRE>template&lt;class Ex&gt;
+	void <B>rethrow_if_nested</B>(const Ex&amp; ex); <B>[added with C++11]</B></PRE>
+
+<P>The function calls <CODE>ex.rethrow_nested()</CODE> if
+<CODE>ex</CODE> is publicly derived from
+<CODE><A HREF="#nested_exception">nested_exception</A></CODE>.
+Otherwise it does nothing.</P>
+
+<H2><A NAME="set_terminate"></A><CODE>set_terminate</CODE></H2>
+
+<PRE>terminate_handler
+    <B>set_terminate</B>(terminate_handler pnew) throw();</PRE>
+
+<P>The function establishes a new
+<A HREF="#terminate_handler">terminate handler</A>
+as the function <CODE>*pnew</CODE>. Thus, <CODE>pnew</CODE> must
+not be a null pointer. The function returns the address of the
+previous terminate handler.</P>
+
+<H2><A NAME="set_unexpected"></A><CODE>set_unexpected</CODE></H2>
+
+<PRE>unexpected_handler
+    <B>set_unexpected</B>(unexpected_handler pnew) throw(); <B>[deprecated with C++11]</B></PRE>
+
+<P>The function establishes a new
+<A HREF="#unexpected_handler">unexpected handler</A>
+as the function <CODE>*pnew</CODE>. Thus, <CODE>pnew</CODE> must
+not be a null pointer. The function returns the address of the
+previous unexpected handler.</P>
+
+<H2><A NAME="terminate"></A><CODE>terminate</CODE></H2>
+
+<PRE>void <B>terminate</B>() noexcept; <B>[does not return]</B></PRE>
+
+<P>The function is available only in &quot;Development Mode&quot; of Development Kit. See &quot;Programming Startup Guide&quot; for details.</P>
+
+<P>The function calls a
+<B><A NAME="terminate_handler"></A>terminate handler</B>,
+a function of type <CODE>void ()</CODE>.
+If <CODE>terminate</CODE> is called directly by the program,
+the terminate handler is the one most recently set by a call to
+<CODE><A HREF="#set_terminate">set_terminate</A></CODE>.
+If <CODE>terminate</CODE> is called for any of several other
+reasons during evaluation of a throw expression,
+the terminate handler is the one in effect immediately after
+evaluating the throw expression.</P>
+
+<P>A terminate handler must not return to its caller. At
+<A HREF="lib_over.html#program_startup">program startup</A>,
+the terminate handler is a function that calls
+<CODE><A HREF="stdlib.html#abort">abort</A>()</CODE>.</P>
+
+<P>Changing the behavior by setting the terminate handler is supported only in &quot;Development Mode&quot; of Development Kit.</P>
+
+<H2><A NAME="terminate_handler_type"></A><CODE>terminate_handler</CODE></H2>
+
+<PRE>typedef void (*<B>terminate_handler</B>)();</PRE>
+
+<P>The type describes a pointer to a function suitable for use as a
+<A HREF="#terminate_handler">terminate handler</A>.</P>
+
+<H2><A NAME="throw_with_nested"></A><CODE>throw_with_nested</CODE></H2>
+
+<PRE>template&lt;class Ty&gt;
+	void <B>throw_with_nested</B>(Ty&amp;&amp; val); <B>[does not return]</B> <B>[added with C++11]</B></PRE>
+
+<P>The function throws
+<CODE>forward&lt;remove_reference&lt;Ty&gt;&gt;(val)</CODE>
+if <CODE>Ty</CODE> is derived from
+<CODE><A HREF="#nested_exception">nested_exception</A></CODE> or is
+not suitable for use as a base class. Otherwise it throws an object
+that contains both the base class <CODE>nested_exception</CODE>, default
+initialized, and the base class <CODE>Ty</CODE>, initialized with
+<CODE>forward&lt;remove_reference&lt;Ty&gt;&gt;(val)</CODE>.</P>
+
+<P><CODE>throw_with_nested</CODE> never returns to its caller.</P>
+
+<H2><A NAME="uncaught_exception"></A><CODE>uncaught_exception</CODE></H2>
+
+<PRE>bool <B>uncaught_exception</B>() throw();</PRE>
+
+<P>The function returns true only if a thrown exception is being currently
+processed. Specifically, it returns true after completing evaluation of a
+throw expression and before completing initialization of the exception
+declaration in the matching handler or calling
+<CODE><A HREF="#unexpected">unexpected</A></CODE> as a result of the
+throw expression.</P>
+
+<H2><A NAME="unexpected"></A><CODE>unexpected</CODE></H2>
+
+<PRE>void <B>unexpected</B>(); <B>[does not return]</B> <B>[deprecated with C++11]</B></PRE>
+
+<P>The function is available only in &quot;Development Mode&quot; of Development Kit. See &quot;Programming Startup Guide&quot; for details.</P>
+
+<P>The function calls an
+<B><A NAME="unexpected_handler"></A>unexpected handler</B>,
+a function of type <CODE>void ()</CODE>.
+If <CODE>unexpected</CODE> is called directly by the program,
+the unexpected handler is the one most recently set by a call to
+<CODE><A HREF="#set_unexpected">set_unexpected</A></CODE>.
+If <CODE>unexpected</CODE> is called when control
+leaves a function by a thrown exception of a type not permitted by an
+<B><A NAME="exception_specification"></A>exception specification</B>
+for the function, as in:</P>
+
+<PRE>void func() throw()   // function may throw no exceptions
+    {throw "bad"; }   // throw calls unexpected()</PRE>
+
+<P>the unexpected handler is the one in effect immediately after
+evaluating the throw expression.</P>
+
+<P>An unexpected handler must not return to its caller. It may
+terminate execution by:</P>
+
+<UL>
+<LI>throwing an object of a type listed in the exception specification
+(or an object of any type if the unexpected handler is called directly
+by the program)</LI>
+
+<LI>throwing an object of type
+<A HREF="#bad_exception"><CODE>bad_exception</CODE></A></LI>
+
+<LI>calling
+<CODE><A HREF="#terminate">terminate</A>()</CODE>,
+<CODE><A HREF="stdlib.html#abort">abort</A>()</CODE>, or
+<CODE><A HREF="stdlib.html#exit">exit</A>(int)</CODE></LI>
+</UL>
+
+<P>At <A HREF="lib_over.html#program_startup">program startup</A>,
+the unexpected handler is a function that calls
+<CODE><A HREF="#terminate">terminate</A>()</CODE>.</P>
+
+<P>Changing the behavior by setting the unexpected handler is supported only in &quot;Development Mode&quot; of Development Kit.</P>
+
+<H2><A NAME="unexpected_handler_type"></A><CODE>unexpected_handler</CODE></H2>
+
+<PRE>typedef void (*<B>unexpected_handler</B>)(); <B>[deprecated with C++11]</B></PRE>
+
+<P>The type describes a pointer to a function suitable for use as an
+<A HREF="#unexpected_handler">unexpected handler</A>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+&copy; 2012 Sony Computer Entertainment Inc. All rights reserved.</I></P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

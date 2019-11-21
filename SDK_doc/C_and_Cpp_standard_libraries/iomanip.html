@@ -1,0 +1,207 @@
+<HTML><HEAD>
+<TITLE>&lt;iomanip&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;iomanip&gt;"></A><CODE>&lt;iomanip&gt;</CODE></H1><HR>
+
+<P><B><CODE><A HREF="#get_money">get_money</A>
+&middot; <A HREF="#get_time">get_time</A>
+&middot; <A HREF="#put_money">put_money</A>
+&middot; <A HREF="#put_time">put_time</A>
+</CODE></B></P><HR>
+
+<P><B><CODE><A HREF="#resetiosflags">resetiosflags</A>
+&middot; <A HREF="#setbase">setbase</A>
+&middot; <A HREF="#setfill">setfill</A>
+&middot; <A HREF="#setiosflags">setiosflags</A>
+&middot; <A HREF="#setprecision">setprecision</A>
+&middot; <A HREF="#setw">setw</A>
+</CODE></B></P><HR>
+
+<P>Include the <A HREF="lib_cpp.html#iostreams">iostreams</A>
+standard header <B><CODE>&lt;iomanip&gt;</CODE></B>
+to define several <A HREF="ios.html#manipulators">manipulators</A>
+that each take a single argument. Each of these manipulators returns
+an unspecified type, called <CODE>T1</CODE> through <CODE>T6</CODE>
+here, that overloads both
+<CODE>basic_istream&lt;Elem,
+Tr&gt;::<A HREF="istream.html#basic_istream__operator&gt;&gt;">operator&gt;&gt;</A></CODE>
+and
+<CODE>basic_ostream&lt;Elem,
+Tr&gt;::<A HREF="ostream.html#basic_ostream__operator&lt;&lt;">operator&lt;&lt;</A></CODE>.
+Thus, you can write extractors and inserters such as:</P>
+
+<PRE>cin &gt;&gt; setbase(8);
+cout &lt;&lt; setbase(8);</PRE>
+
+<PRE>namespace std {
+T1 <B><A HREF="#resetiosflags">resetiosflags</A></B>(ios_base::fmtflags mask);
+T2 <B><A HREF="#setiosflags">setiosflags</A></B>(ios_base::fmtflags mask);
+T3 <B><A HREF="#setbase">setbase</A></B>(int base);
+template&lt;class Elem&gt;
+    T4 <B><A HREF="#setfill">setfill</A></B>(Elem ch);
+T5 <B><A HREF="#setprecision">setprecision</A></B>(streamsize prec);
+T6 <B><A HREF="#setw">setw</A></B>(streamsize wide);
+
+template&lt;class Money&gt;
+    T7 <B><A HREF="#get_money">get_money</A></B>(Money&amp; amount, bool intl); <B>[added with C++11]</B>
+template&lt;class Money&gt;
+    T8 <B><A HREF="#put_money">put_money</A></B>(const Money&amp; amount, bool intl); <B>[added with C++11]</B>
+template&lt;class Elem&gt;
+    T9 <B><A HREF="#get_time">get_time</A></B>(struct tm *tptr, const Elem *fmt); <B>[added with C++11]</B>
+template&lt;class Elem&gt;
+    T10 <B><A HREF="#put_time">put_time</A></B>(struct tm *tptr, const Elem *fmt); <B>[added with C++11]</B>
+
+}  // namespace std</PRE>
+
+<H2><A NAME="get_money"></A><CODE>get_money</CODE></H2>
+
+<PRE>template&lt;class Money&gt;
+    T7 <B>get_money</B>(Money&amp; amount, bool intl); <B>[added with C++11]</B></PRE>
+
+<P>The manipulator returns an object that, when extracted from
+the stream <CODE>str</CODE>, behaves as a
+<A HREF="istream.html#formatted_input_functions">formatted input function</A>,
+using <CODE>intl</CODE> to indicate international format.
+If successful, the call stores in <CODE>amount</CODE>
+the extracted monetary value.
+The manipulator then returns <CODE>str</CODE>.</P>
+
+<P><CODE>Money</CODE> must be of type <I>long double</I>
+or an instantiation of
+<CODE><A HREF="string2.html#basic_string">basic_string</A></CODE>
+with the same element and traits parameters as <CODE>str</CODE>.</P>
+
+<H2><A NAME="get_time"></A><CODE>get_time</CODE></H2>
+
+<PRE>template&lt;class Elem&gt;
+    T9 <B>get_time</B>(struct tm *tptr, const Elem *fmt); <B>[added with C++11]</B></PRE>
+
+<P>The manipulator returns an object that, when extracted from
+the stream <CODE>str</CODE>, behaves as a
+<A HREF="istream.html#formatted_input_functions">formatted input function</A>,
+using <CODE>tptr</CODE> to indicate the time structure
+and <CODE>fmt</CODE> to indicate the beginning of a NUL-terminated format
+string. If successful, the call stores in the time structure
+the values associated with any extracted time fields.
+The manipulator then returns <CODE>str</CODE>.</P>
+
+<H2><A NAME="put_money"></A><CODE>put_money</CODE></H2>
+
+<PRE>template&lt;class Money&gt;
+    T8 <B>put_money</B>(const Money&amp; amount, bool intl); <B>[added with C++11]</B></PRE>
+
+<P>The manipulator returns an object that, when inserted into
+the stream <CODE>str</CODE>, behaves as a
+<A HREF="ostream.html#formatted_output_functions">formatted output function</A>.
+If successful, the call inserts <CODE>amount</CODE>
+suitably formatted, using <CODE>intl</CODE> to indicate international format
+and <CODE>str.<A HREF="ios.html#basic_ios__fill">fill</A>()</CODE>,
+as the fill element.
+The manipulator then returns <CODE>str</CODE>.</P>
+
+<P><CODE>Money</CODE> must be of type <I>long double</I>
+or an instantiation of
+<CODE><A HREF="string2.html#basic_string">basic_string</A></CODE>
+with the same element and traits parameters as <CODE>str</CODE>.</P>
+
+<H2><A NAME="put_time"></A><CODE>put_time</CODE></H2>
+
+<PRE>template&lt;class Elem&gt;
+    T10 <B>put_time</B>(struct tm *tptr, const Elem *fmt); <B>[added with C++11]</B></PRE>
+
+<P>The manipulator returns an object that, when inserted into
+the stream <CODE>str</CODE>, behaves as a
+<A HREF="ostream.html#formatted_output_functions">formatted output function</A>,
+using <CODE>tptr</CODE> to indicate the time structure
+and <CODE>fmt</CODE> to indicate the beginning of a NUL-terminated format
+string. If successful, the call inserts literal text from the format string
+and converted values from the time structure.
+The manipulator then returns <CODE>str</CODE>.</P>
+
+
+<H2><A NAME="resetiosflags"></A><CODE>resetiosflags</CODE></H2>
+
+<PRE>T1 <B>resetiosflags</B>(ios_base::fmtflags mask);</PRE>
+
+<P>The manipulator returns an object that, when extracted from or
+inserted into the stream <CODE>str</CODE>, calls
+<CODE>str.<A HREF="ios.html#ios_base__setf">setf</A>(ios_base::
+<A HREF="ios.html#ios_base__fmtflags">fmtflags</A>(), mask)</CODE>,
+then returns <CODE>str</CODE>.</P>
+
+<H2><A NAME="setbase"></A><CODE>setbase</CODE></H2>
+
+<PRE>T3 <B>setbase</B>(int base);</PRE>
+
+<P>The manipulator returns an object that, when extracted from or
+inserted into the stream <CODE>str</CODE>, calls
+<CODE>str.<A HREF="ios.html#ios_base__setf">setf</A>(mask,
+ios_base::<A HREF="ios.html#ios_base__basefield">basefield</A>)</CODE>,
+then returns <CODE>str</CODE>. Here, <CODE>mask</CODE> is determined
+as follows:</P>
+
+<UL>
+<LI>If <CODE>base</CODE> is 8, then <CODE>mask</CODE> is
+<CODE>ios_base::<A HREF="ios.html#ios_base__oct">oct</A></CODE></LI>
+
+<LI>If <CODE>base</CODE> is 10, then <CODE>mask</CODE> is
+<CODE>ios_base::<A HREF="ios.html#ios_base__dec">dec</A></CODE></LI>
+
+<LI>If <CODE>base</CODE> is 16, then <CODE>mask</CODE> is
+<CODE>ios_base::<A HREF="ios.html#ios_base__hex">hex</A></CODE></LI>
+
+<LI>If <CODE>base</CODE> is any other value, then <CODE>mask</CODE> is
+<CODE>ios_base::<A HREF="ios.html#ios_base__fmtflags">fmtflags</A>(0)</CODE></LI>
+</UL>
+
+<H2><A NAME="setfill"></A><CODE>setfill</CODE></H2>
+
+<PRE>template&lt;class Elem&gt;
+    T4 <B>setfill</B>(Elem ch);</PRE>
+
+<P>The template manipulator returns an object that, when extracted from or
+inserted into the stream <CODE>str</CODE>, calls
+<CODE>str.<A HREF="ios.html#basic_ios__fill">fill</A>(ch)</CODE>,
+then returns <CODE>str</CODE>. The type <CODE>Elem</CODE> must be the
+same as the element type for the stream <CODE>str</CODE>.</P>
+
+<H2><A NAME="setiosflags"></A><CODE>setiosflags</CODE></H2>
+
+<PRE>T2 <B>setiosflags</B>(ios_base::fmtflags mask);</PRE>
+
+<P>The manipulator returns an object that, when extracted from or
+inserted into the stream <CODE>str</CODE>, calls
+<CODE>str.<A HREF="ios.html#ios_base__setf">setf</A>(mask)</CODE>,
+then returns <CODE>str</CODE>.</P>
+
+<H2><A NAME="setprecision"></A><CODE>setprecision</CODE></H2>
+
+<PRE>T5 <B>setprecision</B>(streamsize prec);</PRE>
+
+<P>The manipulator returns an object that, when extracted from or
+inserted into the stream <CODE>str</CODE>, calls
+<CODE>str.<A HREF="ios.html#ios_base__precision">precision</A>(prec)</CODE>,
+then returns <CODE>str</CODE>.</P>
+
+<H2><A NAME="setw"></A><CODE>setw</CODE></H2>
+
+<PRE>T6 <B>setw</B>(streamsize wide);</PRE>
+
+<P>The manipulator returns an object that, when extracted from or
+inserted into the stream <CODE>str</CODE>, calls
+<CODE>str.<A HREF="ios.html#ios_base__width">width</A>(wide)</CODE>,
+then returns <CODE>str</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

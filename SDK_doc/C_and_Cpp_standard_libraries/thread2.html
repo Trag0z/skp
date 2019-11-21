@@ -1,0 +1,405 @@
+<HTML><HEAD>
+<TITLE>&lt;thread&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;thread&gt;"></A><CODE>&lt;thread&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P><B><CODE><A HREF="#get_id">get_id</A>
+&middot; <A HREF="#hash">hash</A>
+&middot; <A HREF="#operator&lt;&lt;">operator&lt;&lt;</A>
+&middot; <A HREF="#operator22">operator==</A>
+&middot; <A HREF="#operator!2">operator!=</A>
+&middot; <A HREF="#operator&lt;">operator&lt;</A>
+&middot; <A HREF="#operator&lt;2">operator&lt;=</A>
+&middot; <A HREF="#operator&gt;">operator&gt;</A>
+&middot; <A HREF="#operator&gt;2">operator&gt;=</A>
+&middot; <A HREF="#sleep_for">sleep_for</A>
+&middot; <A HREF="#sleep_until">sleep_until</A>
+&middot; <A HREF="#__STDCPP_THREADS__">__STDCPP_THREADS__</A>
+&middot; <A HREF="#swap">swap</A>
+&middot; <A HREF="#thread">thread</A>
+&middot; <A HREF="#yield">yield</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the standard header <B><CODE>&lt;thread&gt;</CODE></B>
+to define the class <B><CODE>thread</CODE></B> and various
+supporting functions.</P>
+
+<P>A
+<B><A HREF="#thread">thread</A></B> object can be used to observe and
+manage a thread of execution within an application. A thread object created
+with the default constructor is not associated with any thread of execution. A
+thread object constructed with a callable object creates a new thread of
+execution and calls the callable object in that thread. Thread objects can be
+moved but not copied; thus, there can be only one thread object associated
+with any thread of execution.</P>
+
+<P>Every thread of execution has a unique identifier of type
+<B><A HREF="#thread__id">thread::id</A></B>. The function
+<B><A HREF="#get_id">this_thread::get_id</A></B> returns the identifier of the
+calling thread; the member function
+<B><A HREF="#thread__get_id">thread::get_id</A></B> returns the identifier of
+the thread managed by a thread object. For a default-constructed thread
+object, the member function <CODE>thread::get_id</CODE> returns an object with
+a value that is the same for all default-constructed thread objects and
+different from the value returned by <CODE>this_thread::get_id</CODE> for any
+thread of execution that could be joined at the time of the call.</P>
+
+<PRE>#define <B><A HREF="#__STDCPP_THREADS__">__STDCPP_THREADS__</A></B> 1
+namespace std {
+class <B><A HREF="#thread">thread</A></B>;
+
+template&lt;size_t Bits&gt;
+    struct <B><A HREF="#hash">hash</A>&lt;thread::id&gt;</B>
+        : public <A HREF="functio2.html#unary_function">unary_function</A>&lt;bitset&lt;Bits&gt;, size_t&gt; {
+    size_t <B>operator()</B>(thread::id val) const;
+    };
+
+bool <B><A HREF="#operator22">operator==</A></B>(thread::id Left, thread::id Right) noexcept;
+bool <B><A HREF="#operator!2">operator!=</A></B>(thread::id Left, thread::id Right) noexcept;
+bool <B><A HREF="#operator&lt;">operator&lt;</A></B> (thread::id Left, thread::id Right) noexcept;
+bool <B><A HREF="#operator&lt;2">operator&lt;=</A></B>(thread::id Left, thread::id Right) noexcept;
+bool <B><A HREF="#operator&gt;">operator&gt;</A></B> (thread::id Left, thread::id Right) noexcept;
+bool <B><A HREF="#operator&gt;2">operator&gt;=</A></B>(thread::id Left, thread::id Right) noexcept;
+
+void <B><A HREF="#swap">swap</A></B>(thread&amp; Left, thread&amp; Right) noexcept;
+
+template&lt;class Elem, class Tr&gt;
+    basic_ostream&lt;Elem, Tr&gt;&amp; <B><A HREF="#operator&lt;&lt;">operator&lt;&lt;</A></B>(
+        basic_ostream&lt;Elem, Tr&gt;&amp; ostr, thread::id id);
+
+    namespace this_thread {
+    thread::id <B><A HREF="#get_id">get_id</A></B>() noexcept;
+
+    void <B><A HREF="#yield">yield</A></B>() noexcept;
+    template&lt;class Rep, class Period&gt;
+        void <B><A HREF="#sleep_for">sleep_for</A></B>(const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);
+    template&lt;class Clock, class Duration&gt;
+        void <B><A HREF="#sleep_until">sleep_until</A></B>(const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);
+    }   // namespace this_thread
+}   // namespace std</PRE>
+
+<H2><CODE><A NAME="get_id"></A>this_thread::get_id</CODE></H2>
+
+<PRE>thread::id <B>get_id</B> noexcept;</PRE>
+
+<P>The function returns an object of type <CODE>thread::id</CODE> that
+uniquely identifies the current thread of execution.</P>
+
+<H2><A NAME="hash"></A><CODE>hash</CODE></H2>
+
+<PRE>template&lt;size_t Bits&gt;
+    struct <B>hash&lt;thread::id&gt;</B>
+        : public <A HREF="functio2.html#unary_function">unary_function</A>&lt;bitset&lt;Bits&gt;, size_t&gt; {
+    size_t <B>operator()</B>(thread::id val) const;
+    };</PRE>
+
+<P>The template class defines its member function as returning
+a value uniquely determined by <CODE>val</CODE>. The member function defines a
+<A HREF="functio2.html#hash_function">hash function</A>, suitable for mapping values of type
+<CODE><A HREF="#thread__id">thread::id</A></CODE>
+to a distribution of index values.</P>
+
+<H2><CODE><A NAME="operator&lt;&lt;"></A>operator&lt;&lt;</CODE></H2>
+
+<PRE>template&lt;class Elem, class Tr&gt;
+    basic_ostream&lt;Elem, Tr&gt;&amp; <B>operator&lt;&lt;</B>(
+        basic_ostream&lt;Elem, Tr&gt;&amp; ostr, thread::id id);</PRE>
+
+<P>The template function overloads <CODE>operator&lt;&lt;</CODE> to insert a
+text representation of the object <CODE>id</CODE> of class
+<CODE>thread::id</CODE> into the stream <CODE>ostr</CODE>. If two objects of
+class <CODE>thread::id</CODE> compare equal, the inserted text representations
+for the two objects will be the same; if they do not compare equal, the
+inserted text representations will be different.</P>
+
+<H2><CODE><A NAME="operator22"></A>operator==</CODE></H2>
+
+<PRE>bool <B>operator==</B>(thread::id Left, thread::id Right) noexcept;</PRE>
+
+<P>The template function overloads <CODE>operator==</CODE> to compare two
+objects of class <CODE>thread::id</CODE>. It returns <CODE>true</CODE> if the
+two objects represent the same thread of execution or if neither of the two
+objects represents a thread of execution, otherwise it returns
+<CODE>false</CODE>. It does not throw any exceptions.</P>
+
+<H2><CODE><A NAME="operator!2"></A>operator!=</CODE></H2>
+
+<PRE>bool <B>operator!=</B>(thread::id Left, thread::id Right) noexcept;</PRE>
+
+<P>The template function overloads <CODE>operator!=</CODE> to compare two
+objects of class <CODE>thread::id</CODE>. It returns <CODE>!(Left ==
+Right)</CODE>.</P>
+
+<H2><CODE><A NAME="operator&lt;"></A>operator&lt;</CODE></H2>
+
+<PRE>bool <B>operator&lt;</B>(thread::id Left, thread::id Right) noexcept;</PRE>
+
+<P>The template function overloads <CODE>operator&lt;</CODE> to compare two
+objects of class <CODE>thread::id</CODE>. It defines a total ordering on all
+such objects; thus, objects of type <CODE>thread::id</CODE> can be used as
+keys in associative containers. It does not throw any exceptions.</P>
+
+<H2><CODE><A NAME="operator&lt;2"></A>operator&lt;=</CODE></H2>
+
+<PRE>bool <B>operator&lt;=</B>(thread::id Left, thread::id Right) noexcept;</PRE>
+
+<P>The template function overloads <CODE>operator&lt;=</CODE> to compare two
+objects of class <CODE>thread::id</CODE>. It returns <CODE>!(Right &lt;
+Left)</CODE>.</P>
+
+<H2><CODE><A NAME="operator&gt;"></A>operator&gt;</CODE></H2>
+
+<PRE>bool <B>operator&gt;</B>(thread::id Left, thread::id Right) noexcept;</PRE>
+
+<P>The template function overloads <CODE>operator&gt;</CODE> to compare two
+objects of class <CODE>thread::id</CODE>. It returns <CODE>Right &lt;
+Left</CODE>.</P>
+
+<H2><CODE><A NAME="operator&gt;2"></A>operator&gt;=</CODE></H2>
+
+<PRE>bool <B>operator&gt;=</B>(thread::id Left, thread::id Right) noexcept;</PRE>
+
+<P>The template function overloads <CODE>operator&gt;=</CODE> to compare two
+objects of class <CODE>thread::id</CODE>. It returns <CODE>!(Left &lt;
+Right)</CODE>.</P>
+
+<H2><CODE><A NAME="sleep_for"></A>this_thread::sleep_for</CODE></H2>
+
+<PRE>template&lt;class Rep, class Period&gt;
+    void <B>sleep_for</B>(const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);</PRE>
+
+<P>The template function blocks the calling thread for at least the time
+specified by <CODE>Rel_time</CODE>. It does not throw any exceptions.</P>
+
+<H2><CODE><A NAME="__STDCPP_THREADS__"></A>__STDCPP_THREADS__</CODE></H2>
+
+<PRE>#define <B>__STDCPP_THREADS__</B> 1</PRE>
+
+<P>The macro is defined as a nonzero value to indicate that threads
+are supported by this header.</P>
+
+<H2><CODE><A NAME="sleep_until"></A>this_thread::sleep_until</CODE></H2>
+
+<PRE>template&lt;class Clock, class Duration&gt;
+    void <B>sleep_until</B>(const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);</PRE>
+
+<P>The template function blocks the calling thread at least until the
+time specified by <CODE>Abs_time</CODE>. It does not throw any exceptions.</P>
+
+<H2><CODE><A NAME="swap"></A>swap</CODE></H2>
+
+<PRE>void <B>swap</B>(thread&amp; Left, thread&amp; Right) noexcept;</PRE>
+
+<P>The function calls <CODE>Left.swap(Right)</CODE>.</P>
+
+<H2><CODE><A NAME="thread"></A>thread</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#thread__detach">detach</A>
+&middot; <A HREF="#thread__get_id">get_id</A>
+&middot; <A HREF="#thread__hardware_concurrency">hardware_concurrency</A>
+&middot; <A HREF="#thread__id">id</A>
+&middot; <A HREF="#thread__join">join</A>
+&middot; <A HREF="#thread__joinable">joinable</A>
+&middot; <A HREF="#thread__native_handle">native_handle</A>
+&middot; <A HREF="#thread__native_handle_type">native_handle_type</A>
+&middot; <A HREF="#thread__operator2">operator=</A>
+&middot; <A HREF="#thread__swap">swap</A>
+&middot; <A HREF="#thread__thread">thread</A>
+&middot; <A HREF="#thread__~thread">~thread</A>
+</CODE></B></P>
+<HR>
+
+<PRE>namespace std {
+    class <B>thread</B>
+    {
+public:
+    struct <B><A HREF="#thread__id">id</A></B>;
+
+    <B><A HREF="#thread__thread">thread</A></B>() noexcept;
+    template&lt;class Fn, class... Args&gt;
+        explicit <B><A HREF="#thread__thread">thread</A></B>(Fn&amp;&amp; F, Args&amp;&amp;... A);
+    <B><A HREF="#thread__thread">thread</A></B>(thread&amp;&amp; Other) noexcept;
+    thread&amp; <B><A HREF="#thread__operator2">operator=</A></B>(thread&amp;&amp; Other) noexcept;
+    <B><A HREF="#thread__~thread">~thread</A></B>();
+
+    <B>thread</B>(const thread&amp;) = delete;
+    thread&amp; <B>operator=</B>(const thread&amp;) = delete;
+
+    void <B><A HREF="#thread__swap">swap</A></B>(thread&amp; Other) noexcept;
+
+    bool <B><A HREF="#thread__joinable">joinable</A></B>() const noexcept;
+    void <B><A HREF="#thread__join">join</A></B>();
+    void <B><A HREF="#thread__detach">detach</A></B>();
+    id <B><A HREF="#thread__get_id">get_id</A></B>() const noexcept;
+
+    static unsigned <B><A HREF="#thread__hardware_concurrency">hardware_concurrency</A></B>() noexcept;
+
+    typedef <I>h-type</I> <B><A HREF="#thread__native_handle_type">native_handle_type</A></B>;
+    native_handle_type <B><A HREF="#thread__native_handle">native_handle</A></B>();
+    };
+}   // namespace std</PRE>
+
+<H3><CODE><A NAME="thread__detach"></A>thread::detach</CODE></H3>
+
+<PRE>void <B>detach</B>();</PRE>
+
+<P>The member function is not available because of the functions supported by the kernel.</P>
+
+<H3><CODE><A NAME="thread__get_id"></A>thread::get_id</CODE></H3>
+
+<PRE>id <B>get_id</B>() const noexcept;</PRE>
+
+<P>The member function returns an object of type <CODE>thread::id</CODE> that
+uniquely identifies the thread of execution associated with this object, or
+<CODE>thread::id()</CODE> if there is no thread of execution associated with
+this object.</P>
+
+<H3><CODE><A NAME="thread__hardware_concurrency"></A>thread::hardware_concurrency</CODE></H3>
+
+<PRE>unsigned <B>hardware_concurrency</B>() noexcept;</PRE>
+
+<P>The static member function returns an estimate of the number of hardware thread contexts. If this value cannot be computed or is not well defined it returns 0.</P>
+
+<H3><CODE><A NAME="thread__id"></A>thread::id</CODE></H3>
+
+<PRE>struct <B>id</B> {
+    <B>id</B>() noexcept;
+    };</PRE>
+
+<P>The struct <CODE>thread::id</CODE> provides a unique identifier for each
+thread of execution in the process. Its default constructor creates an object
+that does not compare equal to the <CODE>thread::id</CODE> object for any
+existing thread. All default-constructed <CODE>thread::id</CODE> objects
+compare equal.</P>
+
+<H3><CODE><A NAME="thread__join"></A>thread::join</CODE></H3>
+
+<PRE>void <B>join</B>();</PRE>
+
+<P>The member function blocks until the thread of execution associated with
+the calling object completes. If the call succeeds, subsequent calls to
+<CODE>get_id()</CODE> for the calling object return <CODE>id()</CODE>; if the
+call does not succeed, the value returned by <CODE>get_id()</CODE> is
+unchanged.</P>
+
+<P>If the thread associated with the calling object is not
+<B><A HREF="#joinable">joinable</A></B>, the function throws an object of type
+<CODE>system_error</CODE> with an error code of
+<CODE>invalid_argument</CODE>. If the thread associated with the calling
+object is the current thread (i.e. <CODE>get_id() ==
+this_thread::get_id()</CODE>) or if the system otherwise detects that a
+deadlock would occur, the function throws an object of type
+<CODE>system_error</CODE> with an error code of
+<CODE>resource_deadlock_would_occur</CODE>. If the thread associated with the
+calling object is invalid, the function throws an object of type
+<CODE>system_error</CODE> with an error code of
+<CODE>no_such_process</CODE>.</P>
+
+<H3><CODE><A NAME="thread__joinable"></A>thread::joinable</CODE></H3>
+
+<PRE>bool <B>joinable</B>() const noexcept;</PRE>
+
+<P>The member function returns <CODE>true</CODE> if the thread of execution
+associated with the calling object is
+<B><A NAME="joinable"></A>joinable</B>,
+otherwise <CODE>false</CODE>.</P>
+
+<P>A thread object is joinable if <CODE>get_id() != id()</CODE>.</P>
+
+<H3><CODE><A NAME="thread__native_handle"></A>thread::native_handle</CODE></H3>
+
+<PRE>native_handle_type <B>native_handle</B>();</PRE>
+
+<P>The member function returns an object of type
+<CODE>native_handle_type</CODE> that can be used in implementation-specific
+ways.</P>
+
+<H3><CODE><A NAME="thread__native_handle_type"></A>thread::native_handle_type</CODE></H3>
+
+<PRE>typedef <I>h-type</I> <B>native_handle_type</B>;</PRE>
+
+<P>The typedef is a synonym for an implementation-specific type that can be
+used in implementation-specific ways.</P>
+
+<P>In
+this implementation,
+it is a synonym for <CODE>thrd_t</CODE>, and can be used as an argument to any
+of the <CODE>thrd_XXX</CODE> functions other than
+<CODE>thrd_create</CODE>.</P>
+
+<H3><CODE><A NAME="thread__operator2"></A>thread::operator=</CODE></H3>
+
+<PRE>thread&amp; <B>operator=</B>(thread&amp;&amp; Right) noexcept;</PRE>
+
+<P>The member function calls <CODE><A HREF="exceptio.html#terminate">terminate</A>()</CODE> if the calling object is
+<B><A HREF="#joinable">joinable</A></B>. Otherwise, it associates the
+calling object with the thread associated with <CODE>Right</CODE> and sets
+<CODE>Right</CODE> to a default-constructed state.</P>
+
+<H3><CODE><A NAME="thread__swap"></A>thread::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(thread&amp; Other) noexcept;</PRE>
+
+<P>The member function swaps the states of the calling object and
+<CODE>Other</CODE>.</P>
+
+<H3><CODE><A NAME="thread__thread"></A>thread::thread</CODE></H3>
+
+<PRE><B>thread</B>() noexcept;
+template&lt;class Fn, class... Args&gt;
+    explicit <B>thread</B>(Fn&amp;&amp; F, Args&amp;&amp;... A);
+<B>thread</B>(thread&amp;&amp; Other) noexcept;</PRE>
+
+<P>The first constructor constructs an object that is not associated with any
+thread of execution. The value returned by a call to <CODE>get_id()</CODE> for
+such an object compares equal to <CODE>thread::id()</CODE>.</P>
+
+<P>The second constructor constructs an object that is associated
+with a new thread of execution and executes
+<A HREF="functio2.html#INVOKE">INVOKE</A><CODE>(F, t1, t2, ..., tN)</CODE>
+(where <CODE>t1, t2, ..., tN</CODE> are the values in <CODE>args...</CODE>) in
+the new thread. If there are not enough resources available to start a new
+thread, the function throws an object of type <CODE>system_error</CODE>
+with an error code of <CODE>resource_unavailable_try_again</CODE>. If the call
+to <CODE>F</CODE> terminates with an uncaught exception
+<CODE>terminate()</CODE> is called.</P>
+
+<P>The third constructor constructs an object that is associated with the
+thread associated with <CODE>Other</CODE> and sets
+<CODE>Other</CODE> to a default-constructed state.</P>
+
+<H3><CODE><A NAME="thread__~thread"></A>thread::~thread</CODE></H3>
+
+<PRE><B>~thread</B>();</PRE>
+
+<P>The destructor calls
+<CODE><A HREF="exceptio.html#terminate">terminate</A>()</CODE>
+if the thread object is <B><A HREF="#joinable">joinable</A></B>.</P>
+
+<H2><CODE><A NAME="yield"></A>this_thread::yield</CODE></H2>
+
+<PRE>void <B>yield</B>() noexcept;</PRE>
+
+<P>The function tells the operating system that it may run other threads even
+if the current thread would ordinarily continue to run.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+&copy; 2015 Sony Computer Entertainment Inc. All rights reserved.</I></P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

@@ -1,0 +1,15 @@
+﻿Der Buildvorgang wurde am 24.10.2019 14:26:34 gestartet.
+     1>Projekt "H:\SKP\PSP\HelloJoypad\HelloJoypad.vcxproj" auf Knoten "2", Build Ziel(e).
+     1>ClCompile:
+         main.cpp
+         psp2snc.exe -D_DEBUG -o PSVita_Debug\main.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\PSP\HelloJoypad\main.cpp
+     1>H:\SKP\PSP\HelloJoypad\main.cpp(32,1): warning 112: statement is unreachable
+         
+       Link:
+         C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\bin\psp2ld.exe -o "H:\SKP\PSP\PSVita_Debug\HelloJoypad.self" -L"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\lib" --start-group PSVita_Debug\main.o libSceCtrl_stub.a --end-group
+         HelloJoypad.vcxproj -> H:\SKP\PSP\PSVita_Debug\HelloJoypad.self
+     1>Die Erstellung des Projekts "H:\SKP\PSP\HelloJoypad\HelloJoypad.vcxproj" ist abgeschlossen, Build Ziel(e).
+
+Build erfolgreich.
+
+Verstrichene Zeit 00:00:00.48

@@ -1,0 +1,1471 @@
+<HTML><HEAD>
+<TITLE>&lt;ios&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;ios&gt;"></A><CODE>&lt;ios&gt;</CODE></H1><HR>
+
+<P><B><CODE><A HREF="#basic_ios">basic_ios</A>
+&middot; <A HREF="#fpos">fpos</A>
+&middot; <A HREF="#ios">ios</A>
+&middot; <A HREF="#ios_base">ios_base</A>
+&middot; <A HREF="#streamoff">streamoff</A>
+&middot; <A HREF="#streampos">streampos</A>
+&middot; <A HREF="#streamsize">streamsize</A>
+&middot; <A HREF="#wios">wios</A>
+&middot; <A HREF="#wstreampos">wstreampos</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#iostream_category">iostream_category</A>
+&middot; <A HREF="#io_errc">io_errc</A>
+&middot; <A HREF="#is_error_code_enum">is_error_code_enum</A>
+&middot; <A HREF="#make_error_code">make_error_code</A>
+&middot; <A HREF="#make_error_condition">make_error_condition</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#boolalpha">boolalpha</A>
+&middot; <A HREF="#dec">dec</A>
+&middot; <A HREF="#defaultfloat">defaultfloat</A>
+&middot; <A HREF="#fixed">fixed</A>
+&middot; <A HREF="#hex">hex</A>
+&middot; <A HREF="#hexfloat">hexfloat</A>
+&middot; <A HREF="#internal">internal</A>
+&middot; <A HREF="#left">left</A>
+&middot; <A HREF="#noboolalpha">noboolalpha</A>
+&middot; <A HREF="#noshowbase">noshowbase</A>
+&middot; <A HREF="#noshowpoint">noshowpoint</A>
+&middot; <A HREF="#noshowpos">noshowpos</A>
+&middot; <A HREF="#noskipws">noskipws</A>
+&middot; <A HREF="#nounitbuf">nounitbuf</A>
+&middot; <A HREF="#nouppercase">nouppercase</A>
+&middot; <A HREF="#oct">oct</A>
+&middot; <A HREF="#right">right</A>
+&middot; <A HREF="#scientific">scientific</A>
+&middot; <A HREF="#showbase">showbase</A>
+&middot; <A HREF="#showpoint">showpoint</A>
+&middot; <A HREF="#showpos">showpos</A>
+&middot; <A HREF="#skipws">skipws</A>
+&middot; <A HREF="#unitbuf">unitbuf</A>
+&middot; <A HREF="#uppercase">uppercase</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the <A HREF="lib_cpp.html#iostreams">iostreams</A>
+standard header <B><CODE>&lt;ios&gt;</CODE></B> to
+define several types and functions basic to the operation of
+iostreams. (This header is
+typically included for you by another of the iostreams headers. You
+seldom have occasion to include it directly.)</P>
+
+<P>A large group of functions are
+<B><A NAME="manipulators"></A>manipulators</B>. A manipulator
+declared in <CODE>&lt;ios&gt;</CODE> alters the values stored in its
+argument object of class
+<CODE><A HREF="#ios_base">ios_base</A></CODE>. Other manipulators
+perform actions on streams controlled by objects of a type derived from
+this class,
+such as a specialization of one of the template classes
+<CODE><A HREF="istream.html#basic_istream">basic_istream</A></CODE> or
+<CODE><A HREF="ostream.html#basic_ostream">basic_ostream</A></CODE>.
+For example, <CODE><A HREF="#noskipws">noskipws</A>(str)</CODE>
+clears the format flag
+<CODE>ios_base::<A HREF="#ios_base__skipws">skipws</A></CODE> in the object
+<CODE>str</CODE>, which might be of one of these types.</P>
+
+<P>You can also call a manipulator by inserting it into an output
+stream or extracting it from an input stream, thanks to some special
+machinery supplied in the classes derived from
+<CODE>ios_base</CODE>. For example:</P>
+
+<PRE>istr &gt;&gt; noskipws;</PRE>
+
+<P>calls <CODE><A HREF="#noskipws">noskipws</A>(istr)</CODE>.</P>
+
+<PRE>namespace std {
+typedef T1 <B><A HREF="#streamoff">streamoff</A></B>;
+typedef T2 <B><A HREF="#streamsize">streamsize</A></B>;
+class <B><A HREF="#ios_base">ios_base</A></B>;
+
+        // TEMPLATE CLASSES
+template &lt;class Elem, class Tr = char_traits&lt;Elem&gt; &gt;
+    class <B><A HREF="#basic_ios">basic_ios</A></B>;
+typedef basic_ios&lt;char, char_traits&lt;char&gt; &gt; <B><A HREF="#ios">ios</A></B>;
+typedef basic_ios&lt;wchar_t, char_traits&lt;wchar_t&gt; &gt;
+    <B><A HREF="#wios">wios</A></B>;
+template &lt;class Statetype&gt;
+    class <B><A HREF="#fpos">fpos</A></B>;
+typedef fpos&lt;mbstate_t&gt; <B><A HREF="#streampos">streampos</A></B>;
+typedef fpos&lt;mbstate_t&gt; <B><A HREF="#wstreampos">wstreampos</A></B>;
+
+        // MANIPULATORS
+ios_base&amp; <B><A HREF="#boolalpha">boolalpha</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#noboolalpha">noboolalpha</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#showbase">showbase</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#noshowbase">noshowbase</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#showpoint">showpoint</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#noshowpoint">noshowpoint</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#showpos">showpos</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#noshowpos">noshowpos</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#skipws">skipws</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#noskipws">noskipws</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#unitbuf">unitbuf</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#nounitbuf">nounitbuf</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#uppercase">uppercase</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#nouppercase">nouppercase</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#internal">internal</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#left">left</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#right">right</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#dec">dec</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#hex">hex</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#oct">oct</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#fixed">fixed</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#scientific">scientific</A></B>(ios_base&amp; iosbase);
+ios_base&amp; <B><A HREF="#hexfloat">hexfloat</A></B>(ios_base&amp; iosbase);  <B>[added with C++11]</B>
+ios_base&amp; <B><A HREF="#defaultfloat">defaultfloat</A></B>(ios_base&amp; iosbase); <B>[added with C++11]</B>
+
+    // TYPES
+enum class <B><A HREF="#io_errc">io_errc</A></B>; <B>[added with C++11]</B>
+
+    // ERROR HANDLING
+template&lt;&gt;
+    struct <B><A HREF="#is_error_code_enum">is_error_code_enum</A></B>&lt;io_errc&gt; <B>[added with C++11]</B>
+        : public true_type { };
+const error_category&amp; <B><A HREF="#iostream_category">iostream_category</A></B>() noexcept; <B>[added with C++11]</B>
+error_code <B><A HREF="#make_error_code">make_error_code</A></B>(io_errc errval); <B>[added with C++11]</B>
+error_condition <B><A HREF="#make_error_condition">make_error_condition</A></B>(io_errc errval); <B>[added with C++11]</B>
+}  // namespace std</PRE>
+
+<H2><A NAME="basic_ios"></A><CODE>basic_ios</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#basic_ios__bad">bad</A>
+&middot; <A HREF="#basic_ios__basic_ios">basic_ios</A>
+&middot; <A HREF="#basic_ios__char_type">char_type</A>
+&middot; <A HREF="#basic_ios__clear">clear</A>
+&middot; <A HREF="#basic_ios__copyfmt">copyfmt</A>
+&middot; <A HREF="#basic_ios__eof">eof</A>
+&middot; <A HREF="#basic_ios__exceptions">exceptions</A>
+&middot; <A HREF="#basic_ios__init">init</A>
+&middot; <A HREF="#basic_ios__fail">fail</A>
+&middot; <A HREF="#basic_ios__good">good</A>
+&middot; <A HREF="#basic_ios__init">init</A>
+&middot; <A HREF="#basic_ios__int_type">int_type</A>
+&middot; <A HREF="#basic_ios__move">move</A>
+&middot; <A HREF="#basic_ios__narrow">narrow</A>
+&middot; <A HREF="#basic_ios__off_type">off_type</A>
+&middot; <A HREF="#basic_ios__operator!">operator!</A>
+&middot; <A HREF="#basic_ios__operator_bool">operator bool</A>
+&middot; <A HREF="#basic_ios__pos_type">pos_type</A>
+&middot; <A HREF="#basic_ios__rdbuf">rdbuf</A>
+&middot; <A HREF="#basic_ios__rdstate">rdstate</A>
+&middot; <A HREF="#basic_ios__set_rdbuf">set_rdbuf</A>
+&middot; <A HREF="#basic_ios__setstate">setstate</A>
+&middot; <A HREF="#basic_ios__swap">swap</A>
+&middot; <A HREF="#basic_ios__tie">tie</A>
+&middot; <A HREF="#basic_ios__traits_type">traits_type</A>
+&middot; <A HREF="#basic_ios__widen">widen</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template &lt;class Elem, class Tr = char_traits&lt;Elem&gt; &gt;
+    class <B>basic_ios</B> : public ios_base {
+public:
+    typedef Elem <B><A HREF="#basic_ios__char_type">char_type</A></B>;
+    typedef Tr <B><A HREF="#basic_ios__traits_type">traits_type</A></B>;
+    typedef typename Tr::int_type <B><A HREF="#basic_ios__int_type">int_type</A></B>;
+    typedef typename Tr::pos_type <B><A HREF="#basic_ios__pos_type">pos_type</A></B>;
+    typedef typename Tr::off_type <B><A HREF="#basic_ios__off_type">off_type</A></B>;
+    explicit <B><A HREF="#basic_ios__basic_ios">basic_ios</A></B>(basic_streambuf&lt;Elem, Tr&gt; *strbuf);
+    virtual <B>~basic_ios</B>();
+    explicit <B><A HREF="#basic_ios__operator_bool">operator bool</A></B>() const;
+    bool <B><A HREF="#basic_ios__operator!">operator!</A></B>() const;
+    iostate <B><A HREF="#basic_ios__rdstate">rdstate</A></B>() const;
+    void <B><A HREF="#basic_ios__clear">clear</A></B>(iostate state = goodbit);
+    void <B><A HREF="#basic_ios__setstate">setstate</A></B>(iostate state);
+    bool <B><A HREF="#basic_ios__good">good</A></B>() const;
+    bool <B><A HREF="#basic_ios__eof">eof</A></B>() const;
+    bool <B><A HREF="#basic_ios__fail">fail</A></B>() const;
+    bool <B><A HREF="#basic_ios__bad">bad</A></B>() const;
+
+    iostate <B><A HREF="#basic_ios__exceptions">exceptions</A></B>() const;
+    void <B><A HREF="#basic_ios__exceptions">exceptions</A></B>(iostate newexcept);
+    basic_ios&amp; <B><A HREF="#basic_ios__copyfmt">copyfmt</A></B>(const basic_ios&amp; right);
+    char_type <B><A HREF="#basic_ios__widen">widen</A></B>(char ch) const;
+    char <B><A HREF="#basic_ios__narrow">narrow</A></B>(char_type ch, char dflt) const;
+    char_type <B><A HREF="#basic_ios__fill">fill</A></B>() const;
+    char_type <B><A HREF="#basic_ios__fill">fill</A></B>(char_type ch);
+
+    basic_ostream&lt;Elem, Tr&gt; *<B><A HREF="#basic_ios__tie">tie</A></B>() const;
+    basic_ostream&lt;Elem, Tr&gt; *<B><A HREF="#basic_ios__tie">tie</A></B>(basic_ostream&lt;Elem, Tr&gt; *newtie);
+    basic_streambuf&lt;Elem, Tr&gt; *<B><A HREF="#basic_ios__rdbuf">rdbuf</A></B>() const;
+    basic_streambuf&lt;Elem, Tr&gt;
+        *<B><A HREF="#basic_ios__rdbuf">rdbuf</A></B>(basic_streambuf&lt;Elem, Tr&gt; *strbuf);
+
+protected:
+    void <B><A HREF="#basic_ios__init">init</A></B>(basic_streambuf&lt;Elem, Tr&gt; *strbuf);
+    <B><A HREF="#basic_ios__basic_ios">basic_ios</A></B>();
+
+    void <B><A HREF="#basic_ios__move">move</A></B>(basic_ios&amp;&amp; right); <B>[added with C++11]</B>
+    void <B><A HREF="#basic_ios__move">move</A></B>(basic_ios&amp; right); <B>[added with C++11]</B>
+    void <B><A HREF="#basic_ios__swap">swap</A></B>(basic_ios&amp; right) noexcept; <B>[added with C++11]</B>
+    void <B><A HREF="#basic_ios__set_rdbuf">set_rdbuf</A></B>(basic_streambuf&lt;Elem, Tr&gt; *strbuf); <B>[added with C++11]</B>&nbsp;
+
+    <B>basic_ios</B>(const basic_ios&amp; right) = delete; <B>[added with C++11]</B>&nbsp;
+    <B>basic_ios&amp; operator=</B>(const basic_ios&amp; right) = delete; <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The template class describes the storage and member functions common
+to both input streams (of template class
+<A HREF="istream.html#basic_istream"><CODE>basic_istream</CODE></A>)
+and output streams (of template class
+<A HREF="ostream.html#basic_ostream"><CODE>basic_ostream</CODE></A>)
+that depend on the template parameters. (The class
+<A HREF="#ios_base"><CODE>ios_base</CODE></A> describes what is common
+and <I>not</I> dependent on template parameters. An object of class
+<CODE>basic_ios&lt;Elem, Tr&gt;</CODE> helps control a stream with elements
+of type <CODE>Elem</CODE>, whose
+<A HREF="string2.html#character_traits">character traits</A> are determined by the
+class <CODE>Tr</CODE>.</P>
+
+<P>An object of class <CODE>basic_ios&lt;Elem, Tr&gt;</CODE> stores:</P>
+
+<UL>
+<LI>a <B><A NAME="tie_pointer"></A>tie pointer</B> to an object of type
+<CODE><A HREF="ostream.html#basic_ostream">basic_ostream</A>&lt;Elem,
+Tr&gt;</CODE></LI>
+
+<LI>a <B><A NAME="stream_buffer_pointer"></A>stream buffer pointer</B>
+to an object of type
+<CODE><A HREF="streambu.html#basic_streambuf">basic_streambuf</A>&lt;Elem,
+Tr&gt;</CODE></LI>
+
+<LI><A HREF="#formatting_information">formatting information</A></LI>
+
+<LI><A HREF="#stream_state_information">stream state information</A>
+in a base object of type
+<A HREF="#ios_base"><CODE>ios_base</CODE></A></LI>
+
+<LI>a <B><A NAME="fill_character"></A>fill character</B> in an object
+of type <I>char_type</I></LI>
+</UL>
+
+<H3><A NAME="basic_ios__bad"></A><CODE>basic_ios::bad</CODE></H3>
+
+<PRE>bool <B>bad</B>() const;</PRE>
+
+<P>The member function returns true if
+<CODE><A HREF="#basic_ios__rdstate">rdstate</A>() &amp; badbit</CODE>
+is nonzero.</P>
+
+<H3><A NAME="basic_ios__basic_ios"></A><CODE>basic_ios::basic_ios</CODE></H3>
+
+<PRE>explicit <B>basic_ios</B>(basic_streambuf&lt;Elem, Tr&gt; *strbuf);
+<B>basic_ios</B>();</PRE>
+
+<P>The first constructor initializes its member objects by calling
+<CODE><A HREF="#basic_ios__init">init</A>(strbuf)</CODE>. The second
+(protected) constructor leaves its member objects uninitialized. A later
+call to <CODE>init</CODE> <I>must</I> initialize the object before it
+can be safely destroyed.</P>
+
+<H3><A NAME="basic_ios__char_type"></A><CODE>basic_ios::char_type</CODE></H3>
+
+<PRE>typedef Elem <B>char_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Elem</CODE>.</P>
+
+<H3><A NAME="basic_ios__clear"></A><CODE>basic_ios::clear</CODE></H3>
+
+<PRE>void <B>clear</B>(iostate state = goodbit);</PRE>
+
+<P>The member function replaces the stored
+<A HREF="#stream_state_information">stream state information</A> with
+<CODE>state |
+(<A HREF="#basic_ios__rdbuf">rdbuf</A>() != 0 ? goodbit : badbit)</CODE>.
+If <CODE>state &amp;
+<A HREF="#basic_ios__exceptions">exceptions</A>()</CODE> is nonzero, it
+then throws an object of class
+<CODE><A HREF="#ios_base__failure">failure</A></CODE>.</P>
+
+<H3><A NAME="basic_ios__copyfmt"></A><CODE>basic_ios::copyfmt</CODE></H3>
+
+<PRE>basic_ios&amp; <B>copyfmt</B>(const basic_ios&amp; right);</PRE>
+
+<P>The member function reports the
+<A HREF="#callback_event">callback event</A>
+<CODE><A HREF="#ios_base__erase_event">erase_event</A></CODE>.
+It then copies from <CODE>right</CODE> into <CODE>*this</CODE>
+the <A HREF="#fill_character">fill character</A>,
+the <A HREF="#tie_pointer">tie pointer</A>, and the
+<A HREF="#formatting_information">formatting information</A>.
+Before altering the
+<A HREF="#exception_mask">exception mask</A>, it reports the
+callback event
+<CODE><A HREF="#ios_base__copyfmt_event">copyfmt_event</A></CODE>.
+If, after the copy is complete, <CODE>state &amp;
+<A HREF="#basic_ios__exceptions">exceptions</A>()</CODE> is nonzero,
+the function effectively calls
+<CODE><A HREF="#basic_ios__clear">clear</A></CODE> with the argument
+<CODE><A HREF="#basic_ios__rdstate">rdstate</A>()</CODE>.
+It returns <CODE>*this</CODE>.</P>
+
+<H3><A NAME="basic_ios__eof"></A><CODE>basic_ios::eof</CODE></H3>
+
+<PRE>bool <B>eof</B>() const;</PRE>
+
+<P>The member function returns true if
+<CODE><A HREF="#basic_ios__rdstate">rdstate</A>() &amp; eofbit</CODE>
+is nonzero.</P>
+
+<H3><A NAME="basic_ios__exceptions"></A><CODE>basic_ios::exceptions</CODE></H3>
+
+<PRE>iostate <B>exceptions</B>() const;
+void <B>exceptions</B>(iostate newexcept);</PRE>
+
+<P>The first member function returns the stored
+<A HREF="#exception_mask">exception mask</A>. The second member
+function stores <CODE>except</CODE> in the
+exception mask. Note that storing a new exception mask
+can throw an exception just like the call
+<CODE><A HREF="#basic_ios__clear">clear</A>(
+<A HREF="#basic_ios__rdstate">rdstate</A>())</CODE>.</P>
+
+<H3><A NAME="basic_ios__fail"></A><CODE>basic_ios::fail</CODE></H3>
+
+<PRE>bool <B>fail</B>() const;</PRE>
+
+<P>The member function returns true if
+<CODE><A HREF="#basic_ios__rdstate">rdstate</A>() &amp; (badbit | failbit)</CODE>
+is nonzero.</P>
+
+<H3><A NAME="basic_ios__fill"></A><CODE>basic_ios::fill</CODE></H3>
+
+<PRE>char_type <B>fill</B>() const;
+char_type <B>fill</B>(char_type ch);</PRE>
+
+<P>The first member function returns the stored
+<A HREF="#fill_character">fill character</A>. The second member
+function stores <CODE>ch</CODE> in the fill character and returns its
+previous stored value.</P>
+
+<H3><A NAME="basic_ios__good"></A><CODE>basic_ios::good</CODE></H3>
+
+<PRE>bool <B>good</B>() const;</PRE>
+
+<P>The member function returns true if
+<CODE><A HREF="#basic_ios__rdstate">rdstate</A>() == goodbit</CODE>
+(no state flags are set).</P>
+
+<H3><A NAME="basic_ios__init"></A><CODE>basic_ios::init</CODE></H3>
+
+<PRE>void <B>init</B>(basic_streambuf&lt;Elem, Tr&gt; *strbuf);</PRE>
+
+<P>The member function stores values in all member objects, so that:</P>
+
+<UL>
+<LI><CODE><A HREF="#basic_ios__rdbuf">rdbuf</A>()</CODE> returns
+<CODE>strbuf</CODE></LI>
+
+<LI><CODE><A HREF="#basic_ios__tie">tie</A>()</CODE> returns a null
+pointer</LI>
+
+<LI><CODE><A HREF="#basic_ios__rdstate">rdstate</A>()</CODE> returns
+<CODE><A HREF="#ios_base__goodbit">goodbit</A></CODE> if
+<CODE>strbuf</CODE> is nonzero; otherwise, it returns
+<CODE><A HREF="#ios_base__badbit">badbit</A></CODE></LI>
+
+<LI><CODE><A HREF="#basic_ios__exceptions">exceptions</A>()</CODE> returns
+<CODE>goodbit</CODE></LI>
+
+<LI><CODE><A HREF="#ios_base__flags">flags</A>()</CODE> returns
+<CODE><A HREF="#ios_base__skipws">skipws</A> |
+<A HREF="#ios_base__dec">dec</A></CODE></LI>
+
+<LI><CODE><A HREF="#ios_base__width">width</A>()</CODE> returns zero</LI>
+
+<LI><CODE><A HREF="#ios_base__precision">precision</A>()</CODE>
+returns 6</LI>
+
+<LI><CODE><A HREF="#basic_ios__fill">fill</A>()</CODE> returns the
+space character</LI>
+
+<LI><CODE><A HREF="#ios_base__iword">iword</A></CODE> returns zero and
+<CODE><A HREF="#ios_base__pword">pword</A></CODE> returns a null
+pointer for all argument value</LI>
+</UL>
+
+<H3><A NAME="basic_ios__int_type"></A><CODE>basic_ios::int_type</CODE></H3>
+
+<PRE>typedef typename Ty::int_type <B>int_type</B>;</PRE>
+
+<P>The type is a synonym for
+<CODE>Ty::<A HREF="string2.html#char_traits__int_type">int_type</A></CODE>.</P>
+
+<H3><A NAME="basic_ios__move"></A><CODE>basic_ios::move</CODE></H3>
+
+<PRE>void <B>move</B>(basic_ios&amp;&amp; right) <B>[added with C++11]</B>
+void <B>move</B>(basic_ios&amp; right) <B>[added with C++11]</B></PRE>
+
+<P>The protected member function moves all the values stored in
+<CODE>right</CODE> to <CODE>*this</CODE> except the stored
+<A HREF="#stream_buffer_pointer">stream buffer pointer</A>,
+which is unchanged in <CODE> right</CODE> and set to a null pointer
+in <CODE>*this</CODE>. The stored
+<A HREF="#tie_pointer">tie pointer</A> is set to a null pointer in
+<CODE>right</CODE>.</P>
+
+<H3><A NAME="basic_ios__narrow"></A><CODE>basic_ios::narrow</CODE></H3>
+
+<PRE>char <B>narrow</B>(char_type ch, char dflt) const;</PRE>
+
+<P>The member function returns
+<CODE>(char)ch</CODE>, or <CODE>dflt</CODE> if that expression
+is undefined.</P>
+
+<H3><A NAME="basic_ios__off_type"></A><CODE>basic_ios::off_type</CODE></H3>
+
+<PRE>typedef typename Ty::off_type <B>off_type</B>;</PRE>
+
+<P>The type is a synonym for
+<CODE>Ty::<A HREF="string2.html#char_traits__off_type">off_type</A></CODE>.</P>
+
+<H3><A NAME="basic_ios__operator_bool"></A><CODE>basic_ios::operator bool</CODE></H3>
+
+<PRE>explicit <B>operator bool</B>() const;</PRE>
+
+<P>The operator returns a value convertible to <CODE>false</CODE> only if
+<CODE><A HREF="#basic_ios__fail">fail</A>()</CODE>.
+Beginning with <B>C++11</B>,
+the return type is convertible only to <CODE>bool</CODE>,
+not to <CODE>void *</CODE> or other known scalar type.</P>
+
+<H3><A NAME="basic_ios__operator!"></A><CODE>basic_ios::operator!</CODE></H3>
+
+<PRE>bool <B>operator!</B>() const;</PRE>
+
+<P>The operator returns
+<CODE><A HREF="#basic_ios__fail">fail</A>()</CODE>.</P>
+
+<H3><A NAME="basic_ios__pos_type"></A><CODE>basic_ios::pos_type</CODE></H3>
+
+<PRE>typedef typename Ty::pos_type <B>pos_type</B>;</PRE>
+
+<P>The type is a synonym for
+<CODE>Ty::<A HREF="string2.html#char_traits__pos_type">pos_type</A></CODE>.</P>
+
+<H3><A NAME="basic_ios__rdbuf"></A><CODE>basic_ios::rdbuf</CODE></H3>
+
+<PRE>basic_streambuf&lt;Elem, Tr&gt; *<B>rdbuf</B>() const;
+basic_streambuf&lt;Elem, Tr&gt; *<B>rdbuf</B>(basic_streambuf&lt;Elem, Tr&gt; *strbuf);</PRE>
+
+<P>The first member function returns the stored
+<A HREF="#stream_buffer_pointer">stream buffer pointer</A>.</P>
+<P>The second member function stores <CODE>strbuf</CODE> in the stored
+stream buffer pointer and returns the previously stored value.</P>
+
+<H3><A NAME="basic_ios__rdstate"></A><CODE>basic_ios::rdstate</CODE></H3>
+
+<PRE>iostate <B>rdstate</B>() const;</PRE>
+
+<P>The member function returns the stored
+<A HREF="#stream_state_information">stream state information</A>.</P>
+
+<H3><A NAME="basic_ios__set_rdbuf"></A><CODE>basic_ios::set_rdbuf</CODE></H3>
+
+<PRE>void <B>set_rdbuf</B>(basic_streambuf&lt;Elem, Tr&gt; *strbuf); <B>[added with C++11]</B></PRE>
+
+<P>The protected member function stores <CODE>strbuf</CODE> in the
+<A HREF="#stream_buffer_pointer">stream buffer pointer</A>.
+It does <B>not</B> call <CODE><A HREF="#basic_ios__clear">clear</A></CODE>,
+hence <CODE>strbuf</CODE> must <B>not</B> be a null pointer.</P>
+
+<P>The member function throws nothing.</P>
+
+<H3><A NAME="basic_ios__setstate"></A><CODE>basic_ios::setstate</CODE></H3>
+
+<PRE>void <B>setstate</B>(iostate state);</PRE>
+
+<P>The member function effectively calls
+<CODE><A HREF="#basic_ios__clear">clear</A>(state |
+<A HREF="#basic_ios__rdstate">rdstate</A>())</CODE>.</P>
+
+<H3><A NAME="basic_ios__swap"></A><CODE>basic_ios::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(basic_ios&amp; right) noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The protected member function exchanges all the values stored in
+<CODE>right</CODE> with <CODE>*this</CODE> except the stored
+<A HREF="#stream_buffer_pointer">stream buffer pointer</A>.</P>
+
+<H3><A NAME="basic_ios__tie"></A><CODE>basic_ios::tie</CODE></H3>
+
+<PRE>basic_ostream&lt;Elem, Tr&gt; *<B>tie</B>() const;
+basic_ostream&lt;Elem, Tr&gt; *<B>tie</B>(basic_ostream&lt;Elem, Tr&gt; *newtie);</PRE>
+
+<P>The first member function returns the stored
+<A HREF="#tie_pointer">tie pointer</A>. The second member function
+stores <CODE>newtie</CODE> in the tie pointer and returns its previous
+stored value.</P>
+
+<H3><A NAME="basic_ios__traits_type"></A><CODE>basic_ios::traits_type</CODE></H3>
+
+<PRE>typedef Tr <B>traits_type</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Tr</CODE>.</P>
+
+<H3><A NAME="basic_ios__widen"></A><CODE>basic_ios::widen</CODE></H3>
+
+<PRE>char_type <B>widen</B>(char ch) const;</PRE>
+
+<P>The member function returns
+<CODE>Elem(ch)</CODE>.</P>
+
+<H2><A NAME="boolalpha"></A><CODE>boolalpha</CODE></H2>
+
+<PRE>ios_base&amp; <B>boolalpha</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__boolalpha">boolalpha</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="dec"></A><CODE>dec</CODE></H2>
+
+<PRE>ios_base&amp; <B>dec</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__dec">dec</A>, ios_base::
+<A HREF="#ios_base__basefield">basefield</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="defaultfloat"></A><CODE>defaultfloat</CODE></H2>
+
+<PRE>ios_base&amp; <B>defaultfloat</B>(ios_base&amp; iosbase); <B>[added with C++11]</B></PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__unsetf">unsetf</A>(ios_base::
+<A HREF="#ios_base__floatfield">floatfield</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="fixed"></A><CODE>fixed</CODE></H2>
+
+<PRE>ios_base&amp; <B>fixed</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__fixed">fixed</A>, ios_base::
+<A HREF="#ios_base__floatfield">floatfield</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="fpos"></A><CODE>fpos</CODE></H2>
+
+<PRE>template &lt;class St&gt;
+    class <B>fpos</B> {
+public:
+    <B><A HREF="#fpos__fpos">fpos</A></B>(streamoff off);
+    <B><A HREF="#fpos__fpos">fpos</A></B>(St state, fpos_t filepos);
+    St <B><A HREF="#fpos__state">state</A></B>() const;
+    void <B><A HREF="#fpos__state">state</A></B>(St state);
+    <B><A HREF="#fpos__operator_streamoff">operator streamoff</A></B>() const;
+    streamoff <B><A HREF="#fpos__operator-">operator-</A></B>(const fpos&amp; right) const;
+    fpos&amp; <B><A HREF="#fpos__operator+2">operator+=</A></B>(streamoff off);
+    fpos&amp; <B><A HREF="#fpos__operator-2">operator-=</A></B>(streamoff off);
+    fpos <B><A HREF="#fpos__operator+">operator+</A></B>(streamoff off) const;
+    fpos <B><A HREF="#fpos__operator-">operator-</A></B>(streamoff off) const;
+    bool <B><A HREF="#fpos__operator22">operator==</A></B>(const fpos&amp; right) const;
+    bool <B><A HREF="#fpos__operator!2">operator!=</A></B>(const fpos&amp; right) const;
+    };</PRE>
+
+<P>The template class describes an object
+that can store all the information needed to restore an arbitrary
+<A HREF="lib_file.html#file-position_indicator">file-position indicator</A>
+within any stream. An object of class <CODE>fpos&lt;St&gt;</CODE> effectively
+stores at least two member objects:</P>
+
+<UL>
+<LI>a byte offset, of type
+<CODE><A HREF="#streamoff">streamoff</A></CODE></LI>
+
+<LI>a conversion state, for use by an object of class <CODE>basic_filebuf</CODE>,
+of type <B><CODE>St</CODE></B>, typically
+<CODE><A HREF="wchar.html#mbstate_t">mbstate_t</A></CODE></LI>
+</UL>
+
+<P>It can also store an arbitrary file position, for use by an object of class
+<CODE><A HREF="fstream.html#basic_filebuf">basic_filebuf</A></CODE>,
+of type <CODE><A HREF="stdio.html#fpos_t">fpos_t</A></CODE>.
+For an environment with limited file size, however,
+<CODE>streamoff</CODE> and <CODE>fpos_t</CODE> may sometimes
+be used interchangeably. And for an environment with no
+streams that have a
+<A HREF="charset.html#state-dependent_encoding">state-dependent encoding</A>,
+<CODE>mbstate_t</CODE> may actually be unused. So the number of
+member objects stored may vary.</P>
+
+<H3><A NAME="fpos__fpos"></A><CODE>fpos::fpos</CODE></H3>
+
+<PRE><B>fpos</B>(streamoff off);
+<B>fpos</B>(St state, fpos_t filepos);</PRE>
+
+<P>The first constructor stores the offset
+<CODE>off</CODE>,
+relative to the beginning of file and in the
+<A HREF="charset.html#initial_conversion_state">initial conversion state</A>
+(if that matters).
+If <CODE>off</CODE> is -1,
+the resulting object represents an invalid stream position.</P>
+
+<P>The second constructor stores the object <CODE>state</CODE>
+and a file position determined by <CODE>filepos</CODE>.</P>
+
+<H3><A NAME="fpos__operator!2"></A><CODE>fpos::operator!=</CODE></H3>
+
+<PRE>bool <B>operator!=</B>(const fpos&amp; right) const;</PRE>
+
+<P>The member function returns <CODE>!(*this == right)</CODE>.</P>
+
+<H3><A NAME="fpos__operator+"></A><CODE>fpos::operator+</CODE></H3>
+
+<PRE>fpos <B>operator+</B>(streamoff off) const;</PRE>
+
+<P>The member function returns <CODE>fpos(*this) += off</CODE>.</P>
+
+<H3><A NAME="fpos__operator+2"></A><CODE>fpos::operator+=</CODE></H3>
+
+<PRE>fpos&amp; <B>operator+=</B>(streamoff off);</PRE>
+
+<P>The member function adds <CODE>off</CODE> to the stored offset member object,
+then returns <CODE>*this</CODE>. For positioning within a file, the
+result is generally valid only for
+<A HREF="lib_file.html#binary_stream">binary streams</A> that do not have a
+<A HREF="charset.html#state-dependent_encoding">state-dependent encoding</A>.</P>
+
+<H3><A NAME="fpos__operator-"></A><CODE>fpos::operator-</CODE></H3>
+
+<PRE>streamoff <B>operator-</B>(const fpos&amp; right) const;
+fpos <B>operator-</B>(streamoff off) const;</PRE>
+
+<P>The first member function returns <CODE>(streamoff)*this - (streamoff)right</CODE>.
+The second member function returns <CODE>fpos(*this) -= off</CODE>.</P>
+
+<H3><A NAME="fpos__operator-2"></A><CODE>fpos::operator-=</CODE></H3>
+
+<PRE>fpos&amp; <B>operator-=</B>(streamoff off);</PRE>
+
+<P>The member function returns <CODE>fpos(*this) -= off</CODE>.
+For positioning within a file, the result is generally valid only for
+<A HREF="lib_file.html#binary_stream">binary streams</A> that do not have a
+<A HREF="charset.html#state-dependent_encoding">state-dependent encoding</A>.</P>
+
+<H3><A NAME="fpos__operator22"></A><CODE>fpos::operator==</CODE></H3>
+
+<PRE>bool <B>operator==</B>(const fpos&amp; right) const;</PRE>
+
+<P>The member function returns <CODE>(streamoff)*this == (streamoff)right</CODE>.</P>
+
+<H3><A NAME="fpos__operator_streamoff"></A><CODE>fpos::operator streamoff</CODE></H3>
+
+<PRE><B>operator streamoff</B>() const;</PRE>
+
+<P>The member function returns the stored offset member object,
+plus any additional offset stored as part of the <CODE>fpos_t</CODE> member object.</P>
+
+<H3><A NAME="fpos__state"></A><CODE>fpos::state</CODE></H3>
+
+<PRE>St <B><A HREF="#fpos__state">state</A></B>() const;
+void <B><A HREF="#fpos__state">state</A></B>(St state);</PRE>
+
+<P>The first member function returns the value stored in the
+<CODE>St</CODE> member object. The second member function
+stores <CODE>state</CODE> in the <CODE>St</CODE> member object.</P>
+
+<H2><A NAME="hex"></A><CODE>hex</CODE></H2>
+
+<PRE>ios_base&amp; <B>hex</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__hex">hex</A>, ios_base::
+<A HREF="#ios_base__basefield">basefield</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="hexfloat"></A><CODE>hexfloat</CODE></H2>
+
+<PRE>ios_base&amp; <B>hexfloat</B>(ios_base&amp; iosbase); <B>[added with C++11]</B></PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__fixed">fixed</A> | ios_base::
+<A HREF="#ios_base__scientific">scientific</A>, ios_base::
+<A HREF="#ios_base__floatfield">floatfield</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="internal"></A><CODE>internal</CODE></H2>
+
+<PRE>ios_base&amp; <B>internal</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__internal">internal</A>, ios_base::
+<A HREF="#ios_base__adjustfield">adjustfield</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="ios"></A><CODE>ios</CODE></H2>
+
+<PRE>typedef basic_ios&lt;char, char_traits&lt;char&gt; &gt; <B>ios</B>;</PRE>
+
+<P>The type is a synonym for template class
+<A HREF="#basic_ios"><CODE>basic_ios</CODE></A>, specialized for
+elements of type <I>char</I> with default
+<A HREF="string2.html#character_traits">character traits</A>.</P>
+
+<H2><A NAME="ios_base"></A><CODE>ios_base</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#ios_base__event">event</A>
+&middot; <A HREF="#ios_base__event_callback">event_callback</A>
+&middot; <A HREF="#ios_base__failure">failure</A>
+&middot; <A HREF="#ios_base__flags">flags</A>
+&middot; <A HREF="#ios_base__fmtflags">fmtflags</A>
+&middot; <A HREF="#ios_base__Init">Init</A>
+&middot; <A HREF="#ios_base__ios_base">ios_base</A>
+&middot; <A HREF="#ios_base__iostate">iostate</A>
+&middot; <A HREF="#ios_base__iword">iword</A>
+&middot; <A HREF="#ios_base__openmode">openmode</A>
+&middot; <A HREF="#ios_base__precision">precision</A>
+&middot; <A HREF="#ios_base__pword">pword</A>
+&middot; <A HREF="#ios_base__register_callback">register_callback</A>
+&middot; <A HREF="#ios_base__seekdir">seekdir</A>
+&middot; <A HREF="#ios_base__setf">setf</A>
+&middot; <A HREF="#ios_base__streamoff">streamoff</A>
+&middot; <A HREF="#ios_base__streampos">streampos</A>
+&middot; <A HREF="#ios_base__sync_with_stdio">sync_with_stdio</A>
+&middot; <A HREF="#ios_base__unsetf">unsetf</A>
+&middot; <A HREF="#ios_base__width">width</A>
+&middot; <A HREF="#ios_base__xalloc">xalloc</A>
+</CODE></B></P>
+<HR>
+
+<PRE>class <B>ios_base</B> {
+public:
+    class <B><A HREF="#ios_base__failure">failure</A></B>;
+    typedef T1 <B><A HREF="#ios_base__fmtflags">fmtflags</A></B>;
+    static const fmtflags <B>boolalpha</B>, <B>dec</B>, <B>fixed</B>, <B>hex</B>,
+        <B>internal</B>, <B>left</B>, <B>oct</B>, <B>right</B>, <B>scientific</B>,
+        <B>showbase</B>, <B>showpoint</B>, <B>showpos</B>, <B>skipws</B>, <B>unitbuf</B>,
+        <B>uppercase</B>, <B>adjustfield</B>, <B>basefield</B>, <B>floatfield</B>;
+    typedef T2 <B><A HREF="#ios_base__iostate">iostate</A></B>;
+    static const iostate <B>badbit</B>, <B>eofbit</B>, <B>failbit</B>,
+        <B>goodbit</B>;
+    typedef T3 <B><A HREF="#ios_base__openmode">openmode</A></B>;
+    static const openmode <B>app</B>, <B>ate</B>, <B>binary</B>, <B>in</B>, <B>out</B>,
+        <B>trunc</B>;
+    typedef T4 <B><A HREF="#ios_base__seekdir">seekdir</A></B>;
+    typedef std::streamoff <B><A HREF="#ios_base__streamoff">streamoff</A></B>;
+    typedef std::streampos <B><A HREF="#ios_base__streampos">streampos</A></B>;
+    static const seekdir <B>beg</B>, <B>cur</B>, <B>end</B>;
+    enum <B><A HREF="#ios_base__event">event</A></B> {
+        <B>copyfmt_event</B>, <B>erase_event</B>};
+
+    class <B><A HREF="#ios_base__Init">Init</A></B>;
+
+    fmtflags <B><A HREF="#ios_base__flags">flags</A></B>() const;
+    fmtflags <B><A HREF="#ios_base__flags">flags</A></B>(fmtflags newfmtflags);
+    fmtflags <B><A HREF="#ios_base__setf">setf</A></B>(fmtflags newfmtflags);
+    fmtflags <B><A HREF="#ios_base__setf">setf</A></B>(fmtflags newfmtflags, fmtflags mask);
+    void <B><A HREF="#ios_base__unsetf">unsetf</A></B>(fmtflags mask);
+
+    streamsize <B><A HREF="#ios_base__precision">precision</A></B>() const;
+    streamsize <B><A HREF="#ios_base__precision">precision</A></B>(streamsize newprecision);
+    streamsize <B><A HREF="#ios_base__width">width</A></B>() const;
+    streamsize <B><A HREF="#ios_base__width">width</A></B>(streamsize newwidth);
+
+    static int <B><A HREF="#ios_base__xalloc">xalloc</A></B>();
+    long&amp; <B><A HREF="#ios_base__iword">iword</A></B>(int idx);
+    void *&amp; <B><A HREF="#ios_base__pword">pword</A></B>(int idx);
+    typedef void *(<B><A HREF="#ios_base__event_callback">event_callback</A></B>(event ev,
+        ios_base&amp; iosbase, int idx);
+    void <B><A HREF="#ios_base__register_callback">register_callback</A></B>(event_callback pfn, int idx);
+    static bool <B><A HREF="#ios_base__sync_with_stdio">sync_with_stdio</A></B>(bool newsync = true);
+
+protected:
+    <B><A HREF="#ios_base__ios_base">ios_base</A></B>();
+    <B>ios_base</B>(const ios_base&amp; right) = delete; <B>[added with C++11]</B>
+    ios_base&amp; <B>operator=</B>(const ios_base&amp; right) = delete; <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The class describes the storage and member functions common to both
+input and output streams that does not depend on the template
+parameters. (The template class
+<A HREF="#basic_ios"><CODE>basic_ios</CODE></A> describes what is
+common and <I>is</I> dependent on template parameters.</P>
+
+<P>An object of class <CODE>ios_base</CODE> stores
+<B><A NAME="formatting_information"></A>formatting information</B>,
+which consists of:</P>
+
+<UL>
+<LI><B><A NAME="format_flags"></A>format flags</B> in an object of type
+<A HREF="#ios_base__fmtflags"><CODE>fmtflags</CODE></A></LI>
+
+<LI>an <B><A NAME="exception_mask"></A>exception mask</B> in an
+object of type
+<A HREF="#ios_base__iostate"><CODE>iostate</CODE></A></LI>
+
+<LI>a <B><A NAME="field_width"></A>field width</B> in an object of
+type <I>int</I></LI>
+
+<LI>a <B><A NAME="display_precision"></A>display precison</B> in an
+object of type <I>int</I></LI>
+
+<LI>two <B><A NAME="extensible_arrays"></A>extensible arrays</B>,
+with elements of type <I>long</I> and <I>void</I> pointer</LI>
+</UL>
+
+<P>An object of class <CODE>ios_base</CODE> also stores
+<B><A NAME="stream_state_information"></A>stream state information</B>,
+in an object of type
+<A HREF="#ios_base__iostate"><CODE>iostate</CODE></A>, and a
+<B><A NAME="callback_stack"></A>callback stack</B>.</P>
+
+<H3><A NAME="ios_base__event"></A><CODE>ios_base::event</CODE></H3>
+
+<PRE>enum <B>event</B> {
+    <B>copyfmt_event</B>, <B>erase_event</B>};</PRE>
+
+<P>The type is an enumeration that describes an
+object that can store the
+<B><A NAME="callback_event"></A>callback event</B> used as an argument to
+a function registered with
+<CODE><A HREF="#ios_base__register_callback">register_callback</A></CODE>.
+The distinct event values are:</P>
+
+<UL>
+<LI><CODE><A NAME="ios_base__copyfmt_event"></A>copyfmt_event</CODE>,
+to identify a callback that occurs near the end of a call to
+<CODE><A HREF="#basic_ios__copyfmt">copyfmt</A></CODE>, just before the
+<A HREF="#exception_mask">exception mask</A> is copied.</LI>
+
+<LI><CODE><A NAME="ios_base__erase_event"></A>erase_event</CODE>,
+to identify a callback that occurs at the beginning of a call to
+<CODE><A HREF="#basic_ios__copyfmt">copyfmt</A></CODE>, or at
+the beginning of a call to the destructor for <CODE>*this</CODE>.</LI>
+</UL>
+
+<H3><A NAME="ios_base__event_callback"></A><CODE>ios_base::event_callback</CODE></H3>
+
+<PRE>typedef void *(<B>event_callback</B>(event ev,
+        ios_base&amp; iosbase, int idx);</PRE>
+
+<P>The type describes a pointer to a function that can
+be registered with
+<CODE><A HREF="#ios_base__register_callback">register_callback</A></CODE>.
+Such a function must not throw an exception.</P>
+
+<H3><A NAME="ios_base__failure"></A><CODE>ios_base::failure</CODE></H3>
+
+<PRE>class <B>failure</B>
+    : public <A HREF="system_error.html#system_error">system_error</A> {
+public:
+    explicit failure(const string&amp; message);
+    explicit failure(const string&amp; message,
+        const error_code&amp; code); <B>[added with C++11]</B>
+    explicit <B>failure</B>(const char *); <B>[added with C++11]</B>
+    explicit <B>failure</B>(const char *,
+        const error_code&amp; code); <B>[added with C++11]</B>
+    };</PRE>
+
+<P>The member class serves as the base class
+for all exceptions thrown by the member function
+<CODE><A HREF="#basic_ios__clear">clear</A></CODE> in template class
+<A HREF="#basic_ios"><CODE>basic_ios</CODE></A>. The value returned by
+<CODE><A HREF="exceptio.html#exception__what">what</A>()</CODE> is a copy of
+<CODE>message</CODE>, possibly augmented with test based on <CODE>code</CODE>.
+If <CODE>code</CODE> is not specified, it is taken as
+<CODE><A HREF="#make_error_code">make_error_code</A>(io_errc::stream)</CODE>.</P>
+
+<H3><A NAME="ios_base__flags"></A><CODE>ios_base::flags</CODE></H3>
+
+<PRE>fmtflags <B>flags</B>() const;
+fmtflags <B>flags</B>(fmtflags newfmtflags);</PRE>
+
+<P>The first member function returns the stored
+<A HREF="#format_flags">format flags</A>. The second member function
+stores <CODE>newfmtflags</CODE> in the format flags and returns its previous
+stored value.</P>
+
+<H3><A NAME="ios_base__fmtflags"></A><CODE>ios_base::fmtflags</CODE></H3>
+
+<PRE>typedef T1 <B>fmtflags</B>;
+static const fmtflags <B>boolalpha</B>, <B>dec</B>, <B>fixed</B>, <B>hex</B>,
+    <B>internal</B>, <B>left</B>, <B>oct</B>, <B>right</B>, <B>scientific</B>,
+    <B>showbase</B>, <B>showpoint</B>, <B>showpos</B>, <B>skipws</B>, <B>unitbuf</B>,
+    <B>uppercase</B>, <B>adjustfield</B>, <B>basefield</B>, <B>floatfield</B>;</PRE>
+
+<P>The type is a <A HREF="lib_cpp.html#bitmask_type">bitmask type</A>
+<CODE>T1</CODE> that describes an object that can store
+<A HREF="#format_flags">format flags</A>. The distinct flag values (elements) are:</P>
+
+<UL>
+<LI><CODE><A NAME="ios_base__boolalpha"></A>boolalpha</CODE>, to insert or
+extract objects of type <I>bool</I> as names (such as <CODE>true</CODE>
+and <CODE>false</CODE>) rather than as numeric values</LI>
+
+<LI><CODE><A NAME="ios_base__dec"></A>dec</CODE>, to insert or extract
+integer values in decimal format</LI>
+
+<LI><CODE><A NAME="ios_base__fixed"></A>fixed</CODE>, to insert
+floating-point values in fixed-point format (with no exponent field)</LI>
+
+<LI><CODE><A NAME="ios_base__hex"></A>hex</CODE>, to insert or extract
+integer values in hexadecimal format</LI>
+
+<LI><CODE><A NAME="ios_base__internal"></A>internal</CODE>,
+to pad to a <A HREF="#field_width">field width</A>
+as needed by inserting <A HREF="#fill_character">fill
+characters</A> at a point internal to a generated numeric field</LI>
+
+<LI><CODE><A NAME="ios_base__left"></A>left</CODE>,
+to pad to a <A HREF="#field_width">field width</A> as needed
+by inserting <A HREF="#fill_character">fill characters</A>
+at the end of a generated field (left justification)</LI>
+
+<LI><CODE><A NAME="ios_base__oct"></A>oct</CODE>, to insert or extract
+integer values in octal format</LI>
+
+<LI><CODE><A NAME="ios_base__right"></A>right</CODE>,
+to pad to a <A HREF="#field_width">field width</A>
+as needed by inserting <A HREF="#fill_character">fill characters</A>
+at the beginning of a generated field (right justification)</LI>
+
+<LI><CODE><A NAME="ios_base__scientific"></A>scientific</CODE>, to insert
+floating-point values in scientific format (with an exponent field)</LI>
+
+<LI><CODE><A NAME="ios_base__showbase"></A>showbase</CODE>, to insert a
+prefix that reveals the base of a generated integer field</LI>
+
+<LI><CODE><A NAME="ios_base__showpoint"></A>showpoint</CODE>, to insert a
+decimal point unconditionally in a generated floating-point field</LI>
+
+<LI><CODE><A NAME="ios_base__showpos"></A>showpos</CODE>, to insert a plus
+sign in a non-negative generated numeric field</LI>
+
+<LI><CODE><A NAME="ios_base__skipws"></A>skipws</CODE>, to skip leading
+<A HREF="lib_prin.html#white_space">white space</A> before certain
+extractions</LI>
+
+<LI><CODE><A NAME="ios_base__unitbuf"></A>unitbuf</CODE>, to flush output
+after each insertion</LI>
+
+<LI><CODE><A NAME="ios_base__uppercase"></A>uppercase</CODE>, to insert
+uppercase equivalents of lowercase letters in certain insertions</LI>
+</UL>
+
+<P>In addition, several useful values are:</P>
+
+<UL>
+<LI><CODE><A NAME="ios_base__adjustfield"></A>adjustfield</CODE>,
+<CODE>internal | left | right</CODE></LI>
+
+<LI><CODE><A NAME="ios_base__basefield"></A>basefield</CODE>,
+<CODE>dec | hex | oct</CODE></LI>
+
+<LI><CODE><A NAME="ios_base__floatfield"></A>floatfield</CODE>,
+<CODE>fixed | scientific</CODE></LI>
+</UL>
+
+<H3><A NAME="ios_base__Init"></A><CODE>ios_base::Init</CODE></H3>
+
+<PRE>class <B>Init</B> {
+    };</PRE>
+
+<P>The nested class describes an object whose construction ensures that
+the standard iostreams objects are properly
+<A HREF="iostream.html#constructing_iostreams">constructed</A>, even
+before the execution of a constructor for an arbitrary static object.</P>
+
+<H3><A NAME="ios_base__ios_base"></A><CODE>ios_base::ios_base</CODE></H3>
+
+<PRE><B>ios_base</B>();</PRE>
+
+<P>The (protected) constructor does nothing. A later call to
+<CODE>basic_ios::<A HREF="#basic_ios__init">init</A></CODE>
+<I>must</I> initialize the object before it can be safely destroyed.
+Thus, the only safe use for class <CODE>ios_base</CODE> is as a base
+class for template class
+<CODE><A HREF="#basic_ios">basic_ios</A></CODE>.</P>
+
+<H3><A NAME="ios_base__iostate"></A><CODE>ios_base::iostate</CODE></H3>
+
+<PRE>typedef T2 <B>iostate</B>;
+static const iostate <B>badbit</B>, <B>eofbit</B>, <B>failbit</B>, <B>goodbit</B>;</PRE>
+
+<P>The type is a <A HREF="lib_cpp.html#bitmask_type">bitmask type</A>
+<CODE>T2</CODE> that describes an object that can store
+<A HREF="#stream_state_information">stream state information</A>. The
+distinct flag values (elements) are:</P>
+
+<UL>
+<LI><CODE><A NAME="ios_base__badbit"></A>badbit</CODE>, to record a loss of
+integrity of the stream buffer</LI>
+
+<LI><CODE><A NAME="ios_base__eofbit"></A>eofbit</CODE>, to record
+end-of-file while extracting from a stream</LI>
+
+<LI><CODE><A NAME="ios_base__failbit"></A>failbit</CODE>, to record a
+failure to extract a valid field from a stream</LI>
+</UL>
+
+<P>In addition, a useful value is:</P>
+
+<UL>
+<LI><CODE><A NAME="ios_base__goodbit"></A>goodbit</CODE>, no bits set</LI>
+</UL>
+
+<H3><A NAME="ios_base__iword"></A><CODE>ios_base::iword</CODE></H3>
+
+<PRE>long&amp; <B>iword</B>(int idx);</PRE>
+
+<P>The member function returns a reference to element
+<CODE>idx</CODE> of the
+<A HREF="#extensible_arrays">extensible array</A> with elements of type
+<I>long.</I> All elements are effectively present and initially store
+the value zero. The returned reference is invalid after the next call to
+<CODE>iword</CODE> for the object, after the object is altered by a call to
+<CODE>basic_ios::<A HREF="#basic_ios__copyfmt">copyfmt</A></CODE>, or
+after the object is destroyed.</P>
+
+<P>If <CODE>idx</CODE> is negative, or if unique storage is unavailable
+for the element, the function calls
+<CODE><A HREF="#basic_ios__setstate">setstate</A>(badbit)</CODE>
+and returns a reference that might not be unique.</P>
+
+<P>To obtain a unique index, for use across all objects of type
+<CODE>ios_base</CODE>, call
+<CODE><A HREF="#ios_base__xalloc">xalloc</A></CODE>.</P>
+
+<H3><A NAME="ios_base__openmode"></A><CODE>ios_base::openmode</CODE></H3>
+
+<PRE>typedef T3 <B>openmode</B>;
+static const openmode <B>app</B>, <B>ate</B>, <B>binary</B>, <B>in</B>, <B>out</B>, <B>trunc</B>;</PRE>
+
+<P>The type is a <A HREF="lib_cpp.html#bitmask_type">bitmask type</A>
+<CODE>T3</CODE> that describes an object that can store the
+<B><A NAME="opening_mode"></A>opening mode</B> for several iostreams
+objects. The distinct flag values (elements) are:</P>
+
+<UL>
+<LI><CODE><A NAME="ios_base__app"></A>app</CODE>, to seek to the end of a
+stream before each insertion</LI>
+
+<LI><CODE><A NAME="ios_base__ate"></A>ate</CODE>, to seek to the end of a
+stream when its controlling object is first created</LI>
+
+<LI><CODE><A NAME="ios_base__binary"></A>binary</CODE>, to read a file as a
+<A HREF="lib_file.html#binary_stream">binary stream</A>,
+rather than as a
+<A HREF="lib_file.html#text_stream">text stream</A></LI>
+
+<LI><CODE><A NAME="ios_base__in"></A>in</CODE>,
+to permit extraction from a stream</LI>
+
+<LI><CODE><A NAME="ios_base__out"></A>out</CODE>,
+to permit insertion to a stream</LI>
+
+<LI><CODE><A NAME="ios_base__trunc"></A>trunc</CODE>, to truncate an
+existing file when its controlling object is first created</LI>
+</UL>
+
+<H3><A NAME="ios_base__precision"></A><CODE>ios_base::precision</CODE></H3>
+
+<PRE>streamsize <B>precision</B>() const;
+streamsize <B>precision</B>(streamsize newprecision);</PRE>
+
+<P>The first member function returns the stored
+<A HREF="#display_precision">display precision</A>. The second member
+function stores <CODE>newprecision</CODE> in the display precision and returns
+its previous stored value.</P>
+
+<H3><A NAME="ios_base__pword"></A><CODE>ios_base::pword</CODE></H3>
+
+<PRE>void *&amp; <B>pword</B>(int idx);</PRE>
+
+<P>The member function returns a reference to element <CODE>idx</CODE> of the
+<A HREF="#extensible_arrays">extensible array</A> with elements of type
+<I>void</I> pointer. All elements are effectively present and initially
+store the null pointer. The returned reference is invalid after the next
+call to <CODE>pword</CODE> for the object,
+after the object is altered by a call to
+<CODE>basic_ios::<A HREF="#basic_ios__copyfmt">copyfmt</A></CODE>, or
+after the object is destroyed.</P>
+
+<P>If <CODE>idx</CODE> is negative, or if unique storage is unavailable
+for the element, the function calls
+<CODE><A HREF="#basic_ios__setstate">setstate</A>(badbit)</CODE>
+and returns a reference that might not be unique.</P>
+
+<P>To obtain a unique index, for use across all objects of type
+<CODE>ios_base</CODE>, call
+<CODE><A HREF="#ios_base__xalloc">xalloc</A></CODE>.</P>
+
+<H3><A NAME="ios_base__register_callback"></A><CODE>ios_base::register_callback</CODE></H3>
+
+<PRE>void <B>register_callback</B>(event_callback pfn, int idx);</PRE>
+
+<P>The member function pushes the pair <CODE>{pfn, idx}</CODE>
+onto the stored
+<A HREF="#callback_stack">callback stack</A>. When a
+<A HREF="#callback_event">callback event</A> <CODE>ev</CODE> is reported,
+the functions are called, in reverse order of registry, by the
+expression <CODE>(*pfn)(ev, *this, idx)</CODE>.</P>
+
+<H3><A NAME="ios_base__seekdir"></A><CODE>ios_base::seekdir</CODE></H3>
+
+<PRE>typedef T4 <B>seekdir</B>;
+static const seekdir <B>beg</B>, <B>cur</B>, <B>end</B>;</PRE>
+
+<P>The type is an enumeration type <CODE>T4</CODE> that describes an
+object that can store the
+<B><A NAME="seek_mode"></A>seek mode</B> used as an argument to the
+member functions of several iostreams classes. The distinct flag values
+are:</P>
+
+<UL>
+<LI><CODE><A NAME="ios_base__beg"></A>beg</CODE>, to seek (alter the
+current read or write position) relative to the beginning oc a sequence
+(array, stream, or file)</LI>
+
+<LI><CODE><A NAME="ios_base__cur"></A>cur</CODE>, to seek relative to the
+current position within a sequence</LI>
+
+<LI><CODE><A NAME="ios_base__end"></A>end</CODE>, to seek relative to the
+end of a sequence</LI>
+</UL>
+
+<H3><A NAME="ios_base__setf"></A><CODE>ios_base::setf</CODE></H3>
+
+<PRE>fmtflags <B>setf</B>(fmtflags newfmtflags);
+fmtflags <B>setf</B>(fmtflags newfmtflags, fmtflags mask);</PRE>
+
+<P>The first member function effectively calls
+<CODE><A HREF="#ios_base__flags">flags</A>(newfmtflags | flags())</CODE> (set
+selected bits), then returns the previous
+<A HREF="#format_flags">format flags</A>. The second member function
+effectively calls
+<CODE>flags(newfmtflags &amp; mask | flags() &amp; ~mask)</CODE> (replace selected
+bits under a mask), then returns the previous format flags.</P>
+
+<H3><A NAME="ios_base__streamoff"></A><CODE>ios_base::streamoff</CODE></H3>
+
+<PRE>typedef std::streamoff <B><A HREF="#ios_base__streamoff">streamoff</A></B>;</PRE>
+
+<P>The type is a synonym for <CODE>std::<A HREF="#streamoff">streamoff</A></CODE>.</P>
+
+<H3><A NAME="ios_base__streampos"></A><CODE>ios_base::streampos</CODE></H3>
+
+<PRE>typedef std::streampos <B><A HREF="#ios_base__streampos">streampos</A></B>;</PRE>
+
+<P>The type is a synonym for <CODE>std::<A HREF="#streampos">streampos</A></CODE>.</P>
+
+<H3><A NAME="ios_base__sync_with_stdio"></A><CODE>ios_base::sync_with_stdio</CODE></H3>
+
+<PRE>static bool <B>sync_with_stdio</B>(bool newsync = true);</PRE>
+
+<P>The static member function stores a
+<B><A NAME="stdio_sync_flag"></A>stdio sync flag</B>, which is initially true.
+When true, this flag ensures that operations on the same file are properly synchronized
+between the <A HREF="lib_cpp.html#iostreams">iostreams</A> functions and those defined
+in the <A HREF="index.html#Standard_C_Library">Standard C library</A>.
+Otherwise, synchronization may or may not be guaranteed, but performance may be
+improved.
+The function stores <CODE>newsync</CODE> in the stdio sync flag and returns its
+previous stored value. You can call it reliably only before performing any operations
+on the <A HREF="lib_over.html#standard_streams">standard streams</A>.</P>
+
+<H3><A NAME="ios_base__unsetf"></A><CODE>ios_base::unsetf</CODE></H3>
+
+<PRE>void <B>unsetf</B>(fmtflags mask);</PRE>
+
+<P>The member function effectively calls
+<CODE><A HREF="#ios_base__flags">flags</A>(~mask &amp; flags())</CODE>
+(clear selected bits).</P>
+
+<H3><A NAME="ios_base__width"></A><CODE>ios_base::width</CODE></H3>
+
+<PRE>streamsize <B>width</B>() const;
+streamsize <B>width</B>(streamsize newwidth);</PRE>
+
+<P>The first member function returns the stored
+<A HREF="#field_width">field width</A>. The second member function
+stores <CODE>newwidth</CODE> in the field width and returns its previous
+stored value.</P>
+
+<H3><A NAME="ios_base__xalloc"></A><CODE>ios_base::xalloc</CODE></H3>
+
+<PRE>static int <B>xalloc</B>();</PRE>
+
+<P>The static member function returns a stored static value, which it
+increments on each call. You can use the return value as a unique index
+argument when calling the member functions
+<CODE><A HREF="#ios_base__iword">iword</A></CODE> or
+<CODE><A HREF="#ios_base__pword">pword</A></CODE>.</P>
+
+<H2><CODE><A NAME="iostream_category"></A>iostream_category</CODE></H2>
+
+<PRE>const error_category&amp; <B>iostream_category</B>() noexcept; <B>[added with C++11]</B></PRE>
+
+<P>The function returns a reference to the
+<CODE><A HREF="system_error.html#error_category">error_category</A></CODE>
+that characterizes I/O errors.</P>
+
+<H2><CODE><A NAME="io_errc"></A>io_errc</CODE></H2>
+
+<PRE>enum class <B>io_errc</B> { <B>[added with C++11]</B>
+    <B><A NAME="stream"></A>stream</B> = 1
+    };</PRE>
+
+<P>The scoped enumeration supplies symbolic names for all the errors
+reported by the exception
+<CODE><A HREF="#ios_base__failure">failure</A></CODE>.</P>
+
+<H2><CODE><A NAME="is_error_code_enum"></A>is_error_code_enum</CODE></H2>
+
+<PRE>template&lt;&gt; <B>is_error_code_enum</B>&lt;io_errc&gt; <B>[added with C++11]</B>
+    : public true_type { };</PRE>
+
+<P>The specialization of the
+<A HREF="typetrait.html#type_predicate">type predicate</A>
+always <A HREF="typetrait.html#holds_true">holds true</A>, indicating that
+<CODE>io_errc</CODE> is an enumeration suitable for storing in an object
+of type <A HREF="system_error.html#error_code">error_code</A>.</P>
+
+<H2><CODE><A NAME="make_error_code"></A>make_error_code</CODE></H2>
+
+<PRE>error_code <B>make_error_code</B>(io_errc errval); <B>[added with C++11]</B></PRE>
+
+<P>The function returns
+<CODE><A HREF="system_error.html#error_code">error_code</A>(errval,
+<A HREF="#iostream_category">iostream_category</A>())</CODE>.</P>
+
+<H2><CODE><A NAME="make_error_condition"></A>make_error_condition</CODE></H2>
+
+<PRE>error_condition <B>make_error_condition</B>(io_errc errval); <B>[added with C++11]</B></PRE>
+
+<P>The function returns
+<CODE><A HREF="system_error.html#error_condition">error_condition</A>(errval,
+<A HREF="#iostream_category">iostream_category</A>())</CODE>.</P>
+
+<H2><A NAME="left"></A><CODE>left</CODE></H2>
+
+<PRE>ios_base&amp; <B>left</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__left">left</A>, ios_base::
+<A HREF="#ios_base__adjustfield">adjustfield</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+
+<H2><A NAME="noboolalpha"></A><CODE>noboolalpha</CODE></H2>
+
+<PRE>ios_base&amp; <B>noboolalpha</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__unsetf">unsetf</A>(ios_base::
+<A HREF="#ios_base__boolalpha">boolalpha</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="noshowbase"></A><CODE>noshowbase</CODE></H2>
+
+<PRE>ios_base&amp; <B>noshowbase</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__unsetf">unsetf</A>(ios_base::
+<A HREF="#ios_base__showbase">showbase</A>)</CODE>,
+then returns <CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="noshowpoint"></A><CODE>noshowpoint</CODE></H2>
+
+<PRE>ios_base&amp; <B>noshowpoint</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__unsetf">unsetf</A>(ios_base::
+<A HREF="#ios_base__showpoint">showpoint</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="noshowpos"></A><CODE>noshowpos</CODE></H2>
+
+<PRE>ios_base&amp; <B>noshowpos</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__unsetf">unsetf</A>(ios_base::
+<A HREF="#ios_base__showpos">showpos</A>)</CODE>,
+then returns <CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="noskipws"></A><CODE>noskipws</CODE></H2>
+
+<PRE>ios_base&amp; <B>noskipws</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__unsetf">unsetf</A>(ios_base::
+<A HREF="#ios_base__skipws">skipws</A>)</CODE>,
+then returns <CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="nounitbuf"></A><CODE>nounitbuf</CODE></H2>
+
+<PRE>ios_base&amp; <B>nounitbuf</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__unsetf">unsetf</A>(ios_base::
+<A HREF="#ios_base__unitbuf">unitbuf</A>)</CODE>,
+then returns <CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="nouppercase"></A><CODE>nouppercase</CODE></H2>
+
+<PRE>ios_base&amp; <B>nouppercase</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__unsetf">unsetf</A>(ios_base::
+<A HREF="#ios_base__uppercase">uppercase</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="oct"></A><CODE>oct</CODE></H2>
+
+<PRE>ios_base&amp; <B>oct</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__oct">oct</A>, ios_base::
+<A HREF="#ios_base__basefield">basefield</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="right"></A><CODE>right</CODE></H2>
+
+<PRE>ios_base&amp; <B>right</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The maiipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__right">right</A>, ios_base::
+<A HREF="#ios_base__adjustfield">adjustfield</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="scientific"></A><CODE>scientific</CODE></H2>
+
+<PRE>ios_base&amp; <B>scientific</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__scientific">scientific</A>, ios_base::
+<A HREF="#ios_base__floatfield">floatfield</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="showbase"></A><CODE>showbase</CODE></H2>
+
+<PRE>ios_base&amp; <B>showbase</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__showbase">showbase</A>)</CODE>,
+then returns <CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="showpoint"></A><CODE>showpoint</CODE></H2>
+
+<PRE>ios_base&amp; <B>showpoint</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__showpoint">showpoint</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="showpos"></A><CODE>showpos</CODE></H2>
+
+<PRE>ios_base&amp; <B>showpos</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__showpos">showpos</A>)</CODE>,
+then returns <CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="skipws"></A><CODE>skipws</CODE></H2>
+
+<PRE>ios_base&amp; <B>skipws</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__skipws">skipws</A>)</CODE>,
+then returns <CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="streamoff"></A><CODE>streamoff</CODE></H2>
+
+<PRE>typedef T1 <B>streamoff</B>;</PRE>
+
+<P>The type is a signed integer type <CODE>T1</CODE> that describes an
+object that can store a byte offset involved in various stream
+positioning operations. Its representation has at least 32 value bits,
+but should be large enough to represent an arbitrary
+byte position within a stream (which often requires 64 value bits).
+The value <CODE>streamoff(-1)</CODE>
+generally indicates an erroneous offset.</P>
+
+<H2><A NAME="streampos"></A><CODE>streampos</CODE></H2>
+
+<PRE>typedef fpos&lt;mbstate_t&gt; <B>streampos</B>;</PRE>
+
+<P>The type is a synonym for <CODE><A HREF="#fpos">fpos</A>&lt;
+<A HREF="wchar.html#mbstate_t">mbstate_t</A>&gt;</CODE>.</P>
+
+<H2><A NAME="streamsize"></A><CODE>streamsize</CODE></H2>
+
+<PRE>typedef T2 <B>streamsize</B>;</PRE>
+
+<P>The type is a signed integer type <CODE>T2</CODE> that describes an
+object that can store a count of the number of elements involved in
+various stream operations. It is typically a synonym for
+<CODE><A HREF="#streamoff">streamoff</A></CODE>.</P>
+
+<H2><A NAME="unitbuf"></A><CODE>unitbuf</CODE></H2>
+
+<PRE>ios_base&amp; <B>unitbuf</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__unitbuf">unitbuf</A>)</CODE>,
+then returns <CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="uppercase"></A><CODE>uppercase</CODE></H2>
+
+<PRE>ios_base&amp; <B>uppercase</B>(ios_base&amp; iosbase);</PRE>
+
+<P>The manipulator effectively calls
+<CODE>iosbase.<A HREF="#ios_base__setf">setf</A>(ios_base::
+<A HREF="#ios_base__uppercase">uppercase</A>)</CODE>, then returns
+<CODE>iosbase</CODE>.</P>
+
+<H2><A NAME="wios"></A><CODE>wios</CODE></H2>
+
+<PRE>typedef basic_ios&lt;wchar_t, char_traits&lt;wchar_t&gt; &gt; <B>wios</B>;</PRE>
+
+<P>The type is a synonym for template class
+<A HREF="#basic_ios"><CODE>basic_ios</CODE></A>, specialized for
+elements of type <CODE>wchar_t</CODE> with default
+<A HREF="string2.html#character_traits">character traits</A>.</P>
+
+<H2><A NAME="wstreampos"></A><CODE>wstreampos</CODE></H2>
+
+<PRE>typedef fpos&lt;mbstate_t&gt; <B>wstreampos</B>;</PRE>
+
+<P>The type is a synonym for <CODE><A HREF="#fpos">fpos</A>&lt;
+<A HREF="wchar.html#mbstate_t">mbstate_t</A>&gt;</CODE>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

@@ -1,0 +1,1361 @@
+<HTML><HEAD>
+<TITLE>&lt;chrono&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;chrono&gt;"></A><CODE>&lt;chrono&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P><B><CODE><A HREF="#common_type">common_type</A>
+&middot; <A HREF="#duration">duration</A>
+&middot; <A HREF="#duration_cast">duration_cast</A>
+&middot; <A HREF="#duration_values">duration_values</A>
+&middot; <A HREF="#high_resolution_clock">high_resolution_clock</A>
+&middot; <A HREF="#hours">hours</A>
+&middot; <A HREF="#microseconds">microseconds</A>
+&middot; <A HREF="#milliseconds">milliseconds</A>
+&middot; <A HREF="#minutes">minutes</A>
+&middot; <A HREF="#monotonic_clock">monotonic_clock</A>
+&middot; <A HREF="#nanoseconds">nanoseconds</A>
+&middot; <A HREF="#operator+">operator+</A>
+&middot; <A HREF="#operator-">operator-</A>
+&middot; <A HREF="#operator*">operator*</A>
+&middot; <A HREF="#operator_slash">operator/</A>
+&middot; <A HREF="#operator%">operator%</A>
+&middot; <A HREF="#operator22">operator==</A>
+&middot; <A HREF="#operator!2">operator!=</A>
+&middot; <A HREF="#operator&lt;">operator&lt;</A>
+&middot; <A HREF="#operator&lt;2">operator&lt;=</A>
+&middot; <A HREF="#operator&gt;">operator&gt;</A>
+&middot; <A HREF="#operator&gt;2">operator&gt;=</A>
+&middot; <A HREF="#seconds">seconds</A>
+&middot; <A HREF="#steady_clock">steady_clock</A>
+&middot; <A HREF="#system_clock">system_clock</A>
+&middot; <A HREF="#time_point">time_point</A>
+&middot; <A HREF="#time_point_cast">time_point_cast</A>
+&middot; <A HREF="#treat_as_floating_point">treat_as_floating_point</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the standard header <B><CODE>&lt;chrono&gt;</CODE></B> to define
+various classes and template classes to represent time durations and time
+instants as well as several template functions for manipulating them in
+various ways.</P>
+
+<PRE>namespace std {
+    namespace chrono {
+
+    // CLASS TEMPLATE duration
+template&lt;class Rep, class Period = ratio&lt;1&gt; &gt;
+    class <B><A HREF="#duration">duration</A></B>;
+
+    // duration ARITHMETIC
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr typename common_type&lt;duration&lt;Rep1, Period1&gt;, duration&lt;Rep2, Period2&gt; &gt;::type
+        <B><A HREF="#operator+">operator+</A></B>(
+            const duration&lt;Rep1, Period1&gt;&amp; Left,
+            const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr typename common_type&lt;duration&lt;Rep1, Period1&gt;, duration&lt;Rep2, Period2&gt; &gt;::type
+        <B><A HREF="#operator-">operator-</A></B>(
+            const duration&lt;Rep1, Period1&gt;&amp; Left,
+            const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Rep1, class Period1, class Rep2&gt;
+    constexpr duration&lt;typename common_type&lt;Rep1, Rep2&gt;::type, Period1&gt;
+        <B><A HREF="#operator*">operator*</A></B>(
+            const duration&lt;Rep1, Period1&gt;&amp; Left,
+            const Rep2&amp; Right);
+template&lt;class Rep1, class Rep2, class Period2&gt;
+    constexpr duration&lt;typename common_type&lt;Rep1, Rep2&gt;::type, Period&gt;
+        <B><A HREF="#operator*">operator*</A></B>(
+            const Rep1&amp; Left,
+            const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Rep1, class Period1, class Rep2&gt;
+    constexpr duration&lt;typename common_type&lt;Rep1, Rep2&gt;::type, Period1&gt;
+        <B><A HREF="#operator_slash">operator/</A></B>(
+            const duration&lt;Rep1, Period1&gt;&amp; Dur,
+            const Rep2&amp; Div);
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr typename common_type&lt;Rep1, Rep2&gt;::type
+        <B><A HREF="#operator_slash">operator/</A></B>(
+            const duration&lt;Rep1, Period1&gt;&amp; Left,
+            const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Rep1, class Period1, class Rep2&gt;
+    constexpr duration&lt;typename common_type&lt;Rep1, Rep2&gt;::type, Period1&gt;
+        <B><A HREF="#operator%">operator%</A></B>(
+            const duration&lt;Rep1, Period1&gt;&amp; Dur,
+            const Rep2&amp; Div);
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr typename common_type&lt;duration&lt;Rep1, Period1&gt;, duration&lt;Rep2, Period2&gt; &gt;::type
+        <B><A HREF="#operator%">operator%</A></B>(
+            const duration&lt;Rep1, Period1&gt;&amp; Left,
+            const duration&lt;Rep2, Period2&gt;&amp; Right);
+
+    // duration COMPARISONS
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B><A HREF="#operator22">operator==</A></B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B><A HREF="#operator!2">operator!=</A></B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B><A HREF="#operator&lt;">operator&lt;</A></B> (
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B><A HREF="#operator&lt;2">operator&lt;=</A></B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B><A HREF="#operator&gt;">operator&gt;</A></B> (
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B><A HREF="#operator&gt;2">operator&gt;=</A></B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+
+    // duration CAST
+template&lt;class To, class Rep, class Period&gt;
+    constexpr To <B><A HREF="#duration_cast">duration_cast</A></B>(const duration&lt;Rep, Period&gt;&amp; Dur);
+
+    // PREDEFINED duration TYPES
+typedef duration&lt;<I>i64-type</I>,         nano&gt; <B><A HREF="#nanoseconds">nanoseconds</A></B>;
+typedef duration&lt;<I>i55-type</I>,        micro&gt; <B><A HREF="#microseconds">microseconds</A></B>;
+typedef duration&lt;<I>i45-type</I>,        milli&gt; <B><A HREF="#milliseconds">milliseconds</A></B>;
+typedef duration&lt;<I>i35-type</I>              &gt; <B><A HREF="#seconds">seconds</A></B>;
+typedef duration&lt;<I>i29-type</I>, ratio&lt;  60&gt; &gt; <B><A HREF="#minutes">minutes</A></B>;
+typedef duration&lt;<I>i23-type</I>, ratio&lt;3600&gt; &gt; <B><A HREF="#hours">hours</A></B>;
+
+    // CLASS TEMPLATE time_point
+template&lt;class Clock, class Duration = typename Clock::duration&gt; class <B><A HREF="#time_point">time_point</A></B>;
+
+    // time_point ARITHMETIC
+template&lt;class Clock, class Duration1, class Rep2, class Period2&gt;
+    time_point&lt;Clock, typename common_type&lt;Duration1, duration&lt;Rep2, Period2&gt; &gt;::type&gt;
+    <B><A HREF="#operator+">operator+</A></B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Time,
+        const duration&lt;Rep2, Period2&gt;&amp; Dur);
+template&lt;class Rep1, class Period1, class Clock, class Duration2&gt;
+    time_point&lt;Clock, typename common_type&lt;duration&lt;Rep1, Period1&gt;, Duration2&gt;::type&gt;
+    <B><A HREF="#operator+">operator+</A></B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Dur,
+        const time_point&lt;Clock, Duration2&gt;&amp; Time);
+template&lt;class Clock, class Duration1, class Rep2, class Period2&gt;
+    time_point&lt;Clock, typename common_type&lt;Duration1, duration&lt;Rep2, Period2&gt; &gt;::type&gt;
+    <B><A HREF="#operator-">operator-</A></B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Time,
+        const duration&lt;Rep2, Period2&gt;&amp; Duration);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    typename common_type&lt;Duration1, Duration2&gt;::type
+    <B><A HREF="#operator-">operator-</A></B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);
+
+    // time_point COMPARISONS
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B><A HREF="#operator22">operator==</A></B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B><A HREF="#operator!2">operator!=</A></B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B><A HREF="#operator&lt;">operator&lt;</A></B> (
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B><A HREF="#operator&lt;2">operator&lt;=</A></B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B><A HREF="#operator&gt;">operator&gt;</A></B> (
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B><A HREF="#operator&gt;2">operator&gt;=</A></B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);
+
+    // time_point CAST
+template&lt;class To, class Clock, class Duration&gt;
+    time_point&lt;Clock, To&gt; <B><A HREF="#time_point_cast">time_point_cast</A></B>(const time_point&lt;Clock, Duration&gt;&amp; t);
+
+    // CLOCKS
+class <B><A HREF="#system_clock">system_clock</A></B>;
+class <B><A HREF="#monotonic_clock">monotonic_clock</A></B>; <B>[non-standard]</B>
+class <B><A HREF="#steady_clock">steady_clock</A></B>;
+class <B><A HREF="#high_resolution_clock">high_resolution_clock</A></B>;
+
+    // CUSTOMIZATION TRAITS
+template&lt;class Rep&gt; struct <B><A HREF="#treat_as_floating_point">treat_as_floating_point</A></B>;
+template&lt;class Rep&gt; struct <B><A HREF="#duration_values">duration_values</A></B>;
+
+    }   // namespace chrono
+
+    // common_type SPECIALIZATIONS
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    struct <B><A HREF="#common_type">common_type</A></B>&lt;
+        chrono::duration&lt;Rep1, Period1&gt;,
+        chrono::duration&lt;Rep2, Period2&gt; &gt;;
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    struct <B><A HREF="#common_type">common_type</A></B>&lt;
+        chrono::time_point&lt;Clock, Duration1&gt;,
+        chrono::time_point&gt;Clock, Duration2&gt; &gt;;
+}   // namespace std</PRE>
+
+<H2><CODE><A NAME="common_type"></A>common_type</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    struct <B>common_type</B>&lt;
+        chrono::duration&lt;Rep1, Period1&gt;,
+        chrono::duration&lt;Rep2, Period2&gt; &gt;
+        {
+        typedef chrono::duration&lt;
+            typename common_type&lt;Rep1, Rep2&gt;::type, <I>see below</I>&gt; type;
+        };
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    struct <B>common_type</B>&lt;
+        chrono::time_point&lt;Clock, Duration1&gt;,
+        chrono::time_point&lt;Clock, Duration2&gt; &gt;
+        {
+        typedef chrono::time_point&lt;
+            Clock, typename common_type&lt;Duration1, Duration2&gt;::type&gt; type;
+        };</PRE>
+
+<P>The types describe specializations of template class
+<A HREF="typetrait.html#common_type">common_type</A> specialized for
+instantiations of <A HREF="#duration">duration</A> and
+<A HREF="#time_point">time_point</A>.</P>
+
+<H2><CODE><A NAME="duration"></A>duration</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#duration__count">count</A>
+&middot; <A HREF="#duration__duration">duration</A>
+&middot; <A HREF="#duration__max">max</A>
+&middot; <A HREF="#duration__min">min</A>
+&middot; <A HREF="#duration__operator+">operator+</A>
+&middot; <A HREF="#duration__operator++">operator++</A>
+&middot; <A HREF="#duration__operator+2">operator+=</A>
+&middot; <A HREF="#duration__operator-">operator-</A>
+&middot; <A HREF="#duration__operator--">operator--</A>
+&middot; <A HREF="#duration__operator-2">operator-=</A>
+&middot; <A HREF="#duration__operator*2">operator*=</A>
+&middot; <A HREF="#duration__operator_slash2">operator/=</A>
+&middot; <A HREF="#duration__operator%2">operator%=</A>
+&middot; <A HREF="#duration__period">period</A>
+&middot; <A HREF="#duration__rep">rep</A>
+&middot; <A HREF="#duration__zero">zero</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Rep, class Period = ratio&lt;1&gt; &gt;
+    class <B>duration</B>
+    {
+public:
+    // TYPES
+    typedef Rep <B><A HREF="#duration__rep">rep</A></B>;
+    typedef Period <B><A HREF="#duration__period">period</A></B>;
+
+    // CONSTRUCT, COPY, DESTROY
+    constexpr <B><A HREF="#duration__duration">duration</A></B>() = default;
+    template&lt;class Rep2&gt;
+        constexpr explicit <B><A HREF="#duration__duration">duration</A></B>(const Rep2&amp; R);
+    template&lt;class Rep2, class Period2&gt;
+        constexpr <B><A HREF="#duration__duration">duration</A></B>(const duration&lt;Rep2, Period2&gt;&amp; Dur);
+    <B><A HREF="#duration__duration">duration</A></B>(const duration&amp;) = default;
+    duration&amp; <B>operator=</B>(const duration&amp; Right) = default;
+    <B>~duration</B>() = default;
+
+    // OBSERVERS
+    constexpr rep <B><A HREF="#duration__count">count</A></B>() const;
+
+    // ARITHMETIC OPERATIONS
+    constexpr duration  <B><A HREF="#duration__operator+">operator+</A></B>() const;
+    constexpr duration  <B><A HREF="#duration__operator-">operator-</A></B>() const;
+    duration&amp; <B><A HREF="#duration__operator++">operator++</A></B>();
+    duration  <B><A HREF="#duration__operator++">operator++</A></B>(int);
+    duration&amp; <B><A HREF="#duration__operator--">operator--</A></B>();
+    duration  <B><A HREF="#duration__operator--">operator--</A></B>(int);
+
+    duration&amp; <B><A HREF="#duration__operator+2">operator+=</A></B>(const duration&amp; Dur);
+    duration&amp; <B><A HREF="#duration__operator-2">operator-=</A></B>(const duration&amp; Dur);
+    duration&amp; <B><A HREF="#duration__operator*2">operator*=</A></B>(const rep&amp; Mult);
+    duration&amp; <B><A HREF="#duration__operator_slash2">operator/=</A></B>(const rep&amp; Div);
+    duration&amp; <B><A HREF="#duration__operator%2">operator%=</A></B>(const rep&amp; Div);
+    duration&amp; <B><A HREF="#duration__operator%2">operator%=</A></B>(const duration&amp; Div);
+
+    // SPECIAL VALUES
+    static constexpr duration <B><A HREF="#duration__zero">zero</A></B>();
+    static constexpr duration <B><A HREF="#duration__min">min</A></B>();
+    static constexpr duration <B><A HREF="#duration__max">max</A></B>();
+    };</PRE>
+
+<P>The template class describes a type that holds a time interval, that is,
+the elapsed time between two time points. The template argument
+<CODE>Rep</CODE> describes the type used to hold a count of the number of
+clock ticks in the interval and the template argument <CODE>Period</CODE> is
+an instantiation of
+<A HREF="ratio.html#ratio">ratio</A> that describes the
+size of the interval that each tick represents.</P>
+
+<H3><CODE><A NAME="duration__count"></A>duration::count</CODE></H3>
+
+<PRE>constexpr rep <B>count</B>() const;</PRE>
+
+<P>The member function returns the number of clock ticks in the time
+interval.</P>
+
+<H3><CODE><A NAME="duration__duration"></A>duration</CODE></H3>
+
+<PRE>constexpr <B>duration</B>() = default;
+template&lt;class Rep2&gt;
+    constexpr explicit <B>duration</B>(const Rep2&amp; R);
+template&lt;class Rep2, class Period2&gt;
+    constexpr <B>duration</B>(const duration&lt;Rep2, Period2&gt;&amp; Dur);
+<B>duration</B>(const duration&amp;) = default;</PRE>
+
+<P>The first constructor constructs an object that represents a time interval
+of zero clock ticks.</P>
+
+<P>The second constructor constructs an object that represents a time interval
+of <CODE>R</CODE> clock ticks. To avoid round-off of tick counts, it is an
+error to construct a <CODE>duration</CODE> object from a representation type
+<CODE>Rep2</CODE> that can be
+<A HREF="#treat_as_floating_point">treated as a floating-point type</A> when
+the duration type's representation type <CODE>Rep</CODE> cannot be treated as
+a floating-point type.</P>
+
+<P>The third constructor constructs an object that represents a time interval
+whose length is the same as the time interval represented by <CODE>Dur</CODE>.
+To avoid truncation of tick counts, it is an error to construct a
+<CODE>duration</CODE> object from another <CODE>duration</CODE> object whose
+type is
+<B><A HREF="#incommensurable">incommensurable</A></B> with the target
+type.</P>
+
+<P>A duration type <CODE>D1</CODE> is
+<B><A NAME="incommensurable"></A>incommensurable</B> with another duration
+type <CODE>D2</CODE> if <CODE>D2</CODE> cannot be
+<A HREF="#treat_as_floating_point">treated as a floating-point type</A> and
+<CODE>ratio_divide&lt;D1::period, D2::period&gt;::type::den</CODE> is not 1.</P>
+
+<P>Unless <CODE>treat_as_floating_point&lt;Rep&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>
+and <CODE>treat_as_floating_point&lt;Rep2&gt;</CODE>
+<A HREF="typetrait.html#holds_false">holds false</A>,
+the template constructor
+<CODE>duration(const Rep2&amp; R)</CODE>
+does not participate in overload resolution.</P>
+
+<P>Unless <CODE>treat_as_floating_point&lt;Rep&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>
+and <CODE>treat_as_floating_point&lt;Rep2&gt;</CODE>,
+or both <CODE>ratio_divide&lt;Period2, period&gt;::den</CODE>
+equals one and <CODE>treat_as_floating_point&lt;Rep2&gt;</CODE>
+<A HREF="typetrait.html#holds_false">holds false</A>,
+the template constructor
+<CODE>duration(const duration&lt;Rep2, Period2&gt;&amp; Dur)</CODE>
+does not participate in overload resolution.</P>
+
+<H3><CODE><A NAME="duration__max"></A>duration::max</CODE></H3>
+
+<PRE>static constexpr duration <B>max</B>();</PRE>
+
+<P>The static member function returns
+<CODE>duration(duration_values&lt;rep&gt;::max())</CODE>.</P>
+
+<H3><CODE><A NAME="duration__min"></A>duration::min</CODE></H3>
+
+<PRE>static constexpr duration <B>min</B>();</PRE>
+
+<P>The static member function returns
+<CODE>duration(duration_values&lt;rep&gt;::min())</CODE>.</P>
+
+<H3><CODE><A NAME="duration__operator%2"></A>duration::operator%=</CODE></H3>
+
+<PRE>duration&amp; <B>operator%=</B>(const rep&amp; Div);
+duration&amp; <B>operator%=</B>(const duration&amp; Div);</PRE>
+
+<P>The first member function reduces the stored tick count modulo
+<CODE>Div</CODE> and returns <CODE>*this</CODE>.</P>
+
+<P>The second member function reduces the stored tick count modulo
+<CODE>Div.count()</CODE> and returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="duration__operator+"></A>duration::operator+</CODE></H3>
+
+<PRE>constexpr duration <B>operator+</B>() const;</PRE>
+
+<P>The member function returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="duration__operator++"></A>duration::operator++</CODE></H3>
+
+<PRE>duration&amp; <B>operator++</B>();
+duration <B>operator++</B>(int);</PRE>
+
+<P>The first member function increments the stored tick count and returns
+<CODE>*this</CODE>.</P>
+
+<P>The second member function copies <CODE>*this</CODE>, increments the stored tick count in <CODE>*this</CODE>, and returns the copy.</P>
+
+<H3><CODE><A NAME="duration__operator+2"></A>duration::operator+=</CODE></H3>
+
+<PRE>duration&amp; <B>operator+=</B>(const duration&amp; Dur);</PRE>
+
+<P>The member function adds <CODE>Dur.count()</CODE> to the stored tick count
+and returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="duration__operator-"></A>duration::operator-</CODE></H3>
+
+<PRE>constexpr duration <B>operator-</B>() const;</PRE>
+
+<P>The member function returns a copy of <CODE>*this</CODE> with a stored tick count that is the negation of the stored tick count in <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="duration__operator--"></A>duration::operator--</CODE></H3>
+
+<PRE>duration&amp; <B>operator--</B>();
+duration <B>operator--</B>(int);</PRE>
+
+<P>The first member function decrements the stored tick count and returns
+<CODE>*this</CODE>.</P>
+
+<P>The second member function copies <CODE>*this</CODE>, decrements the stored
+tick count in <CODE>*this</CODE>, and returns the copy.</P>
+
+<H3><CODE><A NAME="duration__operator-2"></A>duration::operator-=</CODE></H3>
+
+<PRE>duration&amp; <B>operator-=</B>(const duration&amp; Dur);</PRE>
+
+<P>The member function subtracts <CODE>Dur.count()</CODE> to the stored tick count and returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="duration__operator*2"></A>duration::operator*=</CODE></H3>
+
+<PRE>duration&amp; <B>operator*=</B>(const rep&amp; Mult);</PRE>
+
+<P>The member function multiplies the stored tick count by <CODE>Mult</CODE> and returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="duration__operator_slash2"></A>duration::operator/=</CODE></H3>
+
+<PRE>duration&amp; <B>operator/=</B>(const duration&amp; Div);</PRE>
+
+<P>The member function divides the stored tick count by <CODE>Div</CODE> and
+returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="duration__period"></A>duration::period</CODE></H3>
+
+<PRE>typedef Period <B>period</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Period</CODE>.</P>
+
+<H3><CODE><A NAME="duration__rep"></A>duration::rep</CODE></H3>
+
+<PRE>typedef Rep <B>rep</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Rep</CODE>.</P>
+
+<H3><CODE><A NAME="duration__zero"></A>duration::zero</CODE></H3>
+
+<PRE>static constexpr duration <B>zero</B>();</PRE>
+
+<P>The static member function returns
+<CODE>duration(duration_values&lt;rep&gt;::zero())</CODE>.</P>
+
+<H2><CODE><A NAME="duration_cast"></A>duration_cast</CODE></H2>
+
+<PRE>template&lt;class To, class Rep, class Period&gt;
+    constexpr To <B>duration_cast</B>(const duration&lt;Rep, Period&gt;&amp; Dur);</PRE>
+
+<P>The template function returns a <CODE>duration</CODE> object of type
+<CODE>To</CODE> that represents the time interval <CODE>Dur</CODE>, truncated
+if necessary to fit in the target type.</P>
+
+<P>Unless <CODE>To</CODE> is not an instantiation of <CODE>duration</CODE>,
+the template function
+does not participate in overload resolution.</P>
+
+<H2><CODE><A NAME="duration_values"></A>duration_values</CODE></H2>
+
+<PRE>template&lt;class Rep&gt;
+    struct <B>duration_values</B>
+    {
+    static constexpr Rep <B><A HREF="#duration_values__zero">zero</A></B>();
+    static constexpr Rep <B><A HREF="#duration_values__min">min</A></B>();
+    static constexpr Rep <B><A HREF="#duration_values__max">max</A></B>();
+    };</PRE>
+
+<P>The template class provides a few specific values of the template parameter
+<CODE>Rep</CODE> that are used by the class template <CODE>duration</CODE>.
+It can be specialized for a user-defined type that requires different code to
+create these values.</P>
+
+<H3><CODE><A NAME="duration_values__max"></A>duration_values::max</CODE></H3>
+
+<PRE>static constexpr Rep <B>max</B>();</PRE>
+
+<P>The static member function returns
+<CODE>numeric_limits&lt;Rep&gt;::max()</CODE>.</P>
+
+<P>When this template is specialized for a user-defined type, this value
+must be greater than <CODE>zero()</CODE>.</P>
+
+<H3><CODE><A NAME="duration_values__min"></A>duration_values::min</CODE></H3>
+
+<PRE>static constexpr Rep <B>min</B>();</PRE>
+
+<P>The static member function returns
+<CODE>numeric_limits&lt;Rep&gt;::lowest()</CODE>.</P>
+
+<P>When this template is specialized for a user-defined type, this value
+must be less than or equal to <CODE>zero()</CODE>.</P>
+
+<H3><CODE><A NAME="duration_values__zero"></A>duration_values::zero</CODE></H3>
+
+<PRE>static constexpr Rep <B>zero</B>();</PRE>
+
+<P>The static member function returns <CODE>Rep(0)</CODE>.</P>
+
+<P>When this template is specialized for a user-defined type, this value
+must represent the additive identity.</P>
+
+<H2><CODE><A NAME="high_resolution_clock"></A>high_resolution_clock</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#high_resolution_clock__duration">duration</A>
+&middot; <A HREF="#high_resolution_clock__is_monotonic">is_monotonic</A>
+&middot; <A HREF="#high_resolution_clock__is_steady">is_steady</A>
+&middot; <A HREF="#high_resolution_clock__now">now</A>
+&middot; <A HREF="#high_resolution_clock__period">period</A>
+&middot; <A HREF="#high_resolution_clock__rep">rep</A>
+&middot; <A HREF="#high_resolution_clock__time_point">time_point</A>
+</CODE></B></P>
+<HR>
+
+
+<PRE>class <B>high_resolution_clock</B>
+    {
+    // TYPES
+    typedef <I>unspecified</I> <B><A HREF="#high_resolution_clock__rep">rep</A></B>;
+    typedef ratio&lt;<I>unspecified</I>, <I>unspecified</I>&gt; <B><A HREF="#high_resolution_clock__period">period</A></B>;
+    typedef chrono::duration&lt;rep, period&gt; <B><A HREF="#high_resolution_clock__duration">duration</A></B>;
+    typedef chrono::time_point&lt;high_resolution_clock&gt; <B><A HREF="#high_resolution_clock__time_point">time_point</A></B>;
+
+    static const bool <B><A HREF="#high_resolution_clock__is_monotonic">is_monotonic</A></B> = <I>unspecified</I>; <B>[non-standard]</B>
+    static const bool <B><A HREF="#high_resolution_clock__is_steady">is_steady</A></B> = <I>unspecified</I>;
+
+    // CURRENT TIME
+    static time_point <B><A HREF="#high_resolution_clock__now">now</A></B>() noexcept;
+    };</PRE>
+
+<P>The
+<A HREF="#clock_type">clock type</A> provides a clock with a short tick
+period.</P>
+
+<P>A
+<B><A NAME="clock_type"></A>clock type</B> can be used to obtain the
+current time. The type embodies an instantiation of the class template
+<CODE>chrono::duration</CODE> and the class template
+<CODE>chrono::time_point</CODE>, and defines a static member function
+<CODE>now()</CODE> that returns the time. It has the following member
+typedefs:</P>
+
+<UL>
+<LI><CODE>rep</CODE> -- a synonym for the type used to represent the number of
+clock ticks in the type's instantiation of the class template
+<CODE>chrono::duration</CODE>;</LI>
+
+<LI><CODE>period</CODE> -- a synonym for the type used to represent the tick
+period of the type's instantiation of the class template
+<CODE>chrono::duration</CODE>;</LI>
+
+<LI><CODE>duration</CODE> -- a synonym for <CODE>chrono::duration&lt;rep,
+period&gt;</CODE>; and</LI>
+
+<LI><CODE>time_point</CODE> -- a synonym for
+<CODE>chrono::time_point&lt;Clock, duration&gt;</CODE>, where
+<CODE>Clock</CODE> is a synonym for the clock type itself or for another clock
+type based on the same epoch and having the same nested <CODE>duration</CODE>
+type.</LI> </UL>
+
+<P>A clock type has the following static data members:</P>
+
+<UL>
+<LI><CODE>is_monotonic</CODE> -- a static data member of type <CODE>const
+bool</CODE> that is <CODE>true</CODE> if the clock type is
+<A HREF="#monotonic">monotonic</A> and <CODE>false</CODE> otherwise.</LI>
+
+<LI><CODE>is_steady</CODE> -- a static data member of type <CODE>const
+bool</CODE> that is <CODE>true</CODE> if the clock type is
+<A HREF="#steady">steady</A> and <CODE>false</CODE> otherwise.</LI>
+</UL>
+
+<P>A clock type has the following static member function:</P>
+
+<UL>
+<LI><CODE>static time_point now()</CODE> -- returns a <CODE>time_point</CODE>
+object that holds the current time.</LI>
+</UL>
+
+<P>A clock is
+<B><A NAME="monotonic"></A>monotonic</B> if the value returned
+by a call to its member function <CODE>now()</CODE> that happens before
+another call to its member function <CODE>now()</CODE> is always less than or
+equal to the value returned by the second call.</P>
+
+<P>A clock is
+<B><A NAME="steady"></A>steady</B> if the value returned
+by a call to its member function <CODE>now()</CODE> that happens before
+another call to its member function <CODE>now()</CODE> is always less than or
+equal to the value returned by the second call, and if the time between
+clock ticks is constant. A steady clock is a monotonic clock.</P>
+
+<H3><CODE><A NAME="high_resolution_clock__duration"></A>high_resolution_clock::duration</CODE></H3>
+
+<PRE>typedef chrono::duration&lt;rep, period&gt; <B>duration</B>;</PRE>
+
+<P>The type is a synonym for <CODE>chrono::duration&lt;rep, period&gt;</CODE>.</P>
+
+<H3><CODE><A NAME="high_resolution_clock__is_monotonic"></A>high_resolution_clock::is_monotonic</CODE></H3>
+
+<PRE>static const bool <B>is_monotonic</B> = <I>unspecified</I>; <B>[non-standard]</B></PRE>
+
+<P>The static data member holds <CODE>true</CODE> if the clock type is
+<A HREF="#monotonic">monotonic</A>, otherwise <CODE>false</CODE>.</P>
+
+<H3><CODE><A NAME="high_resolution_clock__is_steady"></A>high_resolution_clock::is_steady</CODE></H3>
+
+<PRE>static const bool <B>is_steady</B> = <I>unspecified</I>;</PRE>
+
+<P>The static data member holds <CODE>true</CODE> if the clock type is
+<A HREF="#steady">steady</A>, otherwise <CODE>false</CODE>.</P>
+
+<H3><CODE><A NAME="high_resolution_clock__now"></A>high_resolution_clock::now</CODE></H3>
+
+<PRE>static time_point <B>now</B>() noexcept;</PRE>
+
+<P>The static member function returns the current time.</P>
+
+<H3><CODE><A NAME="high_resolution_clock__period"></A>high_resolution_clock::period</CODE></H3>
+
+<PRE>typedef ratio&lt;<I>unspecified</I>, <I>unspecified</I>&gt; <B>period</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>ratio</CODE> instantiation that defines the tick period of the clock.</P>
+
+<H3><CODE><A NAME="high_resolution_clock__rep"></A>high_resolution_clock::rep</CODE></H3>
+
+<PRE>typedef <I>unspecified</I> <B>rep</B>;</PRE>
+
+<P>The type is a synonym for the arithmetic type that represents the tick
+count in the nested type <CODE>duration</CODE>.</P>
+
+<H3><CODE><A NAME="high_resolution_clock__time_point"></A>high_resolution_clock::time_point</CODE></H3>
+
+<PRE>typedef chrono::time_point&lt;high_resolution_clock&gt; <B>time_point</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>time_point</CODE> instantiation that
+<CODE>now()</CODE> returns.</P>
+
+<H2><CODE><A NAME="hours"></A>hours</CODE></H2>
+
+<PRE>typedef chrono::duration&lt;<I>i23-type</I>, ratio&lt;3600&gt; &gt; <B>hours</B>;</PRE>
+
+<P>The type is a synonym for a <CODE>duration</CODE> type with a tick period
+of one hour. <I>i23-type</I> is an implementation-specific integral type with
+at least 23 bits.</P>
+
+<H2><CODE><A NAME="microseconds"></A>microseconds</CODE></H2>
+
+<PRE>typedef duration&lt;<I>i55-type</I>, micro&gt; <B>microseconds</B>;</PRE>
+
+<P>The type is a synonym for a <CODE>duration</CODE> type with a tick period
+of one microsecond. <I>i55-type</I> is an implementation-specific integral
+type with at least 55 bits.</P>
+
+<H2><CODE><A NAME="milliseconds"></A>milliseconds</CODE></H2>
+
+<PRE>typedef duration&lt;<I>i45-type</I>, milli&gt; <B>milliseconds</B>;</PRE>
+
+<P>The type is a synonym for a <CODE>duration</CODE> type with a tick period
+of one millisecond. <I>i45-type</I> is an implementation-specific integral
+type with at least 45 bits.</P>
+
+<H2><CODE><A NAME="minutes"></A>minutes</CODE></H2>
+
+<PRE>typedef duration&lt;<I>i29-type</I>, ratio&lt;60&gt;
+&gt;<B>minutes</B>;</PRE>
+
+<P>The type is a synonym for a <CODE>duration</CODE> type with a tick period
+of one minute. <I>i29-type</I> is an implementation-specific integral type
+with at least 29 bits.</P>
+
+<H2><CODE><A NAME="monotonic_clock"></A>monotonic_clock</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#monotonic_clock__duration">duration</A>
+&middot; <A HREF="#monotonic_clock__is_monotonic">is_monotonic</A>
+&middot; <A HREF="#monotonic_clock__is_steady">is_steady</A>
+&middot; <A HREF="#monotonic_clock__now">now</A>
+&middot; <A HREF="#monotonic_clock__period">period</A>
+&middot; <A HREF="#monotonic_clock__rep">rep</A>
+&middot; <A HREF="#monotonic_clock__time_point">time_point</A>
+</CODE></B></P>
+<HR>
+
+<PRE>class <B>monotonic_clock</B> <B>[non-standard]</B>
+    {
+    // TYPES
+    typedef <I>unspecified</I> <B><A HREF="#monotonic_clock__rep">rep</A></B>;
+    typedef ratio&lt;<I>unspecified</I>, <I>unspecified</I>&gt; <B><A HREF="#monotonic_clock__period">period</A></B>;
+    typedef chrono::duration&lt;rep, period&gt; <B><A HREF="#monotonic_clock__duration">duration</A></B>;
+    typedef chrono::time_point&lt;monotonic_clock&gt; <B><A HREF="#monotonic_clock__time_point">time_point</A></B>;
+
+    static const bool <B><A HREF="#monotonic_clock__is_monotonic">is_monotonic</A></B> = true;
+    static const bool <B><A HREF="#monotonic_clock__is_steady">is_steady</A></B> = <I>unspecified</I>;
+
+    // CURRENT TIME
+    static time_point <B><A HREF="#monotonic_clock__now">now</A></B>() noexcept;
+    };</PRE>
+
+<P>The
+<A HREF="#clock_type">clock type</A> provides a
+<A HREF="#monotonic">monotonic</A> clock. Implementations are not required to
+provide an instance of this type; if it is provided and <CODE>system_clock</CODE> is
+monotonic, it can be a synonym for <CODE>system_clock</CODE>.</P>
+
+<H3><CODE><A NAME="monotonic_clock__duration"></A>monotonic_clock::duration</CODE></H3>
+
+<PRE>typedef chrono::duration&lt;rep, period&gt; <B>duration</B>;</PRE>
+
+<P>The type is a synonym for
+<CODE>chrono::duration&lt;rep, period&gt;</CODE>.</P>
+
+<H3><CODE><A NAME="monotonic_clock__is_monotonic"></A>monotonic_clock::is_monotonic</CODE></H3>
+
+<PRE>static const bool <B>is_monotonic</B> = true;</PRE>
+
+<P>The static data member holds <CODE>true</CODE>.</P>
+
+<H3><CODE><A NAME="monotonic_clock__is_steady"></A>monotonic_clock::is_steady</CODE></H3>
+
+<PRE>static const bool <B>is_steady</B> = <I>unspecified</I>;</PRE>
+
+<P>The static data member holds <CODE>true</CODE> only if the clock is
+<A HREF="#steady">steady</A>.</P>
+
+<H3><CODE><A NAME="monotonic_clock__now"></A>monotonic_clock::now</CODE></H3>
+
+<PRE>static time_point <B>now</B>() noexcept;</PRE>
+
+<P>The static member function returns the current time.</P>
+
+<H3><CODE><A NAME="monotonic_clock__period"></A>monotonic_clock::period</CODE></H3>
+
+<PRE>typedef ratio&lt;<I>unspecified</I>, <I>unspecified</I>&gt; <B>period</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>ratio</CODE> instantiation that defines the tick period of the clock.</P>
+
+<H3><CODE><A NAME="monotonic_clock__rep"></A>monotonic_clock::rep</CODE></H3>
+
+<PRE>typedef <I>see below</I> <B>rep</B>;</PRE>
+
+<P>The type is a synonym for the arithmetic type that represents the tick
+count in the nested type <CODE>duration</CODE>.</P>
+
+<H3><CODE><A NAME="monotonic_clock__time_point"></A>monotonic_clock::time_point</CODE></H3>
+
+<PRE>typedef chrono::time_point&lt;monotonic_clock&gt; <B>time_point</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>time_point</CODE> instantiation that
+<CODE>now()</CODE> returns.</P>
+
+<H2><CODE><A NAME="nanoseconds"></A>nanoseconds</CODE></H2>
+
+<PRE>typedef duration&lt;<I>i64-type</I>, nano&gt; <B>nanoseconds</B>;</PRE>
+
+<P>The type is a synonym for a <CODE>duration</CODE> type with a tick period
+of one nanosecond. <I>i64-type</I> is an implementation-specific integral type
+with at least 64 bits.</P>
+
+<H2><CODE><A NAME="operator%"></A>operator%</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2&gt;
+    constexpr duration&lt;typename common_type&lt;Rep1, Rep2&gt;::type, Period1&gt;
+    <B>operator%</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Dur,
+        const Rep2&amp; Div);
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr typename common_type&lt;duration&lt;Rep1, Period1&gt;, duration&lt;Rep2, Period2&gt; &gt;::type
+    <B>operator%</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);</PRE>
+
+<P>The first template function returns an object whose type is an
+instantiation of <CODE>chrono::duration</CODE> and represents a time
+interval whose length is the length of the time interval represented by
+<CODE>Dur</CODE> modulo <CODE>Div</CODE>.</P>
+
+<P>The second template function returns a value that represents
+the time interval <CODE>Left</CODE> modulo the time interval
+<CODE>Right</CODE>.</P>
+
+<P>Unless <CODE>is_convertible&lt;Rep2, common_type&lt;Rep1, Rep2&gt;&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>,
+and <CODE>Rep2</CODE> is not an instantiation of <CODE>duration</CODE>,
+the first template operator
+does not participate in overload resolution.</P>
+
+<H2><CODE><A NAME="operator+"></A>operator+</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr typename common_type&lt;duration&lt;Rep1, Period1&gt;, duration&lt;Rep2, Period2&gt; &gt;::type
+    <B>operator+</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Rep2, class Period2&gt;
+    constexpr time_point&lt;Clock, typename common_type&lt;Duration1, duration&lt;Rep2, Period2&gt; &gt;::type&gt;
+    <B>operator+</B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Time,
+        const duration&lt;Rep2, Period2&gt;&amp; Dur);
+template&lt;class Rep1, class Period1, class Clock, class Duration2&gt;
+    time_point&lt;Clock, typename common_type&lt;duration&lt;Rep1, Period1&gt;, Duration2&gt;::type&gt;
+    <B>operator+</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Dur,
+        const time_point&lt;Clock, Duration2&gt;&amp; Time);</PRE>
+
+<P>The first template function returns an object that is an instantiation of
+<CODE>chrono::duration</CODE> and represents a time interval equal to the
+sum of the time intervals represented by its two arguments.</P>
+
+<P>The second and third template functions each return an object that is an
+instantiation of <CODE>chrono::time_point</CODE> and represents a point
+in time that is displaced by the time interval represented by <CODE>Dur</CODE>
+from the point in time represented by <CODE>Time</CODE>.</P>
+
+<H2><CODE><A NAME="operator-"></A>operator-</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr typename common_type&lt;duration&lt;Rep1, Period1&gt;, duration&lt;Rep2, Period2&gt; &gt;::type
+    <B>operator-</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Rep2, class Period2&gt;
+    constexpr time_point&lt;Clock, typename common_type&lt;Duration1, duration&lt;Rep2, Period2&gt; &gt;::type&gt;
+    <B>operator-</B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Time,
+        const duration&lt;Rep2, Period2&gt;&amp; Dur);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    typename common_type&lt;Duration1, Duration2&gt;::type
+    <B>operator-</B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);</PRE>
+
+<P>The first template function returns an object that is an instantiation of
+<CODE>chrono::duration</CODE> and represents a time interval equal to the
+difference between the time intervals represented by its two arguments.</P>
+
+<P>The second template function returns an object whose type is
+an instantiation of <CODE>chrono::time_point</CODE> and represents a
+point in time that is displaced by the negation of the time interval
+represented by <CODE>Dur</CODE> from the point in time represented by
+<CODE>Time</CODE>.</P>
+
+<P>The third template function returns an object whose type is an
+instantiation of <CODE>chrono::duration</CODE> and represents the time
+interval between the two time points <CODE>Left</CODE> and
+<CODE>Right</CODE>.</P>
+
+<H2><CODE><A NAME="operator*"></A>operator*</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2&gt;
+    constexpr duration&lt;typename common_type&lt;Rep1, Rep2&gt;::type, Period1&gt;
+    <B>operator*</B>(const duration&lt;Rep1, Period1&gt;&amp; Dur, const Rep2&amp; Mult);
+template&lt;class Rep1, class Rep2, class Period2&gt;
+    constexpr duration&lt;typename common_type&lt;Rep1, Rep2&gt;::type, Period2&gt;
+    <B>operator*</B>(const Rep1&amp; Mult, const duration&lt;Rep2, Period2&gt;&amp; Dur);</PRE>
+
+<P>The template functions each return an object whose type is an instantiation
+of <CODE>chrono::duration</CODE> and represents a time interval whose
+length is the length of the time interval represented by <CODE>Dur</CODE>
+multiplied by <CODE>Mult</CODE>.</P>
+
+<P>Unless <CODE>is_convertible&lt;Rep2, common_type&lt;Rep1, Rep2&gt;&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>,
+the first template operator
+does not participate in overload resolution.</P>
+
+<P>Unless <CODE>is_convertible&lt;Rep1, common_type&lt;Rep1, Rep2&gt;&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>,
+the second template operator
+does not participate in overload resolution.</P>
+
+<H2><CODE><A NAME="operator_slash"></A>operator/</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2&gt;
+    constexpr duration&lt;typename common_type&lt;Rep1, Rep2&gt;::type, Period1&gt;
+    <B>operator/</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Dur,
+        const Rep2&amp; Div);
+template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr typename common_type&lt;Rep1, Rep2&gt;::type
+    <B>operator/</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);</PRE>
+
+<P>The first template function returns an object whose type is an
+instantiation of <CODE>chrono::duration</CODE> and represents a time
+interval whose length is the length of the time interval represented by
+<CODE>Dur</CODE> divided by <CODE>Div</CODE>.</P>
+
+<P>The second template function returns a value that represents the ratio of
+the lengths of the two time intervals <CODE>Left</CODE> and
+<CODE>Right</CODE>.</P>
+
+<P>Unless <CODE>is_convertible&lt;Rep2, common_type&lt;Rep1, Rep2&gt;&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>,
+and <CODE>Rep2</CODE> is not an instantiation of <CODE>duration</CODE>,
+the first template operator
+does not participate in overload resolution.</P>
+
+<H2><CODE><A NAME="operator22"></A>operator==</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B>operator==</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B>operator==</B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);</PRE>
+
+<P>The first template function returns <CODE>true</CODE> only if its arguments
+represent time intervals with the same length. The second template function
+returns <CODE>true</CODE> only if its arguments represent the same point in
+time.</P>
+
+<H2><CODE><A NAME="operator!2"></A>operator!=</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B>operator!=</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B>operator!=</B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);</PRE>
+
+<P>The template functions each return <CODE>!(Left == Right)</CODE>.</P>
+
+<H2><CODE><A NAME="operator&lt;"></A>operator&lt;</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B>operator&lt; </B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B>operator&lt; </B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);</PRE>
+
+<P>The first template function returns <CODE>true</CODE> only if the length of
+the time interval represented by <CODE>Left</CODE> is less than the length of
+the time interval represented by <CODE>Right</CODE>. The second template
+function returns <CODE>true</CODE> only if the time point represented by
+<CODE>Left</CODE> precedes the time point represented by
+<CODE>Right</CODE>.</P>
+
+<H2><CODE><A NAME="operator&lt;2"></A>operator&lt;=</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B>operator&lt;=</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B>operator&lt;=</B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);</PRE>
+
+<P>The two template function each return <CODE>!(Right &lt; Left)</CODE></P>
+
+<H2><CODE><A NAME="operator&gt;"></A>operator&gt;</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B>operator&gt; </B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B>operator&gt; </B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);</PRE>
+
+<P>The two template function each return <CODE>Right &lt; Left</CODE></P>
+
+<H2><CODE><A NAME="operator&gt;2"></A>operator&gt;=</CODE></H2>
+
+<PRE>template&lt;class Rep1, class Period1, class Rep2, class Period2&gt;
+    constexpr bool <B>operator&gt;=</B>(
+        const duration&lt;Rep1, Period1&gt;&amp; Left,
+        const duration&lt;Rep2, Period2&gt;&amp; Right);
+template&lt;class Clock, class Duration1, class Duration2&gt;
+    bool <B>operator&gt;=</B>(
+        const time_point&lt;Clock, Duration1&gt;&amp; Left,
+        const time_point&lt;Clock, Duration2&gt;&amp; Right);</PRE>
+
+<P>The two template function each return <CODE>!(Left &lt; Right)</CODE></P>
+
+<H2><CODE><A NAME="seconds"></A>seconds</CODE></H2>
+
+<PRE>typedef duration&lt;<I>i35-type</I>&gt; <B>seconds</B>;</PRE>
+
+<P>The type is a synonym for a <CODE>duration</CODE> type with a tick period
+of one second. <I>i35-type</I> is an implementation-specific integral type
+with at least 35 bits.</P>
+
+<H2><CODE><A NAME="steady_clock"></A>steady_clock</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#steady_clock__duration">duration</A>
+&middot; <A HREF="#steady_clock__is_monotonic">is_monotonic</A>
+&middot; <A HREF="#steady_clock__is_steady">is_steady</A>
+&middot; <A HREF="#steady_clock__now">now</A>
+&middot; <A HREF="#steady_clock__period">period</A>
+&middot; <A HREF="#steady_clock__rep">rep</A>
+&middot; <A HREF="#steady_clock__time_point">time_point</A>
+</CODE></B></P>
+<HR>
+
+<PRE>class <B>steady_clock</B>
+    {
+    // TYPES
+    typedef <I>unspecified</I> <B><A HREF="#steady_clock__rep">rep</A></B>;
+    typedef ratio&lt;<I>unspecified</I>, <I>unspecified</I>&gt; <B><A HREF="#steady_clock__period">period</A></B>;
+    typedef chrono::duration&lt;rep, period&gt; <B><A HREF="#steady_clock__duration">duration</A></B>;
+    typedef chrono::time_point&lt;steady_clock&gt; <B><A HREF="#steady_clock__time_point">time_point</A></B>;
+
+    static const bool <B><A HREF="#steady_clock__is_monotonic">is_monotonic</A></B> = true; <B>[non-standard]</B>
+    static const bool <B><A HREF="#steady_clock__is_steady">is_steady</A></B> = true;
+
+    // CURRENT TIME
+    static time_point <B><A HREF="#steady_clock__now">now</A></B>() noexcept;
+    };</PRE>
+
+<P>The
+<A HREF="#clock_type">clock type</A> provides a
+<A HREF="#steady">steady</A> clock. Implementations are not required to
+provide an instance of this type; if it is provided and <CODE>system_clock</CODE> is
+steady, it can be a synonym for <CODE>system_clock</CODE>.</P>
+
+<H3><CODE><A NAME="steady_clock__duration"></A>steady_clock::duration</CODE></H3>
+
+<PRE>typedef chrono::duration&lt;rep, period&gt; <B>duration</B>;</PRE>
+
+<P>The type is a synonym for
+<CODE>chrono::duration&lt;rep, period&gt;</CODE>.</P>
+
+<H3><CODE><A NAME="steady_clock__is_monotonic"></A>steady_clock::is_monotonic</CODE></H3>
+
+<PRE>static const bool <B>is_monotonic</B> = true; <B>[non-standard]</B></PRE>
+
+<P>The static data member holds <CODE>true</CODE>.</P>
+
+<H3><CODE><A NAME="steady_clock__is_steady"></A>steady_clock::is_steady</CODE></H3>
+
+<PRE>static const bool <B>is_steady</B> = true;</PRE>
+
+<P>The static data member holds <CODE>true</CODE>.</P>
+
+<H3><CODE><A NAME="steady_clock__now"></A>steady_clock::now</CODE></H3>
+
+<PRE>static time_point <B>now</B>() noexcept;</PRE>
+
+<P>The static member function returns the current time.</P>
+
+<H3><CODE><A NAME="steady_clock__period"></A>steady_clock::period</CODE></H3>
+
+<PRE>typedef ratio&lt;<I>unspecified</I>, <I>unspecified</I>&gt; <B>period</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>ratio</CODE> instantiation that defines the tick period of the clock.</P>
+
+<H3><CODE><A NAME="steady_clock__rep"></A>steady_clock::rep</CODE></H3>
+
+<PRE>typedef <I>see below</I> <B>rep</B>;</PRE>
+
+<P>The type is a synonym for the arithmetic type that represents the tick
+count in the nested type <CODE>duration</CODE>.</P>
+
+<H3><CODE><A NAME="steady_clock__time_point"></A>steady_clock::time_point</CODE></H3>
+
+<PRE>typedef chrono::time_point&lt;steady_clock&gt; <B>time_point</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>time_point</CODE> instantiation that
+<CODE>now()</CODE> returns.</P>
+
+<H2><CODE><A NAME="system_clock"></A>system_clock</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#system_clock__duration">duration</A>
+&middot; <A HREF="#system_clock__from_time_t">from_time_t</A>
+&middot; <A HREF="#system_clock__is_monotonic">is_monotonic</A>
+&middot; <A HREF="#system_clock__is_steady">is_steady</A>
+&middot; <A HREF="#system_clock__now">now</A>
+&middot; <A HREF="#system_clock__period">period</A>
+&middot; <A HREF="#system_clock__rep">rep</A>
+&middot; <A HREF="#system_clock__time_point">time_point</A>
+&middot; <A HREF="#system_clock__to_time_t">to_time_t</A>
+</CODE></B></P>
+<HR>
+
+<PRE>class <B>system_clock</B>
+    {
+    // TYPES
+    typedef <I>unspecified</I> <B><A HREF="#system_clock__rep">rep</A></B>;
+    typedef ratio&lt;<I>unspecified</I>, <I>unspecified</I>&gt; <B><A HREF="#system_clock__period">period</A></B>;
+    typedef chrono::duration&lt;rep, period&gt; <B><A HREF="#system_clock__duration">duration</A></B>;
+    typedef chrono::time_point&lt;system_clock&gt; <B><A HREF="#system_clock__time_point">time_point</A></B>;
+
+    static const bool <B><A HREF="#system_clock__is_monotonic">is_monotonic</A></B> = <I>unspecified</I>; <B>[non-standard]</B>
+    static const bool <B><A HREF="#system_clock__is_steady">is_steady</A></B> = <I>unspecified</I>;
+
+    // CURRENT TIME
+    static time_point <B><A HREF="#system_clock__now">now</A></B>() noexcept;
+
+    // CONVERSIONS WITH time_t
+    static time_t <B><A HREF="#system_clock__to_time_t">to_time_t</A></B>(const time_point&amp; t) noexcept;
+    static time_point <B><A HREF="#system_clock__from_time_t">from_time_t</A></B>(time_t t) noexcept;
+    };</PRE>
+
+<P>The
+<A HREF="#clock_type">clock type</A> provides a clock based on the
+system's realtime clock.</P>
+
+<H3><CODE><A NAME="system_clock__duration"></A>system_clock::duration</CODE></H3>
+
+<PRE>typedef chrono::duration&lt;rep, period&gt; <B>duration</B>;</PRE>
+
+<P>The type is a synonym for
+<CODE>chrono::duration&lt;rep, period&gt;</CODE>.</P>
+
+<H3><CODE><A NAME="system_clock__from_time_t"></A>system_clock::from_time_t</CODE></H3>
+
+<PRE>static time_point <B>from_time_t</B>(time_t t) noexcept;</PRE>
+
+<P>The static member function returns the object of type
+<CODE>time_point</CODE> that most nearly approximates the time represented by
+<CODE>t</CODE>.</P>
+
+<H3><CODE><A NAME="system_clock__is_monotonic"></A>system_clock::is_monotonic</CODE></H3>
+
+<PRE>static const bool <B>is_monotonic</B> = <I>unspecified</I>; <B>[non-standard]</B></PRE>
+
+<P>The static data member holds <CODE>true</CODE> only if the clock type is
+<A HREF="#monotonic">monotonic</A>.</P>
+
+<H3><CODE><A NAME="system_clock__is_steady"></A>system_clock::is_steady</CODE></H3>
+
+<PRE>static const bool <B>is_steady</B> = <I>unspecified</I>;</PRE>
+
+<P>The static data member holds <CODE>true</CODE> only if the clock type is
+<A HREF="#steady">steady</A>.</P>
+
+<H3><CODE><A NAME="system_clock__now"></A>system_clock::now</CODE></H3>
+
+<PRE>static time_point <B>now</B>() noexcept;</PRE>
+
+<P>The static member function returns the current time.</P>
+
+<H3><CODE><A NAME="system_clock__period"></A>system_clock::period</CODE></H3>
+
+<PRE>typedef ratio&lt;<I>unspecified</I>, <I>unspecified</I>&gt; <B>period</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>ratio</CODE> instantiation that defines
+the tick period of the clock.</P>
+
+<H3><CODE><A NAME="system_clock__rep"></A>system_clock::rep</CODE></H3>
+
+<PRE>typedef <I>unspecified</I> <B>rep</B>;</PRE>
+
+<P>The type is a synonym for the arithmetic type that represents the tick
+count in the nested type <CODE>duration</CODE>.</P>
+
+<H3><CODE><A NAME="system_clock__time_point"></A>system_clock::time_point</CODE></H3>
+
+<PRE>typedef chrono::time_point&lt;system_clock&gt; <B>time_point</B>;</PRE>
+
+<P>The type is a synonym for the <CODE>time_point</CODE> instantiation that
+<CODE>now()</CODE> returns.</P>
+
+<H3><CODE><A NAME="system_clock__to_time_t"></A>system_clock::to_time_t</CODE></H3>
+
+<PRE>static time_t <B>to_time_t</B>(const time_point&amp; t) noexcept;</PRE>
+
+<P>The static member function returns the object of type
+<CODE>time_t</CODE> that most nearly approximates the time represented by
+<CODE>t</CODE>.</P>
+
+<H2><CODE><A NAME="time_point"></A>time_point</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#time_point__clock">clock</A>
+&middot; <A HREF="#time_point__duration">duration</A>
+&middot; <A HREF="#time_point__max">max</A>
+&middot; <A HREF="#time_point__min">min</A>
+&middot; <A HREF="#time_point__operator+2">operator+=</A>
+&middot; <A HREF="#time_point__operator-2">operator-=</A>
+&middot; <A HREF="#time_point__period">period</A>
+&middot; <A HREF="#time_point__rep">rep</A>
+&middot; <A HREF="#time_point__time_point">time_point</A>
+&middot; <A HREF="#time_point__time_since_epoch">time_since_epoch</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Clock, class Duration = typename Clock::duration&gt;
+    class <B>time_point</B>
+    {
+public:
+    typedef Clock <B><A HREF="#time_point__clock">clock</A></B>;
+    typedef Duration <B><A HREF="#time_point__duration">duration</A></B>;
+    typedef typename duration::rep <B><A HREF="#time_point__rep">rep</A></B>;
+    typedef typename duration::period <B><A HREF="#time_point__period">period</A></B>;
+
+    // CONSTRUCTORS
+    constexpr <B><A HREF="#time_point__time_point">time_point</A></B>();
+    constexpr explicit <B><A HREF="#time_point__time_point">time_point</A></B>(const duration&amp; Dur);
+    template&lt;class Duration2&gt;
+        constexpr <B><A HREF="#time_point__time_point">time_point</A></B>(const time_point&lt;clock, Duration2&gt;&amp; Tp);
+
+    // OBSERVERS
+    constexpr duration <B><A HREF="#time_point__time_since_epoch">time_since_epoch</A></B>() const;
+
+    // ARITHMETIC OPERATIONS
+    time_point&amp; <B><A HREF="#time_point__operator+2">operator+=</A></B>(const duration&amp; Dur);
+    time_point&amp; <B><A HREF="#time_point__operator-2">operator-=</A></B>(const duration&amp; Dur);
+
+    // SPECIAL VALUES
+    static constexpr time_point <B><A HREF="#time_point__min">min</A></B>();
+    static constexpr time_point <B><A HREF="#time_point__max">max</A></B>();
+    };</PRE>
+
+<P>The template class describes a type that represents a point in time. It
+holds an object of type <CODE>duration</CODE> that stores the elapsed time
+since the epoch represented by the template argument <CODE>Clock</CODE>.</P>
+
+<H3><CODE><A NAME="time_point__clock"></A>time_point::clock</CODE></H3>
+
+<PRE>typedef Clock <B>clock</B>;</PRE>
+
+ <P>The type is a synonym for the template parameter <CODE>Clock</CODE>.</P>
+
+<H3><CODE><A NAME="time_point__duration"></A>time_point::duration</CODE></H3>
+
+<PRE>typedef Duration <B>duration</B>;</PRE>
+
+<P>The type is a synonym for the template parameter <CODE>Duration</CODE>.</P>
+
+<H3><CODE><A NAME="time_point__max"></A>time_point::max</CODE></H3>
+
+<PRE>static constexpr time_point <B>max</B>();</PRE>
+
+<P>The static member function returns
+<CODE>time_point(duration::max())</CODE>.</P>
+
+<H3><CODE><A NAME="time_point__min"></A>time_point::min</CODE></H3>
+
+<PRE>static constexpr time_point <B>min</B>();</PRE>
+
+<P>The static member function returns
+<CODE>time_point(duration::min())</CODE>.</P>
+
+<H3><CODE><A NAME="time_point__operator+2"></A>time_point::operator+=</CODE></H3>
+
+<PRE>time_point&amp; <B>operator+=</B>(const duration&amp; Dur);</PRE>
+
+<P>The operator adds <CODE>Dur</CODE> to the stored <CODE>duration</CODE>
+value and returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="time_point__operator-2"></A>time_point::operator-=</CODE></H3>
+
+<PRE>time_point&amp; <B>operator-=</B>(const duration&amp; Dur);</PRE>
+
+<P>The operator subtracts <CODE>Dur</CODE> from the stored
+<CODE>duration</CODE> value and returns <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="time_point__period"></A>time_point::period</CODE></H3>
+
+<PRE>typedef typename duration::period <B>period</B>;</PRE>
+
+<P>The type is a synonym for the nested type name <CODE>duration::period</CODE>.</P>
+
+<H3><CODE><A NAME="time_point__rep"></A>time_point::rep</CODE></H3>
+
+<PRE>typedef typename duration::rep <B>rep</B>;</PRE>
+
+<P>The type is a synonym for the nested type name
+<CODE>duration::rep</CODE>.</P>
+
+<H3><CODE><A NAME="time_point__time_point"></A>time_point::time_point</CODE></H3>
+
+<PRE>constexpr <B>time_point</B>();
+constexpr explicit <B>time_point</B>(const duration&amp; Dur);
+template&lt;class Duration2&gt;
+    constexpr <B>time_point</B>(const time_point&lt;clock, Duration2&gt;&amp; Tp);</PRE>
+
+<P>The first constructor constructs an object whose stored
+<CODE>duration</CODE> value is equal to <CODE>duration::zero()</CODE>.</P>
+
+<P>The second constructor constructs an object whose stored
+<CODE>duration</CODE> value is equal to <CODE>Dur</CODE>.</P>
+
+<P>Unless <CODE>is_convertible&lt;Duration2, duration&gt;</CODE>
+<A HREF="typetrait.html#holds_true">holds true</A>
+the second constructor
+does not participate in overload resolution.</P>
+
+<P>The third constructor constructs an object whose stored
+<CODE>duration</CODE> value is initialized with
+<CODE>Tp.time_since_epoch()</CODE>.</P>
+
+<H3><CODE><A NAME="time_point__time_since_epoch"></A>time_point::time_since_epoch</CODE></H3>
+
+<PRE>constexpr duration <B>time_since_epoch</B>() const;</PRE>
+
+<P>The member function returns the stored <CODE>duration</CODE> value.</P>
+
+<H2><CODE><A NAME="time_point_cast"></A>time_point_cast</CODE></H2>
+
+<PRE>template&lt;class To, class Clock, class Duration&gt;
+    time_point&lt;Clock, To&gt; <B>time_point_cast</B>(const time_point&lt;Clock, Duration&gt;&amp; Tp);</PRE>
+
+<P>The template function returns
+<CODE>time_point&lt;Clock,&nbsp;To&gt;(duration_cast&lt;To&gt;(Tp.time_since_epoch()))</CODE>.</P>
+
+<P>Unless <CODE>To</CODE> is an instantiation of <CODE>duration</CODE>,
+the template function
+does not participate in overload resolution.</P>
+
+<H2><CODE><A NAME="treat_as_floating_point"></A>treat_as_floating_point</CODE></H2>
+
+<PRE>template&lt;class Rep&gt;
+    struct <B>treat_as_floating_point</B>
+        : is_floating_point&lt;Rep&gt; { };</PRE>
+
+<P>The template parameter <CODE>Rep</CODE> can be <B>treated as a
+floating-point type</B> only when the specialization
+<CODE>treat_as_floating_point&lt;Rep&gt;</CODE> is derived from
+<CODE>true_type</CODE>. The template class can be specialized for a
+user-defined type.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

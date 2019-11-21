@@ -1,0 +1,80 @@
+<HTML><HEAD>
+<TITLE>&lt;assert.h&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;assert.h&gt;"></A><CODE>&lt;assert.h&gt;</CODE></H1><HR>
+
+<P>Include the standard header <B><CODE>&lt;assert.h&gt;</CODE></B>
+to define the macro
+<A HREF="#assert"><CODE>assert</CODE></A>,
+which is useful for diagnosing logic errors in
+the program. You can eliminate the testing code produced by the macro
+<CODE>assert</CODE> without removing the macro references from the program
+by defining the macro
+<B><A NAME="NDEBUG"></A><CODE>NDEBUG</CODE></B>
+in the program before you include
+<CODE>&lt;assert.h&gt;</CODE>. Each time the program includes this header,
+it redetermines the definition of the macro <CODE>assert</CODE>.</P>
+
+<PRE>#undef assert
+#if defined NDEBUG
+#define <B><A HREF="#assert">assert</A></B>(test) (void)0
+#else
+#define <B><A HREF="#assert">assert</A></B>(test) <I>&lt;void expression&gt;</I>
+#endif</PRE>
+
+<H2><A NAME="assert"></A><CODE>assert</CODE></H2>
+
+<PRE>#undef assert
+#if defined NDEBUG
+#define <B>assert</B>(test) (void)0
+#else
+#define <B>assert</B>(test) <I>&lt;void expression&gt;</I>
+#endif</PRE>
+
+<P>The macro is available only in &quot;Development Mode&quot; of Development Kit. Otherwise, please avoid using it or compile with a definition of the macro <A HREF="#NDEBUG"><CODE>NDEBUG</CODE></A>. See &quot;Programming Startup Guide&quot; for details.</P>
+
+<P>If the <I>int</I> expression <CODE>test</CODE> equals zero,
+the macro writes to
+<A HREF="stdio.html#stderr"><CODE>stderr</CODE></A>
+a diagnostic message that includes:</P>
+
+<UL>
+<LI>the text of <CODE>test</CODE></LI>
+
+<LI>the source filename (the predefined macro
+<A HREF="preproc.html#__FILE__"><CODE>__FILE__</CODE></A>)</LI>
+
+<LI>the source line number (the predefined macro
+<A HREF="preproc.html#__LINE__"><CODE>__LINE__</CODE></A>)</LI>
+
+<LI>the function name (the predefined object
+<A HREF="preproc.html#__func__"><CODE>__func__</CODE></A>,
+added with C99)</LI>
+</UL>
+
+<P>It then calls
+<A HREF="stdlib.html#abort"><CODE>abort</CODE></A>.</P>
+
+<P>If the macro <CODE>_VERBOSE_DEBUGGING</CODE> is defined when <CODE>&lt;assert.h&gt;</CODE> is included, a message will be written also when <CODE>test</CODE> is true.</P>
+
+<P>If the macro <CODE>SCE_LIBC_ASSERT_BREAK</CODE> is defined when <CODE>&lt;assert.h&gt;</CODE> is included, <CODE>assert</CODE> traps the program instead of calling <CODE>abort</CODE> so that the debugger can detect it.</P>
+
+<P>You can write the macro <CODE>assert</CODE> in the program in any
+<A HREF="function.html#side-effects_context">side-effects context</A>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+&copy; 2012 Sony Computer Entertainment Inc. All rights reserved.</I></P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger and Jim Brodie. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

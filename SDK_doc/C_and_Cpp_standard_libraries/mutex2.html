@@ -1,0 +1,1020 @@
+<HTML><HEAD>
+<TITLE>&lt;mutex&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;mutex&gt;"></A><CODE>&lt;mutex&gt;</CODE></H1>
+
+<P>[added with C++11]</P><HR>
+
+<P><B><CODE><A HREF="#adopt_lock">adopt_lock</A>
+&middot; <A HREF="#adopt_lock_t">adopt_lock_t</A>
+&middot; <A HREF="#call_once">call_once</A>
+&middot; <A HREF="#defer_lock">defer_lock</A>
+&middot; <A HREF="#defer_lock_t">defer_lock_t</A>
+&middot; <A HREF="#lock">lock</A>
+&middot; <A HREF="#lock_guard">lock_guard</A>
+&middot; <A HREF="#mutex">mutex</A>
+&middot; <A HREF="#once_flag">once_flag</A>
+&middot; <A HREF="#recursive_mutex">recursive_mutex</A>
+&middot; <A HREF="#recursive_timed_mutex">recursive_timed_mutex</A>
+&middot; <A HREF="#swap">swap</A>
+&middot; <A HREF="#timed_mutex">timed_mutex</A>
+&middot; <A HREF="#try_lock">try_lock</A>
+&middot; <A HREF="#try_to_lock">try_to_lock</A>
+&middot; <A HREF="#try_to_lock_t">try_to_lock_t</A>
+&middot; <A HREF="#unique_lock">unique_lock</A>
+</CODE></B></P>
+<HR>
+
+<P>Include the standard header <B><CODE>&lt;mutex&gt;</CODE></B> to define
+the classes <CODE>mutex</CODE>, <CODE>recursive_mutex</CODE>,
+<CODE>timed_mutex</CODE>, and <CODE>recursive_timed_mutex</CODE>,
+the templates <CODE>lock_guard</CODE> and <CODE>unique_lock</CODE>,
+and various supporting types and functions for defining
+mutual exclusion code regions.</P>
+
+<P>The classes <CODE>mutex</CODE> and <CODE>recursive_mutex</CODE> are
+<A HREF="#mutex_type">mutex types</A>. Objects of these types have member
+functions that lock and unlock them, providing mutual exclusion when multiple
+threads try to lock the same mutex object. Mutex types can be used as type
+arguments to instantiate the templates <CODE>lock_guard</CODE> and
+<CODE>unique_lock</CODE>. Objects of these types can be used as the
+<CODE>Lock</CODE> argument to the <CODE>wait</CODE> member functions in the
+template
+<A HREF="condition_variable.html#condition_variable_any">condition_variable_any</A>.</P>
+
+<P>The classes <CODE>timed_mutex</CODE> and <CODE>recursive_timed_mutex</CODE>
+are
+<A HREF="#timed_mutex_type">timed mutex types</A>. These types can be used
+anywhere a mutex type can be used. In addition to the member functions in
+mutex types, objects of these types have member functions that will try to
+lock them but will return after a specified time if they cannot get the lock.
+Objects of these types can be used as the <CODE>Lock</CODE> arguments to
+instantiate the <CODE>wait_for</CODE> and the <CODE>wait_until</CODE> member
+functions in the template
+<A HREF="condition_variable.html#condition_variable_any">condition_variable_any</A>.</P>
+
+<PRE>namespace std {
+    // MUTUAL EXCLUSION
+    class <B><A HREF="#mutex">mutex</A></B>;
+    class <B><A HREF="#recursive_mutex">recursive_mutex</A></B>;
+    class <B><A HREF="#timed_mutex">timed_mutex</A></B>;
+    class <B><A HREF="#recursive_timed_mutex">recursive_timed_mutex</A></B>;
+
+    // LOCK PROPERTIES
+    struct <B><A HREF="#adopt_lock_t">adopt_lock_t</A></B>;
+    struct <B><A HREF="#defer_lock_t">defer_lock_t</A></B>;
+    struct <B><A HREF="#try_to_lock_t">try_to_lock_t</A></B>;
+
+    constexpr adopt_lock_t <B><A HREF="#adopt_lock">adopt_lock</A></B> { };
+    constexpr const defer_lock_t <B><A HREF="#defer_lock">defer_lock</A></B> { };
+    constexpr const try_to_lock_t <B><A HREF="#try_to_lock">try_to_lock</A></B> { };
+
+    // LOCKS
+    template&lt;class Mutex&gt;
+        class <B><A HREF="#lock_guard">lock_guard</A></B>;
+    template&lt;class Mutex&gt;
+        class <B><A HREF="#unique_lock">unique_lock</A></B>;
+
+    // SWAP
+    template&lt;class Mutex&gt;
+        void <B><A HREF="#swap">swap</A></B>(unique_lock&lt;Mutex&gt;&amp; Left,
+            unique_lock&lt;Mutex&gt;&amp; Right) noexcept;
+
+    // MULTIPLE LOCKS
+    template&lt;class L1, class L2, class... L3&gt;
+        void <B><A HREF="#lock">lock</A></B>(L1&amp;, L2&amp;, L3&amp;...);
+    template&lt;class L1, class L2, class... L3&gt;
+        int <B><A HREF="#try_lock">try_lock</A></B>(L1&amp;, L2&amp;, L3&amp;...);
+
+    // CALL ONCE
+    struct <B><A HREF="#once_flag">once_flag</A></B>;
+    template&lt;class Callable, class... Args&gt;
+        void <B><A HREF="#call_once">call_once</A></B>(once_flag&amp; flag,
+            Callable&amp;&amp; F, Args&amp;&amp;... A);
+}   // namespace std</PRE>
+
+<H2><CODE><A NAME="adopt_lock"></A>adopt_lock</CODE></H2>
+
+<PRE>constexpr adopt_lock_t <B>adopt_lock</B> { };</PRE>
+
+<P>The object can be passed to constructors for <CODE>lock_guard</CODE> and
+<CODE>unique_lock</CODE> to indicate that the mutex object that is also being
+passed to the constructor is locked.</P>
+
+<H2><CODE><A NAME="adopt_lock_t"></A>adopt_lock_t</CODE></H2>
+
+<PRE>struct <B>adopt_lock_t</B> { };</PRE>
+
+<P>The type is used to define an object, <CODE>adopt_lock</CODE>,
+that can be used to select one of the overloaded constructors of <CODE>lock_guard</CODE>
+and of <CODE>unique_lock</CODE>.</P>
+
+<H2><CODE><A NAME="call_once"></A>call_once</CODE></H2>
+
+<PRE>template&lt;class Callable, class... Args&gt;
+    void <B>call_once</B>(once_flag&amp; Flag,
+        Callable F&amp;&amp;, Args&amp;&amp;... A);</PRE>
+
+<P>If <CODE>Flag</CODE> is not valid, the function throws an object of type
+<CODE>system_error</CODE> with an error code of
+<CODE>invalid_argument</CODE>. Otherwise, the template function uses its
+<CODE>Flag</CODE> argument to ensure that it calls <CODE>F(A...)</CODE>
+successfully exactly once, regardless of how many times the template function
+is called. If <CODE>F(A...)</CODE> exits by throwing an exception it is not a
+successful call.</P>
+
+<H2><CODE><A NAME="defer_lock"></A>defer_lock</CODE></H2>
+
+<PRE>constexpr defer_lock_t <B>defer_lock</B> { };</PRE>
+
+<P>The object can be passed to the constructor for <CODE>unique_lock</CODE> to
+indicate that the constructor should not lock the mutex object that is also
+being passed to it.</P>
+
+<H2><CODE><A NAME="defer_lock_t"></A>defer_lock_t</CODE></H2>
+
+<PRE>struct <B>defer_lock_t</B> { };</PRE>
+
+<P>The type is used to define an object, <CODE>defer_lock</CODE>, that can be
+used to select one of the overloaded constructors of
+<CODE>unique_lock</CODE>.</P>
+
+<H2><CODE><A NAME="lock"></A>lock</CODE></H2>
+
+<PRE>template&lt;class L1, class L2, class... L3&gt;
+    void <B>lock</B>(L1&amp;, L2&amp;, L3&amp;...);</PRE>
+
+<P>The arguments to the template function must be
+<A HREF="#mutex_type">mutex types</A>,
+except that calls to <CODE>try_lock</CODE> may throw exceptions.
+The function locks all of its arguments without deadlock by calls to
+<CODE>lock</CODE>, <CODE>try_lock</CODE>, and <CODE>unlock</CODE>. If a call
+to <CODE>lock</CODE> or <CODE>try_lock</CODE> throws an exception, the
+function calls <CODE>unlock</CODE> on any of the mutex objects that were
+successfully locked before rethrowing the exception.</P>
+
+<H2><CODE><A NAME="lock_guard"></A>lock_guard</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#lock_guard__lock_guard">lock_guard</A>
+&middot; <A HREF="#lock_guard__~lock_guard">~lock_guard</A>
+&middot; <A HREF="#lock_guard__mutex_type">mutex_type</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Mutex&gt;
+    class <B>lock_guard</B>
+    {
+public:
+    typedef Mutex <B><A HREF="#lock_guard__mutex_type">mutex_type</A></B>;
+
+    explicit <B><A HREF="#lock_guard__lock_guard">lock_guard</A></B>(mutex_type&amp; mtx);
+    <B><A HREF="#lock_guard__lock_guard">lock_guard</A></B>(mutex_type&amp; mtx, adopt_lock_t);
+    <B><A HREF="#lock_guard__~lock_guard">~lock_guard</A></B>();
+
+    <B>lock_guard</B>(const lock_guard&amp;) = delete;
+    <B>lock_guard</B>&amp; operator=(const lock_guard&amp;) = delete;
+    };</PRE>
+
+<P>The template can be instantiated to create an object whose destructor
+unlocks a mutex. The template argument <CODE>Mutex</CODE> must name a
+<A HREF="#mutex_type">mutex type</A>.</P>
+
+<H3><CODE><A NAME="lock_guard__lock_guard"></A>lock_guard::lock_guard</CODE></H3>
+
+<PRE>explicit<B>lock_guard</B>(mutex_type&amp; mtx);
+<B>lock_guard</B>(mutex_type&amp; mtx, adopt_lock_t);</PRE>
+
+<P>The first constructor constructs an object of type <CODE>lock_guard</CODE>
+and locks the mutex <CODE>mtx</CODE>. If <CODE>mtx</CODE> is not a recursive
+mutex, it must not be locked when this constructor is called.</P>
+
+<P>The second constructor constructs an object of type <CODE>lock_guard</CODE>
+but does not lock the mutex <CODE>mtx</CODE>. <CODE>mtx</CODE> must be locked
+when this constructor is called. The constructor throws nothing.</P>
+
+<H3><CODE><A NAME="lock_guard__~lock_guard"></A>lock_guard::~lock_guard</CODE></H3>
+
+<PRE><B>~lock_guard</B>();</PRE>
+
+<P>The destructor unlocks the mutex that was passed to the constructor. If the
+mutex does not exist at the time that the destructor runs, the behavior is
+undefined.</P>
+
+<H3><CODE><A NAME="lock_guard__mutex_type"></A>lock_guard::mutex_type</CODE></H3>
+
+<PRE>typedef Mutex <B>mutex_type</B>;</PRE>
+
+<P>The typedef name is a synonym for the template argument
+<CODE>Mutex</CODE>.</P>
+
+<H2><CODE><A NAME="mutex"></A>mutex</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#mutex__lock">lock</A>
+&middot; <A HREF="#mutex__mutex">mutex</A>
+&middot; <A HREF="#mutex__~mutex">~mutex</A>
+&middot; <A HREF="#mutex__native_handle">native_handle</A>
+&middot; <A HREF="#mutex__native_handle_type">native_handle_type</A>
+&middot; <A HREF="#mutex__try_lock">try_lock</A>
+&middot; <A HREF="#mutex__unlock">unlock</A>
+</CODE></B></P>
+<HR>
+
+<PRE>class <B>mutex</B>
+    {
+public:
+    constexpr <B><A HREF="#mutex__mutex">mutex</A></B>() noexcept;
+    <B><A HREF="#mutex__~mutex">~mutex</A></B>();
+
+    <B>mutex</B>(const mutex&amp;) = delete;
+    mutex&amp; <B>operator=</B>(const mutex&amp;) = delete;
+
+    void <B><A HREF="#mutex__lock">lock</A></B>();
+    bool <B><A HREF="#mutex__try_lock">try_lock</A></B>();
+    void <B><A HREF="#mutex__unlock">unlock</A></B>();
+
+    typedef <I>see below</I> <B><A HREF="#mutex__native_handle_type">native_handle_type</A></B>;
+    native_handle_type <B><A HREF="#mutex__native_handle">native_handle</A></B>();
+    };</PRE>
+
+<P>The class <CODE>mutex</CODE> is a
+<A HREF="#mutex_type">mutex_type</A>. Objects of this type can be used to
+enforce mutual exclusion within a program.</P>
+
+<H3><CODE><A NAME="mutex__lock"></A>mutex::lock</CODE></H3>
+
+<PRE>void <B>lock</B>();</PRE>
+
+<P>The member function blocks the calling thread until the calling thread
+obtains ownership of the mutex. If the calling thread already owns the mutex,
+the behavior is undefined.</P>
+
+<H3><CODE><A NAME="mutex__mutex"></A>mutex::mutex</CODE></H3>
+
+<PRE>constexpr <B>mutex</B>() noexcept;</PRE>
+
+<P>The constructor constructs a <CODE>mutex</CODE> object that is not locked.</P>
+
+<H3><CODE><A NAME="mutex__~mutex"></A>mutex::~mutex</CODE></H3>
+
+<PRE><B>~mutex</B>();</PRE>
+
+<P>The destructor releases any resources used by the <CODE>mutex</CODE>
+object. If the object is locked at the time that the
+destructor runs, the behavior is undefined.</P>
+
+<H3><CODE><A NAME="mutex__native_handle"></A>mutex::native_handle</CODE></H3>
+
+<PRE>native_handle_type <B>native_handle</B>();</PRE>
+
+<P>The member function returns an object of type
+<CODE>native_handle_type</CODE> that can be used in implementation-specific
+ways.</P>
+
+<H3><CODE><A NAME="mutex__native_handle_type"></A>mutex::native_handle_type</CODE></H3>
+
+<PRE>typedef <I>h-type</I> <B>native_handle_type</B>;</PRE>
+
+<P>The typedef is a synonym for an implementation-specific type that can be
+used in implementation-specific ways.</P>
+
+<P>In
+this implementation,
+it is a synonym for <CODE>mtx_t</CODE>, and can be used as an argument to any
+of the <CODE>mtx_XXX</CODE> functions other than <CODE>mtx_create</CODE>.</P>
+
+<H3><CODE><A NAME="mutex__try_lock"></A>mutex::try_lock</CODE></H3>
+
+<PRE>bool <B>try_lock</B>();</PRE>
+
+<P>The member function attempts to obtain ownership of the mutex without
+blocking. If it succeeds it returns <CODE>true</CODE>. If it fails it returns
+<CODE>false</CODE>. If the calling thread already owns the mutex, the behavior
+is undefined.</P>
+
+<H3><CODE><A NAME="mutex__unlock"></A>mutex::unlock</CODE></H3>
+
+<PRE>void <B>unlock</B>();</PRE>
+
+<P>The member function releases ownership of the mutex. If the calling thread
+does not own the mutex, the behavior is undefined.</P>
+
+<H2><CODE><A NAME="once_flag"></A>once_flag</CODE></H2>
+
+<PRE>struct <B>once_flag</B>
+    {
+    constexpr <B>once_flag</B>() noexcept;
+    <B>once_flag</B>(const once_flag&amp;) = delete;
+    once_flag&amp; <B>operator=</B>(const once_flag&amp;) = delete;
+    };</PRE>
+
+<P>The struct <CODE>once_flag</CODE> has only a default constructor. Objects
+of type <CODE>once_flag</CODE> can be created but not copied. They are used
+with the template function
+<A HREF="#call_once">call_once</A> to ensure that
+initialization code is called only once, even in the presence of multiple
+threads of execution.</P>
+
+<H2><CODE><A NAME="recursive_mutex"></A>recursive_mutex</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#recursive_mutex__lock">lock</A>
+&middot; <A HREF="#recursive_mutex__recursive_mutex">recursive_mutex</A>
+&middot; <A HREF="#recursive_mutex__~recursive_mutex">~recursive_mutex</A>
+&middot; <A HREF="#recursive_mutex__native_handle">native_handle</A>
+&middot; <A HREF="#recursive_mutex__native_handle_type">native_handle_type</A>
+&middot; <A HREF="#recursive_mutex__try_lock">try_lock</A>
+&middot; <A HREF="#recursive_mutex__unlock">unlock</A>
+</CODE></B></P>
+<HR>
+
+<PRE>class <B>recursive_mutex</B>
+    {
+public:
+    <B><A HREF="#recursive_mutex__recursive_mutex">recursive_mutex</A></B>();
+    <B><A HREF="#recursive_mutex__~recursive_mutex">~recursive_mutex</A></B>();
+
+    <B>recursive_mutex</B>(const recursive_mutex&amp;) = delete;
+    recursive_mutex&amp; <B>operator=</B>(const recursive_mutex&amp;) = delete;
+
+    void <B><A HREF="#recursive_mutex__lock">lock</A></B>();
+    bool <B><A HREF="#recursive_mutex__try_lock">try_lock</A></B>() noexcept;
+    void <B><A HREF="#recursive_mutex__unlock">unlock</A></B>();
+
+    typedef <I>see below</I> <B><A HREF="#recursive_mutex__native_handle_type">native_handle_type</A></B>;
+    native_handle_type <B><A HREF="#recursive_mutex__native_handle">native_handle</A></B>();
+    };</PRE>
+
+<P>The class <CODE>recursive_mutex</CODE> is a
+<A HREF="#mutex_type">mutex type</A>.
+Objects of this type can be used to enforce mutual exclusion within
+a program. Unlike objects of type <CODE>mutex</CODE>, the effect of calling
+the various locking functions for objects of type <CODE>recursive_mutex</CODE>
+that are already locked is well defined.</P>
+
+<H3><CODE><A NAME="recursive_mutex__lock"></A>recursive_mutex::lock</CODE></H3>
+
+<PRE>void <B>lock</B>();</PRE>
+
+<P>The member function blocks the calling thread until the calling thread
+obtains ownership of the mutex. If the calling thread already owns the mutex,
+the function returns immediately and the previous lock remains in effect.</P>
+
+<H3><CODE><A NAME="recursive_mutex__recursive_mutex"></A>recursive_mutex::recursive_mutex</CODE></H3>
+
+<PRE><B>recursive_mutex</B>();</PRE>
+
+<P>The constructor constructs a <CODE>recursive_mutex</CODE> object that is not locked.</P>
+
+<H3><CODE><A NAME="recursive_mutex__~recursive_mutex"></A>recursive_mutex::~recursive_mutex</CODE></H3>
+
+<PRE><B>~recursive_mutex</B>();</PRE>
+
+<P>The destructor releases any resources used by the
+<CODE>recursive_mutex</CODE> object. If the object is locked at the time that
+the destructor runs, the behavior is undefined.</P>
+
+<H3><CODE><A NAME="recursive_mutex__native_handle"></A>recursive_mutex::native_handle</CODE></H3>
+
+<PRE>native_handle_type <B>native_handle</B>();</PRE>
+
+<P>The member function returns an object of type
+<CODE>native_handle_type</CODE> that can be used in implementation-specific
+ways.</P>
+
+<H3><CODE><A NAME="recursive_mutex__native_handle_type"></A>recursive_mutex::native_handle_type</CODE></H3>
+
+<PRE>typedef <I>h-type</I> <B>native_handle_type</B>;</PRE>
+
+<P>The typedef is a synonym for an implementation-specific type that can be
+used in implementation-specific ways.</P>
+
+<P>In
+this implementation,
+it is a synonym for <CODE>mtx_t</CODE>, and can be used as an argument to any
+of the <CODE>mtx_XXX</CODE> functions other than <CODE>mtx_create</CODE>.</P>
+
+<H3><CODE><A NAME="recursive_mutex__try_lock"></A>recursive_mutex::try_lock</CODE></H3>
+
+<PRE>bool <B>try_lock</B>() noexcept;</PRE>
+
+<P>The member function attempts to obtain ownership of the mutex without
+blocking. If it succeeds it returns <CODE>true</CODE>. If it fails it returns
+<CODE>false</CODE>. If the calling thread already owns the mutex, the function
+returns <CODE>true</CODE> immediately and the previous lock remains in
+effect.</P>
+
+<H3><CODE><A NAME="recursive_mutex__unlock"></A>recursive_mutex::unlock</CODE></H3>
+
+<PRE>void <B>unlock</B>();</PRE>
+
+<P>The member function releases ownership of the mutex only after it has been
+called as many times as <CODE>lock</CODE> or <CODE>try_lock</CODE> was
+successfully called on the <CODE>recursive_mutex</CODE> object. If the calling thread does not own the mutex, the behavior is undefined.</P>
+
+<H2><CODE><A NAME="recursive_timed_mutex"></A>recursive_timed_mutex</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#recursive_timed_mutex__lock">lock</A>
+&middot; <A HREF="#recursive_timed_mutex__recursive_timed_mutex">recursive_timed_mutex</A>
+&middot; <A HREF="#recursive_timed_mutex__~recursive_timed_mutex">~recursive_timed_mutex</A>
+&middot; <A HREF="#recursive_timed_mutex__native_handle">native_handle</A>
+&middot; <A HREF="#recursive_timed_mutex__native_handle_type">native_handle_type</A>
+&middot; <A HREF="#recursive_timed_mutex__try_lock">try_lock</A>
+&middot; <A HREF="#recursive_timed_mutex__try_lock_for">try_lock_for</A>
+&middot; <A HREF="#recursive_timed_mutex__try_lock_until">try_lock_until</A>
+&middot; <A HREF="#recursive_timed_mutex__unlock">unlock</A>
+</CODE></B></P>
+<HR>
+
+<PRE>class <B>recursive_timed_mutex</B>
+    {
+public:
+    <B><A HREF="#recursive_timed_mutex__recursive_timed_mutex">recursive_timed_mutex</A></B>();
+    <B><A HREF="#recursive_timed_mutex__~recursive_timed_mutex">~recursive_timed_mutex</A></B>();
+
+    <B>recursive_timed_mutex</B>(const recursive_timed_mutex&amp;) = delete;
+    recursive_timed_mutex&amp; <B>operator=</B>(const recursive_timed_mutex&amp;) = delete;
+
+    void <B><A HREF="#recursive_timed_mutex__lock">lock</A></B>();
+    bool <B><A HREF="#recursive_timed_mutex__try_lock">try_lock</A></B>() noexcept;
+    template&lt;class Rep, class Period&gt;
+        bool <B><A HREF="#recursive_timed_mutex__try_lock_for">try_lock_for</A></B>(const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);
+    template&lt;class Clock, class Duration&gt;
+        bool <B><A HREF="#recursive_timed_mutex__try_lock_until">try_lock_until</A></B>(const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);
+    void <B><A HREF="#recursive_timed_mutex__unlock">unlock</A></B>();
+
+    typedef <I>see below</I> <B><A HREF="#recursive_timed_mutex__native_handle_type">native_handle_type</A></B>;
+    native_handle_type <B><A HREF="#recursive_timed_mutex__native_handle">native_handle</A></B>();
+    };</PRE>
+
+
+<P>The class <CODE>recursive_timed_mutex</CODE> is a
+<A HREF="#timed_mutex_type">timed mutex type</A>. Objects of this type can be
+used to enforce mutual exclusion with time-limited blocking within a program.
+Unlike objects of type <CODE>timed_mutex</CODE>, the effect of calling the
+various locking functions for objects of type
+<CODE>recursive_timed_mutex</CODE> that are already locked is well
+defined.</P>
+
+<H3><CODE><A NAME="recursive_timed_mutex__lock"></A>recursive_timed_mutex::lock</CODE></H3>
+
+<PRE>void <B>lock</B>();</PRE>
+
+<P>The member function blocks the calling thread until the calling thread
+obtains ownership of the mutex. If the calling thread already owns the mutex,
+the function returns immediately and the previous lock remains in effect.</P>
+
+<H3><CODE><A NAME="recursive_timed_mutex__recursive_timed_mutex"></A>recursive_timed_mutex::recursive_timed_mutex</CODE></H3>
+
+<PRE><B>recursive_timed_mutex</B>();</PRE>
+
+<P>The constructor constructs a <CODE>recursive_timed_mutex</CODE> object that
+is not locked.</P>
+
+<H3><CODE><A NAME="recursive_timed_mutex__~recursive_timed_mutex"></A>recursive_timed_mutex::~recursive_timed_mutex</CODE></H3>
+
+<PRE><B>~recursive_timed_mutex</B>();</PRE>
+
+<P>The destructor releases any resources used by the
+<CODE>recursive_timed_mutex</CODE> object. If the object is locked at the time
+that the destructor runs, the behavior is undefined.</P>
+
+<H3><CODE><A NAME="recursive_timed_mutex__native_handle"></A>recursive_timed_mutex::native_handle</CODE></H3>
+
+<PRE>native_handle_type <B>native_handle</B>();</PRE>
+
+<P>The member function returns an object of type
+<CODE>native_handle_type</CODE> that can be used in implementation-specific
+ways.</P>
+
+<H3><CODE><A NAME="recursive_timed_mutex__native_handle_type"></A>recursive_timed_mutex::native_handle_type</CODE></H3>
+
+<PRE>typedef <I>h-type</I> <B>native_handle_type</B>;</PRE>
+
+<P>The typedef is a synonym for an implementation-specific type that can be
+used in implementation-specific ways.</P>
+
+<P>In
+this implementation,
+it is a synonym for <CODE>mtx_t</CODE>, and can be used as an argument to any
+of the <CODE>mtx_XXX</CODE> functions other than <CODE>mtx_create</CODE>.</P>
+
+<H3><CODE><A NAME="recursive_timed_mutex__try_lock"></A>recursive_timed_mutex::try_lock</CODE></H3>
+
+<PRE>bool <B>try_lock</B>() noexcept;</PRE>
+
+<P>The member function attempts to obtain ownership of the mutex without
+blocking. If it succeeds it returns <CODE>true</CODE>. If it fails it returns
+<CODE>false</CODE>. If the calling thread already owns the mutex, the function
+returns <CODE>true</CODE> immediately and the previous lock remains in
+effect.</P>
+
+<H3><CODE><A NAME="recursive_timed_mutex__try_lock_for"></A>recursive_timed_mutex::try_lock_for</CODE></H3>
+
+<PRE>template&lt;class Rep, class Period&gt;
+    bool <B>try_lock_for</B>(const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);</PRE>
+
+<P>The member function attempts to obtain ownership of the mutex without
+blocking for longer than the time specified by <CODE>Rel_time</CODE>. If it
+succeeds it returns <CODE>true</CODE>. If it fails it returns
+<CODE>false</CODE>. If the calling thread already owns the mutex, the function
+returns <CODE>true</CODE> immediately and the previous lock remains in
+effect.</P>
+
+<H3><CODE><A NAME="recursive_timed_mutex__try_lock_until"></A>recursive_timed_mutex::try_lock_until</CODE></H3>
+
+<PRE>template&lt;class Clock, class Duration&gt;
+    bool <B>try_lock_until</B>(const chrono::time_point&lt;clock, Duration&gt;&amp; Abs_time);</PRE>
+
+<P>The member function attempts to obtain ownership of the mutex without
+blocking past the time specified by <CODE>Abs_time</CODE>. If it succeeds it
+returns <CODE>true</CODE>. If it fails it returns <CODE>false</CODE>. If the
+calling thread already owns the mutex, the function returns <CODE>true</CODE>
+immediately and the previous lock remains in effect.</P>
+
+<H3><CODE><A NAME="recursive_timed_mutex__unlock"></A>recursive_timed_mutex::unlock</CODE></H3>
+
+<PRE>void <B>unlock</B>();</PRE>
+
+<P>The member function releases ownership of the mutex only after it has been
+called as many times as <CODE>lock</CODE>, <CODE>try_lock</CODE>,
+<CODE>try_lock_for</CODE>, or <CODE>try_lock_until</CODE> was successfully
+called on the <CODE>recursive_timed_mutex</CODE> object. If the calling thread
+does not own the mutex, the behavior is undefined.</P>
+
+
+<H2><CODE><A NAME="swap"></A>swap</CODE></H2>
+
+<PRE>template&lt;class Mutex&gt;
+    void <B>swap</B>(unique_lock&lt;Mutex&gt;&amp; Left,
+        unique_lock&lt;Mutex&gt;&amp; Right) noexcept;</PRE>
+
+<P>Each template function calls <CODE>Left.swap(Right)</CODE>.</P>
+
+<H2><CODE><A NAME="timed_mutex"></A>timed_mutex</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#timed_mutex__lock">lock</A>
+&middot; <A HREF="#timed_mutex__timed_mutex">timed_mutex</A>
+&middot; <A HREF="#timed_mutex__~timed_mutex">~timed_mutex</A>
+&middot; <A HREF="#timed_mutex__native_handle">native_handle</A>
+&middot; <A HREF="#timed_mutex__native_handle_type">native_handle_type</A>
+&middot; <A HREF="#timed_mutex__try_lock">try_lock</A>
+&middot; <A HREF="#timed_mutex__try_lock_for">try_lock_for</A>
+&middot; <A HREF="#timed_mutex__try_lock_until">try_lock_until</A>
+&middot; <A HREF="#timed_mutex__unlock">unlock</A>
+</CODE></B></P>
+<HR>
+
+<PRE>class <B>timed_mutex</B>
+    {
+public:
+    <B><A HREF="#timed_mutex__timed_mutex">timed_mutex</A></B>();
+    <B><A HREF="#timed_mutex__~timed_mutex">~timed_mutex</A></B>();
+
+    <B>timed_mutex</B>(const timed_mutex&amp;) = delete;
+    timed_mutex&amp; <B>operator=</B>(const timed_mutex&amp;) = delete;
+
+    void <B><A HREF="#timed_mutex__lock">lock</A></B>();
+    bool <B><A HREF="#timed_mutex__try_lock">try_lock</A></B>();
+    template&lt;class Rep, class Period&gt;
+        bool <B><A HREF="#timed_mutex__try_lock_for">try_lock_for</A></B>(const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);
+    template&lt;class Clock, class Duration&gt;
+        bool <B><A HREF="#timed_mutex__try_lock_until">try_lock_until</A></B>(const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);
+    void <B><A HREF="#timed_mutex__unlock">unlock</A></B>();
+
+    typedef <I>see below</I> <B><A HREF="#timed_mutex__native_handle_type">native_handle_type</A></B>;
+    native_handle_type <B><A HREF="#timed_mutex__native_handle">native_handle</A></B>();
+    };</PRE>
+
+<P>The class <CODE>timed_mutex</CODE> is a
+<A HREF="#timed_mutex_type">timed mutex type</A>. Objects of this type can be
+used to enforce mutual exclusion with time-limited blocking within a
+program.</P>
+
+<H3><CODE><A NAME="timed_mutex__lock"></A>timed_mutex::lock</CODE></H3>
+
+<PRE>void <B>lock</B>();</PRE>
+
+<P>The member function blocks the calling thread until the calling thread obtains ownership of the mutex. If the calling thread already owns the mutex, the behavior is undefined.</P>
+
+<H3><CODE><A NAME="timed_mutex__timed_mutex"></A>timed_mutex::timed_mutex</CODE></H3>
+
+<PRE><B>timed_mutex</B>();</PRE>
+
+<P>The constructor constructs a <CODE>timed_mutex</CODE> object that is not locked.</P>
+
+<H3><CODE><A NAME="timed_mutex__~timed_mutex"></A>timed_mutex::~timed_mutex</CODE></H3>
+
+<PRE><B>~timed_mutex</B>();</PRE>
+
+<P>The destructor releases any resources used by the <CODE>timed_mutex</CODE>
+object. If the object is locked at the time that the destructor runs, the
+behavior is undefined.</P>
+
+<H3><CODE><A NAME="timed_mutex__native_handle"></A>timed_mutex::native_handle</CODE></H3>
+
+<PRE>native_handle_type <B>native_handle</B>();</PRE>
+
+<P>The member function returns an object of type
+<CODE>native_handle_type</CODE> that can be used in implementation-specific
+ways.</P>
+
+<H3><CODE><A NAME="timed_mutex__native_handle_type"></A>timed_mutex::native_handle_type</CODE></H3>
+
+<PRE>typedef <I>h-type</I> <B>native_handle_type</B>;</PRE>
+
+<P>The typedef is a synonym for an implementation-specific type that can be
+used in implementation-specific ways.</P>
+
+<P>In
+this implementation,
+it is a synonym for <CODE>mtx_t</CODE>, and can be used as an argument to any
+of the <CODE>mtx_XXX</CODE> functions other than <CODE>mtx_create</CODE>.</P>
+
+<H3><CODE><A NAME="timed_mutex__try_lock"></A>timed_mutex::try_lock</CODE></H3>
+
+<PRE>bool <B>try_lock</B>();</PRE>
+
+<P>The member function attempts to obtain ownership of the mutex without
+blocking. If it succeeds it returns <CODE>true</CODE>. If it fails it returns
+<CODE>false</CODE>. If the calling thread already owns the mutex, the behavior
+is undefined.</P>
+
+<H3><CODE><A NAME="timed_mutex__try_lock_for"></A>timed_mutex::try_lock_for</CODE></H3>
+
+<PRE>template&lt;class Rep, class Period&gt;
+    bool <B>try_lock_for</B>(const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);</PRE>
+
+<P>The member function attempts to obtain ownership of the mutex without
+blocking for longer than the time specified by <CODE>Rel_time</CODE>. If it
+succeeds it returns <CODE>true</CODE>. If it fails it returns
+<CODE>false</CODE>. If the calling thread already owns the mutex, the behavior
+is undefined.</P>
+
+
+<H3><CODE><A NAME="timed_mutex__try_lock_until"></A>timed_mutex::try_lock_until</CODE></H3>
+
+<PRE>template&lt;class Clock, class Duration&gt;
+    bool <B>try_lock_until</B>(const chrono::time_point&lt;clock, Duration&gt;&amp; Abs_time);</PRE>
+
+<P>The member function attempts to obtain ownership of the mutex without blocking past the time specified by <CODE>Abs_time</CODE>. If it
+succeeds it returns <CODE>true</CODE>. If it fails it returns
+<CODE>false</CODE>. If the calling thread already owns the mutex, the behavior
+is undefined.</P>
+
+<H3><CODE><A NAME="timed_mutex__unlock"></A>timed_mutex::unlock</CODE></H3>
+
+<PRE>void <B>unlock</B>();</PRE>
+
+<P>The member function releases ownership of the mutex. If the calling thread
+does not own the mutex, the behavior is undefined.</P>
+
+
+<H2><CODE><A NAME="try_lock"></A>try_lock</CODE></H2>
+
+<PRE>template&lt;class L1, class L2, class... L3&gt;
+    int <B>try_lock</B>(L1&amp;, L2&amp;, L3&amp;...);</PRE>
+
+<P>The arguments to the template function must be
+<A HREF="#mutex_type">mutex types</A>, except that calls to <CODE>try_lock</CODE> may throw exceptions.
+The function calls <CODE>try_lock</CODE> for each argument, from left to
+right, until all the mutex objects have been locked or one of the calls to
+<CODE>try_lock</CODE> fails. If one of the calls to <CODE>try_lock</CODE>
+fails the function calls <CODE>unlock</CODE> on each of the mutex objects that
+was locked. The function returns <CODE>-1</CODE> if all the locks succeeded,
+otherwise a non-negative value that is the 0-based index of the mutex object
+that could not be locked.</P>
+
+<H2><CODE><A NAME="try_to_lock"></A>try_to_lock</CODE></H2>
+
+<PRE>constexpr try_to_lock_t <B>try_to_lock</B> { };</PRE>
+
+<P>The object can be passed to the constructor for <CODE>unique_lock</CODE> to
+indicate that the constructor should try to lock the mutex object that is also
+being passed to it without blocking.</P>
+
+<H2><CODE><A NAME="try_to_lock_t"></A>try_to_lock_t</CODE></H2>
+
+<PRE>struct <B>try_to_lock_t</B> { };</PRE>
+
+<P>The type is used to define an object, <CODE>try_to_lock</CODE>, that can be
+used to select one of the overloaded constructors of
+<CODE>unique_lock</CODE>.</P>
+
+<H2><CODE><A NAME="unique_lock"></A>unique_lock</CODE></H2>
+
+<HR>
+<P><B><CODE><A HREF="#unique_lock__lock">lock</A>
+&middot; <A HREF="#unique_lock__mutex">mutex</A>
+&middot; <A HREF="#unique_lock__mutex_type">mutex_type</A>
+&middot; <A HREF="#unique_lock__operator_bool">operator bool</A>
+&middot; <A HREF="#unique_lock__operator2">operator=</A>
+&middot; <A HREF="#unique_lock__owns_lock">owns_lock</A>
+&middot; <A HREF="#unique_lock__release">release</A>
+&middot; <A HREF="#unique_lock__swap">swap</A>
+&middot; <A HREF="#unique_lock__try_lock">try_lock</A>
+&middot; <A HREF="#unique_lock__try_lock_for">try_lock_for</A>
+&middot; <A HREF="#unique_lock__try_lock_until">try_lock_until</A>
+&middot; <A HREF="#unique_lock__unique_lock">unique_lock</A>
+&middot; <A HREF="#unique_lock__~unique_lock">~unique_lock</A>
+&middot; <A HREF="#unique_lock__unlock">unlock</A>
+</CODE></B></P>
+<HR>
+
+<PRE>template&lt;class Mutex&gt;
+    class <B>unique_lock</B>
+    {
+public:
+    typedef Mutex <B><A HREF="#unique_lock__mutex_type">mutex_type</A></B>;
+
+    // CONSTRUCT, ASSIGN, AND DESTROY
+    <B><A HREF="#unique_lock__unique_lock">unique_lock</A></B>() noexcept;
+    <B><A HREF="#unique_lock__unique_lock">unique_lock</A></B>(unique_lock&amp;&amp; Other) noexcept;
+    explicit <B><A HREF="#unique_lock__unique_lock">unique_lock</A></B>(mutex_type&amp; m);
+    <B><A HREF="#unique_lock__unique_lock">unique_lock</A></B>(mutex_type&amp; m, adopt_lock_t);
+    <B><A HREF="#unique_lock__unique_lock">unique_lock</A></B>(mutex_type&amp; m, defer_lock_t) noexcept;
+    <B><A HREF="#unique_lock__unique_lock">unique_lock</A></B>(mutex_type&amp; m, try_to_lock_t);
+    template&lt;class Rep, class Period&gt;
+        <B><A HREF="#unique_lock__unique_lock">unique_lock</A></B>(mutex_type&amp; m,
+            const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);
+    template&lt;class Clock, class Duration&gt;
+        <B><A HREF="#unique_lock__unique_lock">unique_lock</A></B>(mutex_type&amp; m,
+            const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);
+    <B>unique_lock</B>(const unique_lock&amp;) = delete;
+
+    unique_lock&amp; <B>operator=</B>(const unique_lock&amp;) = delete;
+    unique_lock&amp; <B><A HREF="#unique_lock__operator2">operator=</A></B>(unique_lock&amp;&amp;) noexcept;
+    <B><A HREF="#unique_lock__~unique_lock">~unique_lock</A></B>();
+
+    // LOCK AND UNLOCK
+    void <B><A HREF="#unique_lock__lock">lock</A></B>();
+    bool <B><A HREF="#unique_lock__try_lock">try_lock</A></B>();
+    template&lt;class Rep, class Period&gt;
+        bool <B><A HREF="#unique_lock__try_lock_for">try_lock_for</A></B>(const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);
+    template&lt;class Clock, class Duration&gt;
+        bool <B><A HREF="#unique_lock__try_lock_until">try_lock_until</A></B>(const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);
+    void <B><A HREF="#unique_lock__unlock">unlock</A></B>();
+
+    // MUTATE
+    void <B><A HREF="#unique_lock__swap">swap</A></B>(unique_lock&amp; Other) noexcept;
+    mutex_type *<B><A HREF="#unique_lock__release">release</A></B>() noexcept;
+
+    // OBSERVE
+    bool <B><A HREF="#unique_lock__owns_lock">owns_lock</A></B>() const noexcept;
+    explicit <B><A HREF="#unique_lock__operator_bool">operator bool</A></B>() const noexcept;
+    mutex_type *<B><A HREF="#unique_lock__mutex">mutex</A></B>() const noexcept;
+private:
+    mutex *pmtx;    // <B>exposition only</B>
+    bool owns;      // <B>exposition only</B>
+    };</PRE>
+
+<P>The template can be instantiated to create objects that manage locking and
+unlocking of a mutex. The template argument <CODE>Mutex</CODE> must name a
+<A HREF="#mutex_type">mutex type</A>.</P>
+
+<H2><CODE><A NAME="unique_lock__lock"></A>unique_lock::lock</CODE></H2>
+
+<PRE>void <B>lock</B>();</PRE>
+
+<P>If <CODE>pmtx</CODE> is a null pointer, the function throws an object of
+type <CODE>system_error</CODE> with an error code of
+<CODE>operation_not_permitted</CODE>. If <CODE>owns == true</CODE>, the
+function throws an object of type <CODE>system_error</CODE> with an error
+code of <CODE>resource_deadlock_would_occur</CODE>. Otherwise, the member
+function calls <CODE>pmtx-&gt;lock()</CODE> and sets <CODE>owns</CODE> to
+<CODE>true</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__mutex"></A>unique_lock::mutex</CODE></H3>
+
+<PRE>mutex_type *<B>mutex</B>() const noexcept;</PRE>
+
+<P>The member function returns <CODE>pmtx</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__mutex_type"></A>unique_lock::mutex_type</CODE></H3>
+
+<PRE>typedef Mutex <B>mutex_type</B>;</PRE>
+
+<P>The typedef name is a synonym for the template argument
+<CODE>Mutex</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__operator_bool"></A>unique_lock::operator bool</CODE></H3>
+
+<PRE>explicit <B>operator bool</B>() noexcept;</PRE>
+
+<P>The member function returns <CODE>owns</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__operator2"></A>unique_lock::operator=</CODE></H3>
+
+<PRE>unique_lock&amp; <B>operator=</B>(unique_lock&amp;&amp; Other) noexcept;</PRE>
+
+<P>If <CODE>owns</CODE>, calls <CODE>pmtx-&gt;unlock()</CODE>. Copies
+<CODE>pmtx</CODE> and <CODE>owns</CODE> from <CODE>Other</CODE> into
+<CODE>*this</CODE> then sets <CODE>Other</CODE> to a default-constructed
+state.</P>
+
+<H3><CODE><A NAME="unique_lock__owns_lock"></A>unique_lock::owns_lock</CODE></H3>
+
+<PRE>bool <B>owns_lock</B>() const noexcept;</PRE>
+
+<P>The member function returns <CODE>owns</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__release"></A>unique_lock::release</CODE></H3>
+
+<PRE>mutex_type *<B>release</B>() noexcept;</PRE>
+
+<P>The member function sets <CODE>pmtx</CODE> to <CODE>0</CODE> and
+<CODE>owns</CODE> to <CODE>false</CODE>. It returns the previous value of
+<CODE>pmtx</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__swap"></A>unique_lock::swap</CODE></H3>
+
+<PRE>void <B>swap</B>(unique_lock&amp; Other) noexcept;</PRE>
+
+<P>The member function swaps the values of <CODE>pmtx</CODE> and <CODE>owns</CODE>
+in <CODE>Other</CODE> and <CODE>*this</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__try_lock"></A>unique_lock::try_lock</CODE></H3>
+
+<PRE>bool <B>try_lock</B>();</PRE>
+
+<P>If <CODE>pmtx</CODE> is a null pointer, the function throws an object of
+type <CODE>system_error</CODE> with an error code of
+<CODE>operation_not_permitted</CODE>. If <CODE>owns == true</CODE>, the
+function throws an object of type <CODE>system_error</CODE> with an error
+code of <CODE>resource_deadlock_would_occur</CODE>. Otherwise, the member
+function calls <CODE>pmtx-&gt;try_lock()</CODE> and assigns the result to
+<CODE>owns</CODE>. It returns the new value of <CODE>owns</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__try_lock_for"></A>unique_lock::try_lock_for</CODE></H3>
+
+<PRE>template&lt;class Rep, class Period&gt;
+    bool <B>try_lock_for</B>(const chrono::duration&lt;Rep, Period&gt;&amp; Rel_time);</PRE>
+
+<P>If <CODE>pmtx</CODE> is a null pointer, the function throws an object of
+type <CODE>system_error</CODE> with an error code of
+<CODE>operation_not_permitted</CODE>. If <CODE>owns == true</CODE>, the
+function throws an object of type <CODE>system_error</CODE> with an error
+code of <CODE>resource_deadlock_would_occur</CODE>. Otherwise, the member
+function calls <CODE>pmtx-&gt;try_lock_for(Rel_time)</CODE> and assigns the
+result to <CODE>owns</CODE>. It returns the new value of
+<CODE>owns</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__try_lock_until"></A>unique_lock::try_lock_until</CODE></H3>
+
+<PRE>template&lt;class Clock, class Duration&gt;
+    bool <B>try_lock_until</B>(const chrono::time_point&lt;Clock, Duration&gt;&amp; Abs_time);</PRE>
+
+<P>If <CODE>pmtx</CODE> is a null pointer, the member functions throw an
+object of type <CODE>system_error</CODE> with an error code of
+<CODE>operation_not_permitted</CODE>. If <CODE>owns == true</CODE>, the
+functions throw an object of type <CODE>system_error</CODE> with an error
+code of <CODE>resource_deadlock_would_occur</CODE>.</P>
+
+<P>The member function calls <CODE>pmtx-&gt;try_lock_until(Abs_time)</CODE>
+and assigns the result to <CODE>owns</CODE>. It returns the new value of
+<CODE>owns</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__unique_lock"></A>unique_lock::unique_lock</CODE></H3>
+
+<PRE><B>unique_lock</B>() noexcept;
+<B>unique_lock</B>(unique_lock&amp;&amp; Other) noexcept;
+explicit <B>unique_lock</B>(mutex_type&amp; mtx);
+<B>unique_lock</B>(mutex_type&amp; mtx, adopt_lock_t Adopt);
+<B>unique_lock</B>(mutex_type&amp; mtx, defer_lock_t Defer) noexcept;
+<B>unique_lock</B>(mutex_type&amp; mtx, try_to_lock_t Try);
+template&lt;class Rep, class Period&gt;
+    <B>unique_lock</B>(mutex_type&amp; mtx,
+        const chrono::duration&lt;Rep, Period&gt; Rel_time);
+template&lt;class Clock, class Duration&gt;
+    <B>unique_lock</B>(mutex_type&amp; mtx,
+        const chrono::time_point&lt;Clock, Duration&gt; Abs_time);</PRE>
+
+<P>The first constructor constructs an object with <CODE>pmtx</CODE> equal to
+<CODE>0</CODE> and <CODE>owns</CODE> equal to <CODE>false</CODE>.</P>
+
+<P>The second constructor constructs an object with <CODE>pmtx</CODE> equal to
+<CODE>Other.pmtx</CODE> and <CODE>owns</CODE> equal to <CODE>Other.owns</CODE>
+and then sets <CODE>Other.pmtx</CODE> to <CODE>0</CODE> and
+<CODE>Other.owns</CODE> to <CODE>false</CODE>.</P>
+
+<P>The remaining constructors all construct an object with <CODE>pmtx</CODE>
+set to <CODE>&amp;mtx</CODE>. They set their stored value <CODE>owns</CODE>
+either to a particular value or to the result of a function call, depending on
+their second argument, as follows:</P>
+
+<UL>
+<LI><I>no argument</I> -- <CODE>owns = true</CODE> and calls <CODE>pmtx-&gt;lock()</CODE></LI>
+
+<LI><CODE>Adopt</CODE> -- <CODE>owns = true</CODE>. <CODE>mtx</CODE>
+must be locked when the constructor is called. The constructor throws nothing.</LI>
+
+<LI><CODE>Defer</CODE> -- <CODE>owns = false</CODE>. <CODE>mtx</CODE>
+must not be locked when the constructor is called.</LI>
+
+<LI><CODE>Try</CODE> -- <CODE>owns = pmtx-&gt;try_lock()</CODE>.
+The constructor throws nothing.</LI>
+
+<LI><CODE>Rel_time</CODE> -- <CODE>owns = pmtx-&gt;try_lock_for(Rel_time)</CODE>.</LI>
+
+<LI><CODE>Abs_time</CODE> -- <CODE>owns = pmtx-&gt;try_lock_until(Abs_time)</CODE>.</LI>
+</UL>
+
+<H3><CODE><A NAME="unique_lock__~unique_lock"></A>unique_lock::~unique_lock</CODE></H3>
+
+<PRE><B>~unique_lock</B>();</PRE>
+
+<P>Calls <CODE>pmtx-&gt;lock()</CODE> if <CODE>owns</CODE> is <CODE>true</CODE>.</P>
+
+<H3><CODE><A NAME="unique_lock__unlock"></A>unique_lock::unlock</CODE></H3>
+
+<PRE>void <B>unlock</B>();</PRE>
+
+<P>If <CODE>owns == false</CODE>, the function throws an object of type
+<CODE>system_error</CODE> with an error code of
+<CODE>operation_not_permitted</CODE>. Otherwise,
+the member function calls <CODE>pmtx-&gt;unlock()</CODE> and sets
+<CODE>owns</CODE> to <CODE>false</CODE>.</P>
+
+<HR>
+
+<P>A <B><A NAME="mutex_type"></A>mutex type</B> satisfies the following
+requirements:</P>
+
+<UL>
+<LI>it has a default constructor;</LI>
+<LI>its destructor does not throw any exceptions;</LI>
+<LI>it has member functions <CODE>lock</CODE>, <CODE>try_lock</CODE>, and
+<CODE>unlock</CODE>, as described below.</LI>
+</UL>
+
+<P>The required member functions must be callable with no arguments. A mutex
+type can define them with additional arguments, provided those additional
+arguments all have default values.</P>
+
+<PRE><B>lock</B></PRE>
+
+<P>The member function blocks the calling thread until the calling thread
+obtains ownership of the mutex. Its return value, if any, is ignored.</P>
+
+<PRE><B>try_lock</B></PRE>
+
+<P>The member function attempts to obtain ownership of the mutex, without
+blocking. It returns a type that is convertible to <CODE>bool</CODE>. It
+returns a value that converts to <CODE>true</CODE> if it obtains ownership,
+otherwise to <CODE>false</CODE>.</P>
+
+<PRE><B>unlock</B></PRE>
+
+<P>The member function releases the calling thread's ownership of the mutex.</P>
+
+<P>A
+<B><A NAME="timed_mutex_type"></A>timed mutex type</B> satisfies the
+requirements for a mutex type. In addition, it has member functions
+<CODE>try_lock_for</CODE> and <CODE>try_lock_until</CODE>. These member
+functions must be callable with one argument and return a type that is
+convertible to <CODE>bool</CODE>, as described below. A timed mutex type can
+define these functions with additional arguments, provided those additional
+arguments all have default values.</P>
+
+<PRE><B>try_lock_for</B></PRE>
+
+<P>The member function must be callable with a single argument,
+<CODE>Rel_time</CODE>, whose type is an instantiation of the template
+<A HREF="chrono.html#duration">chrono::duration</A>. It attempts to
+obtain ownership of the mutex, but will return within the time designated by
+<CODE>Rel_time</CODE> even if it does not obtain ownership. It returns a value
+that converts to <CODE>true</CODE> if it obtains ownership, otherwise to
+<CODE>false</CODE>.</P>
+
+<PRE><B>try_lock_until</B></PRE>
+
+<P>The member function must be callable with a single argument,
+<CODE>Abs_time</CODE>, whose type is an instantiation of the template
+<A HREF="chrono.html#time_point">chrono::time_point</A>. It attempts to
+obtain ownership of the mutex, but will return no later than the time
+designated by <CODE>Abs_time</CODE> even if it does not obtain ownership. It
+returns a value that converts to <CODE>true</CODE> if it obtains ownership,
+otherwise to <CODE>false</CODE>.</P>
+
+<P>A mutex type is also known as a <B><A NAME="lockable_type"></A>lockable type</B>.
+If it does not provide the member function <CODE>try_lock</CODE>, it is
+a <B><A NAME="basic_lockable_type"></A>basic lockable type</B>.
+A timed mutex type is also known as a
+<B><A NAME="timed_lockable_type"></A>timed lockable type</B>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>

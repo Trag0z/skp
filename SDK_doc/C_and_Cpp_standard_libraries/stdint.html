@@ -1,0 +1,702 @@
+<HTML><HEAD>
+<TITLE>&lt;stdint.h&gt; -- C and C++ Standard Libraries:&nbsp;&nbsp;Overview and Reference</TITLE>
+<meta name="Microsoft.Help.Locale" content="en-us">
+<meta name="Microsoft.Help.TopicLocale" content="en-us">
+</HEAD><BODY>
+
+<H1><A NAME="&lt;stdint.h&gt;"></A><CODE>&lt;stdint.h&gt;</CODE></H1>
+
+<P>[added with
+C99]</P><HR>
+
+<P>Include the standard header <B><CODE>&lt;stdint.h&gt;</CODE></B>
+to define various integer types, and related macros, with size
+constraints.</P>
+<HR>
+
+<P><B><CODE><A HREF="#int8_t">int8_t</A>
+&middot; <A HREF="#int16_t">int16_t</A>
+&middot; <A HREF="#int32_t">int32_t</A>
+&middot; <A HREF="#int64_t">int64_t</A>
+&middot; <A HREF="#int_fast8_t">int_fast8_t</A>
+&middot; <A HREF="#int_fast16_t">int_fast16_t</A>
+&middot; <A HREF="#int_fast32_t">int_fast32_t</A>
+&middot; <A HREF="#int_fast64_t">int_fast64_t</A>
+&middot; <A HREF="#int_least8_t">int_least8_t</A>
+&middot; <A HREF="#int_least16_t">int_least16_t</A>
+&middot; <A HREF="#int_least32_t">int_least32_t</A>
+&middot; <A HREF="#int_least64_t">int_least64_t</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#uint8_t">uint8_t</A>
+&middot; <A HREF="#uint16_t">uint16_t</A>
+&middot; <A HREF="#uint32_t">uint32_t</A>
+&middot; <A HREF="#uint64_t">uint64_t</A>
+&middot; <A HREF="#uint_fast8_t">uint_fast8_t</A>
+&middot; <A HREF="#uint_fast16_t">uint_fast16_t</A>
+&middot; <A HREF="#uint_fast32_t">uint_fast32_t</A>
+&middot; <A HREF="#uint_fast64_t">uint_fast64_t</A>
+&middot; <A HREF="#uint_least8_t">uint_least8_t</A>
+&middot; <A HREF="#uint_least16_t">uint_least16_t</A>
+&middot; <A HREF="#uint_least32_t">uint_least32_t</A>
+&middot; <A HREF="#uint_least64_t">uint_least64_t</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#intmax_t">intmax_t</A>
+&middot; <A HREF="#intptr_t">intptr_t</A>
+&middot; <A HREF="#uintmax_t">uintmax_t</A>
+&middot; <A HREF="#uintptr_t">uintptr_t</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#INT8_C">INT8_C</A>
+&middot; <A HREF="#INT16_C">INT16_C</A>
+&middot; <A HREF="#INT32_C">INT32_C</A>
+&middot; <A HREF="#INT64_C">INT64_C</A>
+&middot; <A HREF="#INT8_MAX">INT8_MAX</A>
+&middot; <A HREF="#INT16_MAX">INT16_MAX</A>
+&middot; <A HREF="#INT32_MAX">INT32_MAX</A>
+&middot; <A HREF="#INT64_MAX">INT64_MAX</A>
+&middot; <A HREF="#INT8_MIN">INT8_MIN</A>
+&middot; <A HREF="#INT16_MIN">INT16_MIN</A>
+&middot; <A HREF="#INT32_MIN">INT32_MIN</A>
+&middot; <A HREF="#INT64_MIN">INT64_MIN</A>
+&middot; <A HREF="#INT_FAST8_MAX">INT_FAST8_MAX</A>
+&middot; <A HREF="#INT_FAST16_MAX">INT_FAST16_MAX</A>
+&middot; <A HREF="#INT_FAST32_MAX">INT_FAST32_MAX</A>
+&middot; <A HREF="#INT_FAST64_MAX">INT_FAST64_MAX</A>
+&middot; <A HREF="#INT_FAST8_MIN">INT_FAST8_MIN</A>
+&middot; <A HREF="#INT_FAST16_MIN">INT_FAST16_MIN</A>
+&middot; <A HREF="#INT_FAST32_MIN">INT_FAST32_MIN</A>
+&middot; <A HREF="#INT_FAST64_MIN">INT_FAST64_MIN</A>
+&middot; <A HREF="#INT_LEAST8_MAX">INT_LEAST8_MAX</A>
+&middot; <A HREF="#INT_LEAST16_MAX">INT_LEAST16_MAX</A>
+&middot; <A HREF="#INT_LEAST32_MAX">INT_LEAST32_MAX</A>
+&middot; <A HREF="#INT_LEAST64_MAX">INT_LEAST64_MAX</A>
+&middot; <A HREF="#INT_LEAST8_MIN">INT_LEAST8_MIN</A>
+&middot; <A HREF="#INT_LEAST16_MIN">INT_LEAST16_MIN</A>
+&middot; <A HREF="#INT_LEAST32_MIN">INT_LEAST32_MIN</A>
+&middot; <A HREF="#INT_LEAST64_MIN">INT_LEAST64_MIN</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#UINT8_C">UINT8_C</A>
+&middot; <A HREF="#UINT16_C">UINT16_C</A>
+&middot; <A HREF="#UINT32_C">UINT32_C</A>
+&middot; <A HREF="#UINT64_C">UINT64_C</A>
+&middot; <A HREF="#UINTMAX_C">UINTMAX_C</A>
+&middot; <A HREF="#UINT8_MAX">UINT8_MAX</A>
+&middot; <A HREF="#UINT16_MAX">UINT16_MAX</A>
+&middot; <A HREF="#UINT32_MAX">UINT32_MAX</A>
+&middot; <A HREF="#UINT64_MAX">UINT64_MAX</A>
+&middot; <A HREF="#UINT_FAST8_MAX">UINT_FAST8_MAX</A>
+&middot; <A HREF="#UINT_FAST16_MAX">UINT_FAST16_MAX</A>
+&middot; <A HREF="#UINT_FAST32_MAX">UINT_FAST32_MAX</A>
+&middot; <A HREF="#UINT_FAST64_MAX">UINT_FAST64_MAX</A>
+&middot; <A HREF="#UINT_LEAST8_MAX">UINT_LEAST8_MAX</A>
+&middot; <A HREF="#UINT_LEAST16_MAX">UINT_LEAST16_MAX</A>
+&middot; <A HREF="#UINT_LEAST32_MAX">UINT_LEAST32_MAX</A>
+&middot; <A HREF="#UINT_LEAST64_MAX">UINT_LEAST64_MAX</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#INTMAX_C">INTMAX_C</A>
+&middot; <A HREF="#INTMAX_MAX">INTMAX_MAX</A>
+&middot; <A HREF="#INTMAX_MIN">INTMAX_MIN</A>
+&middot; <A HREF="#INTPTR_MAX">INTPTR_MAX</A>
+&middot; <A HREF="#INTPTR_MIN">INTPTR_MIN</A>
+&middot; <A HREF="#PTRDIFF_MAX">PTRDIFF_MAX</A>
+&middot; <A HREF="#PTRDIFF_MIN">PTRDIFF_MIN</A>
+&middot; <A HREF="#SIZE_MAX">SIZE_MAX</A>
+&middot; <A HREF="#WCHAR_MAX">WCHAR_MAX</A>
+&middot; <A HREF="#WCHAR_MIN">WCHAR_MIN</A>
+&middot; <A HREF="#WINT_MAX">WINT_MAX</A>
+&middot; <A HREF="#WINT_MIN">WINT_MIN</A>
+&middot; <A HREF="#UINTMAX_MAX">UINTMAX_MAX</A>
+&middot; <A HREF="#UINTPTR_MAX">UINTPTR_MAX</A>
+</CODE></B></P>
+
+<P><B><CODE><A HREF="#RSIZE_MAX">RSIZE_MAX</A>
+</CODE></B></P>
+<HR>
+
+<PRE>        /* TYPE DEFINITIONS */
+typedef signed char <A HREF="#int8_t"><B>int8_t</B></A>;
+typedef short <A HREF="#int16_t"><B>int16_t</B></A>;
+typedef int <A HREF="#int32_t"><B>int32_t</B></A>;
+typedef long long <A HREF="#int64_t"><B>int64_t</B></A>;
+
+typedef unsigned char <A HREF="#uint8_t"><B>uint8_t</B></A>;
+typedef unsigned short <A HREF="#uint16_t"><B>uint16_t</B></A>;
+typedef unsigned int <A HREF="#uint32_t"><B>uint32_t</B></A>;
+typedef unsigned long long <A HREF="#uint64_t"><B>uint64_t</B></A>;
+
+typedef signed char <A HREF="#int_least8_t"><B>int_least8_t</B></A>;
+typedef short <A HREF="#int_least16_t"><B>int_least16_t</B></A>;
+typedef int <A HREF="#int_least32_t"><B>int_least32_t</B></A>;
+typedef long long <A HREF="#int_least64_t"><B>int_least64_t</B></A>;
+
+typedef unsigned char <A HREF="#uint_least8_t"><B>uint_least8_t</B></A>;
+typedef unsigned short <A HREF="#uint_least16_t"><B>uint_least16_t</B></A>;
+typedef unsigned int <A HREF="#uint_least32_t"><B>uint_least32_t</B></A>;
+typedef unsigned long long <A HREF="#uint_least64_t"><B>uint_least64_t</B></A>;
+
+typedef int <A HREF="#int_fast8_t"><B>int_fast8_t</B></A>;
+typedef int <A HREF="#int_fast16_t"><B>int_fast16_t</B></A>;
+typedef int <A HREF="#int_fast32_t"><B>int_fast32_t</B></A>;
+typedef long long <A HREF="#int_fast64_t"><B>int_fast64_t</B></A>;
+
+typedef unsigned int <A HREF="#uint_fast8_t"><B>uint_fast8_t</B></A>;
+typedef unsigned int <A HREF="#uint_fast16_t"><B>uint_fast16_t</B></A>;
+typedef unsigned int <A HREF="#uint_fast32_t"><B>uint_fast32_t</B></A>;
+typedef unsigned long long <A HREF="#uint_fast64_t"><B>uint_fast64_t</B></A>;
+
+typedef int <A HREF="#intptr_t"><B>intptr_t</B></A>;
+typedef unsigned int <A HREF="#uintptr_t"><B>uintptr_t</B></A>;
+
+typedef long long <A HREF="#intmax_t"><B>intmax_t</B></A>;
+typedef unsigned long long <A HREF="#uintmax_t"><B>uintmax_t</B></A>;
+
+        /* LIMIT MACROS */
+#define <A HREF="#INT8_MIN"><B>INT8_MIN</B></A>    (-0x7f - 1)
+#define <A HREF="#INT16_MIN"><B>INT16_MIN</B></A>   (-0x7fff - 1)
+#define <A HREF="#INT32_MIN"><B>INT32_MIN</B></A>   (-0x7fffffff - 1)
+#define <A HREF="#INT64_MIN"><B>INT64_MIN</B></A>   (-0x7fffffffffffffff - 1)
+
+#define <A HREF="#INT8_MAX"><B>INT8_MAX</B></A>    0x7f
+#define <A HREF="#INT16_MAX"><B>INT16_MAX</B></A>   0x7fff
+#define <A HREF="#INT32_MAX"><B>INT32_MAX</B></A>   0x7fffffff
+#define <A HREF="#INT64_MAX"><B>INT64_MAX</B></A>   0x7fffffffffffffff
+
+#define <A HREF="#UINT8_MAX"><B>UINT8_MAX</B></A>   0xff
+#define <A HREF="#UINT16_MAX"><B>UINT16_MAX</B></A>  0xffff
+#define <A HREF="#UINT32_MAX"><B>UINT32_MAX</B></A>  0xffffffff
+#define <A HREF="#UINT64_MAX"><B>UINT64_MAX</B></A>  0xffffffffffffffff
+
+#define <A HREF="#INT_LEAST8_MIN"><B>INT_LEAST8_MIN</B></A>    (-0x7f - 1)
+#define <A HREF="#INT_LEAST16_MIN"><B>INT_LEAST16_MIN</B></A>   (-0x7fff - 1)
+#define <A HREF="#INT_LEAST32_MIN"><B>INT_LEAST32_MIN</B></A>   (-0x7fffffff - 1)
+#define <A HREF="#INT_LEAST64_MIN"><B>INT_LEAST64_MIN</B></A>   (-0x7fffffffffffffff - 1)
+
+#define <A HREF="#INT_LEAST8_MAX"><B>INT_LEAST8_MAX</B></A>    0x7f
+#define <A HREF="#INT_LEAST16_MAX"><B>INT_LEAST16_MAX</B></A>   0x7fff
+#define <A HREF="#INT_LEAST32_MAX"><B>INT_LEAST32_MAX</B></A>   0x7fffffff
+#define <A HREF="#INT_LEAST64_MAX"><B>INT_LEAST64_MAX</B></A>   0x7fffffffffffffff
+
+#define <A HREF="#UINT_LEAST8_MAX"><B>UINT_LEAST8_MAX</B></A>   0xff
+#define <A HREF="#UINT_LEAST16_MAX"><B>UINT_LEAST16_MAX</B></A>  0xffff
+#define <A HREF="#UINT_LEAST32_MAX"><B>UINT_LEAST32_MAX</B></A>  0xffffffff
+#define <A HREF="#UINT_LEAST64_MAX"><B>UINT_LEAST64_MAX</B></A>  0xffffffffffffffff
+
+#define <A HREF="#INT_FAST8_MIN"><B>INT_FAST8_MIN</B></A>     (-0x7fffffff - 1)
+#define <A HREF="#INT_FAST16_MIN"><B>INT_FAST16_MIN</B></A>    (-0x7fffffff - 1)
+#define <A HREF="#INT_FAST32_MIN"><B>INT_FAST32_MIN</B></A>    (-0x7fffffff - 1)
+#define <A HREF="#INT_FAST64_MIN"><B>INT_FAST64_MIN</B></A>    (-0x7fffffffffffffff - 1)
+
+#define <A HREF="#INT_FAST8_MAX"><B>INT_FAST8_MAX</B></A>     0x7fffffff
+#define <A HREF="#INT_FAST16_MAX"><B>INT_FAST16_MAX</B></A>    0x7fffffff
+#define <A HREF="#INT_FAST32_MAX"><B>INT_FAST32_MAX</B></A>    0x7fffffff
+#define <A HREF="#INT_FAST64_MAX"><B>INT_FAST64_MAX</B></A>    0x7fffffffffffffff
+
+#define <A HREF="#UINT_FAST8_MAX"><B>UINT_FAST8_MAX</B></A>    0xffffffff
+#define <A HREF="#UINT_FAST16_MAX"><B>UINT_FAST16_MAX</B></A>   0xffffffff
+#define <A HREF="#UINT_FAST32_MAX"><B>UINT_FAST32_MAX</B></A>   0xffffffff
+#define <A HREF="#UINT_FAST64_MAX"><B>UINT_FAST64_MAX</B></A>   0xffffffffffffffff
+
+#define <A HREF="#INTPTR_MIN"><B>INTPTR_MIN</B></A>        (-0x7fffffff - 1)
+#define <A HREF="#INTPTR_MAX"><B>INTPTR_MAX</B></A>        0x7fffffff
+#define <A HREF="#UINTPTR_MAX"><B>UINTPTR_MAX</B></A>       0xffffffff
+
+#define <A HREF="#INT8_C"><B>INT8_C</B></A>(x)    (x)
+#define <A HREF="#INT16_C"><B>INT16_C</B></A>(x)   (x)
+#define <A HREF="#INT32_C"><B>INT32_C</B></A>(x)   (x)
+#define <A HREF="#INT64_C"><B>INT64_C</B></A>(x)   (x ## LL)
+
+#define <A HREF="#UINT8_C"><B>UINT8_C</B></A>(x)   (x)
+#define <A HREF="#UINT16_C"><B>UINT16_C</B></A>(x)  (x)
+#define <A HREF="#UINT32_C"><B>UINT32_C</B></A>(x)  (x ## U)
+#define <A HREF="#UINT64_C"><B>UINT64_C</B></A>(x)  (x ## ULL)
+
+#define <A HREF="#INTMAX_C"><B>INTMAX_C</B></A>(x)  (x ## LL)
+#define <A HREF="#UINTMAX_C"><B>UINTMAX_C</B></A>(x) (x ## ULL)
+
+#define <A HREF="#PTRDIFF_MIN"><B>PTRDIFF_MIN</B></A>  INT32_MIN
+#define <A HREF="#PTRDIFF_MAX"><B>PTRDIFF_MAX</B></A>  INT32_MAX
+
+#define <A HREF="#SIZE_MAX"><B>SIZE_MAX</B></A>     UINT32_MAX
+
+#define <A HREF="#WCHAR_MIN"><B>WCHAR_MIN</B></A>    0
+#define <A HREF="#WCHAR_MAX"><B>WCHAR_MAX</B></A>    UINT16_MAX
+
+#define <A HREF="#WINT_MIN"><B>WINT_MIN</B></A>     0
+#define <A HREF="#WINT_MAX"><B>WINT_MAX</B></A>     UINT32_MAX
+
+#define <A HREF="#INTMAX_MIN"><B>INTMAX_MIN</B></A>        (-0x7fffffffffffffff - 1)
+#define <A HREF="#INTMAX_MAX"><B>INTMAX_MAX</B></A>        0x7fffffffffffffff
+#define <A HREF="#UINTMAX_MAX"><B>UINTMAX_MAX</B></A>       0xffffffffffffffff
+
+#if __STDC_WANT_LIB_EXT1__ <B>[added with <A HREF="index_ext1.html#TR24731">TR24731</A>]</B>
+ #define <A HREF="#RSIZE_MAX"><B>RSIZE_MAX</B></A>   (SIZE_MAX / 2)
+#endif /* __STDC_WANT_LIB_EXT1__ */</PRE>
+
+<H2><A NAME="INT8_C"></A><CODE>INT8_C</CODE>,
+<A NAME="INT16_C"></A><CODE>INT16_C</CODE>,
+<A NAME="INT32_C"></A><CODE>INT32_C</CODE>,
+<A NAME="INT64_C"></A><CODE>INT64_C</CODE></H2>
+
+<PRE>#define <B>INT8_C</B>(x)    (x)
+#define <B>INT16_C</B>(x)   (x)
+#define <B>INT32_C</B>(x)   (x)
+#define <B>INT64_C</B>(x)   (x ## LL)</PRE>
+
+<P>The macros each convert an unsuffixed integer literal to
+an <A HREF="preproc.html#if_expression"><I>#if</I> expression</A> whose type is
+the result of the integer promotion applied to type
+<A HREF="#int_least8_t"><CODE>int_least8_t</CODE></A>,
+<A HREF="#int_least16_t"><CODE>int_least16_t</CODE></A>,
+<A HREF="#int_least32_t"><CODE>int_least32_t</CODE></A>, or
+<A HREF="#int_least64_t"><CODE>int_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="INT8_MAX"></A><CODE>INT8_MAX</CODE>,
+<A NAME="INT16_MAX"></A><CODE>INT16_MAX</CODE>,
+<A NAME="INT32_MAX"></A><CODE>INT32_MAX</CODE>,
+<A NAME="INT64_MAX"></A><CODE>INT64_MAX</CODE></H2>
+
+<PRE>#define <B>INT8_MAX</B>    0x7f
+#define <B>INT16_MAX</B>   0x7fff
+#define <B>INT32_MAX</B>   0x7fffffff
+#define <B>INT64_MAX</B>   0x7fffffffffffffff</PRE>
+
+<P>The macros each expand to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="#int8_t"><CODE>int8_t</CODE></A>,
+<A HREF="#int16_t"><CODE>int16_t</CODE></A>,
+<A HREF="#int32_t"><CODE>int32_t</CODE></A>, or
+<A HREF="#int64_t"><CODE>int64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="INT8_MIN"></A><CODE>INT8_MIN</CODE>,
+<A NAME="INT16_MIN"></A><CODE>INT16_MIN</CODE>,
+<A NAME="INT32_MIN"></A><CODE>INT32_MIN</CODE>,
+<A NAME="INT64_MIN"></A><CODE>INT64_MIN</CODE></H2>
+
+<PRE>#define <B>INT8_MIN</B>    (-0x7f - 1)
+#define <B>INT16_MIN</B>   (-0x7fff - 1)
+#define <B>INT32_MIN</B>   (-0x7fffffff - 1)
+#define <B>INT64_MIN</B>   (-0x7fffffffffffffff - 1)</PRE>
+
+<P>The macros each expand to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the minimum value representable as type
+<A HREF="#int8_t"><CODE>int8_t</CODE></A>,
+<A HREF="#int16_t"><CODE>int16_t</CODE></A>,
+<A HREF="#int32_t"><CODE>int32_t</CODE></A>, or
+<A HREF="#int64_t"><CODE>int64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="int8_t"></A><CODE>int8_t</CODE>,
+<A NAME="int16_t"></A><CODE>int16_t</CODE>,
+<A NAME="int32_t"></A><CODE>int32_t</CODE>,
+<A NAME="int64_t"></A><CODE>int64_t</CODE></H2>
+
+<PRE>typedef signed char <B>int8_t</B>;
+typedef short <B>int16_t</B>;
+typedef int <B>int32_t</B>;
+typedef long long <B>int64_t</B>;</PRE>
+
+<P>The types each specify a signed integer type whose representation has
+exactly eight, 16, 32, or 64 bits, respectively.</P>
+
+<H2><A NAME="INT_FAST8_MAX"></A><CODE>INT_FAST8_MAX</CODE>,
+<A NAME="INT_FAST16_MAX"></A><CODE>INT_FAST16_MAX</CODE>,
+<A NAME="INT_FAST32_MAX"></A><CODE>INT_FAST32_MAX</CODE>,
+<A NAME="INT_FAST64_MAX"></A><CODE>INT_FAST64_MAX</CODE></H2>
+
+<PRE>#define <B>INT_FAST8_MAX</B>     0x7fffffff
+#define <B>INT_FAST16_MAX</B>    0x7fffffff
+#define <B>INT_FAST32_MAX</B>    0x7fffffff
+#define <B>INT_FAST64_MAX</B>    0x7fffffffffffffff</PRE>
+
+<P>The macros each expand to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="#int_fast8_t"><CODE>int_fast8_t</CODE></A>,
+<A HREF="#int_fast16_t"><CODE>int_fast16_t</CODE></A>,
+<A HREF="#int_fast32_t"><CODE>int_fast32_t</CODE></A>, or
+<A HREF="#int_fast64_t"><CODE>int_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="INT_FAST8_MIN"></A><CODE>INT_FAST8_MIN</CODE>,
+<A NAME="INT_FAST16_MIN"></A><CODE>INT_FAST16_MIN</CODE>,
+<A NAME="INT_FAST32_MIN"></A><CODE>INT_FAST32_MIN</CODE>,
+<A NAME="INT_FAST64_MIN"></A><CODE>INT_FAST64_MIN</CODE></H2>
+
+<PRE>#define <B>INT_FAST8_MIN</B>     (-0x7fffffff - 1)
+#define <B>INT_FAST16_MIN</B>    (-0x7fffffff - 1)
+#define <B>INT_FAST32_MIN</B>    (-0x7fffffff - 1)
+#define <B>INT_FAST64_MIN</B>    (-0x7fffffffffffffff - 1)</PRE>
+
+<P>The macros each expand to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the minimum value representable as type
+<A HREF="#int_fast8_t"><CODE>int_fast8_t</CODE></A>,
+<A HREF="#int_fast16_t"><CODE>int_fast16_t</CODE></A>,
+<A HREF="#int_fast32_t"><CODE>int_fast32_t</CODE></A>, or
+<A HREF="#int_fast64_t"><CODE>int_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="int_fast8_t"></A><CODE>int_fast8_t</CODE>,
+<A NAME="int_fast16_t"></A><CODE>int_fast16_t</CODE>,
+<A NAME="int_fast32_t"></A><CODE>int_fast32_t</CODE>,
+<A NAME="int_fast64_t"></A><CODE>int_fast64_t</CODE></H2>
+
+<PRE>typedef int <B>int_fast8_t</B>;
+typedef int <B>int_fast16_t</B>;
+typedef int <B>int_fast32_t</B>;
+typedef long long <B>int_fast64_t</B>;</PRE>
+
+<P>The types each specify a signed integer type
+that supports the fastest operations among those whose representation has
+at least eight, 16, 32, or 64 bits, respectively.</P>
+
+<H2><A NAME="INT_LEAST8_MAX"></A><CODE>INT_LEAST8_MAX</CODE>,
+<A NAME="INT_LEAST16_MAX"></A><CODE>INT_LEAST16_MAX</CODE>,
+<A NAME="INT_LEAST32_MAX"></A><CODE>INT_LEAST32_MAX</CODE>,
+<A NAME="INT_LEAST64_MAX"></A><CODE>INT_LEAST64_MAX</CODE></H2>
+
+<PRE>#define <B>INT_LEAST8_MAX</B>    0x7f
+#define <B>INT_LEAST16_MAX</B>   0x7fff
+#define <B>INT_LEAST32_MAX</B>   0x7fffffff
+#define <B>INT_LEAST64_MAX</B>   0x7fffffffffffffff</PRE>
+
+<P>The macros each expand to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="#int_least8_t"><CODE>int_least8_t</CODE></A>,
+<A HREF="#int_least16_t"><CODE>int_least16_t</CODE></A>,
+<A HREF="#int_least32_t"><CODE>int_least32_t</CODE></A>, or
+<A HREF="#int_least64_t"><CODE>int_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="INT_LEAST8_MIN"></A><CODE>INT_LEAST8_MIN</CODE>,
+<A NAME="INT_LEAST16_MIN"></A><CODE>INT_LEAST16_MIN</CODE>,
+<A NAME="INT_LEAST32_MIN"></A><CODE>INT_LEAST32_MIN</CODE>,
+<A NAME="INT_LEAST64_MIN"></A><CODE>INT_LEAST64_MIN</CODE></H2>
+
+<PRE>#define <B>INT_LEAST8_MIN</B>    (-0x7f - 1)
+#define <B>INT_LEAST16_MIN</B>   (-0x7fff - 1)
+#define <B>INT_LEAST32_MIN</B>   (-0x7fffffff - 1)
+#define <B>INT_LEAST64_MIN</B>   (-0x7fffffffffffffff - 1)</PRE>
+
+<P>The macros each expand to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the minimum value representable as type
+<A HREF="#int_least8_t"><CODE>int_least8_t</CODE></A>,
+<A HREF="#int_least16_t"><CODE>int_least16_t</CODE></A>,
+<A HREF="#int_least32_t"><CODE>int_least32_t</CODE></A>, or
+<A HREF="#int_least64_t"><CODE>int_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="int_least8_t"></A><CODE>int_least8_t</CODE>,
+<A NAME="int_least16_t"></A><CODE>int_least16_t</CODE>,
+<A NAME="int_least32_t"></A><CODE>int_least32_t</CODE>,
+<A NAME="int_least64_t"></A><CODE>int_least64_t</CODE></H2>
+
+<PRE>typedef signed char <B>int_least8_t</B>;
+typedef short <B>int_least16_t</B>;
+typedef int <B>int_least32_t</B>;
+typedef long long <B>int_least64_t</B>;</PRE>
+
+<P>The types each specify a signed integer type whose representation has
+at least eight, 16, 32, or 64 bits, respectively.</P>
+
+<H2><A NAME="INTMAX_C"></A><CODE>INTMAX_C</CODE></H2>
+
+<PRE>#define <B>INTMAX_C</B>(x)  (x ## LL)</PRE>
+
+<P>The macro converts an integer literal to
+the largest signed integer type.</P>
+
+<H2><A NAME="INTMAX_MAX"></A><CODE>INTMAX_MAX</CODE></H2>
+
+<PRE>#define <B>INTMAX_MAX</B>        0x7fffffffffffffff</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="#intmax_t"><CODE>intmax_t</CODE></A>.</P>
+
+<H2><A NAME="INTMAX_MIN"></A><CODE>INTMAX_MIN</CODE></H2>
+
+<PRE>#define <B>INTMAX_MIN</B>        (-0x7fffffffffffffff - 1)</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the minimum value representable as type
+<A HREF="#intmax_t"><CODE>intmax_t</CODE></A>.</P>
+
+<H2><A NAME="intmax_t"></A><CODE>intmax_t</CODE></H2>
+
+<PRE>typedef long long <B>intmax_t</B>;</PRE>
+
+<P>The type specifies the largest signed integer type.</P>
+
+<H2><A NAME="INTPTR_MAX"></A><CODE>INTPTR_MAX</CODE></H2>
+
+<PRE>#define <B>INTPTR_MAX</B>        0x7fffffff</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="#intptr_t"><CODE>intptr_t</CODE></A>.</P>
+
+<H2><A NAME="INTPTR_MIN"></A><CODE>INTPTR_MIN</CODE></H2>
+
+<PRE>#define <B>INTPTR_MIN</B>        (-0x7fffffff - 1)</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the minimum value representable as type
+<A HREF="#intptr_t"><CODE>intptr_t</CODE></A>.</P>
+
+<H2><A NAME="intptr_t"></A><CODE>intptr_t</CODE></H2>
+
+<PRE>typedef int <B>intptr_t</B>;</PRE>
+
+<P>The type specifies a signed integer type large enough to support
+interconversion with a void pointer. (You can convert a void pointer to
+<CODE>intptr_t</CODE> and back, and the result compares equal to the original
+pointer value.)</P>
+
+<H2><A NAME="PTRDIFF_MAX"></A><CODE>PTRDIFF_MAX</CODE></H2>
+
+<PRE>#define <B>PTRDIFF_MAX</B>  INT32_MAX</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="stddef.html#ptrdiff_t"><CODE>ptrdiff_t</CODE></A>.</P>
+
+<H2><A NAME="PTRDIFF_MIN"></A><CODE>PTRDIFF_MIN</CODE></H2>
+
+<PRE>#define <B>PTRDIFF_MIN</B>  INT32_MIN</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the minimum value representable as type
+<A HREF="stddef.html#ptrdiff_t"><CODE>ptrdiff_t</CODE></A>.</P>
+
+<H2><A NAME="RSIZE_MAX"></A><CODE>RSIZE_MAX</CODE></H2>
+
+<PRE>#define <B>RSIZE_MAX</B>   (SIZE_MAX / 2) <B>[added with TR24731]</B></PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum valid value representable as type
+<A HREF="stddef.html#rsize_t"><CODE>rsize_t</CODE></A>. (It is a
+<A HREF="index_ext1.html#runtime_constraint_violation">runtime constraint violation</A>
+for an argument of type <CODE>rsize_t</CODE> to be greater than
+<CODE>RSIZE_MAX</CODE>.)</P>
+
+<H2><A NAME="SIZE_MAX"></A><CODE>SIZE_MAX</CODE></H2>
+
+<PRE>#define <B>SIZE_MAX</B>     UINT32_MAX</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="stddef.html#size_t"><CODE>size_t</CODE></A>.</P>
+
+<H2><A NAME="UINT8_C"></A><CODE>UINT8_C</CODE>,
+<A NAME="UINT16_C"></A><CODE>UINT16_C</CODE>,
+<A NAME="UINT32_C"></A><CODE>UINT32_C</CODE>,
+<A NAME="UINT64_C"></A><CODE>UINT64_C</CODE></H2>
+
+<PRE>#define <B>UINT8_C</B>(x)   (x)
+#define <B>UINT16_C</B>(x)  (x)
+#define <B>UINT32_C</B>(x)  (x ## U)
+#define <B>UINT64_C</B>(x)  (x ## ULL)</PRE>
+
+<P>The macros each convert an unsuffixed integer literal to
+an <A HREF="preproc.html#if_expression"><I>#if</I> expression</A> whose type is
+the result of the integer promotion applied to type
+<A HREF="#uint_least8_t"><CODE>uint_least8_t</CODE></A>,
+<A HREF="#uint_least16_t"><CODE>uint_least16_t</CODE></A>,
+<A HREF="#uint_least32_t"><CODE>uint_least32_t</CODE></A>, or
+<A HREF="#uint_least64_t"><CODE>uint_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="UINT8_MAX"></A><CODE>UINT8_MAX</CODE>,
+<A NAME="UINT16_MAX"></A><CODE>UINT16_MAX</CODE>,
+<A NAME="UINT32_MAX"></A><CODE>UINT32_MAX</CODE>,
+<A NAME="UINT64_MAX"></A><CODE>UINT64_MAX</CODE></H2>
+
+<PRE>#define <B>UINT8_MAX</B>   0xff
+#define <B>UINT16_MAX</B>  0xffff
+#define <B>UINT32_MAX</B>  0xffffffff
+#define <B>UINT64_MAX</B>  0xffffffffffffffff</PRE>
+
+<P>The macros each expand to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="#uint8_t"><CODE>uint8_t</CODE></A>,
+<A HREF="#uint16_t"><CODE>uint16_t</CODE></A>,
+<A HREF="#uint32_t"><CODE>uint32_t</CODE></A>, or
+<A HREF="#uint64_t"><CODE>uint64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="uint8_t"></A><CODE>uint8_t</CODE>,
+<A NAME="uint16_t"></A><CODE>uint16_t</CODE>,
+<A NAME="uint32_t"></A><CODE>uint32_t</CODE>,
+<A NAME="uint64_t"></A><CODE>uint64_t</CODE></H2>
+
+<PRE>typedef unsigned char <B>uint8_t</B>;
+typedef unsigned short <B>uint16_t</B>;
+typedef unsigned int <B>uint32_t</B>;
+typedef unsigned long long <B>uint64_t</B>;</PRE>
+
+<P>The types each specify an unsigned integer type whose representation has
+exactly eight, 16, 32, or 64 bits, respectively.</P>
+
+<H2><A NAME="UINT_FAST8_MAX"></A><CODE>UINT_FAST8_MAX</CODE>,
+<A NAME="UINT_FAST16_MAX"></A><CODE>UINT_FAST16_MAX</CODE>,
+<A NAME="UINT_FAST32_MAX"></A><CODE>UINT_FAST32_MAX</CODE>,
+<A NAME="UINT_FAST64_MAX"></A><CODE>UINT_FAST64_MAX</CODE></H2>
+
+<PRE>#define <B>UINT_FAST8_MAX</B>    0xffffffff
+#define <B>UINT_FAST16_MAX</B>   0xffffffff
+#define <B>UINT_FAST32_MAX</B>   0xffffffff
+#define <B>UINT_FAST64_MAX</B>   0xffffffffffffffff</PRE>
+
+<P>The macros each expand to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="#uint_fast8_t"><CODE>uint_fast8_t</CODE></A>,
+<A HREF="#uint_fast16_t"><CODE>uint_fast16_t</CODE></A>,
+<A HREF="#uint_fast32_t"><CODE>uint_fast32_t</CODE></A>, or
+<A HREF="#uint_fast64_t"><CODE>uint_fast64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="uint_fast8_t"></A><CODE>uint_fast8_t</CODE>,
+<A NAME="uint_fast16_t"></A><CODE>uint_fast16_t</CODE>,
+<A NAME="uint_fast32_t"></A><CODE>uint_fast32_t</CODE>,
+<A NAME="uint_fast64_t"></A><CODE>uint_fast64_t</CODE></H2>
+
+<PRE>typedef unsigned int <B>uint_fast8_t</B>;
+typedef unsigned int <B>uint_fast16_t</B>;
+typedef unsigned int <B>uint_fast32_t</B>;
+typedef unsigned long long <B>uint_fast64_t</B>;</PRE>
+
+<P>The types each specify an unsigned integer type
+that supports the fastest operations among those whose representation has
+at least eight, 16, 32, or 64 bits, respectively.</P>
+
+<H2><A NAME="UINT_LEAST8_MAX"></A><CODE>UINT_LEAST8_MAX</CODE>,
+<A NAME="UINT_LEAST16_MAX"></A><CODE>UINT_LEAST16_MAX</CODE>,
+<A NAME="UINT_LEAST32_MAX"></A><CODE>UINT_LEAST32_MAX</CODE>,
+<A NAME="UINT_LEAST64_MAX"></A><CODE>UINT_LEAST64_MAX</CODE></H2>
+
+<PRE>#define <B>UINT_LEAST8_MAX</B>   0xff
+#define <B>UINT_LEAST16_MAX</B>  0xffff
+#define <B>UINT_LEAST32_MAX</B>  0xffffffff
+#define <B>UINT_LEAST64_MAX</B>  0xffffffffffffffff</PRE>
+
+<P>The macros each expand to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="#uint_least8_t"><CODE>uint_least8_t</CODE></A>,
+<A HREF="#uint_least16_t"><CODE>uint_least16_t</CODE></A>,
+<A HREF="#uint_least32_t"><CODE>uint_least32_t</CODE></A>, or
+<A HREF="#uint_least64_t"><CODE>uint_least64_t</CODE></A>, respectively.</P>
+
+<H2><A NAME="uint_least8_t"></A><CODE>uint_least8_t</CODE>,
+<A NAME="uint_least16_t"></A><CODE>uint_least16_t</CODE>,
+<A NAME="uint_least32_t"></A><CODE>uint_least32_t</CODE>,
+<A NAME="uint_least64_t"></A><CODE>uint_least64_t</CODE></H2>
+
+<PRE>typedef unsigned char <B>uint_least8_t</B>;
+typedef unsigned short <B>uint_least16_t</B>;
+typedef unsigned int <B>uint_least32_t</B>;
+typedef unsigned long long <B>uint_least64_t</B>;</PRE>
+
+<P>The types each specify an unsigned integer type whose representation has
+at least eight, 16, 32, or 64 bits, respectively.</P>
+
+<H2><A NAME="UINTMAX_C"></A><CODE>UINTMAX_C</CODE></H2>
+
+<PRE>#define <B>UINTMAX_C</B>(x) (x ## ULL)</PRE>
+
+<P>The macro converts an unsuffixed integer literal to
+the largest unsigned integer type.</P>
+
+<H2><A NAME="UINTMAX_MAX"></A><CODE>UINTMAX_MAX</CODE></H2>
+
+<PRE>#define <B>UINTMAX_MAX</B>       0xffffffffffffffff</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="#uintmax_t"><CODE>uintmax_t</CODE></A>.</P>
+
+<H2><A NAME="uintmax_t"></A><CODE>uintmax_t</CODE></H2>
+
+<PRE>typedef unsigned long long <B>uintmax_t</B>;</PRE>
+
+<P>The type specifies the largest unsigned integer type.</P>
+
+<H2><A NAME="UINTPTR_MAX"></A><CODE>UINTPTR_MAX</CODE></H2>
+
+<PRE>#define <B>UINTPTR_MAX</B>       0xffffffff</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="#uintptr_t"><CODE>uintptr_t</CODE></A>.</P>
+
+<H2><A NAME="uintptr_t"></A><CODE>uintptr_t</CODE></H2>
+
+<PRE>typedef unsigned int <B>uintptr_t</B>;</PRE>
+
+<P>The type specifies an unsigned integer type large enough to support
+interconversion with a void pointer. (You can convert a void pointer to
+<CODE>uintptr_t</CODE> and back, and the result compares equal to the original
+pointer value.)</P>
+
+<H2><A NAME="WCHAR_MAX"></A><CODE>WCHAR_MAX</CODE></H2>
+
+<PRE>#define <B>WCHAR_MAX</B>    UINT16_MAX</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="stddef.html#wchar_t"><CODE>wchar_t</CODE></A>.</P>
+
+<H2><A NAME="WCHAR_MIN"></A><CODE>WCHAR_MIN</CODE></H2>
+
+<PRE>#define <B>WCHAR_MIN</B>    0</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the minimum value representable as type
+<A HREF="stddef.html#wchar_t"><CODE>wchar_t</CODE></A>.</P>
+
+<H2><A NAME="WINT_MAX"></A><CODE>WINT_MAX</CODE></H2>
+
+<PRE>#define <B>WINT_MAX</B>     UINT32_MAX</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the maximum value representable as type
+<A HREF="wchar.html#wint_t"><CODE>wint_t</CODE></A>.</P>
+
+<H2><A NAME="WINT_MIN"></A><CODE>WINT_MIN</CODE></H2>
+
+<PRE>#define <B>WINT_MIN</B>     0</PRE>
+
+<P>The macro expands to an
+<A HREF="preproc.html#if_expression"><I>#if</I> expression</A>
+that yields the minimum value representable as type
+<A HREF="wchar.html#wint_t"><CODE>wint_t</CODE></A>.</P>
+
+<HR>
+<P>See also the
+<B><A HREF="index.html#Table_of_Contents">Table of Contents</A></B> and the
+<B><A HREF="_index.html">Index</A></B>.</P>
+
+<P><I>
+&copy; 2012 Sony Computer Entertainment Inc. All rights reserved.</I></P>
+
+<P><I>
+<A HREF="crit_pjp.html">Copyright</A> &copy; 1992-2013
+by P.J. Plauger. All rights reserved.</I></P>
+
+<!--V6.42:0216--></BODY></HTML>
