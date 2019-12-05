@@ -1,3 +1,10 @@
+TODO:
+- find out what 3rd parameter of graphicsAlloc does
+- where is the position of the rendered object determined?
+- calculate rendering quaternions, rendering in generel
+
+
+#########################################
 a = touchX
 b = touchY
 

@@ -1,27 +1,39 @@
+#include <assert.h>
 #include <gxm.h>
 // #include <kernel.h>
 
 struct Vertex {
-    float m_position[3];
+    float position[3];
     // float normal[3]; // If uncommenting this, change MiniCube::create()
     // accordingly
 };
 
+// NOTE: When drawing these, rotate the vertices by m_rotation and translate
+// them by m_position. Then draw textures on two triangles per texture, by
+// indeces
 class MiniCube {
     float m_position[3];
-    Quat m_orientation;
-    Vertex m_vertices[8];
+    float m_rotation[3];
+    Vertex m_vertices[6 * 4];
     SceGxmTexture *m_texture[6];
+
+    static Vertex *s_vertices;
+    static int32_t s_verticesUId;
+    static const size_t s_numVertices = 27 * 6 * 4;
 
     static uint16_t *s_indeces;
     static int32_t s_indecesUId;
 
   public:
     static void init() {
-        s_indeces = (uint16_t *)graphicsAlloc(
+        s_vertices = (Vertex *)graphicsAlloc(
             SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE,
-            6 * 6 * sizeof(uint16_t), 2, SCE_GXM_MEMORY_ATTRIB_READ,
-            &s_basicIndiceUId);
+            s_numVertices * sizeof(Vertex), )
+
+            s_indeces = (uint16_t *)graphicsAlloc(
+                SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE,
+                6 * 6 * sizeof(uint16_t), 2, SCE_GXM_MEMORY_ATTRIB_READ,
+                &s_basicIndiceUId);
 
         size_t count = 0;
         for (size_t side = 0; side < 6; ++side) {
@@ -54,5 +66,11 @@ class MiniCube {
         m_position[0] = pos[0];
         m_position[1] = pos[1];
         m_position[2] = pos[2];
+    }
+
+    // NOTE: It this degrees or angle?
+    void rotate(float degrees, size_t axis) {
+        assert(axis < 3);
+        m_rotation[axis] += degrees;
     }
 };

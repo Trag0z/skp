@@ -10,6 +10,8 @@ void Cube::init(float center[3], float miniCubeDiameter) {
                              m_center[1] - miniCubeDiameter,
                              m_center[2] - miniCubeDiameter};
 
+    MiniCube::init();
+
     for (int x = 0; x < 3; ++x) {
         for (int y = 0; y < 3; ++y) {
             for (int z = 0; z < 3; ++z) {
@@ -117,6 +119,12 @@ void Cube::rotate(int layer, Cube::Dimension dimension, bool clockwise) {
         break;
     }
 
-    for (auto c : rotatedLayer) {
+    if (clockwise) {
+        // NOTE: does this run through all 9 cubes?
+        for (auto &row : rotatedLayer) {
+            for (auto &col : row) {
+                col.rotate(90.0f, static_cast<size_t>(dimension));
+            }
         }
+    }
 }
