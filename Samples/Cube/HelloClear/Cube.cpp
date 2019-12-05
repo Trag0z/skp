@@ -1,5 +1,7 @@
+#pragma once
 #include "Cube.h"
 #include <assert.h>
+#include <gxm.h>
 
 void Cube::init(float center[3], float miniCubeDiameter) {
     m_center[0] = center[0];
@@ -12,17 +14,24 @@ void Cube::init(float center[3], float miniCubeDiameter) {
 
     MiniCube::init();
 
-    for (int x = 0; x < 3; ++x) {
-        for (int y = 0; y < 3; ++y) {
-            for (int z = 0; z < 3; ++z) {
+    for (size_t x = 0; x < 3; ++x) {
+        for (size_t y = 0; y < 3; ++y) {
+            for (size_t z = 0; z < 3; ++z) {
                 m_miniCube[x][y][z] = &m_memBlock[x][y][z];
                 float pos[3] = {firstCubePos[0] + x * miniCubeDiameter,
                                 firstCubePos[1] + y * miniCubeDiameter,
                                 firstCubePos[2] + z * miniCubeDiameter};
-                MiniCube::create(m_memBlock[x][y][z], pos);
+                size_t location[3] = {x, y, z};
+                MiniCube::create(m_memBlock[x][y][z], pos, location);
             }
         }
     }
+}
+
+void Cube::draw(SceGxmContext *context) {
+    SceGxmErrorCode success;
+    for ()
+        success = sceGxmSetVertexStream() assert(success);
 }
 
 void Cube::rotate(int layer, Cube::Dimension dimension, bool clockwise) {

@@ -12,5 +12,6 @@ class Cube {
     enum Dimension { X = 0, Y = 1, Z = 2 };
 
     void init(float center[3], float miniCubeDiameter);
+    void draw();
     void rotate(int layer, Cube::Dimension dimension, bool clockwise);
 };

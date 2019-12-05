@@ -1,17 +1,114 @@
-﻿Der Buildvorgang wurde am 14.11.2019 14:26:32 gestartet.
-     1>Projekt "H:\SKP\Samples\RenderCubeQuat\HelloClear\HelloClear.vcxproj" auf Knoten "2", Build Ziel(e).
+﻿Der Buildvorgang wurde am 05.12.2019 17:14:34 gestartet.
+     1>Projekt "H:\SKP\Samples\Cube\HelloClear\HelloClear.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
-         main.cpp
-         psp2snc.exe -D_DEBUG -o PSVita_Debug\main.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\RenderCubeQuat\HelloClear\main.cpp
-     1>H:\SKP\Samples\RenderCubeQuat\HelloClear\main.cpp(821,5): warning 178: function "destroyGxmData" was declared but never referenced
+         Cube.cpp
+         psp2snc.exe -D_DEBUG -o PSVita_Debug\Cube.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\Cube\HelloClear\Cube.cpp
+     1>H:\SKP\Samples\Cube\HelloClear\Cube.h(10,13): error 70: incomplete type is not allowed
          
-     1>H:\SKP\Samples\RenderCubeQuat\HelloClear\main.cpp(850,4): warning 178: function "shutdownGxm" was declared but never referenced
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(75,18): error 29: expected an expression
          
-       Link:
-         C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\bin\psp2ld.exe -o "H:\SKP\Samples\RenderCubeQuat\PSVita_Debug\HelloClear.self" -L"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\lib" --start-group PSVita_Debug\clear_f_gxp.obj PSVita_Debug\clear_v_gxp.obj PSVita_Debug\basic_f_gxp.obj "PSVita_Debug\basic_v _gxp.obj" PSVita_Debug\main.o "-lSceGxm_stub" "-lSceCtrl_stub" "-lSceDisplay_stub" "-lSceDbg_stub" "-lSceDbgFont" --end-group
-         HelloClear.vcxproj -> H:\SKP\Samples\RenderCubeQuat\PSVita_Debug\HelloClear.self
-     1>Die Erstellung des Projekts "H:\SKP\Samples\RenderCubeQuat\HelloClear\HelloClear.vcxproj" ist abgeschlossen, Build Ziel(e).
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(78,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(79,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(80,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(82,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(83,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(84,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(85,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(87,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(88,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(89,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(90,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(92,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(93,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(94,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(95,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(97,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(98,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(99,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(100,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(102,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(103,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(104,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(105,18): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(107,13): error 261-D: explicit type is missing ("int" assumed)
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(107,25): error 29: expected an expression
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(115,9): warning 12: parsing restarts here after previous syntax error
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(120,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(122,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(124,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(128,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(130,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(132,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(136,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(138,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(140,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(146,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(148,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(150,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(154,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(156,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(158,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(162,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(164,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(166,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(172,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(174,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(176,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(180,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+     1>H:\SKP\Samples\Cube\HelloClear\MiniCube.h(182,20): error 110: expression preceding parentheses of apparent call must have (pointer-to-) function type
+         
+         Error limit reached.
+         Compilation terminated.
+     1>Die Erstellung des Projekts "H:\SKP\Samples\Cube\HelloClear\HelloClear.vcxproj" ist abgeschlossen, Build Ziel(e) -- FEHLER.
 
-Build erfolgreich.
+Fehler beim Buildvorgang.
 
-Verstrichene Zeit 00:00:01.23
+Verstrichene Zeit 00:00:00.96

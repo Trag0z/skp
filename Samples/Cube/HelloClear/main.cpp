@@ -163,6 +163,8 @@ static uint16_t *s_basicIndices = NULL;
 static int32_t s_basicVerticesUId;
 static int32_t s_basicIndiceUId;
 
+static Cube s_cube;
+
 //!! The program parameter for the transformation of the triangle
 static Matrix4 s_finalTransformation;
 static const SceGxmProgramParameter *s_wvpParam = NULL;
@@ -736,7 +738,8 @@ void createGxmData(void) {
                            SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
     // Does what the code below does, but for MiniCubes
-    Cube::init({0.0f, 0.0f, 0.0f}, 5.0f);
+    float cubeCenter[3] = {0.0f, 0.0f, 0.0f};
+    s_cube.init(cubeCenter, 1.0f);
 
     // /* create shaded triangle vertex/index data */
     // s_basicVertices = (BasicVertex *)graphicsAlloc(
@@ -822,7 +825,7 @@ void renderGxm(void) {
     sceGxmSetUniformDataF(vertexDefaultBuffer, s_wvpParam, 0, 16,
                           (float *)&s_finalTransformation);
 
-    /* draw the spinning triangle */
+        /* draw the spinning triangle */
     sceGxmSetVertexStream(s_context, 0, s_basicVertices);
     sceGxmDraw(s_context, SCE_GXM_PRIMITIVE_TRIANGLES, SCE_GXM_INDEX_FORMAT_U16,
                s_basicIndices, 6 * 6);
