@@ -1,0 +1,53 @@
+﻿/* SCE CONFIDENTIAL
+ * PlayStation(R)Vita Programmer Tool Runtime Library Release 02.000.081
+ * Copyright (C) 2010 Sony Computer Entertainment Inc. 
+ * All Rights Reserved.
+ */
+
+uniform float4x4 wvp;		/*Matrix als uniform parameter wvp = world view projection*/
+uniform float4x4 rot;
+uniform float angle;
+
+
+
+void main(
+	float3 aPosition,
+	float3 aNormal,													
+	float4 aColor,
+	int ANIMATION_FLAG,
+	float4 out vPosition : POSITION,
+	float4 out vColor : TEXCOORD0 /*COLOR0*/)		
+	//TEXCOORD0 ist ein Fließkommainterpolator
+{
+	
+	float3x3 ani_rot = float3x3(1.f, 0.f, 0.f,
+								0.f, 1.f, 0.f,
+								0.f, 0.f, 1.f);
+	
+
+	if(ANIMATION_FLAG == 0){
+		ani_rot = float3x3(cos(angle), 0.f, sin(angle), 
+							0.f, 1.f, 0.f,
+							-sin(angle), 0.f, cos(angle));
+	}
+	if(ANIMATION_FLAG == 1){
+		ani_rot = float3x3(1.f, 0.f, 0.f,
+							0.f, cos(angle), -sin(angle),
+							0.f, sin(angle), cos(angle));
+	}
+	if(ANIMATION_FLAG == 2){
+		ani_rot = float3x3(cos(angle), -sin(angle), 0.f,
+						   sin(angle), cos(angle), 0.f,
+							0.f, 0.f, 1.f);
+	}
+	
+	//Normale Rotation und Animation
+	aPosition = mul(aPosition, ani_rot);
+	vPosition = mul(float4(aPosition, 1.0f), wvp);
+	float3 normal = mul(aNormal, ani_rot);
+	normal = mul(float4(normal, 0.0f), rot).xyz;
+					
+	//Beleuchtung														
+	float light = saturate(normal.z);
+	vColor = aColor * light ;
+}

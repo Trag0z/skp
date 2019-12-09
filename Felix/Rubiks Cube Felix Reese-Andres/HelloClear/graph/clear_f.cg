@@ -4,9 +4,9 @@
  * All Rights Reserved.
  */
 
- uniform sampler2D normalTex: TEXUNIT0;
 
-float4 main(float4 vTexCoord: TEXCOORD0)
+ //zum Bildschirm schwarz zeichnen
+float4 main() : COLOR
 {
-	return tex2D(normalTex, vTexCoord);
+	 return 0.f;
 }

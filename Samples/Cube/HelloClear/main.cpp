@@ -268,6 +268,11 @@ int main(void) {
 
     // Set sampling mode for input device.
     sceCtrlSetSamplingMode(SCE_CTRL_MODE_DIGITALANALOG_WIDE);
+    // TODO: Activate touchpad here
+    // sceTouchSetSamplingState(SCE_TOUCH_PORT_BACK,
+    // SCE_TOUCH_SAMPLING_STATE_START);		//BackTouchInput aktivieren
+    // sceTouchSetSamplingState(SCE_TOUCH_PORT_FRONT,
+    // SCE_TOUCH_SAMPLING_STATE_START);		//FrontTouchInput aktivieren
 
     /* 6. main loop */
     while (true) {
@@ -737,9 +742,16 @@ void createGxmData(void) {
                           (sceGxmProgramParameterGetCategory(s_wvpParam) ==
                            SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
+    SceGxmProgramParameter *localToWorldParam =
+        sceGxmProgramFindParameterByName(basicProgram, "localToWorld");
+    SCE_DBG_ALWAYS_ASSERT(
+        localToWorldParam &&
+        (sceGxmProgramParameterGetCategory(localToWorldParam) ==
+         SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
+
     // Does what the code below does, but for MiniCubes
     float cubeCenter[3] = {0.0f, 0.0f, 0.0f};
-    s_cube.init(cubeCenter, 1.0f);
+    s_cube.init(cubeCenter, 1.0f, localToWorldParam);
 
     // /* create shaded triangle vertex/index data */
     // s_basicVertices = (BasicVertex *)graphicsAlloc(
@@ -825,10 +837,13 @@ void renderGxm(void) {
     sceGxmSetUniformDataF(vertexDefaultBuffer, s_wvpParam, 0, 16,
                           (float *)&s_finalTransformation);
 
-        /* draw the spinning triangle */
-    sceGxmSetVertexStream(s_context, 0, s_basicVertices);
-    sceGxmDraw(s_context, SCE_GXM_PRIMITIVE_TRIANGLES, SCE_GXM_INDEX_FORMAT_U16,
-               s_basicIndices, 6 * 6);
+    s_cube.render(s_context, vertexDefaultBuffer);
+
+    // /* draw the spinning triangle */
+    // sceGxmSetVertexStream(s_context, 0, s_basicVertices);
+    // sceGxmDraw(s_context, SCE_GXM_PRIMITIVE_TRIANGLES,
+    // SCE_GXM_INDEX_FORMAT_U16,
+    //            s_basicIndices, 6 * 6);
 
     /* stop rendering to the render target */
     sceGxmEndScene(s_context, NULL, NULL);

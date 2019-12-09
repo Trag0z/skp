@@ -1,7 +1,13 @@
 TODO:
 - find out what 3rd parameter of graphicsAlloc does
-- where is the position of the rendered object determined?
-- calculate rendering quaternions, rendering in generel
+- maybe TEXCOORD needs to be calculated in a different way
+- sort out includes
+
+Rendering: For each MiniCube:
+- transform to world position
+    > rotate 
+    > translate
+- camera transformation
 
 
 #########################################
