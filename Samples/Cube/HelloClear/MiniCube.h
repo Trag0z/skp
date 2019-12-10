@@ -1,8 +1,9 @@
 #pragma once
 #include <assert.h>
+#include "Helpers.h"
 #include <gxm.h>
-// #include <vectormath.h>
-// using namespace sce::Vectormath::Simd::Aos;
+#include <vectormath.h>
+using namespace sce::Vectormath::Simd::Aos;
 // #include <kernel.h>
 
 // NOTE: Maybe these should all start with ff?
@@ -19,10 +20,16 @@ enum TextureColors {
 struct Vertex {
     float position[3];
     uint32_t color;
+
+    Vertex(float posX, float posY, float posZ) {
+        position[0] = posX;
+        position[1] = posY;
+        position[2] = posZ;
+    }
 };
 
 class MiniCube {
-    float m_position[3];
+    Vector3 m_position;
     // float m_rotation[3];
     Quat m_orientation;
     // Vertex m_vertices[6][4];
@@ -32,7 +39,7 @@ class MiniCube {
     static int32_t s_verticesUId;
     static const int s_numVertices = 27 * 6 * 4;
 
-    static uint16_t *s_indeces;
+    static uint16_t *s_indices;
     static int32_t s_indicesUId;
 
     static SceGxmTexture s_textures[7];
@@ -54,13 +61,15 @@ class MiniCube {
     //     m_position[2] = pos[2];
     // }
 
-    const float *position() const { return m_position; }
+    const Vector3 *position() const { return &m_position; }
 
-    const Vertex *vertices() const { return &m_vertices; }
+    // const Vertex *vertices() const { return &m_vertices; }
 
-    const SceGxmTexture **textures() const { return m_textures; }
+    SceGxmTexture **textures() { return m_textures; }
 
-    static const uint16_t *indeces() { return s_indeces; }
+    static const Vertex *vertices() { return s_vertices; }
+
+    static const uint16_t *indeces() { return s_indices; }
 
     void localToWorldTransform(Matrix4 &out) const {
         out =

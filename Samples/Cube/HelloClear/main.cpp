@@ -32,6 +32,7 @@
    section.
 */
 
+#pragma once
 #include <sceerror.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -51,6 +52,7 @@
 using namespace sce::Vectormath::Simd::Aos;
 
 #include "Cube.h"
+#include "Helpers.h"
 
 /*	Define the debug font pixel color format to render to. */
 #define DBGFONT_PIXEL_FORMAT SCE_DBGFONT_PIXELFORMAT_A8B8G8R8
@@ -81,6 +83,7 @@ using namespace sce::Vectormath::Simd::Aos;
 */
 #define DISPLAY_MAX_PENDING_SWAPS 2
 
+// TODO: Remove this here if it is no longer needed
 /*	Helper macro to align a value */
 #define ALIGN(x, a) (((x) + ((a)-1)) & ~((a)-1))
 
@@ -179,8 +182,8 @@ static void patcherHostFree(void *userData, void *mem);
 static void displayCallback(const void *callbackData);
 
 /*	Helper function to allocate memory and map it for the GPU */
-static void *graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
-                           uint32_t alignment, uint32_t attribs, SceUID *uid);
+void *graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
+                    uint32_t alignment, uint32_t attribs, SceUID *uid);
 
 /*	Helper function to free memory mapped to the GPU */
 static void graphicsFree(SceUID uid);
@@ -697,15 +700,15 @@ void createGxmData(void) {
         paramBasicPositionAttribute &&
         (sceGxmProgramParameterGetCategory(paramBasicPositionAttribute) ==
          SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
-    const SceGxmProgramParameter *paramBasicColorAttribute =
-        sceGxmProgramFindParameterByName(basicProgram, "aColor");
-    SCE_DBG_ALWAYS_ASSERT(
-        paramBasicColorAttribute &&
-        (sceGxmProgramParameterGetCategory(paramBasicColorAttribute) ==
-         SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
+    // const SceGxmProgramParameter *paramBasicColorAttribute =
+    //     sceGxmProgramFindParameterByName(basicProgram, "aColor");
+    // SCE_DBG_ALWAYS_ASSERT(
+    //     paramBasicColorAttribute &&
+    //     (sceGxmProgramParameterGetCategory(paramBasicColorAttribute) ==
+    //      SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
 
     /* create shaded triangle vertex format */
-    SceGxmVertexAttribute basicVertexAttributes[2];
+    SceGxmVertexAttribute basicVertexAttributes[1];
     SceGxmVertexStream basicVertexStreams[1];
     basicVertexAttributes[0].streamIndex = 0;
     basicVertexAttributes[0].offset = 0;
@@ -713,19 +716,19 @@ void createGxmData(void) {
     basicVertexAttributes[0].componentCount = 3;
     basicVertexAttributes[0].regIndex =
         sceGxmProgramParameterGetResourceIndex(paramBasicPositionAttribute);
-    basicVertexAttributes[1].streamIndex = 0;
-    basicVertexAttributes[1].offset = 12;
-    basicVertexAttributes[1].format =
-        SCE_GXM_ATTRIBUTE_FORMAT_U8N; // Mapping relation clarified.
-    basicVertexAttributes[1].componentCount = 4;
-    basicVertexAttributes[1].regIndex =
-        sceGxmProgramParameterGetResourceIndex(paramBasicColorAttribute);
+    // basicVertexAttributes[1].streamIndex = 0;
+    // basicVertexAttributes[1].offset = 12;
+    // basicVertexAttributes[1].format =
+    //     SCE_GXM_ATTRIBUTE_FORMAT_U8N; // Mapping relation clarified.
+    // basicVertexAttributes[1].componentCount = 4;
+    // basicVertexAttributes[1].regIndex =
+    //     sceGxmProgramParameterGetResourceIndex(paramBasicColorAttribute);
     basicVertexStreams[0].stride = sizeof(BasicVertex);
     basicVertexStreams[0].indexSource = SCE_GXM_INDEX_SOURCE_INDEX_16BIT;
 
     /* create shaded triangle shaders */
     returnCode = sceGxmShaderPatcherCreateVertexProgram(
-        s_shaderPatcher, s_basicVertexProgramId, basicVertexAttributes, 2,
+        s_shaderPatcher, s_basicVertexProgramId, basicVertexAttributes, 1,
         basicVertexStreams, 1, &s_basicVertexProgram);
     SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
 
@@ -742,7 +745,7 @@ void createGxmData(void) {
                           (sceGxmProgramParameterGetCategory(s_wvpParam) ==
                            SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
-    SceGxmProgramParameter *localToWorldParam =
+    const SceGxmProgramParameter *localToWorldParam =
         sceGxmProgramFindParameterByName(basicProgram, "localToWorld");
     SCE_DBG_ALWAYS_ASSERT(
         localToWorldParam &&
@@ -1017,45 +1020,6 @@ void displayCallback(const void *callbackData) {
      * longer displayed */
     returnCode = sceDisplayWaitVblankStart();
     SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
-}
-
-/* Alloc used by libgxm */
-static void *graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
-                           uint32_t alignment, uint32_t attribs, SceUID *uid) {
-    /*	Since we are using sceKernelAllocMemBlock directly, we cannot directly
-            use the alignment parameter.  Instead, we must allocate the size to
-       the minimum for this memblock type, and just SCE_DBG_ALWAYS_ASSERT that
-       this will cover our desired alignment.
-
-            Developers using their own heaps should be able to use the alignment
-            parameter directly for more minimal padding.
-    */
-
-    if (type == SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RWDATA) {
-        /* CDRAM memblocks must be 256KiB aligned */
-        SCE_DBG_ALWAYS_ASSERT(alignment <= 256 * 1024);
-        size = ALIGN(size, 256 * 1024);
-    } else {
-        /* LPDDR memblocks must be 4KiB aligned */
-        SCE_DBG_ALWAYS_ASSERT(alignment <= 4 * 1024);
-        size = ALIGN(size, 4 * 1024);
-    }
-
-    /* allocate some memory */
-    *uid = sceKernelAllocMemBlock("simple", type, size, NULL);
-    SCE_DBG_ALWAYS_ASSERT(*uid >= SCE_OK);
-
-    /* grab the base address */
-    void *mem = NULL;
-    int err = sceKernelGetMemBlockBase(*uid, &mem);
-    SCE_DBG_ALWAYS_ASSERT(err == SCE_OK);
-
-    /* map for the GPU */
-    err = sceGxmMapMemory(mem, size, attribs);
-    SCE_DBG_ALWAYS_ASSERT(err == SCE_OK);
-
-    /* done */
-    return mem;
 }
 
 /* Free used by libgxm */

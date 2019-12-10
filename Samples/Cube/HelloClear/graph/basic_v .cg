@@ -9,11 +9,10 @@ uniform float4x4 localToWorld;
 
 void main(
 	float3 aPosition,
-	float4 aColor,
 	float4 out vPosition : POSITION,
 	float2 out vTexCoord : TEXCOORD0)
 {
 	vPosition = mul(mul(float4(aPosition, 1.f), localToWorld), wvp);
-	xTexCoord.x = vPosition.x * 0.5;
-    xTexCoord.y = vPosition.y * 0.5;
+	vTexCoord.x = vPosition.x * 0.5;
+    vTexCoord.y = vPosition.y * 0.5;
 }
