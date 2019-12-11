@@ -43,13 +43,13 @@ void Cube::render(SceGxmContext *context, void *vertexDefaultBuffer) {
                                       0, 16, (float *)&localToWorld);
 
                 for (int side = 0; side < 6; ++side) {
-                    sceGxmSetVertexStream(context, 0,
-                                          MiniCube::vertices() + (side * 4));
+                    const Vertex *vert = &(MiniCube::vertices()[side * 4]);
+                    const uint16_t *indices = &(MiniCube::indeces()[side * 4]);
+                    sceGxmSetVertexStream(context, 0, vert);
                     sceGxmSetFragmentTexture(
                         context, 0, m_memBlock[x][y][z].textures()[side]);
                     sceGxmDraw(context, SCE_GXM_PRIMITIVE_TRIANGLES,
-                               SCE_GXM_INDEX_FORMAT_U16,
-                               MiniCube::indeces() + (side * 4), 6);
+                               SCE_GXM_INDEX_FORMAT_U16, indices, 6);
                 }
             }
         }

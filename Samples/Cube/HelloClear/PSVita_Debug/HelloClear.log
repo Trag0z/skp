@@ -1,11 +1,23 @@
-﻿Der Buildvorgang wurde am 10.12.2019 20:03:10 gestartet.
+﻿Der Buildvorgang wurde am 11.12.2019 18:56:41 gestartet.
      1>Projekt "H:\SKP\Samples\Cube\HelloClear\HelloClear.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
-         Helpers.cpp
-         psp2snc.exe -D_DEBUG -o PSVita_Debug\Helpers.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\Cube\HelloClear\Helpers.cpp
-     1>H:\SKP\Samples\Cube\HelloClear\Helpers.cpp(50,28): warning 1628: argument of type "SceOff" is incompatible with parameter (1 of malloc) of type "std::size_t"
+         Cube.cpp
+         psp2snc.exe -D_DEBUG -o PSVita_Debug\Cube.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\Cube\HelloClear\Cube.cpp
+         MiniCube.cpp
+         psp2snc.exe -D_DEBUG -o PSVita_Debug\MiniCube.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\Cube\HelloClear\MiniCube.cpp
+         main.cpp
+         psp2snc.exe -D_DEBUG -o PSVita_Debug\main.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\Cube\HelloClear\main.cpp
+     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(164,20): warning 178: variable "s_basicVertices" was declared but never referenced
          
-     1>H:\SKP\Samples\Cube\HelloClear\Helpers.cpp(51,29): warning 1628: argument of type "SceOff" is incompatible with parameter (3 of sceIoRead) of type "SceSize"
+     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(165,17): warning 178: variable "s_basicIndices" was declared but never referenced
+         
+     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(166,15): warning 178: variable "s_basicVerticesUId" was declared but never referenced
+         
+     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(167,15): warning 178: variable "s_basicIndiceUId" was declared but never referenced
+         
+     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(892,5): warning 178: function "destroyGxmData" was declared but never referenced
+         
+     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(925,4): warning 178: function "shutdownGxm" was declared but never referenced
          
        Link:
          C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\bin\psp2ld.exe -o "H:\SKP\Samples\Cube\PSVita_Debug\HelloClear.self" -L"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\lib" --start-group PSVita_Debug\clear_f_gxp.obj PSVita_Debug\clear_v_gxp.obj PSVita_Debug\basic_f_gxp.obj "PSVita_Debug\basic_v _gxp.obj" PSVita_Debug\Cube.o PSVita_Debug\Helpers.o PSVita_Debug\main.o PSVita_Debug\MiniCube.o "-lSceGxm_stub" "-lSceCtrl_stub" "-lSceDisplay_stub" "-lSceDbg_stub" "-lSceDbgFont" --end-group
@@ -14,4 +26,4 @@
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:00.88
+Verstrichene Zeit 00:00:03.07

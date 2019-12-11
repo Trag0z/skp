@@ -1,5 +1,7 @@
 #pragma once
 #include "Helpers.h"
+#include <iostream>
+#include <libdbg.h>
 
 void *graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
                     uint32_t alignment, uint32_t attribs, SceUID *uid) {
@@ -45,18 +47,27 @@ void loadTexture(SceGxmTexture *texture, const char *filename) {
     SceOff fileSize = sceIoLseek(fileID, 0, SCE_SEEK_END);
     sceIoLseek(fileID, 0, SCE_SEEK_SET);
 
-
     // Why this randomly allocated memory that never gets freed?
-    void *dummyMem = malloc(fileSize);
-	sceIoRead(fileID, dummyMem, fileSize);
+    void *gxt = malloc(fileSize);
+    SceSSize bytesRead = sceIoRead(fileID, gxt, fileSize);
+    SCE_DBG_ALWAYS_ASSERT(bytesRead == fileSize);
+    SCE_DBG_ALWAYS_ASSERT(sceGxtCheckData(gxt) == SCE_OK);
 
-    const void *dataSrc = sceGxtGetDataAddress(dummyMem);
-    const uint32_t dataSize = sceGxtGetDataSize(dummyMem);
+    const void *dataSrc = sceGxtGetDataAddress(gxt);
+    const uint32_t dataSize = sceGxtGetDataSize(gxt);
     SceUID texID;
     void *texPtr = graphicsAlloc(SCE_KERNEL_MEMBLOCK_TYPE_USER_RW_UNCACHE,
                                  dataSize, SCE_GXM_TEXTURE_ALIGNMENT,
                                  SCE_GXM_MEMORY_ATTRIB_READ, &texID);
 
     memcpy(texPtr, dataSrc, dataSize);
-    sceGxtInitTexture(texture, texPtr, dataSrc, 0);
+    SceGxtErrorCode returnCode = sceGxtInitTexture(texture, gxt, dataSrc, 0);
+    if (returnCode == SCE_GXT_ERROR_INVALID_ALIGNMENT) {
+        std::cout << "Invalid Argument!";
+    } else if (returnCode == SCE_GXT_ERROR_INVALID_VALUE) {
+        std::cout << "Invalid Value!";
+    } else if (returnCode == SCE_GXT_ERROR_INVALID_POINTER) {
+        std::cout << "Invalid Pointer!";
+    }
+    SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
 };

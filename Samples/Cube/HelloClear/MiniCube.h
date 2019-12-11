@@ -1,6 +1,6 @@
 #pragma once
-#include <assert.h>
 #include "Helpers.h"
+#include <assert.h>
 #include <gxm.h>
 #include <vectormath.h>
 using namespace sce::Vectormath::Simd::Aos;
@@ -19,7 +19,7 @@ enum TextureColors {
 
 struct Vertex {
     float position[3];
-    uint32_t color;
+    // uint32_t color;
 
     Vertex(float posX, float posY, float posZ) {
         position[0] = posX;

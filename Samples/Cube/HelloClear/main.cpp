@@ -694,11 +694,11 @@ void createGxmData(void) {
     const SceGxmProgram *basicProgram =
         sceGxmShaderPatcherGetProgramFromId(s_basicVertexProgramId);
     SCE_DBG_ALWAYS_ASSERT(basicProgram);
-    const SceGxmProgramParameter *paramBasicPositionAttribute =
+    const SceGxmProgramParameter *paramPositionAttribute =
         sceGxmProgramFindParameterByName(basicProgram, "aPosition");
     SCE_DBG_ALWAYS_ASSERT(
-        paramBasicPositionAttribute &&
-        (sceGxmProgramParameterGetCategory(paramBasicPositionAttribute) ==
+        paramPositionAttribute &&
+        (sceGxmProgramParameterGetCategory(paramPositionAttribute) ==
          SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
     // const SceGxmProgramParameter *paramBasicColorAttribute =
     //     sceGxmProgramFindParameterByName(basicProgram, "aColor");
@@ -708,28 +708,28 @@ void createGxmData(void) {
     //      SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
 
     /* create shaded triangle vertex format */
-    SceGxmVertexAttribute basicVertexAttributes[1];
-    SceGxmVertexStream basicVertexStreams[1];
-    basicVertexAttributes[0].streamIndex = 0;
-    basicVertexAttributes[0].offset = 0;
-    basicVertexAttributes[0].format = SCE_GXM_ATTRIBUTE_FORMAT_F32;
-    basicVertexAttributes[0].componentCount = 3;
-    basicVertexAttributes[0].regIndex =
-        sceGxmProgramParameterGetResourceIndex(paramBasicPositionAttribute);
-    // basicVertexAttributes[1].streamIndex = 0;
-    // basicVertexAttributes[1].offset = 12;
-    // basicVertexAttributes[1].format =
-    //     SCE_GXM_ATTRIBUTE_FORMAT_U8N; // Mapping relation clarified.
-    // basicVertexAttributes[1].componentCount = 4;
-    // basicVertexAttributes[1].regIndex =
-    //     sceGxmProgramParameterGetResourceIndex(paramBasicColorAttribute);
-    basicVertexStreams[0].stride = sizeof(BasicVertex);
-    basicVertexStreams[0].indexSource = SCE_GXM_INDEX_SOURCE_INDEX_16BIT;
+    SceGxmVertexAttribute vertexAttributes[1];
+    SceGxmVertexStream vertexAttribStreams[1];
+    vertexAttributes[0].streamIndex = 0;
+    vertexAttributes[0].offset = 0;
+    vertexAttributes[0].format = SCE_GXM_ATTRIBUTE_FORMAT_F32;
+    vertexAttributes[0].componentCount = 3;
+    vertexAttributes[0].regIndex =
+        sceGxmProgramParameterGetResourceIndex(paramPositionAttribute);
+    vertexAttributes[1].streamIndex = 0;
+    vertexAttributes[1].offset = 12;
+    vertexAttributes[1].format =
+        SCE_GXM_ATTRIBUTE_FORMAT_U8N; // Mapping relation clarified.
+    vertexAttributes[1].componentCount = 4;
+    vertexAttributes[1].regIndex =
+        sceGxmProgramParameterGetResourceIndex(paramBasicColorAttribute);
+    vertexAttribStreams[0].stride = sizeof(Vertex);
+    vertexAttribStreams[0].indexSource = SCE_GXM_INDEX_SOURCE_INDEX_16BIT;
 
     /* create shaded triangle shaders */
     returnCode = sceGxmShaderPatcherCreateVertexProgram(
-        s_shaderPatcher, s_basicVertexProgramId, basicVertexAttributes, 1,
-        basicVertexStreams, 1, &s_basicVertexProgram);
+        s_shaderPatcher, s_basicVertexProgramId, vertexAttributes, 1,
+        vertexAttribStreams, 1, &s_basicVertexProgram);
     SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
 
     returnCode = sceGxmShaderPatcherCreateFragmentProgram(
