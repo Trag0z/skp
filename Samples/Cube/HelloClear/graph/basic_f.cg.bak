@@ -4,7 +4,9 @@
  * All Rights Reserved.
  */
 
-float4 main(float4 vColor : TEXCOORD0)
+ uniform sampler2D normalTex: TEXUNIT0;
+
+float4 main(float2 vTexCoord: TEXCOORD0)
 {
-	return vColor;
+	return tex2D(normalTex, vTexCoord);
 }

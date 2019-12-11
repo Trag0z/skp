@@ -17,43 +17,64 @@ void Cube::init(float center[3], float miniCubeDiameter,
 
     MiniCube::init();
 
-    for (int x = 0; x < 3; ++x) {
-        for (int y = 0; y < 3; ++y) {
-            for (int z = 0; z < 3; ++z) {
-                m_miniCube[x][y][z] = &m_memBlock[x][y][z];
-                float pos[3] = {firstCubePos[0] + x * miniCubeDiameter,
-                                firstCubePos[1] + y * miniCubeDiameter,
-                                firstCubePos[2] + z * miniCubeDiameter};
-                int location[3] = {x, y, z};
-                MiniCube::create(m_memBlock[x][y][z], pos, location);
-            }
-        }
-    }
+    int location[3] = {1, 1, 1};
+    MiniCube::create(m_memBlock[0][0][0], firstCubePos, location);
+
+    // for (int x = 0; x < 3; ++x) {
+    //     for (int y = 0; y < 3; ++y) {
+    //         for (int z = 0; z < 3; ++z) {
+    //             m_miniCube[x][y][z] = &m_memBlock[x][y][z];
+    //             float pos[3] = {firstCubePos[0] + x * miniCubeDiameter,
+    //                             firstCubePos[1] + y * miniCubeDiameter,
+    //                             firstCubePos[2] + z * miniCubeDiameter};
+    //             int location[3] = {x, y, z};
+    //             MiniCube::create(m_memBlock[x][y][z], pos, location);
+    //         }
+    //     }
+    // }
 }
 
 void Cube::render(SceGxmContext *context, void *vertexDefaultBuffer) {
-    Matrix4 localToWorld;
-    for (int x = 0; x < 3; ++x) {
-        for (int y = 0; y < 3; ++y) {
-            for (int z = 0; z < 3; ++z) {
-                m_memBlock[x][y][z].localToWorldTransform(localToWorld);
-                // NOTE: Does this apply the uniform for following draw calls
-                // only? I certainly hope so.
-                sceGxmSetUniformDataF(vertexDefaultBuffer, m_localToWorldParam,
-                                      0, 16, (float *)&localToWorld);
+    SceGxmErrorCode returnCode;
 
-                for (int side = 0; side < 6; ++side) {
-                    const Vertex *vert = &(MiniCube::vertices()[side * 4]);
-                    const uint16_t *indices = &(MiniCube::indeces()[side * 4]);
-                    sceGxmSetVertexStream(context, 0, vert);
-                    sceGxmSetFragmentTexture(
-                        context, 0, m_memBlock[x][y][z].textures()[side]);
-                    sceGxmDraw(context, SCE_GXM_PRIMITIVE_TRIANGLES,
-                               SCE_GXM_INDEX_FORMAT_U16, indices, 6);
-                }
-            }
-        }
-    }
+    Matrix4 localToWorld;
+    m_memBlock[0][0][0].localToWorldTransform(localToWorld);
+
+    returnCode = sceGxmSetUniformDataF(vertexDefaultBuffer, m_localToWorldParam,
+                                       0, 16, (float *)&localToWorld);
+    SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
+
+    returnCode =
+        sceGxmSetVertexStream(context, 0, m_memBlock[0][0][0].m_vertices);
+    SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
+
+    returnCode =
+        sceGxmDraw(context, SCE_GXM_PRIMITIVE_TRIANGLES,
+                   SCE_GXM_INDEX_FORMAT_U16, MiniCube::indeces(), 6 * 6);
+    SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
+
+    // for (int x = 0; x < 3; ++x) {
+    //     for (int y = 0; y < 3; ++y) {
+    //         for (int z = 0; z < 3; ++z) {
+    //             m_memBlock[x][y][z].localToWorldTransform(localToWorld);
+    //             // NOTE: Does this apply the uniform for following draw calls
+    //             // only? I certainly hope so.
+    //             sceGxmSetUniformDataF(vertexDefaultBuffer,
+    //             m_localToWorldParam,
+    //                                   0, 16, (float *)&localToWorld);
+
+    //             for (int side = 0; side < 6; ++side) {
+    //                 const Vertex *vert = &(MiniCube::vertices()[side * 4]);
+    //                 const uint16_t *indices = &(MiniCube::indeces()[side *
+    //                 4]); sceGxmSetVertexStream(context, 0, vert);
+    //                 // sceGxmSetFragmentTexture(
+    //                 //     context, 0, m_memBlock[x][y][z].textures()[side]);
+    //                 sceGxmDraw(context, SCE_GXM_PRIMITIVE_TRIANGLES,
+    //                            SCE_GXM_INDEX_FORMAT_U16, indices, 6);
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 void Cube::rotate(int layer, Cube::Dimension dimension, bool clockwise) {

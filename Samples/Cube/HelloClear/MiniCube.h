@@ -7,7 +7,7 @@ using namespace sce::Vectormath::Simd::Aos;
 // #include <kernel.h>
 
 // NOTE: Maybe these should all start with ff?
-enum TextureColors {
+enum TextureColor {
     WHITE = 0,
     BLACK = 1,
     GREEN = 2,
@@ -17,9 +17,21 @@ enum TextureColors {
     YELLOW = 6
 };
 
+// enum Color {
+//     WHITE = 0xffffff00,
+//     BLACK = 0x00000000,
+//     GREEN = 0x00ff0000,
+//     ORANGE = 0xff990000,
+//     BLUE = 0x0000ff00,
+//     RED = 0xff000000,
+//     YELLOW = 0xffff0000
+// };
+
 struct Vertex {
     float position[3];
-    // uint32_t color;
+    uint32_t color;
+
+    Vertex() {}
 
     Vertex(float posX, float posY, float posZ) {
         position[0] = posX;
@@ -32,7 +44,6 @@ class MiniCube {
     Vector3 m_position;
     // float m_rotation[3];
     Quat m_orientation;
-    // Vertex m_vertices[6][4];
     SceGxmTexture *m_textures[6];
 
     static Vertex *s_vertices;
@@ -45,6 +56,8 @@ class MiniCube {
     static SceGxmTexture s_textures[7];
 
   public:
+    Vertex *m_vertices;
+
     enum Side { FRONT = 0, BACK = 1, LEFT = 2, RIGHT = 3, TOP = 4, BOTTOM = 5 };
 
     static void init();

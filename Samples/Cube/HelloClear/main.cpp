@@ -700,15 +700,15 @@ void createGxmData(void) {
         paramPositionAttribute &&
         (sceGxmProgramParameterGetCategory(paramPositionAttribute) ==
          SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
-    // const SceGxmProgramParameter *paramBasicColorAttribute =
-    //     sceGxmProgramFindParameterByName(basicProgram, "aColor");
-    // SCE_DBG_ALWAYS_ASSERT(
-    //     paramBasicColorAttribute &&
-    //     (sceGxmProgramParameterGetCategory(paramBasicColorAttribute) ==
-    //      SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
+    const SceGxmProgramParameter *paramBasicColorAttribute =
+        sceGxmProgramFindParameterByName(basicProgram, "aColor");
+    SCE_DBG_ALWAYS_ASSERT(
+        paramBasicColorAttribute &&
+        (sceGxmProgramParameterGetCategory(paramBasicColorAttribute) ==
+         SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
 
     /* create shaded triangle vertex format */
-    SceGxmVertexAttribute vertexAttributes[1];
+    SceGxmVertexAttribute vertexAttributes[2];
     SceGxmVertexStream vertexAttribStreams[1];
     vertexAttributes[0].streamIndex = 0;
     vertexAttributes[0].offset = 0;
@@ -728,7 +728,7 @@ void createGxmData(void) {
 
     /* create shaded triangle shaders */
     returnCode = sceGxmShaderPatcherCreateVertexProgram(
-        s_shaderPatcher, s_basicVertexProgramId, vertexAttributes, 1,
+        s_shaderPatcher, s_basicVertexProgramId, vertexAttributes, 2,
         vertexAttribStreams, 1, &s_basicVertexProgram);
     SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
 
@@ -849,7 +849,8 @@ void renderGxm(void) {
     //            s_basicIndices, 6 * 6);
 
     /* stop rendering to the render target */
-    sceGxmEndScene(s_context, NULL, NULL);
+    SceGxmErrorCode returnCode = sceGxmEndScene(s_context, NULL, NULL);
+    SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
 }
 
 /* queue a display swap and cycle our buffers */

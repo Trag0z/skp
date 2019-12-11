@@ -2,7 +2,6 @@
 #include "MiniCube.h"
 #include <gxt.h>
 
-
 Vertex *MiniCube::s_vertices;
 int32_t MiniCube::s_verticesUId;
 uint16_t *MiniCube::s_indices;
@@ -12,7 +11,7 @@ SceGxmTexture MiniCube::s_textures[7];
 void MiniCube::init() {
     s_vertices =
         (Vertex *)graphicsAlloc(SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE,
-                                s_numVertices * sizeof(Vertex), 3,
+                                s_numVertices * sizeof(Vertex), 4,
                                 SCE_GXM_MEMORY_ATTRIB_READ, &s_verticesUId);
 
     // What is allingment here? Why is it 2 in main.cpp?
@@ -67,13 +66,13 @@ void MiniCube::init() {
     }
 
     // load textures
-    loadTexture(&s_textures[0], "app0:white.gxt");
-    loadTexture(&s_textures[1], "app0:black.gxt");
-    loadTexture(&s_textures[2], "app0:green.gxt");
-    loadTexture(&s_textures[3], "app0:orange.gxt");
-    loadTexture(&s_textures[4], "app0:blue.gxt");
-    loadTexture(&s_textures[5], "app0:red.gxt");
-    loadTexture(&s_textures[6], "app0:yellow.gxt");
+    // loadTexture(&s_textures[0], "app0:white.gxt");
+    // loadTexture(&s_textures[1], "app0:black.gxt");
+    // loadTexture(&s_textures[2], "app0:green.gxt");
+    // loadTexture(&s_textures[3], "app0:orange.gxt");
+    // loadTexture(&s_textures[4], "app0:blue.gxt");
+    // loadTexture(&s_textures[5], "app0:red.gxt");
+    // loadTexture(&s_textures[6], "app0:yellow.gxt");
 }
 
 void MiniCube::rotate(float radians, int axis) {
@@ -90,13 +89,39 @@ void MiniCube::rotate(float radians, int axis) {
     // m_rotation[axis] += degrees;
 }
 
-static void setColors(MiniCube &mc, SceGxmTexture *textures,
-                      TextureColors front, TextureColors back,
-                      TextureColors left, TextureColors right,
-                      TextureColors top, TextureColors bottom) {
-    TextureColors colors[6] = {front, back, left, right, top, bottom};
+static uint32_t toRGB(TextureColor c) {
+    switch (c) {
+    case WHITE:
+        return 0xffffff00;
+    case BLACK:
+        return 0x00000000;
+    case GREEN:
+        return 0x00ff0000;
+    case ORANGE:
+        return 0xff990000;
+    case BLUE:
+        return 0x0000ff00;
+    case RED:
+        return 0xff000000;
+    case YELLOW:
+        return 0xffff0000;
+    default:
+        return 0;
+    }
+}
+
+static void setColors(MiniCube &mc, SceGxmTexture *textures, TextureColor front,
+                      TextureColor back, TextureColor left, TextureColor right,
+                      TextureColor top, TextureColor bottom) {
+    TextureColor colors[6] = {front, back, left, right, top, bottom};
+    // for (int side = 0; side < 6; ++side) {
+    //     mc.textures()[side] = &textures[colors[side]];
+    // }
+
     for (int side = 0; side < 6; ++side) {
-        mc.textures()[side] = &textures[colors[side]];
+        for (int vertex = 0; vertex < 4; ++vertex) {
+            mc.m_vertices[side * 6 + vertex].color = toRGB(colors[side]);
+        }
     }
 };
 
@@ -105,6 +130,13 @@ void MiniCube::create(MiniCube &mc, const float position[3],
     mc.m_position[0] = position[0];
     mc.m_position[1] = position[1];
     mc.m_position[2] = position[2];
+
+    mc.m_vertices =
+        (Vertex *)graphicsAlloc(SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE,
+                                s_numVertices * sizeof(Vertex), 4,
+                                SCE_GXM_MEMORY_ATTRIB_READ, &s_verticesUId);
+
+    memcpy(mc.m_vertices, mc.s_vertices, sizeof(Vertex) * 6 * 4);
 
     if (cubeLocation[0] == 0) {     // X Left
         if (cubeLocation[1] == 0) { // Y Top
