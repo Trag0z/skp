@@ -339,10 +339,60 @@ struct MiniCube {
     int32_t verticesUId;
 };
 
-// ToCopy
-void CreateCubeSide(BasicVertex *field, int type, int direction);
+enum Color {
+    WHITE = 0xffffffff,
+    BLACK = 0xff000000,
+    GREEN = 0xff00ff00,
+    ORANGE = 0xff0099ff,
+    BLUE = 0xffff0000,
+    RED = 0xff0000ff,
+    YELLOW = 0xff00ffff
+};
 
-MiniCube createMiniCube(Vector3 pos) {
+const static BasicVertex s_defaultVertices[24] = {
+    // Front
+    {{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, 0},
+    {{0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, 0},
+    {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, 0},
+    {{-0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, 0},
+    // Back
+    {{0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, 0},
+    {{-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, 0},
+    {{-0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, 0},
+    {{0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, 0},
+    // Left
+    {{-0.5f, -0.5f, 0.5f}, {-1.0f, 0.0f, 0.0f}, 0},
+    {{-0.5f, -0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}, 0},
+    {{-0.5f, 0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}, 0},
+    {{-0.5f, 0.5f, 0.5f}, {-1.0f, 0.0f, 0.0f}, 0},
+    // Right
+    {{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, 0},
+    {{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, 0},
+    {{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, 0},
+    {{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, 0},
+    // Top
+    {{-0.5f, -0.5f, 0.5f}, {0.0f, -1.0f, 0.0f}, 0},
+    {{0.5f, -0.5f, 0.5f}, {0.0f, -1.0f, 0.0f}, 0},
+    {{0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}, 0},
+    {{-0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}, 0},
+    // Bottom
+    {{-0.5f, 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, 0},
+    {{0.5f, 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, 0},
+    {{0.5f, 0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, 0},
+    {{-0.5f, 0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, 0},
+};
+
+static void setColors(MiniCube &mc, Color front, Color back, Color left,
+                      Color right, Color top, Color bottom) {
+    Color colors[6] = {front, back, left, right, top, bottom};
+    for (int side = 0; side < 6; ++side) {
+        for (int vertex = 0; vertex < 4; ++vertex) {
+            mc.vertices[side * 4 + vertex].color = colors[side];
+        }
+    }
+};
+
+MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     MiniCube mc;
     mc.position = pos;
     mc.rotation = Vector3(0.0f, 0.0f, 0.0f);
@@ -352,14 +402,88 @@ MiniCube createMiniCube(Vector3 pos) {
         4 * 6 * sizeof(BasicVertex), 4, SCE_GXM_MEMORY_ATTRIB_READ,
         &mc.verticesUId);
 
-    // The vertices.
-    int count = 0;
-    for (int type = 0; type < 3; ++type) {
-        for (int dir = -1; dir < 2; dir += 2) {
-            CreateCubeSide(&(mc.vertices[count]), type, dir);
-            count += 4;
+    memcpy(mc.vertices, s_defaultVertices, sizeof(BasicVertex) * 24);
+
+    if (cubeLocation[0] == 0) {     // X Left
+        if (cubeLocation[1] == 0) { // Y Top
+            if (cubeLocation[2] == 0) {
+                setColors(mc, WHITE, BLACK, GREEN, BLACK, ORANGE, BLACK);
+            } else if (cubeLocation[2] == 1) {
+                setColors(mc, BLACK, BLACK, GREEN, BLACK, ORANGE, BLACK);
+            } else {
+                setColors(mc, BLACK, YELLOW, GREEN, BLACK, ORANGE, BLACK);
+            }
+        } else if (cubeLocation[1] == 1) { // Y Middle
+            if (cubeLocation[2] == 0) {
+                setColors(mc, WHITE, BLACK, GREEN, BLACK, BLACK, BLACK);
+            } else if (cubeLocation[2] == 1) {
+                setColors(mc, BLACK, BLACK, GREEN, BLACK, BLACK, BLACK);
+            } else {
+                setColors(mc, BLACK, YELLOW, GREEN, BLACK, BLACK, BLACK);
+            }
+        } else { // Y Bottom
+            if (cubeLocation[2] == 0) {
+                setColors(mc, WHITE, BLACK, GREEN, BLACK, BLACK, RED);
+            } else if (cubeLocation[2] == 1) {
+                setColors(mc, BLACK, BLACK, GREEN, BLACK, BLACK, RED);
+            } else {
+                setColors(mc, BLACK, YELLOW, GREEN, BLACK, BLACK, RED);
+            }
+        }
+    } else if (cubeLocation[0] == 1) { // X Middle
+        if (cubeLocation[1] == 0) {    // Y Top
+            if (cubeLocation[2] == 0) {
+                setColors(mc, WHITE, BLACK, BLACK, BLACK, ORANGE, BLACK);
+            } else if (cubeLocation[2] == 1) {
+                setColors(mc, BLACK, BLACK, BLACK, BLACK, ORANGE, BLACK);
+            } else {
+                setColors(mc, BLACK, YELLOW, BLACK, BLACK, ORANGE, BLACK);
+            }
+        } else if (cubeLocation[1] == 1) { // Y Middle
+            if (cubeLocation[2] == 0) {
+                setColors(mc, WHITE, BLACK, BLACK, BLACK, BLACK, BLACK);
+            } else if (cubeLocation[2] == 1) {
+                setColors(mc, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK);
+            } else {
+                setColors(mc, BLACK, YELLOW, BLACK, BLACK, BLACK, BLACK);
+            }
+        } else { // Y Bottom
+            if (cubeLocation[2] == 0) {
+                setColors(mc, WHITE, BLACK, BLACK, BLACK, BLACK, RED);
+            } else if (cubeLocation[2] == 1) {
+                setColors(mc, BLACK, BLACK, BLACK, BLACK, BLACK, RED);
+            } else {
+                setColors(mc, BLACK, YELLOW, BLACK, BLACK, BLACK, RED);
+            }
+        }
+    } else {                        // X Right
+        if (cubeLocation[1] == 0) { // Y Top
+            if (cubeLocation[2] == 0) {
+                setColors(mc, WHITE, BLACK, BLACK, BLUE, ORANGE, BLACK);
+            } else if (cubeLocation[2] == 1) {
+                setColors(mc, BLACK, BLACK, BLACK, BLUE, ORANGE, BLACK);
+            } else {
+                setColors(mc, BLACK, YELLOW, BLACK, BLUE, ORANGE, BLACK);
+            }
+        } else if (cubeLocation[1] == 1) { // Y Middle
+            if (cubeLocation[2] == 0) {
+                setColors(mc, WHITE, BLACK, BLACK, BLUE, BLACK, BLACK);
+            } else if (cubeLocation[2] == 1) {
+                setColors(mc, BLACK, BLACK, BLACK, BLUE, BLACK, BLACK);
+            } else {
+                setColors(mc, BLACK, YELLOW, BLACK, BLUE, BLACK, BLACK);
+            }
+        } else { // Y Bottom
+            if (cubeLocation[2] == 0) {
+                setColors(mc, WHITE, BLACK, BLACK, BLUE, BLACK, RED);
+            } else if (cubeLocation[2] == 1) {
+                setColors(mc, BLACK, BLACK, BLACK, BLUE, BLACK, RED);
+            } else {
+                setColors(mc, BLACK, YELLOW, BLACK, BLUE, BLACK, RED);
+            }
         }
     }
+
     // ToCopy
     return mc;
 }
@@ -394,14 +518,18 @@ static MiniCube *s_miniCubes;
 static void initCube() {
     s_miniCubes = new MiniCube[27];
     int i = 0;
-    for (int z = -1; z < 2; ++z) {
-        for (int y = -1; y < 2; ++y) {
-            for (int x = -1; x < 2; ++x) {
-                s_miniCubes[i++] = createMiniCube(Vector3(
-                    // TODO: If this is 1.0 there's only one cube, but the
-                    // distance is incorrect with bigger numbers
-                    static_cast<float>(x) * 1.1f, static_cast<float>(y) * 1.1f,
-                    static_cast<float>(z) * 1.1f));
+    for (int z = 0; z < 3; ++z) {
+        for (int y = 0; y < 3; ++y) {
+            for (int x = 0; x < 3; ++x) {
+                int cubeLocation[3] = {x, y, z};
+                s_miniCubes[i++] = createMiniCube(
+                    Vector3(
+                        // TODO: If this is 1.0 there's only one cube, but the
+                        // distance is incorrect with bigger numbers
+                        static_cast<float>(x - 1) * 1.01f,
+                        static_cast<float>(y - 1) * 1.01f,
+                        static_cast<float>(z - 1) * 1.01f),
+                    cubeLocation);
             }
         }
     }
@@ -866,9 +994,9 @@ void createGxmData(void) {
         s_basicIndices[count++] = baseIndex + 1;
         s_basicIndices[count++] = baseIndex + 2;
 
-        s_basicIndices[count++] = baseIndex;
-        s_basicIndices[count++] = baseIndex + 3;
         s_basicIndices[count++] = baseIndex + 2;
+        s_basicIndices[count++] = baseIndex + 3;
+        s_basicIndices[count++] = baseIndex;
     }
 }
 
