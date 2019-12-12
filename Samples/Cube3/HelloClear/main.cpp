@@ -275,6 +275,8 @@ int main(void) {
     // Set sampling mode for input device.
     sceCtrlSetSamplingMode(SCE_CTRL_MODE_DIGITALANALOG_WIDE);
 
+    initCube();
+
     /* 6. main loop */
     while (true) {
         Update();
@@ -332,17 +334,19 @@ struct MiniCube {
     BasicVertex *vertices;
     Vector3 position;
     Vector3 rotation;
+
+    int32_t verticesUId;
 };
 
-MiniCube createMiniCube(Vector3 pos, Vector3 rot) {
+MiniCube createMiniCube(Vector3 pos) {
     MiniCube mc;
     mc.position = pos;
-    mc.rotation = rot;
+    mc.rotation = Vector3(0.0f, 0.0f, 0.0f);
 
     mc.vertices = (BasicVertex *)graphicsAlloc(
         SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE,
         4 * 6 * sizeof(BasicVertex), 4, SCE_GXM_MEMORY_ATTRIB_READ,
-        &s_basicVerticesUId);
+        &mc.verticesUId);
 
     // The vertices.
     int count = 0;
@@ -364,16 +368,73 @@ void renderMiniCube(const MiniCube &mc, void *vertexDefaultBuffer) {
     sceGxmSetUniformDataF(vertexDefaultBuffer, s_localToWorldParam, 0, 16,
                           (float *)&localToWorld);
 
-    /* draw the spinning triangle */
     sceGxmSetVertexStream(s_context, 0, mc.vertices);
-    sceGxmDraw(s_context, SCE_GXM_PRIMITIVE_TRIANGLES, SCE_GXM_INDEX_FORMAT_U16,
-               s_basicIndices, 6 * 6);
+
+    for (int i = 0; i < 6; ++i) {
+        sceGxmSetFragmentTexture(s_context, 0, &s_textures[i]);
+
+        sceGxmDraw(s_context, SCE_GXM_PRIMITIVE_TRIANGLES,
+                   SCE_GXM_INDEX_FORMAT_U16, &s_basicIndices[i * 6], 6);
+    }
 }
 
-static MiniCube s_miniCube =
-    createMiniCube(Vector3(-0.5f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f));
+void loadTexture(SceGxmTexture *texture, const char *filename) {
+    // NOTE: Dangling file pointers here?
+    SceUID fileID = sceIoOpen(filename, SCE_O_RDONLY, SCE_STM_RU);
+    SceOff fileSize = sceIoLseek(fileID, 0, SCE_SEEK_END);
+    sceIoLseek(fileID, 0, SCE_SEEK_SET);
 
-static void initCube() {}
+    // Why this randomly allocated memory that never gets freed?
+    void *gxt = malloc(fileSize);
+    SceSSize bytesRead = sceIoRead(fileID, gxt, fileSize);
+    SCE_DBG_ALWAYS_ASSERT(bytesRead == fileSize);
+    SCE_DBG_ALWAYS_ASSERT(sceGxtCheckData(gxt) == SCE_OK);
+
+    const void *dataSrc = sceGxtGetDataAddress(gxt);
+    const uint32_t dataSize = sceGxtGetDataSize(gxt);
+    SceUID texID;
+    void *texPtr = graphicsAlloc(SCE_KERNEL_MEMBLOCK_TYPE_USER_RW_UNCACHE,
+                                 dataSize, SCE_GXM_TEXTURE_ALIGNMENT,
+                                 SCE_GXM_MEMORY_ATTRIB_READ, &texID);
+
+    memcpy(texPtr, dataSrc, dataSize);
+    SceGxtErrorCode returnCode = sceGxtInitTexture(texture, gxt, dataSrc, 0);
+    if (returnCode == SCE_GXT_ERROR_INVALID_ALIGNMENT) {
+        std::cout << "Invalid Argument!";
+    } else if (returnCode == SCE_GXT_ERROR_INVALID_VALUE) {
+        std::cout << "Invalid Value!";
+    } else if (returnCode == SCE_GXT_ERROR_INVALID_POINTER) {
+        std::cout << "Invalid Pointer!";
+    }
+    SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
+};
+
+static MiniCube *s_miniCubes;
+SceGxmTexture *s_textures;
+
+static void initCube() {
+
+    s_textures = new SceGxmTexture[7];
+    loadTexture(&s_textures[0], "app0:white.gxt");
+    loadTexture(&s_textures[1], "app0:black.gxt");
+    loadTexture(&s_textures[2], "app0:green.gxt");
+    loadTexture(&s_textures[3], "app0:orange.gxt");
+    loadTexture(&s_textures[4], "app0:blue.gxt");
+    loadTexture(&s_textures[5], "app0:red.gxt");
+    loadTexture(&s_textures[6], "app0:yellow.gxt");
+
+    s_miniCube = new MiniCube[27];
+    int i = 0;
+    for (int z = -1; z < 2; ++z) {
+        for (int y = -1; y < 2; ++y) {
+            for (int x = -1; x < 2; ++x) {
+                s_miniCubes[i++] = createMiniCube(Vector3(
+                    static_cast<float>(x) * 1.5f, static_cast<float>(y) * 1.5f,
+                    static_cast<float>(z) * 1.5f));
+            }
+        }
+    }
+}
 
 /* Initialize libgxm */
 int initGxm(void) {
@@ -891,7 +952,9 @@ void renderGxm(void) {
     sceGxmSetUniformDataF(vertexDefaultBuffer, s_rotParam, 0, 16,
                           (float *)&s_finalRotation);
 
-    renderMiniCube(s_miniCube, vertexDefaultBuffer);
+    for (int i = 0; i < 27; ++i) {
+        renderMiniCube(s_miniCubes[i], vertexDefaultBuffer);
+    }
 
     /* stop rendering to the render target */
     sceGxmEndScene(s_context, NULL, NULL);

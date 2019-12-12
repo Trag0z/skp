@@ -275,6 +275,8 @@ int main(void) {
     // Set sampling mode for input device.
     sceCtrlSetSamplingMode(SCE_CTRL_MODE_DIGITALANALOG_WIDE);
 
+    initCube();
+
     /* 6. main loop */
     while (true) {
         Update();
@@ -332,17 +334,19 @@ struct MiniCube {
     BasicVertex *vertices;
     Vector3 position;
     Vector3 rotation;
+
+    int32_t verticesUId;
 };
 
-MiniCube createMiniCube(Vector3 pos, Vector3 rot) {
+MiniCube createMiniCube(Vector3 pos) {
     MiniCube mc;
     mc.position = pos;
-    mc.rotation = rot;
+    mc.rotation = Vector3(0.0f, 0.0f, 0.0f);
 
     mc.vertices = (BasicVertex *)graphicsAlloc(
         SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE,
         4 * 6 * sizeof(BasicVertex), 4, SCE_GXM_MEMORY_ATTRIB_READ,
-        &s_basicVerticesUId);
+        &mc.verticesUId);
 
     // The vertices.
     int count = 0;
@@ -370,10 +374,21 @@ void renderMiniCube(const MiniCube &mc, void *vertexDefaultBuffer) {
                s_basicIndices, 6 * 6);
 }
 
-static MiniCube s_miniCube =
-    createMiniCube(Vector3(-0.5f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f));
+static MiniCube *s_miniCubes;
 
-static void initCube() {}
+static void initCube() {
+    s_miniCubes = new MiniCube[27];
+    int i = 0;
+    for (int z = -1; z < 2; ++z) {
+        for (int y = -1; y < 2; ++y) {
+            for (int x = -1; x < 2; ++x) {
+                s_miniCubes[i++] = createMiniCube(Vector3(
+                    static_cast<float>(x) * 1.5f, static_cast<float>(y) * 1.5f,
+                    static_cast<float>(z) * 1.5f));
+            }
+        }
+    }
+}
 
 /* Initialize libgxm */
 int initGxm(void) {
@@ -891,7 +906,9 @@ void renderGxm(void) {
     sceGxmSetUniformDataF(vertexDefaultBuffer, s_rotParam, 0, 16,
                           (float *)&s_finalRotation);
 
-    renderMiniCube(s_miniCube, vertexDefaultBuffer);
+    for (int i = 0; i < 27; ++i) {
+        renderMiniCube(s_miniCubes[i], vertexDefaultBuffer);
+    }
 
     /* stop rendering to the render target */
     sceGxmEndScene(s_context, NULL, NULL);
