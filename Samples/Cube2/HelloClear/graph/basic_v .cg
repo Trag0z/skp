@@ -16,7 +16,7 @@ void main(
 	float4 out vColor : TEXCOORD0)
 {
 	
-	vPosition = mul(mul(float4(aPosition, 1.f), localToWorld) wvp);
+	vPosition = mul(mul(float4(aPosition, 1.f), localToWorld), wvp);
 	float3 normal = mul(float4(aNormal, 0.0f), rot).xyz;
 	float light = saturate(-normal.z);
 	vColor = aColor * light;

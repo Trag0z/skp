@@ -1,22 +1,12 @@
-﻿Der Buildvorgang wurde am 24.10.2019 16:40:08 gestartet.
-     1>Projekt "H:\SKP\Samples\RenderCubeIlluminated\HelloClear\HelloClear.vcxproj" auf Knoten "2", Build Ziel(e).
+﻿Der Buildvorgang wurde am 12.12.2019 16:08:30 gestartet.
+     1>Projekt "H:\SKP\Samples\Cube3\HelloClear\HelloClear.vcxproj" auf Knoten "2", Build Ziel(e).
      1>CustomBuild:
-         Compiling Fragment Shader: "H:\SKP\Samples\RenderCubeIlluminated\HelloClear\graph\clear_f.cg"
-         Compiling Vertex Shader: "H:\SKP\Samples\RenderCubeIlluminated\HelloClear\graph\clear_v.cg"
-         Compiling Fragment Shader: "H:\SKP\Samples\RenderCubeIlluminated\HelloClear\graph\basic_f.cg"
-         Compiling Vertex Shader: "H:\SKP\Samples\RenderCubeIlluminated\HelloClear\graph\basic_v .cg"
-       ClCompile:
-         main.cpp
-         psp2snc.exe -D_DEBUG -o PSVita_Debug\main.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\RenderCubeIlluminated\HelloClear\main.cpp
-     1>H:\SKP\Samples\RenderCubeIlluminated\HelloClear\main.cpp(844,5): warning 178: function "destroyGxmData" was declared but never referenced
-         
-     1>H:\SKP\Samples\RenderCubeIlluminated\HelloClear\main.cpp(873,4): warning 178: function "shutdownGxm" was declared but never referenced
-         
+         Compiling Vertex Shader: "H:\SKP\Samples\Cube3\HelloClear\graph\basic_v .cg"
        Link:
-         C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\bin\psp2ld.exe -o "H:\SKP\Samples\RenderCubeIlluminated\PSVita_Debug\HelloClear.self" -L"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\lib" --start-group PSVita_Debug\clear_f_gxp.obj PSVita_Debug\clear_v_gxp.obj PSVita_Debug\basic_f_gxp.obj "PSVita_Debug\basic_v _gxp.obj" PSVita_Debug\main.o "-lSceGxm_stub" "-lSceCtrl_stub" "-lSceDisplay_stub" "-lSceDbg_stub" "-lSceDbgFont" --end-group
-         HelloClear.vcxproj -> H:\SKP\Samples\RenderCubeIlluminated\PSVita_Debug\HelloClear.self
-     1>Die Erstellung des Projekts "H:\SKP\Samples\RenderCubeIlluminated\HelloClear\HelloClear.vcxproj" ist abgeschlossen, Build Ziel(e).
+         C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\bin\psp2ld.exe -o "H:\SKP\Samples\Cube3\PSVita_Debug\HelloClear.self" -L"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\lib" --start-group PSVita_Debug\clear_f_gxp.obj PSVita_Debug\clear_v_gxp.obj PSVita_Debug\basic_f_gxp.obj "PSVita_Debug\basic_v _gxp.obj" PSVita_Debug\main.o "-lSceGxm_stub" "-lSceCtrl_stub" "-lSceDisplay_stub" "-lSceDbg_stub" "-lSceDbgFont" --end-group
+         HelloClear.vcxproj -> H:\SKP\Samples\Cube3\PSVita_Debug\HelloClear.self
+     1>Die Erstellung des Projekts "H:\SKP\Samples\Cube3\HelloClear\HelloClear.vcxproj" ist abgeschlossen, Build Ziel(e).
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:01.70
+Verstrichene Zeit 00:00:00.74

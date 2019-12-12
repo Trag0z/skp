@@ -275,6 +275,8 @@ int main(void) {
     // Set sampling mode for input device.
     sceCtrlSetSamplingMode(SCE_CTRL_MODE_DIGITALANALOG_WIDE);
 
+    initCube();
+
     /* 6. main loop */
     while (true) {
         Update();
@@ -334,6 +336,8 @@ struct MiniCube {
     Vector3 rotation;
 };
 
+void CreateCubeSide(BasicVertex *field, int type, int direction);
+
 MiniCube createMiniCube(Vector3 pos, Vector3 rot) {
     MiniCube mc;
     mc.position = pos;
@@ -352,10 +356,11 @@ MiniCube createMiniCube(Vector3 pos, Vector3 rot) {
             count += 4;
         }
     }
+    return mc;
 }
 
 void getLocalToWorldTransform(const MiniCube &mc, Matrix4 &out) {
-    out = Matrix4::translation(m_position) * Matrix4::rotation(m_orientation);
+    out = Matrix4::translation(mc.position); // *Matrix4::rotation(mc.rotation);
 }
 
 void renderMiniCube(const MiniCube &mc, void *vertexDefaultBuffer) {
@@ -370,10 +375,12 @@ void renderMiniCube(const MiniCube &mc, void *vertexDefaultBuffer) {
                s_basicIndices, 6 * 6);
 }
 
-static MiniCube s_miniCube =
-    createMiniCube(Vector3(-0.5f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f));
+static MiniCube s_miniCube;
 
-static void initCube() {}
+static void initCube() {
+    s_miniCube =
+        createMiniCube(Vector3(0.5f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f));
+}
 
 /* Initialize libgxm */
 int initGxm(void) {
@@ -809,7 +816,8 @@ void createGxmData(void) {
                           (sceGxmProgramParameterGetCategory(s_rotParam) ==
                            SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
-    s_rotParam = sceGxmProgramFindParameterByName(basicProgram, "localToWorld");
+    s_localToWorldParam =
+        sceGxmProgramFindParameterByName(basicProgram, "localToWorld");
     SCE_DBG_ALWAYS_ASSERT(
         s_rotParam && (sceGxmProgramParameterGetCategory(s_localToWorldParam) ==
                        SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
@@ -824,7 +832,7 @@ void createGxmData(void) {
         2, SCE_GXM_MEMORY_ATTRIB_READ, &s_basicIndiceUId);
 
     // The indices.
-    count = 0;
+    int count = 0;
     for (int side = 0; side < 6; ++side) {
         int baseIndex = side * 4;
         s_basicIndices[count++] = baseIndex;

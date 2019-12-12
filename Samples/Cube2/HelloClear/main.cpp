@@ -320,8 +320,9 @@ void Update(void) {
 
     s_finalRotation = Matrix4::rotationZYX(
         Vector3(s_accumulatedTurningAngleY, -s_accumulatedTurningAngleX, 0.0f));
+    // ToCopy
     Matrix4 lookAt =
-        Matrix4::lookAt(Point3(0.0f, 0.0f, -3.0f), Point3(0.0f, 0.0f, 0.0f),
+        Matrix4::lookAt(Point3(0.0f, 0.0f, -10.0f), Point3(0.0f, 0.0f, 10.0f),
                         Vector3(0.0f, -1.0f, 0.0f));
     Matrix4 perspective = Matrix4::perspective(
         3.141592f / 4.0f, (float)DISPLAY_WIDTH / (float)DISPLAY_HEIGHT, 0.1f,
@@ -337,6 +338,9 @@ struct MiniCube {
 
     int32_t verticesUId;
 };
+
+// ToCopy
+void CreateCubeSide(BasicVertex *field, int type, int direction);
 
 MiniCube createMiniCube(Vector3 pos) {
     MiniCube mc;
@@ -356,13 +360,24 @@ MiniCube createMiniCube(Vector3 pos) {
             count += 4;
         }
     }
+    // ToCopy
+    return mc;
 }
 
 void getLocalToWorldTransform(const MiniCube &mc, Matrix4 &out) {
-    out = Matrix4::translation(m_position) * Matrix4::rotation(m_orientation);
+    out =
+        Matrix4::translation(mc.position); // * Matrix4::rotation(mc.rotation);
 }
 
-void renderMiniCube(const MiniCube &mc, void *vertexDefaultBuffer) {
+// ToCopy
+void renderMiniCube(const MiniCube &mc) {
+    void *vertexDefaultBuffer;
+    sceGxmReserveVertexDefaultUniformBuffer(s_context, &vertexDefaultBuffer);
+    sceGxmSetUniformDataF(vertexDefaultBuffer, s_wvpParam, 0, 16,
+                          (float *)&s_finalTransformation);
+    sceGxmSetUniformDataF(vertexDefaultBuffer, s_rotParam, 0, 16,
+                          (float *)&s_finalRotation);
+
     Matrix4 localToWorld;
     getLocalToWorldTransform(mc, localToWorld);
     sceGxmSetUniformDataF(vertexDefaultBuffer, s_localToWorldParam, 0, 16,
@@ -383,8 +398,10 @@ static void initCube() {
         for (int y = -1; y < 2; ++y) {
             for (int x = -1; x < 2; ++x) {
                 s_miniCubes[i++] = createMiniCube(Vector3(
-                    static_cast<float>(x) * 1.5f, static_cast<float>(y) * 1.5f,
-                    static_cast<float>(z) * 1.5f));
+                    // TODO: If this is 1.0 there's only one cube, but the
+                    // distance is incorrect with bigger numbers
+                    static_cast<float>(x) * 1.1f, static_cast<float>(y) * 1.1f,
+                    static_cast<float>(z) * 1.1f));
             }
         }
     }
@@ -824,10 +841,12 @@ void createGxmData(void) {
                           (sceGxmProgramParameterGetCategory(s_rotParam) ==
                            SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
-    s_rotParam = sceGxmProgramFindParameterByName(basicProgram, "localToWorld");
+    s_localToWorldParam =
+        sceGxmProgramFindParameterByName(basicProgram, "localToWorld");
     SCE_DBG_ALWAYS_ASSERT(
-        s_rotParam && (sceGxmProgramParameterGetCategory(s_localToWorldParam) ==
-                       SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
+        s_localToWorldParam &&
+        (sceGxmProgramParameterGetCategory(s_localToWorldParam) ==
+         SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
     /* create shaded triangle vertex/index data */
     // s_basicVertices = (BasicVertex *)graphicsAlloc(
@@ -839,7 +858,8 @@ void createGxmData(void) {
         2, SCE_GXM_MEMORY_ATTRIB_READ, &s_basicIndiceUId);
 
     // The indices.
-    count = 0;
+    // ToCopy
+    int count = 0;
     for (int side = 0; side < 6; ++side) {
         int baseIndex = side * 4;
         s_basicIndices[count++] = baseIndex;
@@ -899,15 +919,9 @@ void renderGxm(void) {
     sceGxmSetFragmentProgram(s_context, s_basicFragmentProgram);
 
     /* set the vertex program constants */
-    void *vertexDefaultBuffer;
-    sceGxmReserveVertexDefaultUniformBuffer(s_context, &vertexDefaultBuffer);
-    sceGxmSetUniformDataF(vertexDefaultBuffer, s_wvpParam, 0, 16,
-                          (float *)&s_finalTransformation);
-    sceGxmSetUniformDataF(vertexDefaultBuffer, s_rotParam, 0, 16,
-                          (float *)&s_finalRotation);
 
     for (int i = 0; i < 27; ++i) {
-        renderMiniCube(s_miniCubes[i], vertexDefaultBuffer);
+        renderMiniCube(s_miniCubes[i]);
     }
 
     /* stop rendering to the render target */

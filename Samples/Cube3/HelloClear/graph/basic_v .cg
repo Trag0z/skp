@@ -5,18 +5,15 @@
  */
 
 uniform float4x4 wvp;
-uniform float4x4 rot;
 uniform float4x4 localToWorld;
 
 void main(
 	float3 aPosition,
-	float3 aNormal,
-	float4 aColor,
 	float4 out vPosition : POSITION,
-	float4 out vTexCoord : TEXCOORD0)
+	float2 out vTexCoord : TEXCOORD0)
 {
 	
-	vPosition = mul(mul(float4(aPosition, 1.f), localToWorld) wvp);
-	vTexCoord.x = aPosition.x + 0.5f;
-	vTexCoord.y = aPosition.y + 0.5f;
+	vPosition = mul(mul(float4(aPosition, 1.f), localToWorld), wvp);
+	vTexCoord.x = 0.5f;
+	vTexCoord.y = 0.5f;
 }

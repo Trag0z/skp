@@ -3,6 +3,8 @@ TODO:
 - maybe TEXCOORD needs to be calculated in a different way
 - sort out includes
 
+- for sound: copy ngs_common.c and ngs_common.h and stuff from that main for audio
+
 Rendering: For each MiniCube:
 - transform to world position
     > rotate 

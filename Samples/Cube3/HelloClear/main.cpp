@@ -47,6 +47,9 @@
 #include <libdbgfont.h>
 #include <math.h>
 
+#include <gxt.h>
+#include <iostream>
+
 #include <vectormath.h>
 using namespace sce::Vectormath::Simd::Aos;
 
@@ -101,10 +104,11 @@ extern const SceGxmProgram binaryBasicVGxpStart;
 extern const SceGxmProgram binaryBasicFGxpStart;
 
 /*	Data structure for basic geometry */
+// ToCopy
 typedef struct BasicVertex {
     float position[3]; // Easier to index.
-    float normal[3];   // Contains normal now.
-    uint32_t color;    // Data gets expanded to float 4 in vertex shader.
+    // float normal[3];   // Contains normal now.
+    // uint32_t color;    // Data gets expanded to float 4 in vertex shader.
 } BasicVertex;
 
 /*	Data structure to pass through the display queue.  This structure is
@@ -320,8 +324,9 @@ void Update(void) {
 
     s_finalRotation = Matrix4::rotationZYX(
         Vector3(s_accumulatedTurningAngleY, -s_accumulatedTurningAngleX, 0.0f));
+    // ToCopy
     Matrix4 lookAt =
-        Matrix4::lookAt(Point3(0.0f, 0.0f, -3.0f), Point3(0.0f, 0.0f, 0.0f),
+        Matrix4::lookAt(Point3(0.0f, 0.0f, -10.0f), Point3(0.0f, 0.0f, 10.0f),
                         Vector3(0.0f, -1.0f, 0.0f));
     Matrix4 perspective = Matrix4::perspective(
         3.141592f / 4.0f, (float)DISPLAY_WIDTH / (float)DISPLAY_HEIGHT, 0.1f,
@@ -337,6 +342,8 @@ struct MiniCube {
 
     int32_t verticesUId;
 };
+
+void CreateCubeSide(BasicVertex *field, int type, int direction);
 
 MiniCube createMiniCube(Vector3 pos) {
     MiniCube mc;
@@ -356,13 +363,22 @@ MiniCube createMiniCube(Vector3 pos) {
             count += 4;
         }
     }
+    return mc;
 }
 
 void getLocalToWorldTransform(const MiniCube &mc, Matrix4 &out) {
-    out = Matrix4::translation(m_position) * Matrix4::rotation(m_orientation);
+    out = Matrix4::translation(
+        mc.position); // * Matrix4::rotation(m_orientation);
 }
 
-void renderMiniCube(const MiniCube &mc, void *vertexDefaultBuffer) {
+SceGxmTexture *s_textures;
+
+void renderMiniCube(const MiniCube &mc) {
+    void *vertexDefaultBuffer;
+    sceGxmReserveVertexDefaultUniformBuffer(s_context, &vertexDefaultBuffer);
+    sceGxmSetUniformDataF(vertexDefaultBuffer, s_wvpParam, 0, 16,
+                          (float *)&s_finalTransformation);
+
     Matrix4 localToWorld;
     getLocalToWorldTransform(mc, localToWorld);
     sceGxmSetUniformDataF(vertexDefaultBuffer, s_localToWorldParam, 0, 16,
@@ -370,8 +386,8 @@ void renderMiniCube(const MiniCube &mc, void *vertexDefaultBuffer) {
 
     sceGxmSetVertexStream(s_context, 0, mc.vertices);
 
+        
     for (int i = 0; i < 6; ++i) {
-        sceGxmSetFragmentTexture(s_context, 0, &s_textures[i]);
 
         sceGxmDraw(s_context, SCE_GXM_PRIMITIVE_TRIANGLES,
                    SCE_GXM_INDEX_FORMAT_U16, &s_basicIndices[i * 6], 6);
@@ -410,7 +426,6 @@ void loadTexture(SceGxmTexture *texture, const char *filename) {
 };
 
 static MiniCube *s_miniCubes;
-SceGxmTexture *s_textures;
 
 static void initCube() {
 
@@ -422,15 +437,16 @@ static void initCube() {
     loadTexture(&s_textures[4], "app0:blue.gxt");
     loadTexture(&s_textures[5], "app0:red.gxt");
     loadTexture(&s_textures[6], "app0:yellow.gxt");
+	sceGxmSetFragmentTexture(s_context, 0, s_textures);
 
-    s_miniCube = new MiniCube[27];
+    s_miniCubes = new MiniCube[27];
     int i = 0;
     for (int z = -1; z < 2; ++z) {
         for (int y = -1; y < 2; ++y) {
             for (int x = -1; x < 2; ++x) {
                 s_miniCubes[i++] = createMiniCube(Vector3(
-                    static_cast<float>(x) * 1.5f, static_cast<float>(y) * 1.5f,
-                    static_cast<float>(z) * 1.5f));
+                    static_cast<float>(x) * 1.0f, static_cast<float>(y) * 1.0f,
+                    static_cast<float>(z) * 1.0f));
             }
         }
     }
@@ -668,25 +684,25 @@ void CreateCubeSide(BasicVertex *field, int type, int direction) {
     field[2].position[localYDim] = -0.5f;
     field[3].position[localYDim] = 0.5f;
 
-    // Now the color.
-    uint32_t baseColor;
-    if (direction == 1)
-        baseColor = 0xfa;
-    else
-        baseColor = 0x80;
+    // // Now the color.
+    // uint32_t baseColor;
+    // if (direction == 1)
+    //     baseColor = 0xfa;
+    // else
+    //     baseColor = 0x80;
 
-    baseColor <<= type * 8;
+    // baseColor <<= type * 8;
 
-    // Calculate normal.
-    float normal[3];
-    normal[0] = normal[1] = normal[2] = 0.0f;
-    normal[type] = direction;
+    // // Calculate normal.
+    // float normal[3];
+    // normal[0] = normal[1] = normal[2] = 0.0f;
+    // normal[type] = direction;
 
-    for (int i = 0; i < 4; ++i) {
-        field[i].color = baseColor;
-        for (int j = 0; j < 3; ++j)
-            field[i].normal[j] = normal[j];
-    }
+    // for (int i = 0; i < 4; ++i) {
+    //     field[i].color = baseColor;
+    //     for (int j = 0; j < 3; ++j)
+    //         field[i].normal[j] = normal[j];
+    // }
 }
 
 /* Create libgxm scenes */
@@ -809,21 +825,23 @@ void createGxmData(void) {
         paramBasicPositionAttribute &&
         (sceGxmProgramParameterGetCategory(paramBasicPositionAttribute) ==
          SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
-    const SceGxmProgramParameter *paramBasicNormalAttribute =
-        sceGxmProgramFindParameterByName(basicProgram, "aNormal");
-    SCE_DBG_ALWAYS_ASSERT(
-        paramBasicNormalAttribute &&
-        (sceGxmProgramParameterGetCategory(paramBasicNormalAttribute) ==
-         SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
-    const SceGxmProgramParameter *paramBasicColorAttribute =
-        sceGxmProgramFindParameterByName(basicProgram, "aColor");
-    SCE_DBG_ALWAYS_ASSERT(
-        paramBasicColorAttribute &&
-        (sceGxmProgramParameterGetCategory(paramBasicColorAttribute) ==
-         SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
+    // ToCopy much
+    // const SceGxmProgramParameter *paramBasicNormalAttribute =
+    //     sceGxmProgramFindParameterByName(basicProgram, "aNormal");
+    // SCE_DBG_ALWAYS_ASSERT(
+    //     paramBasicNormalAttribute &&
+    //     (sceGxmProgramParameterGetCategory(paramBasicNormalAttribute) ==
+    //      SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
+    // const SceGxmProgramParameter *paramBasicColorAttribute =
+    //     sceGxmProgramFindParameterByName(basicProgram, "aColor");
+    // SCE_DBG_ALWAYS_ASSERT(
+    //     paramBasicColorAttribute &&
+    //     (sceGxmProgramParameterGetCategory(paramBasicColorAttribute) ==
+    //      SCE_GXM_PARAMETER_CATEGORY_ATTRIBUTE));
 
+    // ToCopy
     /* create shaded triangle vertex format */
-    SceGxmVertexAttribute basicVertexAttributes[3];
+    SceGxmVertexAttribute basicVertexAttributes[1];
     SceGxmVertexStream basicVertexStreams[1];
     basicVertexAttributes[0].streamIndex = 0;
     basicVertexAttributes[0].offset = 0;
@@ -831,25 +849,26 @@ void createGxmData(void) {
     basicVertexAttributes[0].componentCount = 3;
     basicVertexAttributes[0].regIndex =
         sceGxmProgramParameterGetResourceIndex(paramBasicPositionAttribute);
-    basicVertexAttributes[1].streamIndex = 0;
-    basicVertexAttributes[1].offset = 12;
-    basicVertexAttributes[1].format = SCE_GXM_ATTRIBUTE_FORMAT_F32;
-    basicVertexAttributes[1].componentCount = 3;
-    basicVertexAttributes[1].regIndex =
-        sceGxmProgramParameterGetResourceIndex(paramBasicNormalAttribute);
-    basicVertexAttributes[2].streamIndex = 0;
-    basicVertexAttributes[2].offset = 24;
-    basicVertexAttributes[2].format =
-        SCE_GXM_ATTRIBUTE_FORMAT_U8N; // Mapping relation clarified.
-    basicVertexAttributes[2].componentCount = 4;
-    basicVertexAttributes[2].regIndex =
-        sceGxmProgramParameterGetResourceIndex(paramBasicColorAttribute);
+    // basicVertexAttributes[1].streamIndex = 0;
+    // basicVertexAttributes[1].offset = 12;
+    // basicVertexAttributes[1].format = SCE_GXM_ATTRIBUTE_FORMAT_F32;
+    // basicVertexAttributes[1].componentCount = 3;
+    // basicVertexAttributes[1].regIndex =
+    //     sceGxmProgramParameterGetResourceIndex(paramBasicNormalAttribute);
+    // basicVertexAttributes[2].streamIndex = 0;
+    // basicVertexAttributes[2].offset = 24;
+    // basicVertexAttributes[2].format =
+    //     SCE_GXM_ATTRIBUTE_FORMAT_U8N; // Mapping relation clarified.
+    // basicVertexAttributes[2].componentCount = 4;
+    // basicVertexAttributes[2].regIndex =
+    //     sceGxmProgramParameterGetResourceIndex(paramBasicColorAttribute);
     basicVertexStreams[0].stride = sizeof(BasicVertex);
     basicVertexStreams[0].indexSource = SCE_GXM_INDEX_SOURCE_INDEX_16BIT;
 
     /* create shaded triangle shaders */
+    // ToCopy argument to 1
     returnCode = sceGxmShaderPatcherCreateVertexProgram(
-        s_shaderPatcher, s_basicVertexProgramId, basicVertexAttributes, 3,
+        s_shaderPatcher, s_basicVertexProgramId, basicVertexAttributes, 1,
         basicVertexStreams, 1, &s_basicVertexProgram);
     SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
 
@@ -865,15 +884,19 @@ void createGxmData(void) {
     SCE_DBG_ALWAYS_ASSERT(s_wvpParam &&
                           (sceGxmProgramParameterGetCategory(s_wvpParam) ==
                            SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
-    s_rotParam = sceGxmProgramFindParameterByName(basicProgram, "rot");
-    SCE_DBG_ALWAYS_ASSERT(s_rotParam &&
-                          (sceGxmProgramParameterGetCategory(s_rotParam) ==
-                           SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
+    // ToCopy
+    // s_rotParam = sceGxmProgramFindParameterByName(basicProgram, "rot");
+    // SCE_DBG_ALWAYS_ASSERT(s_rotParam &&
+    //                       (sceGxmProgramParameterGetCategory(s_rotParam) ==
+    //                        SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
-    s_rotParam = sceGxmProgramFindParameterByName(basicProgram, "localToWorld");
+    // ToCopy
+    s_localToWorldParam =
+        sceGxmProgramFindParameterByName(basicProgram, "localToWorld");
     SCE_DBG_ALWAYS_ASSERT(
-        s_rotParam && (sceGxmProgramParameterGetCategory(s_localToWorldParam) ==
-                       SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
+        s_localToWorldParam &&
+        (sceGxmProgramParameterGetCategory(s_localToWorldParam) ==
+         SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
     /* create shaded triangle vertex/index data */
     // s_basicVertices = (BasicVertex *)graphicsAlloc(
@@ -885,7 +908,8 @@ void createGxmData(void) {
         2, SCE_GXM_MEMORY_ATTRIB_READ, &s_basicIndiceUId);
 
     // The indices.
-    count = 0;
+    // ToCopy
+    int count = 0;
     for (int side = 0; side < 6; ++side) {
         int baseIndex = side * 4;
         s_basicIndices[count++] = baseIndex;
@@ -944,16 +968,15 @@ void renderGxm(void) {
     sceGxmSetVertexProgram(s_context, s_basicVertexProgram);
     sceGxmSetFragmentProgram(s_context, s_basicFragmentProgram);
 
+    // ToCopy: remove this
     /* set the vertex program constants */
-    void *vertexDefaultBuffer;
-    sceGxmReserveVertexDefaultUniformBuffer(s_context, &vertexDefaultBuffer);
-    sceGxmSetUniformDataF(vertexDefaultBuffer, s_wvpParam, 0, 16,
-                          (float *)&s_finalTransformation);
-    sceGxmSetUniformDataF(vertexDefaultBuffer, s_rotParam, 0, 16,
-                          (float *)&s_finalRotation);
+
+    // ToCopy
+    // sceGxmSetUniformDataF(vertexDefaultBuffer, s_rotParam, 0, 16,
+    //                       (float *)&s_finalRotation);
 
     for (int i = 0; i < 27; ++i) {
-        renderMiniCube(s_miniCubes[i], vertexDefaultBuffer);
+        renderMiniCube(s_miniCubes[i]);
     }
 
     /* stop rendering to the render target */
