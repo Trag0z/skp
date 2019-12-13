@@ -46,7 +46,7 @@
 
 #include <libdbgfont.h>
 #include <math.h>
-
+#include <touch.h>
 #include <vectormath.h>
 using namespace sce::Vectormath::Simd::Aos;
 
@@ -633,7 +633,6 @@ inline void createGxmData(void) {
         2, SCE_GXM_MEMORY_ATTRIB_READ, &s_basicIndiceUId);
 
     // The indices.
-    // ToCopy
     int count = 0;
     for (int side = 0; side < 6; ++side) {
         int baseIndex = side * 4;
@@ -959,4 +958,10 @@ static void fragmentUsseFree(SceUID uid) {
     /* free the memory block */
     err = sceKernelFreeMemBlock(uid);
     SCE_DBG_ALWAYS_ASSERT(err == SCE_OK);
+}
+
+void initTouch(SceTouchPanelInfo touchInfo) {
+    sceTouchSetSamplingState(SCE_TOUCH_PORT_BACK,
+                             SCE_TOUCH_SAMPLING_STATE_START);
+    sceTouchGetPanelInfo(SCE_TOUCH_PORT_BACK, &touchInfo);
 }
