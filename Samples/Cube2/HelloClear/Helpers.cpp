@@ -4,7 +4,7 @@
 
 /* Alloc used by libgxm */
 void *graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
-                    uint32_t alignment, uint32_t attribs, SceUID *uid) {
+	uint32_t alignment, uint32_t attribs, SceUID *uid) {
     /*	Since we are using sceKernelAllocMemBlock directly, we cannot directly
             use the alignment parameter.  Instead, we must allocate the size to
        the minimum for this memblock type, and just SCE_DBG_ALWAYS_ASSERT that

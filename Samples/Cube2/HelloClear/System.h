@@ -53,9 +53,11 @@ using namespace sce::Vectormath::Simd::Aos;
 #include "Helpers.h"
 #include "MiniCube.h"
 
-extern const SceGxmProgramParameter *s_wvpParam;
-extern const SceGxmProgramParameter *s_rotParam;
-extern const SceGxmProgramParameter *s_localToWorldParam;
+extern Matrix4 g_finalTransformation;
+extern Matrix4 g_finalRotation;
+extern const SceGxmProgramParameter *g_wvpParam;
+extern const SceGxmProgramParameter *g_rotParam;
+extern const SceGxmProgramParameter *g_localToWorldParam;
 
 /*	Define the debug font pixel color format to render to. */
 #define DBGFONT_PIXEL_FORMAT SCE_DBGFONT_PIXELFORMAT_A8B8G8R8
@@ -167,7 +169,65 @@ extern const unsigned int sceUserMainThreadStackSize =
 /*	@brief libc parameters */
 unsigned int sceLibcHeapSize = 1 * 1024 * 1024;
 
+/* Callback function to allocate memory for the shader patcher */
+static void *patcherHostAlloc(void *userData, uint32_t size);
+
+/* Callback function to allocate memory for the shader patcher */
+static void patcherHostFree(void *userData, void *mem);
+
+/*	Callback function for displaying a buffer */
 static void displayCallback(const void *callbackData);
+
+/*	Helper function to allocate memory and map it for the GPU */
+static void *graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
+                           uint32_t alignment, uint32_t attribs, SceUID *uid);
+
+/*	Helper function to free memory mapped to the GPU */
+static void graphicsFree(SceUID uid);
+
+/* Helper function to allocate memory and map it as vertex USSE code for the
+GPU
+ */
+static void *vertexUsseAlloc(uint32_t size, SceUID *uid, uint32_t *usseOffset);
+
+/* Helper function to free memory mapped as vertex USSE code for the GPU */
+static void vertexUsseFree(SceUID uid);
+
+/* Helper function to allocate memory and map it as fragment USSE code for
+the
+ * GPU */
+static void *fragmentUsseAlloc(uint32_t size, SceUID *uid,
+                               uint32_t *usseOffset);
+
+/* Helper function to free memory mapped as fragment USSE code for the GPU */
+static void fragmentUsseFree(SceUID uid);
+
+/*	@brief Initializes the graphics services and the libgxm graphics library
+        @return Error code result of processing during execution: <c> SCE_OK
+   </c> on success, or another code depending upon the error
+*/
+static int initGxm(void);
+
+/*	 @brief Creates scenes with libgxm */
+static void createGxmData(void);
+
+/*	@brief Main rendering function to draw graphics to the display */
+static void render(const MiniCube *miniCubes);
+
+/*	@brief render libgxm scenes */
+static void renderGxm(void);
+
+/*	@brief cycle display buffer */
+static void cycleDisplayBuffers(void);
+
+/*	@brief Destroy scenes with libgxm */
+static void destroyGxmData(void);
+
+/*	@brief Function to shut down libgxm and the graphics display services
+        @return Error code result of processing during execution: <c> SCE_OK
+   </c> on success, or another code depending upon the error
+*/
+static int shutdownGxm(void);
 
 /* Initialize libgxm */
 inline int initGxm(void) {
@@ -552,20 +612,20 @@ inline void createGxmData(void) {
     SCE_DBG_ALWAYS_ASSERT(returnCode == SCE_OK);
 
     /* find vertex uniforms by name and cache parameter information */
-    s_wvpParam = sceGxmProgramFindParameterByName(basicProgram, "wvp");
-    SCE_DBG_ALWAYS_ASSERT(s_wvpParam &&
-                          (sceGxmProgramParameterGetCategory(s_wvpParam) ==
+    g_wvpParam = sceGxmProgramFindParameterByName(basicProgram, "wvp");
+    SCE_DBG_ALWAYS_ASSERT(g_wvpParam &&
+                          (sceGxmProgramParameterGetCategory(g_wvpParam) ==
                            SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
-    s_rotParam = sceGxmProgramFindParameterByName(basicProgram, "rot");
-    SCE_DBG_ALWAYS_ASSERT(s_rotParam &&
-                          (sceGxmProgramParameterGetCategory(s_rotParam) ==
+    g_rotParam = sceGxmProgramFindParameterByName(basicProgram, "rot");
+    SCE_DBG_ALWAYS_ASSERT(g_rotParam &&
+                          (sceGxmProgramParameterGetCategory(g_rotParam) ==
                            SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
-    s_localToWorldParam =
+    g_localToWorldParam =
         sceGxmProgramFindParameterByName(basicProgram, "localToWorld");
     SCE_DBG_ALWAYS_ASSERT(
-        s_localToWorldParam &&
-        (sceGxmProgramParameterGetCategory(s_localToWorldParam) ==
+        g_localToWorldParam &&
+        (sceGxmProgramParameterGetCategory(g_localToWorldParam) ==
          SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
     s_basicIndices = (uint16_t *)graphicsAlloc(
@@ -588,7 +648,7 @@ inline void createGxmData(void) {
 }
 
 /* render gxm scenes */
-inline void render(void) {
+inline void render(const MiniCube *miniCubes) {
     /* -----------------------------------------------------------------
             8. Rendering step
 
@@ -630,7 +690,7 @@ inline void render(void) {
     /* set the vertex program constants */
 
     for (int i = 0; i < 27; ++i) {
-        renderMiniCube(s_miniCubes[i]);
+        renderMiniCube(miniCubes[i], s_context, s_basicIndices);
     }
 
     /* stop rendering to the render target */

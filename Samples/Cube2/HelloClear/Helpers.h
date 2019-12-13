@@ -1,5 +1,7 @@
 #pragma once
+#include <gxm.h>
 #include <kernel.h>
+#include <stdlib.h>
 
 /*	Helper macro to align a value */
 #define ALIGN(x, a) (((x) + ((a)-1)) & ~((a)-1))

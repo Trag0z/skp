@@ -78,7 +78,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="System.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="graph\basic_f.cg">
@@ -105,6 +107,11 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|PSVita'">Compiling Vertex Shader: "%(FullPath)"</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|PSVita'">$(IntDir)%(Filename)_gxp.obj;%(Outputs)</Outputs>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Helpers.h" />
+    <ClInclude Include="MiniCube.h" />
+    <ClInclude Include="System.h" />
   </ItemGroup>
   <Import Condition="'$(ConfigurationType)' == 'Makefile' and Exists('$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets')" Project="$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
