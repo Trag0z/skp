@@ -4,6 +4,7 @@
 #include <gxm.h>
 #include <kernel.h>
 #include <libdbg.h>
+#include <rtc.h>
 #include <vectormath.h>
 using namespace sce::Vectormath::Simd::Aos;
 
@@ -12,6 +13,10 @@ extern Matrix4 g_finalRotation;
 extern const SceGxmProgramParameter *g_wvpParam;
 extern const SceGxmProgramParameter *g_rotParam;
 extern const SceGxmProgramParameter *g_localToWorldParam;
+
+extern bool g_animationInProgress;
+static SceRtcTick s_animStartTick;
+const static float c_animDuration = 2e6;
 
 enum Color {
     WHITE = 0xffffffff,
@@ -204,6 +209,29 @@ inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     return mc;
 }
 
+inline void progressAnimations(MiniCube *miniCubes) {
+    if (!g_animationInProgress)
+        return;
+
+    SceRtcTick currentTick;
+    sceRtcGetCurrentTick(&currentTick);
+    float t = std::min(static_cast<float>(s_animStartTick - currentTick) /
+                           c_animDuration,
+                       1.0f);
+
+    bool animsRunning = false;
+    for (int i = 0; i < 27; ++i) {
+        MiniCube &mc = miniCubes[i];
+        if (mc.position != mc.targetPosition) {
+            mc.position = Vector3::lerp(t, mc.startPosition, mc.targetPosition);
+            animsRunning = true;
+        }
+    }
+
+    if (!animsRunning)
+        g_animationInProgress = false;
+}
+
 enum Dimension { DIM_X = 0, DIM_Y = 1, DIM_Z = 2 };
 
 static inline MiniCube *getMiniCubeByLocation(MiniCube *miniCubes, int x, int y,
@@ -228,7 +256,6 @@ static inline void setTargetRotation(MiniCube &mc, float degrees,
     normalize(mc.targetRotation);
 }
 
-// TODO: figure out how to organize the minicubes
 void rotateCubeLayer(MiniCube *miniCubes, int layer, Dimension dimension,
                      bool clockwise) {
     SCE_DBG_ALWAYS_ASSERT(layer < 3);
@@ -341,4 +368,7 @@ void rotateCubeLayer(MiniCube *miniCubes, int layer, Dimension dimension,
             }
         }
     }
+
+    sceRtxGetCurrentTick(s_animStartTick);
+    g_animationInProgress = true;
 }

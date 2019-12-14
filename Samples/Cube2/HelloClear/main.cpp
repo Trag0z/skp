@@ -6,6 +6,7 @@ Matrix4 g_finalRotation = Matrix4();
 const SceGxmProgramParameter *g_wvpParam = NULL;
 const SceGxmProgramParameter *g_rotParam = NULL;
 const SceGxmProgramParameter *g_localToWorldParam = NULL;
+g_animationInProgress = false;
 
 static MiniCube *s_miniCubes;
 static float s_accumulatedTurningAngleX;
@@ -94,11 +95,17 @@ void update(void) {
         s_lastBackTouchPosY = report.y;
     }
 
-    SceCtrlData result;
-    sceCtrlReadBufferPositive(0, &result, 1);
-
-    s_accumulatedTurningAngleX += makeFloat(result.lx) * 0.01f;
-    s_accumulatedTurningAngleY += makeFloat(result.ly) * 0.01f;
+    if (!g_animationInProgress) {
+        SceCtrlData result;
+        sceCtrlReadBufferPositive(0, &result, 1);
+        if (makeFloat(result.lx) > 0.5f) {
+            rotateCubeLayer(s_miniCubes, 0, DIM_X, true);
+        } else if (makeFloat(result.lx) < 0.5f) {
+            rotateCubeLayer(s_miniCubes, 0, DIM_X, false);
+        }
+    } else {
+        progressAnimations();
+    }
 
     g_finalRotation = Matrix4::rotationZYX(
         Vector3(s_accumulatedTurningAngleY, -s_accumulatedTurningAngleX, 0.0f));
