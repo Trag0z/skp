@@ -3,6 +3,7 @@
 #include <cstring>
 #include <gxm.h>
 #include <kernel.h>
+#include <libdbg.h>
 #include <vectormath.h>
 using namespace sce::Vectormath::Simd::Aos;
 
@@ -22,12 +23,25 @@ enum Color {
     YELLOW = 0xff00ffff
 };
 
-/*	Data structure for basic geometry */
-typedef struct Vertex {
-    float position[3]; // Easier to index.
-    float normal[3];   // Contains normal now.
-    uint32_t color;    // Data gets expanded to float 4 in vertex shader.
-} Vertex;
+struct Vertex {
+    float position[3];
+    float normal[3];
+    uint32_t color;
+};
+
+struct MiniCube {
+    Vertex *vertices;
+    Vector3 position;
+    Quat rotation;
+
+    Vector3 startPosition;
+    Quat startRotation;
+
+    Vector3 targetPosition;
+    Quat targetRotation;
+
+    int32_t verticesUId;
+};
 
 const static Vertex s_defaultVertices[24] = {
     // Front
@@ -62,20 +76,12 @@ const static Vertex s_defaultVertices[24] = {
     {{-0.5f, 0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, 0},
 };
 
-struct MiniCube {
-    Vertex *vertices;
-    Vector3 position;
-    Vector3 rotation;
-
-    int32_t verticesUId;
-};
-
 inline static void getLocalToWorldTransform(const MiniCube &mc, Matrix4 &out) {
-    out =
-        Matrix4::translation(mc.position); // * Matrix4::rotation(mc.rotation);
+    out = Matrix4::translation(mc.position) * Matrix4::rotation(mc.rotation);
 }
 
-inline void renderMiniCube(const MiniCube &mc, SceGxmContext *context, const uint16_t *indices) {
+inline void renderMiniCube(const MiniCube &mc, SceGxmContext *context,
+                           const uint16_t *indices) {
     void *vertexDefaultBuffer;
     sceGxmReserveVertexDefaultUniformBuffer(context, &vertexDefaultBuffer);
     sceGxmSetUniformDataF(vertexDefaultBuffer, g_wvpParam, 0, 16,
@@ -107,7 +113,7 @@ static void setColors(MiniCube &mc, Color front, Color back, Color left,
 inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     MiniCube mc;
     mc.position = pos;
-    mc.rotation = Vector3(0.0f, 0.0f, 0.0f);
+    mc.rotation = Quat::zero();
 
     mc.vertices = (Vertex *)graphicsAlloc(
         SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE, 4 * 6 * sizeof(Vertex), 4,
@@ -196,4 +202,143 @@ inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     }
 
     return mc;
+}
+
+enum Dimension { DIM_X = 0, DIM_Y = 1, DIM_Z = 2 };
+
+static inline MiniCube *getMiniCubeByLocation(MiniCube *miniCubes, int x, int y,
+                                              int z) {
+    return &miniCubes[x + y * 3 + z * 9];
+}
+
+static inline float toRad(float degrees) {
+    return degrees * 3.14159265359 / 180;
+}
+
+static inline void setTargetRotation(MiniCube &mc, float degrees,
+                                     Dimension dim) {
+    mc.startRotation = mc.rotation;
+    if (dim == DIM_X) {
+        mc.targetRotation *= Quat::rotationX(toRad(degrees));
+    } else if (dim = DIM_Y) {
+        mc.targetRotation *= Quat::rotationY(toRad(degrees));
+    } else {
+        mc.targetRotation *= Quat::rotationY(toRad(degrees));
+    }
+    normalize(mc.targetRotation);
+}
+
+// TODO: figure out how to organize the minicubes
+void rotateCubeLayer(MiniCube *miniCubes, int layer, Dimension dimension,
+                     bool clockwise) {
+    SCE_DBG_ALWAYS_ASSERT(layer < 3);
+
+    MiniCube *selectedLayer[3][3];
+    switch (dimension) {
+    case DIM_X:
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                selectedLayer[i][j] =
+                    getMiniCubeByLocation(miniCubes, layer, i, j);
+                selectedLayer[i][j]->startPosition =
+                    selectedLayer[i][j]->position;
+            }
+        }
+        if (clockwise) {
+            selectedLayer[0][0]->targetPosition = selectedLayer[0][2]->position;
+            selectedLayer[0][1]->targetPosition = selectedLayer[1][2]->position;
+            selectedLayer[0][2]->targetPosition = selectedLayer[2][2]->position;
+            selectedLayer[1][0]->targetPosition = selectedLayer[0][1]->position;
+            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
+            selectedLayer[1][2]->targetPosition = selectedLayer[2][1]->position;
+            selectedLayer[2][0]->targetPosition = selectedLayer[0][0]->position;
+            selectedLayer[2][1]->targetPosition = selectedLayer[1][0]->position;
+            selectedLayer[2][2]->targetPosition = selectedLayer[2][0]->position;
+        } else {
+            selectedLayer[0][0]->targetPosition = selectedLayer[2][0]->position;
+            selectedLayer[0][1]->targetPosition = selectedLayer[1][0]->position;
+            selectedLayer[0][2]->targetPosition = selectedLayer[0][0]->position;
+            selectedLayer[1][0]->targetPosition = selectedLayer[1][2]->position;
+            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
+            selectedLayer[1][2]->targetPosition = selectedLayer[0][1]->position;
+            selectedLayer[2][0]->targetPosition = selectedLayer[2][2]->position;
+            selectedLayer[2][1]->targetPosition = selectedLayer[1][2]->position;
+            selectedLayer[2][2]->targetPosition = selectedLayer[0][2]->position;
+        }
+        break;
+    case DIM_Y:
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                selectedLayer[i][j] =
+                    getMiniCubeByLocation(miniCubes, i, layer, j);
+            }
+        }
+        if (!clockwise) {
+            selectedLayer[0][0]->targetPosition = selectedLayer[0][2]->position;
+            selectedLayer[0][1]->targetPosition = selectedLayer[1][2]->position;
+            selectedLayer[0][2]->targetPosition = selectedLayer[2][2]->position;
+            selectedLayer[1][0]->targetPosition = selectedLayer[0][1]->position;
+            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
+            selectedLayer[1][2]->targetPosition = selectedLayer[2][1]->position;
+            selectedLayer[2][0]->targetPosition = selectedLayer[0][0]->position;
+            selectedLayer[2][1]->targetPosition = selectedLayer[1][0]->position;
+            selectedLayer[2][2]->targetPosition = selectedLayer[2][0]->position;
+        } else {
+            selectedLayer[0][0]->targetPosition = selectedLayer[2][0]->position;
+            selectedLayer[0][1]->targetPosition = selectedLayer[1][0]->position;
+            selectedLayer[0][2]->targetPosition = selectedLayer[0][0]->position;
+            selectedLayer[1][0]->targetPosition = selectedLayer[1][2]->position;
+            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
+            selectedLayer[1][2]->targetPosition = selectedLayer[0][1]->position;
+            selectedLayer[2][0]->targetPosition = selectedLayer[2][2]->position;
+            selectedLayer[2][1]->targetPosition = selectedLayer[1][2]->position;
+            selectedLayer[2][2]->targetPosition = selectedLayer[0][2]->position;
+        }
+        break;
+    case DIM_Z:
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                selectedLayer[i][j] =
+                    getMiniCubeByLocation(miniCubes, i, j, layer);
+            }
+        }
+        if (clockwise) {
+            selectedLayer[0][0]->targetPosition = selectedLayer[0][2]->position;
+            selectedLayer[0][1]->targetPosition = selectedLayer[1][2]->position;
+            selectedLayer[0][2]->targetPosition = selectedLayer[2][2]->position;
+            selectedLayer[1][0]->targetPosition = selectedLayer[0][1]->position;
+            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
+            selectedLayer[1][2]->targetPosition = selectedLayer[2][1]->position;
+            selectedLayer[2][0]->targetPosition = selectedLayer[0][0]->position;
+            selectedLayer[2][1]->targetPosition = selectedLayer[1][0]->position;
+            selectedLayer[2][2]->targetPosition = selectedLayer[2][0]->position;
+        } else {
+            selectedLayer[0][0]->targetPosition = selectedLayer[2][0]->position;
+            selectedLayer[0][1]->targetPosition = selectedLayer[1][0]->position;
+            selectedLayer[0][2]->targetPosition = selectedLayer[0][0]->position;
+            selectedLayer[1][0]->targetPosition = selectedLayer[2][1]->position;
+            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
+            selectedLayer[1][2]->targetPosition = selectedLayer[0][1]->position;
+            selectedLayer[2][0]->targetPosition = selectedLayer[2][2]->position;
+            selectedLayer[2][1]->targetPosition = selectedLayer[1][2]->position;
+            selectedLayer[2][2]->targetPosition = selectedLayer[0][2]->position;
+        }
+        break;
+    default:
+        break;
+    }
+
+    if (clockwise) {
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 3; ++col) {
+                setTargetRotation(*selectedLayer[row][col], 90.0f, dimension);
+            }
+        }
+    } else {
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 3; ++col) {
+                setTargetRotation(*selectedLayer[row][col], -90.0f, dimension);
+            }
+        }
+    }
 }
