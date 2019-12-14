@@ -113,7 +113,7 @@ static void setColors(MiniCube &mc, Color front, Color back, Color left,
 inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     MiniCube mc;
     mc.position = pos;
-    mc.rotation = Quat::zero();
+    mc.rotation = Quat::identity();
 
     mc.vertices = (Vertex *)graphicsAlloc(
         SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE, 4 * 6 * sizeof(Vertex), 4,
