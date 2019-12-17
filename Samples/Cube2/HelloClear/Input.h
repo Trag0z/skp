@@ -31,7 +31,7 @@ static Vector2 s_startPosOnCube = Vector2(0.0f, 0.0f);
 static float s_accumulatedTurningAngle[2] = {0.0f, 0.0f};
 
 static const float c_cubeHalfSize = g_miniCubeHalfSize * 3.0f;
-static const float c_touchThreshold = 5.0f;
+static const float c_touchThreshold = 0.3f;
 static const float c_touchSensitivity = 0.5f;
 
 static const Plane s_planes[] = {
@@ -77,8 +77,8 @@ inline const Vector3 processBackTouch() {
 
 inline void processFrontTouch(MiniCube* miniCubes) {
     SceTouchData tdf;
-    int returnCode = sceTouchRead(SCE_TOUCH_PORT_FRONT, &tdf, 1);
-    SCE_DBG_ALWAYS_ASSERT(returnCode <= 1);
+    int returnCode = sceTouchRead(SCE_TOUCH_PORT_FRONT, &tdf, 6);
+    SCE_DBG_ALWAYS_ASSERT(returnCode >= 0);
 
     // Cast ray
     switch (g_animationState) {
@@ -89,9 +89,7 @@ inline void processFrontTouch(MiniCube* miniCubes) {
         }
         s_lastFrontTouch.id = tdf.report[0].id;
         s_lastFrontTouch.x = 2.0f * tdf.report[0].x / 1919.0f - 1.0f;
-        // (2.0f * tdf.report[0].x / s_touchInfo.maxAaX - 1.0f) * 4.5f;
         s_lastFrontTouch.y = -2.0f * tdf.report[0].y / 1087.0f + 1.0f;
-        // (2.0f * tdf.report[0].y / s_touchInfo.maxAaY - 1.0f) * 2.5f;
 
         Matrix4 inverseFinalTransform = inverse(g_finalTransformation);
         Vector4 p1 =
@@ -101,27 +99,17 @@ inline void processFrontTouch(MiniCube* miniCubes) {
             inverseFinalTransform *
             Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 0.9f, 1.0f);
 
-        std::printf(
-            "Before:\np1: %.2f %.2f %.2f %.2f\np2: %.2f %.2f %.2f %.2f\n",
-            p1.getX().getAsFloat(), p1.getY().getAsFloat(),
-            p1.getZ().getAsFloat(), p1.getW().getAsFloat(),
-            p2.getX().getAsFloat(), p2.getY().getAsFloat(),
-            p2.getZ().getAsFloat(), p2.getW().getAsFloat());
-
         p1 /= p1.getW();
         p2 /= p2.getW();
-
-        std::printf(
-            "After:\np1: %.2f %.2f %.2f %.2f\np2: %.2f %.2f %.2f %.2f\n",
-            p1.getX().getAsFloat(), p1.getY().getAsFloat(),
-            p1.getZ().getAsFloat(), p1.getW().getAsFloat(),
-            p2.getX().getAsFloat(), p2.getY().getAsFloat(),
-            p2.getZ().getAsFloat(), p2.getW().getAsFloat());
 
         Ray ray = Ray(Point3(p1.getXYZ()), Point3(p2.getXYZ()));
 
         Point3 intersection;
         for (int i = 0; i < 6; ++i) {
+            if (dot(ray.getDirection(), s_planes[i].getNormal()).getAsFloat() >
+                0.0f) {
+                continue;
+            }
             if (!intersectionPoint(ray, s_planes[i], &intersection)) {
                 continue;
             }
@@ -129,27 +117,24 @@ inline void processFrontTouch(MiniCube* miniCubes) {
             const float x = intersection.getX();
             const float y = intersection.getY();
             const float z = intersection.getZ();
-
-            if (i == 0) {
-                std::printf("Hit %d:\n%.2f %.2f %.2f\n", i, x, y, z);
-            }
             if (x < -c_cubeHalfSize || x > c_cubeHalfSize ||
                 y < -c_cubeHalfSize || y > c_cubeHalfSize ||
-                z < -c_cubeHalfSize || z > c_cubeHalfSize ||
-                dot(ray.getDirection(), s_planes[i].getNormal()).getAsFloat() >
-                    0.0f) {
+                z < -c_cubeHalfSize || z > c_cubeHalfSize) {
                 // We didn't hit the cube, or we hit its back side
                 continue;
             }
 
+            std::printf("Hit %d:\n%.2f %.2f %.2f\n", i, x, y, z);
             s_touchedSide = i;
             // startPosOnCube always from top right of first mentioned side
-            if (s_touchedSide == 0 || s_touchedSide == 1)
+            if (s_touchedSide == 0 || s_touchedSide == 1) {
                 s_startPosOnCube = Vector2(x, y);
-            else if (s_touchedSide == 2 || s_touchedSide == 3)
+            } else if (s_touchedSide == 2 || s_touchedSide == 3) {
                 s_startPosOnCube = Vector2(-z, y);
-            else
+            } else {
                 s_startPosOnCube = Vector2(x, -z);
+            }
+            g_animationState = ANIMSTATE_TOUCH;
             break;
         }
         break;
@@ -161,13 +146,18 @@ inline void processFrontTouch(MiniCube* miniCubes) {
                 continue;
             }
 
+            float newTouchPos[2];
+            newTouchPos[0] = 2.0f * tdf.report[0].x / 1919.0f - 1.0f;
+            newTouchPos[1] = -2.0f * tdf.report[0].y / 1087.0f + 1.0f;
+
             Matrix4 inverseFinalTransform = inverse(g_finalTransformation);
-            Vector4 p1 =
-                inverseFinalTransform *
-                Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 0.1f, 1.0f);
-            Vector4 p2 =
-                inverseFinalTransform *
-                Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 1.0f, 1.0f);
+            Vector4 p1 = inverseFinalTransform *
+                         Vector4(newTouchPos[0], newTouchPos[1], 0.1f, 1.0f);
+            Vector4 p2 = inverseFinalTransform *
+                         Vector4(newTouchPos[0], newTouchPos[1], 1.0f, 1.0f);
+
+            p1 /= p1.getW();
+            p2 /= p2.getW();
 
             Ray ray = Ray(Point3(p1.getXYZ()), Point3(p2.getXYZ()));
 
@@ -179,18 +169,20 @@ inline void processFrontTouch(MiniCube* miniCubes) {
             }
             touchReleased = false;
 
-            Vector2 newTouchPos;
+            Vector2 newTouchPosOnCube;
 
-            if (s_touchedSide == 0 || s_touchedSide == 1)
-                newTouchPos = Vector2(intersection.getX(), intersection.getY());
-            else if (s_touchedSide == 2 || s_touchedSide == 3)
-                newTouchPos =
+            if (s_touchedSide == 0 || s_touchedSide == 1) {
+                newTouchPosOnCube =
+                    Vector2(intersection.getX(), intersection.getY());
+            } else if (s_touchedSide == 2 || s_touchedSide == 3) {
+                newTouchPosOnCube =
                     Vector2(-intersection.getZ(), intersection.getY());
-            else
-                newTouchPos =
+            } else {
+                newTouchPosOnCube =
                     Vector2(intersection.getX(), -intersection.getZ());
+            }
 
-            Vector2 touchMotion = newTouchPos - s_startPosOnCube;
+            Vector2 touchMotion = newTouchPosOnCube - s_startPosOnCube;
             float touchMotionLength = length(touchMotion).getAsFloat();
 
             if (touchMotionLength < c_touchThreshold) {
@@ -229,9 +221,11 @@ inline void processFrontTouch(MiniCube* miniCubes) {
                 return;
             }
 
+            s_touchMotionDirection = newTouchMotionDirection;
+
             // Determine layer and rotation direction
-            if (newTouchMotionDirection == DIR_LEFT ||
-                newTouchMotionDirection == DIR_RIGHT) {
+            if (newTouchMotionDirection == DIR_UP ||
+                newTouchMotionDirection == DIR_DOWN) {
                 // Vertical motion
                 if (s_startPosOnCube.getX() < -g_miniCubeHalfSize) {
                     // Left column
@@ -416,6 +410,7 @@ inline void processFrontTouch(MiniCube* miniCubes) {
 
         if (touchReleased) {
             g_animationState = ANIMSTATE_ANIMATING;
+            s_touchMotionDirection = DIR_NO;
         }
         break;
     case ANIMSTATE_ANIMATING:

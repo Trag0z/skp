@@ -9,7 +9,6 @@
 extern Matrix4 g_finalTransformation;
 extern Matrix4 g_finalRotation;
 extern const SceGxmProgramParameter* g_wvpParam;
-extern const SceGxmProgramParameter* g_rotParam;
 extern const SceGxmProgramParameter* g_localToWorldParam;
 extern AnimationState g_animationState;
 extern const float g_miniCubeHalfSize;

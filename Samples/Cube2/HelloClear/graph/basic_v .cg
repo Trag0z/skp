@@ -18,6 +18,6 @@ void main(
 	
 	vPosition = mul(mul(float4(aPosition, 1.f), localToWorld), wvp);
 	float3 normal = mul(float4(aNormal, 0.0f), rot).xyz;
-	float light = saturate(-normal.z);
+	float light = 1; //saturate(-normal.z);
 	vColor = aColor * light;
 }

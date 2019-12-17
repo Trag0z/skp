@@ -6,14 +6,13 @@
 #include <kernel.h>
 #include <libdbg.h>
 #include <rtc.h>
-#include <cstring>
 #include <vectormath.h>
 using namespace sce::Vectormath::Simd::Aos;
 
 extern Matrix4 g_finalTransformation;
 extern Matrix4 g_finalRotation;
 extern const SceGxmProgramParameter* g_wvpParam;
-extern const SceGxmProgramParameter* g_rotParam;
+// extern const SceGxmProgramParameter* g_rotParam;
 extern const SceGxmProgramParameter* g_localToWorldParam;
 
 extern AnimationState g_animationState;
@@ -144,8 +143,8 @@ inline void renderMiniCube(const MiniCube& mc, SceGxmContext* context,
     sceGxmReserveVertexDefaultUniformBuffer(context, &vertexDefaultBuffer);
     sceGxmSetUniformDataF(vertexDefaultBuffer, g_wvpParam, 0, 16,
                           (float*)&g_finalTransformation);
-    sceGxmSetUniformDataF(vertexDefaultBuffer, g_rotParam, 0, 16,
-                          (float*)&g_finalRotation);
+    // sceGxmSetUniformDataF(vertexDefaultBuffer, g_rotParam, 0, 16,
+    //                       (float*)&g_finalRotation);
 
     Matrix4 localToWorld;
     getLocalToWorldTransform(mc, localToWorld);
@@ -169,8 +168,8 @@ static void setColors(MiniCube& mc, Color front, Color back, Color left,
 
 inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     MiniCube mc;
-    mc.position = mc.startPosition = pos;
-    mc.rotation = mc.startRotation = Quat::identity();
+    mc.position = mc.startPosition = mc.targetPosition = pos;
+    mc.rotation = mc.startRotation = mc.targetRotation = Quat::identity();
 
     mc.vertices = (Vertex*)graphicsAlloc(
         SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE, 4 * 6 * sizeof(Vertex), 4,
@@ -270,8 +269,10 @@ inline void progressAnimations(MiniCube* miniCubes) {
         for (int i = 0; i < 27; ++i) {
             MiniCube& mc = miniCubes[i];
             if (!isEqual(mc.position, mc.targetPosition)) {
-                mc.position = lerp(s_interpolationValue, mc.startPosition,
-                                   mc.targetPosition);
+                // mc.position = lerp(s_interpolationValue, mc.startPosition,
+                //                    mc.targetPosition);
+                mc.rotation = lerp(s_interpolationValue, mc.startRotation,
+                                   mc.targetRotation);
             }
         }
         return;
@@ -300,11 +301,15 @@ inline void progressAnimations(MiniCube* miniCubes) {
         if (!isEqual(mc.position, mc.targetPosition)) {
             if (s_interpolationValue == 0.0f) {
                 mc.position = mc.targetPosition = mc.startPosition;
+                mc.rotation = mc.targetRotation = mc.startRotation;
             } else if (s_interpolationValue == 1.0f) {
                 mc.position = mc.startPosition = mc.targetPosition;
+                mc.rotation = mc.startRotation = mc.targetRotation;
             } else {
-                mc.position = lerp(s_interpolationValue, mc.startPosition,
-                                   mc.targetPosition);
+                // mc.position = lerp(s_interpolationValue, mc.startPosition,
+                //                    mc.targetPosition);
+                mc.rotation = lerp(s_interpolationValue, mc.startRotation,
+                                   mc.targetRotation);
                 animationsFinished = false;
             }
         }
@@ -328,11 +333,11 @@ static inline float toRad(float degrees) {
 static inline void setTargetRotation(MiniCube& mc, float degrees,
                                      Dimension dim) {
     if (dim == DIM_X) {
-        mc.targetRotation = mc.startRotation * Quat::rotationX(toRad(degrees));
+        mc.targetRotation = mc.startRotation * Quat::rotationX(-toRad(degrees));
     } else if (dim == DIM_Y) {
-        mc.targetRotation = mc.startRotation * Quat::rotationY(toRad(degrees));
+        mc.targetRotation = mc.startRotation * Quat::rotationY(-toRad(degrees));
     } else {
-        mc.targetRotation = mc.startRotation * Quat::rotationY(toRad(degrees));
+        mc.targetRotation = mc.startRotation * Quat::rotationY(-toRad(degrees));
     }
     normalize(mc.targetRotation);
 }
