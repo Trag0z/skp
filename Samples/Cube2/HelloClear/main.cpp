@@ -1,21 +1,20 @@
 #pragma once
+#include "Globals.h"
+#include "Input.h"
 #include "System.h"
+#include <sce_geometry.h>
 
-Matrix4 g_finalTransformation = Matrix4();
-Matrix4 g_finalRotation = Matrix4();
-const SceGxmProgramParameter *g_wvpParam = NULL;
-const SceGxmProgramParameter *g_rotParam = NULL;
-const SceGxmProgramParameter *g_localToWorldParam = NULL;
-g_animationInProgress = false;
+extern Matrix4 g_finalTransformation;
+extern Matrix4 g_finalRotation;
+extern const SceGxmProgramParameter *g_wvpParam;
+extern const SceGxmProgramParameter *g_rotParam;
+extern const SceGxmProgramParameter *g_localToWorldParam;
+extern AnimationState g_animationState;
+extern const float g_miniCubeHalfSize;
 
 static MiniCube *s_miniCubes;
 static float s_accumulatedTurningAngleX;
 static float s_accumulatedTurningAngleY;
-
-static SceTouchPanelInfo s_touchInfo;
-static int s_lastTouchId = 0;
-static float s_lastBackTouchPosX;
-static float s_lastBackTouchPosY;
 
 static void initCube();
 
@@ -44,7 +43,7 @@ int main(void) {
     // Set sampling mode for input device.
     sceCtrlSetSamplingMode(SCE_CTRL_MODE_DIGITALANALOG_WIDE);
 
-    initTouch(s_touchInfo);
+    initTouch();
     initCube();
 
     /* 6. main loop */
@@ -78,37 +77,11 @@ float makeFloat(unsigned char input) {
 }
 
 void update(void) {
-    SceTouchData tdb;
-    int returnCode = sceTouchRead(SCE_TOUCH_PORT_BACK, &tdb, 4);
-    SCE_DBG_ALWAYS_ASSERT(returnCode <= 1);
 
-    if (tdb.reportNum > 0) {
-        SceTouchReport &report = tdb.report[0];
-        if (report.id == s_lastTouchId) {
-            s_accumulatedTurningAngleX +=
-                (report.x - s_lastBackTouchPosX) * 0.01f;
-            s_accumulatedTurningAngleY +=
-                (report.y - s_lastBackTouchPosY) * 0.01f;
-        }
-        s_lastTouchId = report.id;
-        s_lastBackTouchPosX = report.x;
-        s_lastBackTouchPosY = report.y;
-    }
+    processFrontTouch();
+    progressAnimations();
 
-    if (!g_animationInProgress) {
-        SceCtrlData result;
-        sceCtrlReadBufferPositive(0, &result, 1);
-        if (makeFloat(result.lx) > 0.5f) {
-            rotateCubeLayer(s_miniCubes, 0, DIM_X, true);
-        } else if (makeFloat(result.lx) < 0.5f) {
-            rotateCubeLayer(s_miniCubes, 0, DIM_X, false);
-        }
-    } else {
-        progressAnimations();
-    }
-
-    g_finalRotation = Matrix4::rotationZYX(
-        Vector3(s_accumulatedTurningAngleY, -s_accumulatedTurningAngleX, 0.0f));
+    g_finalRotation = Matrix4::rotationZYX(processBackTouch());
     Matrix4 lookAt =
         Matrix4::lookAt(Point3(0.0f, 0.0f, -8.0f), Point3(0.0f, 0.0f, 1.0f),
                         Vector3(0.0f, -1.0f, 0.0f));
@@ -127,9 +100,12 @@ static void initCube() {
             for (int x = 0; x < 3; ++x) {
                 int cubeLocation[3] = {x, y, z};
                 s_miniCubes[i++] =
-                    createMiniCube(Vector3(static_cast<float>(x - 1) * 1.01f,
-                                           static_cast<float>(y - 1) * 1.01f,
-                                           static_cast<float>(z - 1) * 1.01f),
+                    createMiniCube(Vector3(static_cast<float>(x - 1) *
+                                               (g_miniCubeHalfSize + 0.01f),
+                                           static_cast<float>(y - 1) *
+                                               (g_miniCubeHalfSize + 0.01f),
+                                           static_cast<float>(z - 1) *
+                                               (g_miniCubeHalfSize + 0.01f)),
                                    cubeLocation);
             }
         }

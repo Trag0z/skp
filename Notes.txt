@@ -1,15 +1,13 @@
 TODO:
-- find out what 3rd parameter of graphicsAlloc does
-- maybe TEXCOORD needs to be calculated in a different way
-- sort out includes
+- fix animstate control flow problems
+- add geometry lib
 
+NOTES:
+- check if s_startPosOnCube has the cubes center as 0.0
+
+EXTRAS: 
 - for sound: copy ngs_common.c and ngs_common.h and stuff from that main for audio
-
-Rendering: For each MiniCube:
-- transform to world position
-    > rotate 
-    > translate
-- camera transformation
+- pinch to zoom on backtouch?
 
 
 #########################################

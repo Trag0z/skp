@@ -14,9 +14,12 @@ extern const SceGxmProgramParameter *g_wvpParam;
 extern const SceGxmProgramParameter *g_rotParam;
 extern const SceGxmProgramParameter *g_localToWorldParam;
 
-extern bool g_animationInProgress;
-static SceRtcTick s_animStartTick;
-const static float c_animDuration = 2e6;
+extern bool g_animationState;
+extern const float g_miniCubeHalfSize;
+
+static SceRtcTick s_lastTick;
+const static float c_animationSpeed = 2e-4;
+static float s_interpolationValue;
 
 enum Color {
     WHITE = 0xffffffff,
@@ -50,35 +53,83 @@ struct MiniCube {
 
 const static Vertex s_defaultVertices[24] = {
     // Front
-    {{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, 0},
-    {{0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, 0},
-    {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, 0},
-    {{-0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, 0},
+    {{-g_miniCubeHalfSize, -g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {0.0f, 0.0f, -1.0f},
+     0},
+    {{g_miniCubeHalfSize, -g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {0.0f, 0.0f, -1.0f},
+     0},
+    {{g_miniCubeHalfSize, g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {0.0f, 0.0f, -1.0f},
+     0},
+    {{-g_miniCubeHalfSize, g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {0.0f, 0.0f, -1.0f},
+     0},
     // Back
-    {{0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, 0},
-    {{-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, 0},
-    {{-0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, 0},
-    {{0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, 0},
+    {{g_miniCubeHalfSize, -g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {0.0f, 0.0f, 1.0f},
+     0},
+    {{-g_miniCubeHalfSize, -g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {0.0f, 0.0f, 1.0f},
+     0},
+    {{-g_miniCubeHalfSize, g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {0.0f, 0.0f, 1.0f},
+     0},
+    {{g_miniCubeHalfSize, g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {0.0f, 0.0f, 1.0f},
+     0},
     // Left
-    {{-0.5f, -0.5f, 0.5f}, {-1.0f, 0.0f, 0.0f}, 0},
-    {{-0.5f, -0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}, 0},
-    {{-0.5f, 0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}, 0},
-    {{-0.5f, 0.5f, 0.5f}, {-1.0f, 0.0f, 0.0f}, 0},
+    {{-g_miniCubeHalfSize, -g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {-1.0f, 0.0f, 0.0f},
+     0},
+    {{-g_miniCubeHalfSize, -g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {-1.0f, 0.0f, 0.0f},
+     0},
+    {{-g_miniCubeHalfSize, g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {-1.0f, 0.0f, 0.0f},
+     0},
+    {{-g_miniCubeHalfSize, g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {-1.0f, 0.0f, 0.0f},
+     0},
     // Right
-    {{0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, 0},
-    {{0.5f, -0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, 0},
-    {{0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, 0},
-    {{0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, 0},
+    {{g_miniCubeHalfSize, -g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {1.0f, 0.0f, 0.0f},
+     0},
+    {{g_miniCubeHalfSize, -g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {1.0f, 0.0f, 0.0f},
+     0},
+    {{g_miniCubeHalfSize, g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {1.0f, 0.0f, 0.0f},
+     0},
+    {{g_miniCubeHalfSize, g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {1.0f, 0.0f, 0.0f},
+     0},
     // Top
-    {{-0.5f, -0.5f, 0.5f}, {0.0f, -1.0f, 0.0f}, 0},
-    {{0.5f, -0.5f, 0.5f}, {0.0f, -1.0f, 0.0f}, 0},
-    {{0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}, 0},
-    {{-0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}, 0},
+    {{-g_miniCubeHalfSize, -g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {0.0f, -1.0f, 0.0f},
+     0},
+    {{g_miniCubeHalfSize, -g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {0.0f, -1.0f, 0.0f},
+     0},
+    {{g_miniCubeHalfSize, -g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {0.0f, -1.0f, 0.0f},
+     0},
+    {{-g_miniCubeHalfSize, -g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {0.0f, -1.0f, 0.0f},
+     0},
     // Bottom
-    {{-0.5f, 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, 0},
-    {{0.5f, 0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, 0},
-    {{0.5f, 0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, 0},
-    {{-0.5f, 0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, 0},
+    {{-g_miniCubeHalfSize, g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {0.0f, 1.0f, 0.0f},
+     0},
+    {{g_miniCubeHalfSize, g_miniCubeHalfSize, -g_miniCubeHalfSize},
+     {0.0f, 1.0f, 0.0f},
+     0},
+    {{g_miniCubeHalfSize, g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {0.0f, 1.0f, 0.0f},
+     0},
+    {{-g_miniCubeHalfSize, g_miniCubeHalfSize, g_miniCubeHalfSize},
+     {0.0f, 1.0f, 0.0f},
+     0},
 };
 
 inline static void getLocalToWorldTransform(const MiniCube &mc, Matrix4 &out) {
@@ -99,7 +150,6 @@ inline void renderMiniCube(const MiniCube &mc, SceGxmContext *context,
     sceGxmSetUniformDataF(vertexDefaultBuffer, g_localToWorldParam, 0, 16,
                           (float *)&localToWorld);
 
-    /* draw the spinning triangle */
     sceGxmSetVertexStream(context, 0, mc.vertices);
     sceGxmDraw(context, SCE_GXM_PRIMITIVE_TRIANGLES, SCE_GXM_INDEX_FORMAT_U16,
                indices, 6 * 6);
@@ -117,8 +167,8 @@ static void setColors(MiniCube &mc, Color front, Color back, Color left,
 
 inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     MiniCube mc;
-    mc.position = pos;
-    mc.rotation = Quat::identity();
+    mc.position = mc.startPosition = pos;
+    mc.rotation = mc.startRotation = Quat::identity();
 
     mc.vertices = (Vertex *)graphicsAlloc(
         SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE, 4 * 6 * sizeof(Vertex), 4,
@@ -209,27 +259,56 @@ inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     return mc;
 }
 
+inline void setAnimationInterpolationValue(float t) {
+    s_interpolationValue = t;
+}
+
 inline void progressAnimations(MiniCube *miniCubes) {
-    if (!g_animationInProgress)
+    if (g_animationState == ANIMSTATE_TOUCH) {
+        for (int i = 0; i < 27; ++i) {
+            MiniCube &mc = miniCubes[i];
+            if (mc.position != mc.targetPosition) {
+                mc.position = Vector3::lerp(
+                    s_interpolationValue, mc.startPosition, mc.targetPosition);
+            }
+        }
+        return;
+    }
+
+    if (g_animationState != ANIMSTATE_ANIMATING)
         return;
 
     SceRtcTick currentTick;
     sceRtcGetCurrentTick(&currentTick);
-    float t = std::min(static_cast<float>(s_animStartTick - currentTick) /
-                           c_animDuration,
-                       1.0f);
+    float interpolationStep =
+        static_cast<float>(currentTick - s_lastTick) * c_animationSpeed;
+    if (s_interpolationValue < 0.5f) {
+        s_interpolationValue =
+            std::max(s_interpolationValue - interpolationStep, 0.0f);
+    } else {
+        s_interpolationValue =
+            std::min(s_interpolationValue + interpolationStep, 1.0f);
+    }
+    s_lastTick = currentTick;
 
-    bool animsRunning = false;
+    bool animationsFinished = true;
     for (int i = 0; i < 27; ++i) {
         MiniCube &mc = miniCubes[i];
         if (mc.position != mc.targetPosition) {
-            mc.position = Vector3::lerp(t, mc.startPosition, mc.targetPosition);
-            animsRunning = true;
+            if (s_interpolationValue == 0.0f) {
+                mc.position = mc.targetPosition = mc.startPosition;
+            } else if (s_interpolationValue == 1.0f) {
+                mc.position = mc.startPosition = mc.targetPosition;
+            } else {
+                mc.position = Vector3::lerp(
+                    s_interpolationValue, mc.startPosition, mc.targetPosition);
+                animationsFinished = false;
+            }
         }
     }
 
-    if (!animsRunning)
-        g_animationInProgress = false;
+    if (animationsFinished)
+        g_animationState = ANIMSTATE_NO_ANIM;
 }
 
 enum Dimension { DIM_X = 0, DIM_Y = 1, DIM_Z = 2 };
@@ -245,19 +324,18 @@ static inline float toRad(float degrees) {
 
 static inline void setTargetRotation(MiniCube &mc, float degrees,
                                      Dimension dim) {
-    mc.startRotation = mc.rotation;
     if (dim == DIM_X) {
-        mc.targetRotation *= Quat::rotationX(toRad(degrees));
+        mc.targetRotation = mc.startRotation * Quat::rotationX(toRad(degrees));
     } else if (dim = DIM_Y) {
-        mc.targetRotation *= Quat::rotationY(toRad(degrees));
+        mc.targetRotation = mc.startRotation * Quat::rotationY(toRad(degrees));
     } else {
-        mc.targetRotation *= Quat::rotationY(toRad(degrees));
+        mc.targetRotation = mc.startRotation * Quat::rotationY(toRad(degrees));
     }
     normalize(mc.targetRotation);
 }
 
-void rotateCubeLayer(MiniCube *miniCubes, int layer, Dimension dimension,
-                     bool clockwise) {
+void setAnimation(MiniCube *miniCubes, int layer, Dimension dimension,
+                  bool clockwise) {
     SCE_DBG_ALWAYS_ASSERT(layer < 3);
 
     MiniCube *selectedLayer[3][3];
@@ -267,30 +345,46 @@ void rotateCubeLayer(MiniCube *miniCubes, int layer, Dimension dimension,
             for (int j = 0; j < 3; ++j) {
                 selectedLayer[i][j] =
                     getMiniCubeByLocation(miniCubes, layer, i, j);
-                selectedLayer[i][j]->startPosition =
-                    selectedLayer[i][j]->position;
             }
         }
         if (clockwise) {
-            selectedLayer[0][0]->targetPosition = selectedLayer[0][2]->position;
-            selectedLayer[0][1]->targetPosition = selectedLayer[1][2]->position;
-            selectedLayer[0][2]->targetPosition = selectedLayer[2][2]->position;
-            selectedLayer[1][0]->targetPosition = selectedLayer[0][1]->position;
-            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
-            selectedLayer[1][2]->targetPosition = selectedLayer[2][1]->position;
-            selectedLayer[2][0]->targetPosition = selectedLayer[0][0]->position;
-            selectedLayer[2][1]->targetPosition = selectedLayer[1][0]->position;
-            selectedLayer[2][2]->targetPosition = selectedLayer[2][0]->position;
+            selectedLayer[0][0]->targetPosition =
+                selectedLayer[0][2]->startPosition;
+            selectedLayer[0][1]->targetPosition =
+                selectedLayer[1][2]->startPosition;
+            selectedLayer[0][2]->targetPosition =
+                selectedLayer[2][2]->startPosition;
+            selectedLayer[1][0]->targetPosition =
+                selectedLayer[0][1]->startPosition;
+            selectedLayer[1][1]->targetPosition =
+                selectedLayer[1][1]->startPosition;
+            selectedLayer[1][2]->targetPosition =
+                selectedLayer[2][1]->startPosition;
+            selectedLayer[2][0]->targetPosition =
+                selectedLayer[0][0]->startPosition;
+            selectedLayer[2][1]->targetPosition =
+                selectedLayer[1][0]->startPosition;
+            selectedLayer[2][2]->targetPosition =
+                selectedLayer[2][0]->startPosition;
         } else {
-            selectedLayer[0][0]->targetPosition = selectedLayer[2][0]->position;
-            selectedLayer[0][1]->targetPosition = selectedLayer[1][0]->position;
-            selectedLayer[0][2]->targetPosition = selectedLayer[0][0]->position;
-            selectedLayer[1][0]->targetPosition = selectedLayer[1][2]->position;
-            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
-            selectedLayer[1][2]->targetPosition = selectedLayer[0][1]->position;
-            selectedLayer[2][0]->targetPosition = selectedLayer[2][2]->position;
-            selectedLayer[2][1]->targetPosition = selectedLayer[1][2]->position;
-            selectedLayer[2][2]->targetPosition = selectedLayer[0][2]->position;
+            selectedLayer[0][0]->targetPosition =
+                selectedLayer[2][0]->startPosition;
+            selectedLayer[0][1]->targetPosition =
+                selectedLayer[1][0]->startPosition;
+            selectedLayer[0][2]->targetPosition =
+                selectedLayer[0][0]->startPosition;
+            selectedLayer[1][0]->targetPosition =
+                selectedLayer[1][2]->startPosition;
+            selectedLayer[1][1]->targetPosition =
+                selectedLayer[1][1]->startPosition;
+            selectedLayer[1][2]->targetPosition =
+                selectedLayer[0][1]->startPosition;
+            selectedLayer[2][0]->targetPosition =
+                selectedLayer[2][2]->startPosition;
+            selectedLayer[2][1]->targetPosition =
+                selectedLayer[1][2]->startPosition;
+            selectedLayer[2][2]->targetPosition =
+                selectedLayer[0][2]->startPosition;
         }
         break;
     case DIM_Y:
@@ -301,25 +395,43 @@ void rotateCubeLayer(MiniCube *miniCubes, int layer, Dimension dimension,
             }
         }
         if (!clockwise) {
-            selectedLayer[0][0]->targetPosition = selectedLayer[0][2]->position;
-            selectedLayer[0][1]->targetPosition = selectedLayer[1][2]->position;
-            selectedLayer[0][2]->targetPosition = selectedLayer[2][2]->position;
-            selectedLayer[1][0]->targetPosition = selectedLayer[0][1]->position;
-            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
-            selectedLayer[1][2]->targetPosition = selectedLayer[2][1]->position;
-            selectedLayer[2][0]->targetPosition = selectedLayer[0][0]->position;
-            selectedLayer[2][1]->targetPosition = selectedLayer[1][0]->position;
-            selectedLayer[2][2]->targetPosition = selectedLayer[2][0]->position;
+            selectedLayer[0][0]->targetPosition =
+                selectedLayer[0][2]->startPosition;
+            selectedLayer[0][1]->targetPosition =
+                selectedLayer[1][2]->startPosition;
+            selectedLayer[0][2]->targetPosition =
+                selectedLayer[2][2]->startPosition;
+            selectedLayer[1][0]->targetPosition =
+                selectedLayer[0][1]->startPosition;
+            selectedLayer[1][1]->targetPosition =
+                selectedLayer[1][1]->startPosition;
+            selectedLayer[1][2]->targetPosition =
+                selectedLayer[2][1]->startPosition;
+            selectedLayer[2][0]->targetPosition =
+                selectedLayer[0][0]->startPosition;
+            selectedLayer[2][1]->targetPosition =
+                selectedLayer[1][0]->startPosition;
+            selectedLayer[2][2]->targetPosition =
+                selectedLayer[2][0]->startPosition;
         } else {
-            selectedLayer[0][0]->targetPosition = selectedLayer[2][0]->position;
-            selectedLayer[0][1]->targetPosition = selectedLayer[1][0]->position;
-            selectedLayer[0][2]->targetPosition = selectedLayer[0][0]->position;
-            selectedLayer[1][0]->targetPosition = selectedLayer[1][2]->position;
-            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
-            selectedLayer[1][2]->targetPosition = selectedLayer[0][1]->position;
-            selectedLayer[2][0]->targetPosition = selectedLayer[2][2]->position;
-            selectedLayer[2][1]->targetPosition = selectedLayer[1][2]->position;
-            selectedLayer[2][2]->targetPosition = selectedLayer[0][2]->position;
+            selectedLayer[0][0]->targetPosition =
+                selectedLayer[2][0]->startPosition;
+            selectedLayer[0][1]->targetPosition =
+                selectedLayer[1][0]->startPosition;
+            selectedLayer[0][2]->targetPosition =
+                selectedLayer[0][0]->startPosition;
+            selectedLayer[1][0]->targetPosition =
+                selectedLayer[1][2]->startPosition;
+            selectedLayer[1][1]->targetPosition =
+                selectedLayer[1][1]->startPosition;
+            selectedLayer[1][2]->targetPosition =
+                selectedLayer[0][1]->startPosition;
+            selectedLayer[2][0]->targetPosition =
+                selectedLayer[2][2]->startPosition;
+            selectedLayer[2][1]->targetPosition =
+                selectedLayer[1][2]->startPosition;
+            selectedLayer[2][2]->targetPosition =
+                selectedLayer[0][2]->startPosition;
         }
         break;
     case DIM_Z:
@@ -330,25 +442,43 @@ void rotateCubeLayer(MiniCube *miniCubes, int layer, Dimension dimension,
             }
         }
         if (clockwise) {
-            selectedLayer[0][0]->targetPosition = selectedLayer[0][2]->position;
-            selectedLayer[0][1]->targetPosition = selectedLayer[1][2]->position;
-            selectedLayer[0][2]->targetPosition = selectedLayer[2][2]->position;
-            selectedLayer[1][0]->targetPosition = selectedLayer[0][1]->position;
-            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
-            selectedLayer[1][2]->targetPosition = selectedLayer[2][1]->position;
-            selectedLayer[2][0]->targetPosition = selectedLayer[0][0]->position;
-            selectedLayer[2][1]->targetPosition = selectedLayer[1][0]->position;
-            selectedLayer[2][2]->targetPosition = selectedLayer[2][0]->position;
+            selectedLayer[0][0]->targetPosition =
+                selectedLayer[0][2]->startPosition;
+            selectedLayer[0][1]->targetPosition =
+                selectedLayer[1][2]->startPosition;
+            selectedLayer[0][2]->targetPosition =
+                selectedLayer[2][2]->startPosition;
+            selectedLayer[1][0]->targetPosition =
+                selectedLayer[0][1]->startPosition;
+            selectedLayer[1][1]->targetPosition =
+                selectedLayer[1][1]->startPosition;
+            selectedLayer[1][2]->targetPosition =
+                selectedLayer[2][1]->startPosition;
+            selectedLayer[2][0]->targetPosition =
+                selectedLayer[0][0]->startPosition;
+            selectedLayer[2][1]->targetPosition =
+                selectedLayer[1][0]->startPosition;
+            selectedLayer[2][2]->targetPosition =
+                selectedLayer[2][0]->startPosition;
         } else {
-            selectedLayer[0][0]->targetPosition = selectedLayer[2][0]->position;
-            selectedLayer[0][1]->targetPosition = selectedLayer[1][0]->position;
-            selectedLayer[0][2]->targetPosition = selectedLayer[0][0]->position;
-            selectedLayer[1][0]->targetPosition = selectedLayer[2][1]->position;
-            selectedLayer[1][1]->targetPosition = selectedLayer[1][1]->position;
-            selectedLayer[1][2]->targetPosition = selectedLayer[0][1]->position;
-            selectedLayer[2][0]->targetPosition = selectedLayer[2][2]->position;
-            selectedLayer[2][1]->targetPosition = selectedLayer[1][2]->position;
-            selectedLayer[2][2]->targetPosition = selectedLayer[0][2]->position;
+            selectedLayer[0][0]->targetPosition =
+                selectedLayer[2][0]->startPosition;
+            selectedLayer[0][1]->targetPosition =
+                selectedLayer[1][0]->startPosition;
+            selectedLayer[0][2]->targetPosition =
+                selectedLayer[0][0]->startPosition;
+            selectedLayer[1][0]->targetPosition =
+                selectedLayer[2][1]->startPosition;
+            selectedLayer[1][1]->targetPosition =
+                selectedLayer[1][1]->startPosition;
+            selectedLayer[1][2]->targetPosition =
+                selectedLayer[0][1]->startPosition;
+            selectedLayer[2][0]->targetPosition =
+                selectedLayer[2][2]->startPosition;
+            selectedLayer[2][1]->targetPosition =
+                selectedLayer[1][2]->startPosition;
+            selectedLayer[2][2]->targetPosition =
+                selectedLayer[0][2]->startPosition;
         }
         break;
     default:
@@ -369,6 +499,5 @@ void rotateCubeLayer(MiniCube *miniCubes, int layer, Dimension dimension,
         }
     }
 
-    sceRtxGetCurrentTick(s_animStartTick);
-    g_animationInProgress = true;
+    sceRtxGetCurrentTick(s_lastTick);
 }

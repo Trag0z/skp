@@ -959,9 +959,3 @@ static void fragmentUsseFree(SceUID uid) {
     err = sceKernelFreeMemBlock(uid);
     SCE_DBG_ALWAYS_ASSERT(err == SCE_OK);
 }
-
-void initTouch(SceTouchPanelInfo touchInfo) {
-    sceTouchSetSamplingState(SCE_TOUCH_PORT_BACK,
-                             SCE_TOUCH_SAMPLING_STATE_START);
-    sceTouchGetPanelInfo(SCE_TOUCH_PORT_BACK, &touchInfo);
-}
