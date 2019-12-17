@@ -38,7 +38,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>-lSceGxm_stub;-lSceCtrl_stub;-lSceDisplay_stub;-lSceDbg_stub;-lSceDbgFont;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>-lSceGxm_stub;-lSceCtrl_stub;-lSceDisplay_stub;-lSceDbg_stub;-lSceDbgFont;-lSceRtc_stub;-lSceTouch_stub;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|PSVita'">
@@ -78,6 +78,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="System.cpp" />
@@ -109,7 +110,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="Helpers.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="MiniCube.h" />
     <ClInclude Include="System.h" />
   </ItemGroup>

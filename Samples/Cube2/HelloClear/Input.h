@@ -1,11 +1,13 @@
 #pragma once
 #include "Globals.h"
 #include "MiniCube.h"
+#include <cstdio>
 #include <libdbg.h>
 #include <sce_geometry.h>
 #include <touch.h>
 #include <vectormath.h>
 using namespace sce::Vectormath::Simd::Aos;
+using namespace sce::Geometry::Aos;
 
 extern AnimationState g_animationState;
 extern Matrix4 g_finalTransformation;
@@ -15,15 +17,9 @@ struct TouchData {
     float x;
     float y;
     int id;
-}
-
-enum TouchDirection {
-    DIR_NO,
-    DIR_UP,
-    DIR_DOWN,
-    DIR_LEFT,
-    DIR_RIGHT
 };
+
+enum TouchDirection { DIR_NO, DIR_UP, DIR_DOWN, DIR_LEFT, DIR_RIGHT };
 
 static SceTouchPanelInfo s_touchInfo;
 static TouchData s_lastBackTouch;
@@ -39,12 +35,12 @@ static const float c_touchThreshold = 5.0f;
 static const float c_touchSensitivity = 0.5f;
 
 static const Plane s_planes[] = {
-    Plane(Point(0.0f, 0.0f, -c_cubeHalfSize), Vector3(0.0f, 0.0f, -1.0f)),
-    Plane(Point(0.0f, 0.0f, c_cubeHalfSize), Vector3(0.0f, 0.0f, 1.0f)),
-    Plane(Point(-c_cubeHalfSize, 0.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f)),
-    Plane(Point(c_cubeHalfSize, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f)),
-    Plane(Point(0.0f, -c_cubeHalfSize, 0.0f), Vector3(0.0f, -1.0f, 1.0f)),
-    Plane(Point(0.0f, c_cubeHalfSize, 0.0f), Vector3(0.0f, 1.0f, 0.0f))};
+    Plane(Point3(0.0f, 0.0f, -c_cubeHalfSize), Vector3(0.0f, 0.0f, -1.0f)),
+    Plane(Point3(0.0f, 0.0f, c_cubeHalfSize), Vector3(0.0f, 0.0f, 1.0f)),
+    Plane(Point3(-c_cubeHalfSize, 0.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f)),
+    Plane(Point3(c_cubeHalfSize, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f)),
+    Plane(Point3(0.0f, -c_cubeHalfSize, 0.0f), Vector3(0.0f, -1.0f, 1.0f)),
+    Plane(Point3(0.0f, c_cubeHalfSize, 0.0f), Vector3(0.0f, 1.0f, 0.0f))};
 
 inline void initTouch() {
     sceTouchSetSamplingState(SCE_TOUCH_PORT_BACK,
@@ -55,15 +51,15 @@ inline void initTouch() {
                              SCE_TOUCH_SAMPLING_STATE_START);
 }
 
-inline const Vector3 &processBackTouch() {
+inline const Vector3 processBackTouch() {
     SceTouchData tdb;
     // NOTE: maybe the last argument should be 1 because we don't deal with
     // multitouch?
-    int returnCode = sceTouchRead(SCE_TOUCH_PORT_BACK, &tdb, 4);
+    int returnCode = sceTouchRead(SCE_TOUCH_PORT_BACK, &tdb, 1);
     SCE_DBG_ALWAYS_ASSERT(returnCode <= 1);
 
     if (tdb.reportNum > 0) {
-        SceTouchReport &report = tdb.report[0];
+        SceTouchReport& report = tdb.report[0];
         if (report.id == s_lastBackTouch.id) {
             s_accumulatedTurningAngle[0] +=
                 (report.x - s_lastBackTouch.x) * 0.01f;
@@ -75,13 +71,13 @@ inline const Vector3 &processBackTouch() {
         s_lastBackTouch.y = report.y;
     }
 
-    return Vector3(s_accumulatedTurningAngle[0], s_accumulatedTurningAngle[1],
+    return Vector3(s_accumulatedTurningAngle[1], -s_accumulatedTurningAngle[0],
                    0.0f);
 }
 
-inline void processFrontTouch(MiniCube *miniCubes) {
+inline void processFrontTouch(MiniCube* miniCubes) {
     SceTouchData tdf;
-    returnCode = sceTouchRead(SCE_TOUCH_PORT_FRONT, &tdf, 6);
+    int returnCode = sceTouchRead(SCE_TOUCH_PORT_FRONT, &tdf, 1);
     SCE_DBG_ALWAYS_ASSERT(returnCode <= 1);
 
     // Cast ray
@@ -91,10 +87,11 @@ inline void processFrontTouch(MiniCube *miniCubes) {
         if (tdf.reportNum == 0) {
             break;
         }
-        s_lastFrontTouch.id = tdf.report.id;
-        s_lastFrontTouch.x = 2.0f * tdf.report[0].x / s_touchInfo.maxAaX - 1.0f;
-        s_lastFrontTouch.y =
-            -2.0f * tdf.report[0].y / s_touchInfo.maxAaY + 1.0f;
+        s_lastFrontTouch.id = tdf.report[0].id;
+        s_lastFrontTouch.x = 2.0f * tdf.report[0].x / 1919.0f - 1.0f;
+        // (2.0f * tdf.report[0].x / s_touchInfo.maxAaX - 1.0f) * 4.5f;
+        s_lastFrontTouch.y = -2.0f * tdf.report[0].y / 1087.0f + 1.0f;
+        // (2.0f * tdf.report[0].y / s_touchInfo.maxAaY - 1.0f) * 2.5f;
 
         Matrix4 inverseFinalTransform = inverse(g_finalTransformation);
         Vector4 p1 =
@@ -102,13 +99,30 @@ inline void processFrontTouch(MiniCube *miniCubes) {
             Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 0.1f, 1.0f);
         Vector4 p2 =
             inverseFinalTransform *
-            Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 1.0f, 1.0f);
+            Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 0.9f, 1.0f);
 
-        Ray ray = Ray(p1.getXYZ(), p2.getXYZ());
+        std::printf(
+            "Before:\np1: %.2f %.2f %.2f %.2f\np2: %.2f %.2f %.2f %.2f\n",
+            p1.getX().getAsFloat(), p1.getY().getAsFloat(),
+            p1.getZ().getAsFloat(), p1.getW().getAsFloat(),
+            p2.getX().getAsFloat(), p2.getY().getAsFloat(),
+            p2.getZ().getAsFloat(), p2.getW().getAsFloat());
+
+        p1 /= p1.getW();
+        p2 /= p2.getW();
+
+        std::printf(
+            "After:\np1: %.2f %.2f %.2f %.2f\np2: %.2f %.2f %.2f %.2f\n",
+            p1.getX().getAsFloat(), p1.getY().getAsFloat(),
+            p1.getZ().getAsFloat(), p1.getW().getAsFloat(),
+            p2.getX().getAsFloat(), p2.getY().getAsFloat(),
+            p2.getZ().getAsFloat(), p2.getW().getAsFloat());
+
+        Ray ray = Ray(Point3(p1.getXYZ()), Point3(p2.getXYZ()));
 
         Point3 intersection;
         for (int i = 0; i < 6; ++i) {
-            if (!intersectionPoint(ray, s_planes[i], intersection)) {
+            if (!intersectionPoint(ray, s_planes[i], &intersection)) {
                 continue;
             }
 
@@ -116,9 +130,14 @@ inline void processFrontTouch(MiniCube *miniCubes) {
             const float y = intersection.getY();
             const float z = intersection.getZ();
 
+            if (i == 0) {
+                std::printf("Hit %d:\n%.2f %.2f %.2f\n", i, x, y, z);
+            }
             if (x < -c_cubeHalfSize || x > c_cubeHalfSize ||
                 y < -c_cubeHalfSize || y > c_cubeHalfSize ||
-                z < -c_cubeHalfSize || z > c_cubeHalfSize) {
+                z < -c_cubeHalfSize || z > c_cubeHalfSize ||
+                dot(ray.getDirection(), s_planes[i].getNormal()).getAsFloat() >
+                    0.0f) {
                 // We didn't hit the cube, or we hit its back side
                 continue;
             }
@@ -131,6 +150,7 @@ inline void processFrontTouch(MiniCube *miniCubes) {
                 s_startPosOnCube = Vector2(-z, y);
             else
                 s_startPosOnCube = Vector2(x, -z);
+            break;
         }
         break;
     case ANIMSTATE_TOUCH:
@@ -149,11 +169,11 @@ inline void processFrontTouch(MiniCube *miniCubes) {
                 inverseFinalTransform *
                 Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 1.0f, 1.0f);
 
-            Ray ray = Ray(p1.getXYZ(), p2.getXYZ());
+            Ray ray = Ray(Point3(p1.getXYZ()), Point3(p2.getXYZ()));
 
             Point3 intersection;
             if (!intersectionPoint(ray, s_planes[s_touchedSide],
-                                   intersection)) {
+                                   &intersection)) {
                 // Touch is not on the same side of the cube anymore
                 continue;
             }
@@ -213,7 +233,7 @@ inline void processFrontTouch(MiniCube *miniCubes) {
             if (newTouchMotionDirection == DIR_LEFT ||
                 newTouchMotionDirection == DIR_RIGHT) {
                 // Vertical motion
-                if (s_startPosOnCube.x < -g_miniCubeHalfSize) {
+                if (s_startPosOnCube.getX() < -g_miniCubeHalfSize) {
                     // Left column
                     if (newTouchMotionDirection == 1) {
                         if (s_touchedSide == 0)
@@ -242,7 +262,7 @@ inline void processFrontTouch(MiniCube *miniCubes) {
                         else if (s_touchedSide == 5)
                             setAnimation(miniCubes, 0, DIM_X, false);
                     }
-                } else if (s_startPosOnCube.x > g_miniCubeHalfSize) {
+                } else if (s_startPosOnCube.getX() > g_miniCubeHalfSize) {
                     // Right column
                     if (newTouchMotionDirection == 1) {
                         if (s_touchedSide == 0)
@@ -303,7 +323,7 @@ inline void processFrontTouch(MiniCube *miniCubes) {
                 }
             } else {
                 // Horizontal motion
-                if (s_startPosOnCube.y < -g_miniCubeHalfSize) {
+                if (s_startPosOnCube.getY() < -g_miniCubeHalfSize) {
                     // Top row
                     if (newTouchMotionDirection == 3) {
                         if (s_touchedSide == 0)
@@ -332,7 +352,7 @@ inline void processFrontTouch(MiniCube *miniCubes) {
                         else if (s_touchedSide == 5)
                             setAnimation(miniCubes, 2, DIM_Z, false);
                     }
-                } else if (s_startPosOnCube.y > g_miniCubeHalfSize) {
+                } else if (s_startPosOnCube.getY() > g_miniCubeHalfSize) {
                     // Bottom row
                     if (newTouchMotionDirection == 3) {
                         if (s_touchedSide == 0)

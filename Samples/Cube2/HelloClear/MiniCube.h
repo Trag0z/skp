@@ -1,20 +1,22 @@
 #pragma once
 #include "Helpers.h"
+#include <algorithm>
 #include <cstring>
 #include <gxm.h>
 #include <kernel.h>
 #include <libdbg.h>
 #include <rtc.h>
+#include <cstring>
 #include <vectormath.h>
 using namespace sce::Vectormath::Simd::Aos;
 
 extern Matrix4 g_finalTransformation;
 extern Matrix4 g_finalRotation;
-extern const SceGxmProgramParameter *g_wvpParam;
-extern const SceGxmProgramParameter *g_rotParam;
-extern const SceGxmProgramParameter *g_localToWorldParam;
+extern const SceGxmProgramParameter* g_wvpParam;
+extern const SceGxmProgramParameter* g_rotParam;
+extern const SceGxmProgramParameter* g_localToWorldParam;
 
-extern bool g_animationState;
+extern AnimationState g_animationState;
 extern const float g_miniCubeHalfSize;
 
 static SceRtcTick s_lastTick;
@@ -38,7 +40,7 @@ struct Vertex {
 };
 
 struct MiniCube {
-    Vertex *vertices;
+    Vertex* vertices;
     Vector3 position;
     Quat rotation;
 
@@ -132,30 +134,30 @@ const static Vertex s_defaultVertices[24] = {
      0},
 };
 
-inline static void getLocalToWorldTransform(const MiniCube &mc, Matrix4 &out) {
+inline static void getLocalToWorldTransform(const MiniCube& mc, Matrix4& out) {
     out = Matrix4::translation(mc.position) * Matrix4::rotation(mc.rotation);
 }
 
-inline void renderMiniCube(const MiniCube &mc, SceGxmContext *context,
-                           const uint16_t *indices) {
-    void *vertexDefaultBuffer;
+inline void renderMiniCube(const MiniCube& mc, SceGxmContext* context,
+                           const uint16_t* indices) {
+    void* vertexDefaultBuffer;
     sceGxmReserveVertexDefaultUniformBuffer(context, &vertexDefaultBuffer);
     sceGxmSetUniformDataF(vertexDefaultBuffer, g_wvpParam, 0, 16,
-                          (float *)&g_finalTransformation);
+                          (float*)&g_finalTransformation);
     sceGxmSetUniformDataF(vertexDefaultBuffer, g_rotParam, 0, 16,
-                          (float *)&g_finalRotation);
+                          (float*)&g_finalRotation);
 
     Matrix4 localToWorld;
     getLocalToWorldTransform(mc, localToWorld);
     sceGxmSetUniformDataF(vertexDefaultBuffer, g_localToWorldParam, 0, 16,
-                          (float *)&localToWorld);
+                          (float*)&localToWorld);
 
     sceGxmSetVertexStream(context, 0, mc.vertices);
     sceGxmDraw(context, SCE_GXM_PRIMITIVE_TRIANGLES, SCE_GXM_INDEX_FORMAT_U16,
                indices, 6 * 6);
 }
 
-static void setColors(MiniCube &mc, Color front, Color back, Color left,
+static void setColors(MiniCube& mc, Color front, Color back, Color left,
                       Color right, Color top, Color bottom) {
     Color colors[6] = {front, back, left, right, top, bottom};
     for (int side = 0; side < 6; ++side) {
@@ -170,11 +172,11 @@ inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     mc.position = mc.startPosition = pos;
     mc.rotation = mc.startRotation = Quat::identity();
 
-    mc.vertices = (Vertex *)graphicsAlloc(
+    mc.vertices = (Vertex*)graphicsAlloc(
         SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE, 4 * 6 * sizeof(Vertex), 4,
         SCE_GXM_MEMORY_ATTRIB_READ, &mc.verticesUId);
 
-    memcpy(mc.vertices, s_defaultVertices, sizeof(Vertex) * 24);
+    std::memcpy(mc.vertices, s_defaultVertices, sizeof(Vertex) * 24);
 
     if (cubeLocation[0] == 0) {     // X Left
         if (cubeLocation[1] == 0) { // Y Top
@@ -263,13 +265,13 @@ inline void setAnimationInterpolationValue(float t) {
     s_interpolationValue = t;
 }
 
-inline void progressAnimations(MiniCube *miniCubes) {
+inline void progressAnimations(MiniCube* miniCubes) {
     if (g_animationState == ANIMSTATE_TOUCH) {
         for (int i = 0; i < 27; ++i) {
-            MiniCube &mc = miniCubes[i];
-            if (mc.position != mc.targetPosition) {
-                mc.position = Vector3::lerp(
-                    s_interpolationValue, mc.startPosition, mc.targetPosition);
+            MiniCube& mc = miniCubes[i];
+            if (!isEqual(mc.position, mc.targetPosition)) {
+                mc.position = lerp(s_interpolationValue, mc.startPosition,
+                                   mc.targetPosition);
             }
         }
         return;
@@ -281,7 +283,8 @@ inline void progressAnimations(MiniCube *miniCubes) {
     SceRtcTick currentTick;
     sceRtcGetCurrentTick(&currentTick);
     float interpolationStep =
-        static_cast<float>(currentTick - s_lastTick) * c_animationSpeed;
+        static_cast<float>(currentTick.tick - s_lastTick.tick) *
+        c_animationSpeed;
     if (s_interpolationValue < 0.5f) {
         s_interpolationValue =
             std::max(s_interpolationValue - interpolationStep, 0.0f);
@@ -293,15 +296,15 @@ inline void progressAnimations(MiniCube *miniCubes) {
 
     bool animationsFinished = true;
     for (int i = 0; i < 27; ++i) {
-        MiniCube &mc = miniCubes[i];
-        if (mc.position != mc.targetPosition) {
+        MiniCube& mc = miniCubes[i];
+        if (!isEqual(mc.position, mc.targetPosition)) {
             if (s_interpolationValue == 0.0f) {
                 mc.position = mc.targetPosition = mc.startPosition;
             } else if (s_interpolationValue == 1.0f) {
                 mc.position = mc.startPosition = mc.targetPosition;
             } else {
-                mc.position = Vector3::lerp(
-                    s_interpolationValue, mc.startPosition, mc.targetPosition);
+                mc.position = lerp(s_interpolationValue, mc.startPosition,
+                                   mc.targetPosition);
                 animationsFinished = false;
             }
         }
@@ -313,7 +316,7 @@ inline void progressAnimations(MiniCube *miniCubes) {
 
 enum Dimension { DIM_X = 0, DIM_Y = 1, DIM_Z = 2 };
 
-static inline MiniCube *getMiniCubeByLocation(MiniCube *miniCubes, int x, int y,
+static inline MiniCube* getMiniCubeByLocation(MiniCube* miniCubes, int x, int y,
                                               int z) {
     return &miniCubes[x + y * 3 + z * 9];
 }
@@ -322,11 +325,11 @@ static inline float toRad(float degrees) {
     return degrees * 3.14159265359 / 180;
 }
 
-static inline void setTargetRotation(MiniCube &mc, float degrees,
+static inline void setTargetRotation(MiniCube& mc, float degrees,
                                      Dimension dim) {
     if (dim == DIM_X) {
         mc.targetRotation = mc.startRotation * Quat::rotationX(toRad(degrees));
-    } else if (dim = DIM_Y) {
+    } else if (dim == DIM_Y) {
         mc.targetRotation = mc.startRotation * Quat::rotationY(toRad(degrees));
     } else {
         mc.targetRotation = mc.startRotation * Quat::rotationY(toRad(degrees));
@@ -334,11 +337,11 @@ static inline void setTargetRotation(MiniCube &mc, float degrees,
     normalize(mc.targetRotation);
 }
 
-void setAnimation(MiniCube *miniCubes, int layer, Dimension dimension,
+void setAnimation(MiniCube* miniCubes, int layer, Dimension dimension,
                   bool clockwise) {
     SCE_DBG_ALWAYS_ASSERT(layer < 3);
 
-    MiniCube *selectedLayer[3][3];
+    MiniCube* selectedLayer[3][3];
     switch (dimension) {
     case DIM_X:
         for (int i = 0; i < 3; ++i) {
@@ -499,5 +502,5 @@ void setAnimation(MiniCube *miniCubes, int layer, Dimension dimension,
         }
     }
 
-    sceRtxGetCurrentTick(s_lastTick);
+    sceRtcGetCurrentTick(&s_lastTick);
 }

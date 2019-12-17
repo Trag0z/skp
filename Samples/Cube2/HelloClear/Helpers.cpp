@@ -3,7 +3,7 @@
 #include <libdbg.h>
 
 /* Alloc used by libgxm */
-void *graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
+void* graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
                     uint32_t alignment, uint32_t attribs, SceUID *uid) {
     /*	Since we are using sceKernelAllocMemBlock directly, we cannot directly
             use the alignment parameter.  Instead, we must allocate the size to
@@ -39,4 +39,9 @@ void *graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
 
     /* done */
     return mem;
+}
+
+bool isEqual(Vector3& v1, Vector3& v2) {
+	return (v1.getX() == v2.getX() && v1.getY() == v2.getY() &&
+		v1.getZ() == v2.getZ());
 }

@@ -13,4 +13,4 @@ extern const float g_miniCubeHalfSize;
 
 enum AnimationState { ANIMSTATE_NO_ANIM, ANIMSTATE_ANIMATING, ANIMSTATE_TOUCH };
 
-AnimationState g_animationState;
+extern AnimationState g_animationState;

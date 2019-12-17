@@ -1,6 +1,6 @@
 TODO:
+- swap around cubes in s_miniCubes after animation is done
 - fix animstate control flow problems
-- add geometry lib
 
 NOTES:
 - check if s_startPosOnCube has the cubes center as 0.0
