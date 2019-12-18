@@ -1,4 +1,5 @@
 #pragma once
+#include "Globals.h"
 #include "Helpers.h"
 #include <algorithm>
 #include <cstring>
@@ -16,8 +17,11 @@ extern const SceGxmProgramParameter* g_wvpParam;
 extern const SceGxmProgramParameter* g_localToWorldParam;
 extern const float g_miniCubeHalfSize;
 
+// NOTE: Why does this have to bere up here?
+enum Dimension { DIM_X = 0, DIM_Y = 1, DIM_Z = 2 };
+
 struct MiniCube;
-enum Dimension;
+enum AnimationState;
 
 // TODO: make the declaration consistent across files
 extern MiniCube* g_miniCubes[3][3][3];
@@ -142,26 +146,33 @@ const static Vertex s_defaultVertices[24] = {
 
 inline static void getLocalToWorldTransform(const MiniCube& mc, Matrix4& out) {
     // translate first, then rotate
-    out = Matrix4::rotation(mc.rotation) * Matrix4::translation(mc.position);
+    out = Matrix4::rotation(normalize(mc.rotation)) *
+          Matrix4::translation(mc.position);
 }
 
 inline void renderMiniCubes(SceGxmContext* context, const uint16_t* indices) {
     void* vertexDefaultBuffer;
-    for (int x = 0; x < 27; ++x) {
-        sceGxmReserveVertexDefaultUniformBuffer(context, &vertexDefaultBuffer);
-        sceGxmSetUniformDataF(vertexDefaultBuffer, g_wvpParam, 0, 16,
-                              (float*)&g_finalTransformation);
-        // sceGxmSetUniformDataF(vertexDefaultBuffer, g_rotParam, 0, 16,
-        //                       (float*)&g_finalRotation);
+    for (int x = 0; x < 3; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            for (int z = 0; z < 3; ++z) {
+                sceGxmReserveVertexDefaultUniformBuffer(context,
+                                                        &vertexDefaultBuffer);
+                sceGxmSetUniformDataF(vertexDefaultBuffer, g_wvpParam, 0, 16,
+                                      (float*)&g_finalTransformation);
+                // sceGxmSetUniformDataF(vertexDefaultBuffer, g_rotParam, 0, 16,
+                //                       (float*)&g_finalRotation);
 
-        Matrix4 localToWorld;
-        getLocalToWorldTransform(g_miniCubes[x], localToWorld);
-        sceGxmSetUniformDataF(vertexDefaultBuffer, g_localToWorldParam, 0, 16,
-                              (float*)&localToWorld);
+                Matrix4 localToWorld;
+                getLocalToWorldTransform(*g_miniCubes[x][y][z], localToWorld);
+                sceGxmSetUniformDataF(vertexDefaultBuffer, g_localToWorldParam,
+                                      0, 16, (float*)&localToWorld);
 
-        sceGxmSetVertexStream(context, 0, mc.vertices);
-        sceGxmDraw(context, SCE_GXM_PRIMITIVE_TRIANGLES,
-                   SCE_GXM_INDEX_FORMAT_U16, indices, 6 * 6);
+                sceGxmSetVertexStream(context, 0,
+                                      g_miniCubes[x][y][z]->vertices);
+                sceGxmDraw(context, SCE_GXM_PRIMITIVE_TRIANGLES,
+                           SCE_GXM_INDEX_FORMAT_U16, indices, 6 * 6);
+            }
+        }
     }
 }
 
@@ -276,11 +287,16 @@ inline void setAnimationInterpolationValue(float t) {
 
 inline void progressAnimations() {
     if (g_animationState == ANIMSTATE_TOUCH) {
-        for (int x = 0; x < 9; ++x) {
-            MiniCube& mc = s_rotatingMiniCubes[x];
-            if (!isEqual(mc.rotation, mc.targetRotation)) {
-                mc.rotation = lerp(s_interpolationValue, mc.startRotation,
-                                   mc.targetRotation);
+        // TODO: remove this hack
+        if (!**s_rotatingMiniCubes)
+            return;
+        for (int x = 0; x < 3; ++x) {
+            for (int y = 0; y < 3; ++y) {
+                MiniCube& mc = *s_rotatingMiniCubes[x][y];
+                if (!isEqual(mc.rotation, mc.targetRotation)) {
+                    mc.rotation = lerp(s_interpolationValue, mc.startRotation,
+                                       mc.targetRotation);
+                }
             }
         }
         return;
@@ -304,17 +320,19 @@ inline void progressAnimations() {
     s_lastTick = currentTick;
 
     bool animationsFinished = true;
-    for (int x = 0; x < 9; ++x) {
-        MiniCube& mc = s_rotatingMiniCubes[x];
-        if (!isEqual(mc.rotation, mc.targetRotation)) {
-            if (s_interpolationValue == 0.0f) {
-                mc.rotation = mc.targetRotation = mc.startRotation;
-            } else if (s_interpolationValue == 1.0f) {
-                mc.rotation = mc.startRotation = mc.targetRotation;
-            } else {
-                mc.rotation = lerp(s_interpolationValue, mc.startRotation,
-                                   mc.targetRotation);
-                animationsFinished = false;
+    for (int x = 0; x < 3; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            MiniCube& mc = *s_rotatingMiniCubes[x][y];
+            if (!isEqual(mc.rotation, mc.targetRotation)) {
+                if (s_interpolationValue == 0.0f) {
+                    mc.rotation = mc.targetRotation = mc.startRotation;
+                } else if (s_interpolationValue == 1.0f) {
+                    mc.rotation = mc.startRotation = mc.targetRotation;
+                } else {
+                    mc.rotation = lerp(s_interpolationValue, mc.startRotation,
+                                       mc.targetRotation);
+                    animationsFinished = false;
+                }
             }
         }
     }
@@ -360,10 +378,9 @@ inline void progressAnimations() {
                     s_rotatingMiniCubes[2][0];
             }
         }
+        s_interpolationValue = 0.0f;
     }
 }
-
-enum Dimension { DIM_X = 0, DIM_Y = 1, DIM_Z = 2 };
 
 static inline float toRad(float degrees) {
     return degrees * 3.14159265359 / 180;
@@ -372,12 +389,16 @@ static inline float toRad(float degrees) {
 static inline void setTargetRotation(MiniCube& mc, float degrees,
                                      Dimension dim) {
     // TODO: remove degrees since we only ever rotate by 90 degrees
+    // NOTE: is normalization needed here?
     if (dim == DIM_X) {
-        mc.targetRotation = mc.startRotation * Quat::rotationX(-toRad(degrees));
+        mc.targetRotation =
+            normalize(mc.startRotation * Quat::rotationX(toRad(degrees)));
     } else if (dim == DIM_Y) {
-        mc.targetRotation = mc.startRotation * Quat::rotationY(-toRad(degrees));
+        mc.targetRotation =
+            normalize(mc.startRotation * Quat::rotationY(toRad(degrees)));
     } else {
-        mc.targetRotation = mc.startRotation * Quat::rotationY(-toRad(degrees));
+        mc.targetRotation =
+            normalize(mc.startRotation * Quat::rotationY(toRad(degrees)));
     }
     normalize(mc.targetRotation);
 }

@@ -78,8 +78,8 @@ float makeFloat(unsigned char input) {
 
 void update(void) {
 
-    processFrontTouch(s_miniCubes);
-    progressAnimations(s_miniCubes);
+    processFrontTouch();
+    progressAnimations();
 
     g_finalRotation = Matrix4::rotationZYX(processBackTouch());
     Matrix4 lookAt =
@@ -101,11 +101,11 @@ static void initCube() {
                 int cubeLocation[3] = {x, y, z};
                 s_miniCubes[i] = createMiniCube(
                     Vector3(static_cast<float>(x - 1) *
-                                (g_miniCubeHalfSize * 2 + 0.01f),
+                                (g_miniCubeHalfSize + 0.01f) * 2.0f,
                             static_cast<float>(y - 1) *
-                                (g_miniCubeHalfSize * 2 + 0.01f),
+                                (g_miniCubeHalfSize + 0.01f) * 2.0f,
                             static_cast<float>(z - 1) *
-                                (g_miniCubeHalfSize * 2 + 0.01f)),
+                                (g_miniCubeHalfSize + 0.01f) * 2.0f),
                     cubeLocation);
                 g_miniCubes[x][y][z] = &s_miniCubes[i];
                 ++i;

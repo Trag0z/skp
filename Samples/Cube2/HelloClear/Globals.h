@@ -1,8 +1,9 @@
 #pragma once
-#include "MiniCube.h"
 #include <gxm.h>
 #include <vectormath.h>
 using namespace sce::Vectormath::Simd::Aos;
+
+struct MiniCube;
 
 // TODO: rename to g_cameraTransformation
 extern Matrix4 g_finalTransformation;

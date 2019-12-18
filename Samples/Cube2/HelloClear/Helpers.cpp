@@ -41,7 +41,7 @@ void* graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
     return mem;
 }
 
-bool isEqual(Vector3& q1, Vector3& q2) {
+bool isEqual(Quat& q1, Quat& q2) {
     return (q1.getX() == q2.getX() && q1.getY() == q2.getY() &&
             q1.getZ() == q2.getZ() && q1.getW() == q2.getW());
 }
