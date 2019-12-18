@@ -14,13 +14,24 @@ extern Matrix4 g_finalRotation;
 extern const SceGxmProgramParameter* g_wvpParam;
 // extern const SceGxmProgramParameter* g_rotParam;
 extern const SceGxmProgramParameter* g_localToWorldParam;
+extern const float g_miniCubeHalfSize;
+
+struct MiniCube;
+enum Dimension;
+
+// TODO: make the declaration consistent across files
+extern MiniCube* g_miniCubes[3][3][3];
 
 extern AnimationState g_animationState;
-extern const float g_miniCubeHalfSize;
 
 static SceRtcTick s_lastTick;
 const static float c_animationSpeed = 2e-4;
 static float s_interpolationValue;
+static bool s_rotatingClockwise;
+static int s_rotatingLayer;
+static Dimension s_rotatingDimension;
+static MiniCube* s_rotatingMiniCubes[3][3];
+static MiniCube** s_correspondingGlobalPointers[3][3];
 
 enum Color {
     WHITE = 0xffffffff,
@@ -43,11 +54,7 @@ struct MiniCube {
     Vector3 position;
     Quat rotation;
 
-    Vector3 startPosition;
-    Quat startRotation;
-
-    Vector3 targetPosition;
-    Quat targetRotation;
+    Quat startRotation, targetRotation;
 
     int32_t verticesUId;
 };
@@ -134,26 +141,28 @@ const static Vertex s_defaultVertices[24] = {
 };
 
 inline static void getLocalToWorldTransform(const MiniCube& mc, Matrix4& out) {
-    out = Matrix4::translation(mc.position) * Matrix4::rotation(mc.rotation);
+    // translate first, then rotate
+    out = Matrix4::rotation(mc.rotation) * Matrix4::translation(mc.position);
 }
 
-inline void renderMiniCube(const MiniCube& mc, SceGxmContext* context,
-                           const uint16_t* indices) {
+inline void renderMiniCubes(SceGxmContext* context, const uint16_t* indices) {
     void* vertexDefaultBuffer;
-    sceGxmReserveVertexDefaultUniformBuffer(context, &vertexDefaultBuffer);
-    sceGxmSetUniformDataF(vertexDefaultBuffer, g_wvpParam, 0, 16,
-                          (float*)&g_finalTransformation);
-    // sceGxmSetUniformDataF(vertexDefaultBuffer, g_rotParam, 0, 16,
-    //                       (float*)&g_finalRotation);
+    for (int x = 0; x < 27; ++x) {
+        sceGxmReserveVertexDefaultUniformBuffer(context, &vertexDefaultBuffer);
+        sceGxmSetUniformDataF(vertexDefaultBuffer, g_wvpParam, 0, 16,
+                              (float*)&g_finalTransformation);
+        // sceGxmSetUniformDataF(vertexDefaultBuffer, g_rotParam, 0, 16,
+        //                       (float*)&g_finalRotation);
 
-    Matrix4 localToWorld;
-    getLocalToWorldTransform(mc, localToWorld);
-    sceGxmSetUniformDataF(vertexDefaultBuffer, g_localToWorldParam, 0, 16,
-                          (float*)&localToWorld);
+        Matrix4 localToWorld;
+        getLocalToWorldTransform(g_miniCubes[x], localToWorld);
+        sceGxmSetUniformDataF(vertexDefaultBuffer, g_localToWorldParam, 0, 16,
+                              (float*)&localToWorld);
 
-    sceGxmSetVertexStream(context, 0, mc.vertices);
-    sceGxmDraw(context, SCE_GXM_PRIMITIVE_TRIANGLES, SCE_GXM_INDEX_FORMAT_U16,
-               indices, 6 * 6);
+        sceGxmSetVertexStream(context, 0, mc.vertices);
+        sceGxmDraw(context, SCE_GXM_PRIMITIVE_TRIANGLES,
+                   SCE_GXM_INDEX_FORMAT_U16, indices, 6 * 6);
+    }
 }
 
 static void setColors(MiniCube& mc, Color front, Color back, Color left,
@@ -168,13 +177,14 @@ static void setColors(MiniCube& mc, Color front, Color back, Color left,
 
 inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     MiniCube mc;
-    mc.position = mc.startPosition = mc.targetPosition = pos;
+    mc.position = pos;
     mc.rotation = mc.startRotation = mc.targetRotation = Quat::identity();
 
     mc.vertices = (Vertex*)graphicsAlloc(
         SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE, 4 * 6 * sizeof(Vertex), 4,
         SCE_GXM_MEMORY_ATTRIB_READ, &mc.verticesUId);
 
+    // TODO: Vertices can store position, so position attribute is obsolete
     std::memcpy(mc.vertices, s_defaultVertices, sizeof(Vertex) * 24);
 
     if (cubeLocation[0] == 0) {     // X Left
@@ -264,13 +274,11 @@ inline void setAnimationInterpolationValue(float t) {
     s_interpolationValue = t;
 }
 
-inline void progressAnimations(MiniCube* miniCubes) {
+inline void progressAnimations() {
     if (g_animationState == ANIMSTATE_TOUCH) {
-        for (int i = 0; i < 27; ++i) {
-            MiniCube& mc = miniCubes[i];
-            if (!isEqual(mc.position, mc.targetPosition)) {
-                // mc.position = lerp(s_interpolationValue, mc.startPosition,
-                //                    mc.targetPosition);
+        for (int x = 0; x < 9; ++x) {
+            MiniCube& mc = s_rotatingMiniCubes[x];
+            if (!isEqual(mc.rotation, mc.targetRotation)) {
                 mc.rotation = lerp(s_interpolationValue, mc.startRotation,
                                    mc.targetRotation);
             }
@@ -296,18 +304,14 @@ inline void progressAnimations(MiniCube* miniCubes) {
     s_lastTick = currentTick;
 
     bool animationsFinished = true;
-    for (int i = 0; i < 27; ++i) {
-        MiniCube& mc = miniCubes[i];
-        if (!isEqual(mc.position, mc.targetPosition)) {
+    for (int x = 0; x < 9; ++x) {
+        MiniCube& mc = s_rotatingMiniCubes[x];
+        if (!isEqual(mc.rotation, mc.targetRotation)) {
             if (s_interpolationValue == 0.0f) {
-                mc.position = mc.targetPosition = mc.startPosition;
                 mc.rotation = mc.targetRotation = mc.startRotation;
             } else if (s_interpolationValue == 1.0f) {
-                mc.position = mc.startPosition = mc.targetPosition;
                 mc.rotation = mc.startRotation = mc.targetRotation;
             } else {
-                // mc.position = lerp(s_interpolationValue, mc.startPosition,
-                //                    mc.targetPosition);
                 mc.rotation = lerp(s_interpolationValue, mc.startRotation,
                                    mc.targetRotation);
                 animationsFinished = false;
@@ -315,16 +319,51 @@ inline void progressAnimations(MiniCube* miniCubes) {
         }
     }
 
-    if (animationsFinished)
+    if (animationsFinished) {
         g_animationState = ANIMSTATE_NO_ANIM;
+        if (s_interpolationValue == 1.0f) {
+            // Put the pointer to the rotated miniCubes into the correct
+            // positions of the global array
+            if (s_rotatingClockwise) {
+                *s_correspondingGlobalPointers[0][0] =
+                    s_rotatingMiniCubes[0][2];
+                *s_correspondingGlobalPointers[0][1] =
+                    s_rotatingMiniCubes[1][2];
+                *s_correspondingGlobalPointers[0][2] =
+                    s_rotatingMiniCubes[2][2];
+                *s_correspondingGlobalPointers[1][0] =
+                    s_rotatingMiniCubes[0][1];
+                *s_correspondingGlobalPointers[1][2] =
+                    s_rotatingMiniCubes[2][1];
+                *s_correspondingGlobalPointers[2][0] =
+                    s_rotatingMiniCubes[0][0];
+                *s_correspondingGlobalPointers[2][1] =
+                    s_rotatingMiniCubes[1][0];
+                *s_correspondingGlobalPointers[2][2] =
+                    s_rotatingMiniCubes[2][0];
+            } else {
+                *s_correspondingGlobalPointers[0][0] =
+                    s_rotatingMiniCubes[0][2];
+                *s_correspondingGlobalPointers[0][1] =
+                    s_rotatingMiniCubes[1][2];
+                *s_correspondingGlobalPointers[0][2] =
+                    s_rotatingMiniCubes[2][2];
+                *s_correspondingGlobalPointers[1][0] =
+                    s_rotatingMiniCubes[0][1];
+                *s_correspondingGlobalPointers[1][2] =
+                    s_rotatingMiniCubes[2][1];
+                *s_correspondingGlobalPointers[2][0] =
+                    s_rotatingMiniCubes[0][0];
+                *s_correspondingGlobalPointers[2][1] =
+                    s_rotatingMiniCubes[1][0];
+                *s_correspondingGlobalPointers[2][2] =
+                    s_rotatingMiniCubes[2][0];
+            }
+        }
+    }
 }
 
 enum Dimension { DIM_X = 0, DIM_Y = 1, DIM_Z = 2 };
-
-static inline MiniCube* getMiniCubeByLocation(MiniCube* miniCubes, int x, int y,
-                                              int z) {
-    return &miniCubes[x + y * 3 + z * 9];
-}
 
 static inline float toRad(float degrees) {
     return degrees * 3.14159265359 / 180;
@@ -332,6 +371,7 @@ static inline float toRad(float degrees) {
 
 static inline void setTargetRotation(MiniCube& mc, float degrees,
                                      Dimension dim) {
+    // TODO: remove degrees since we only ever rotate by 90 degrees
     if (dim == DIM_X) {
         mc.targetRotation = mc.startRotation * Quat::rotationX(-toRad(degrees));
     } else if (dim == DIM_Y) {
@@ -342,151 +382,40 @@ static inline void setTargetRotation(MiniCube& mc, float degrees,
     normalize(mc.targetRotation);
 }
 
-void setAnimation(MiniCube* miniCubes, int layer, Dimension dimension,
-                  bool clockwise) {
+void setAnimation(int layer, Dimension dimension, bool clockwise) {
     SCE_DBG_ALWAYS_ASSERT(layer < 3);
 
-    MiniCube* selectedLayer[3][3];
+    s_rotatingLayer = layer;
+    s_rotatingDimension = dimension;
+    s_rotatingClockwise = clockwise;
+
+    // Origin of x/y always in top left corner of the slice, viewed from
+    // front/top/left depending on dimension
     switch (dimension) {
     case DIM_X:
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                selectedLayer[i][j] =
-                    getMiniCubeByLocation(miniCubes, layer, i, j);
+        for (int x = 0; x < 3; ++x) {
+            for (int y = 0; y < 3; ++y) {
+                s_rotatingMiniCubes[x][y] = g_miniCubes[layer][y][2 - x];
+                s_correspondingGlobalPointers[x][y] =
+                    &g_miniCubes[layer][y][2 - x];
             }
-        }
-        if (clockwise) {
-            selectedLayer[0][0]->targetPosition =
-                selectedLayer[0][2]->startPosition;
-            selectedLayer[0][1]->targetPosition =
-                selectedLayer[1][2]->startPosition;
-            selectedLayer[0][2]->targetPosition =
-                selectedLayer[2][2]->startPosition;
-            selectedLayer[1][0]->targetPosition =
-                selectedLayer[0][1]->startPosition;
-            selectedLayer[1][1]->targetPosition =
-                selectedLayer[1][1]->startPosition;
-            selectedLayer[1][2]->targetPosition =
-                selectedLayer[2][1]->startPosition;
-            selectedLayer[2][0]->targetPosition =
-                selectedLayer[0][0]->startPosition;
-            selectedLayer[2][1]->targetPosition =
-                selectedLayer[1][0]->startPosition;
-            selectedLayer[2][2]->targetPosition =
-                selectedLayer[2][0]->startPosition;
-        } else {
-            selectedLayer[0][0]->targetPosition =
-                selectedLayer[2][0]->startPosition;
-            selectedLayer[0][1]->targetPosition =
-                selectedLayer[1][0]->startPosition;
-            selectedLayer[0][2]->targetPosition =
-                selectedLayer[0][0]->startPosition;
-            selectedLayer[1][0]->targetPosition =
-                selectedLayer[1][2]->startPosition;
-            selectedLayer[1][1]->targetPosition =
-                selectedLayer[1][1]->startPosition;
-            selectedLayer[1][2]->targetPosition =
-                selectedLayer[0][1]->startPosition;
-            selectedLayer[2][0]->targetPosition =
-                selectedLayer[2][2]->startPosition;
-            selectedLayer[2][1]->targetPosition =
-                selectedLayer[1][2]->startPosition;
-            selectedLayer[2][2]->targetPosition =
-                selectedLayer[0][2]->startPosition;
         }
         break;
     case DIM_Y:
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                selectedLayer[i][j] =
-                    getMiniCubeByLocation(miniCubes, i, layer, j);
+        for (int x = 0; x < 3; ++x) {
+            for (int y = 0; y < 3; ++y) {
+                s_rotatingMiniCubes[x][y] = g_miniCubes[x][layer][2 - y];
+                s_correspondingGlobalPointers[x][y] =
+                    &g_miniCubes[x][layer][2 - y];
             }
-        }
-        if (!clockwise) {
-            selectedLayer[0][0]->targetPosition =
-                selectedLayer[0][2]->startPosition;
-            selectedLayer[0][1]->targetPosition =
-                selectedLayer[1][2]->startPosition;
-            selectedLayer[0][2]->targetPosition =
-                selectedLayer[2][2]->startPosition;
-            selectedLayer[1][0]->targetPosition =
-                selectedLayer[0][1]->startPosition;
-            selectedLayer[1][1]->targetPosition =
-                selectedLayer[1][1]->startPosition;
-            selectedLayer[1][2]->targetPosition =
-                selectedLayer[2][1]->startPosition;
-            selectedLayer[2][0]->targetPosition =
-                selectedLayer[0][0]->startPosition;
-            selectedLayer[2][1]->targetPosition =
-                selectedLayer[1][0]->startPosition;
-            selectedLayer[2][2]->targetPosition =
-                selectedLayer[2][0]->startPosition;
-        } else {
-            selectedLayer[0][0]->targetPosition =
-                selectedLayer[2][0]->startPosition;
-            selectedLayer[0][1]->targetPosition =
-                selectedLayer[1][0]->startPosition;
-            selectedLayer[0][2]->targetPosition =
-                selectedLayer[0][0]->startPosition;
-            selectedLayer[1][0]->targetPosition =
-                selectedLayer[1][2]->startPosition;
-            selectedLayer[1][1]->targetPosition =
-                selectedLayer[1][1]->startPosition;
-            selectedLayer[1][2]->targetPosition =
-                selectedLayer[0][1]->startPosition;
-            selectedLayer[2][0]->targetPosition =
-                selectedLayer[2][2]->startPosition;
-            selectedLayer[2][1]->targetPosition =
-                selectedLayer[1][2]->startPosition;
-            selectedLayer[2][2]->targetPosition =
-                selectedLayer[0][2]->startPosition;
         }
         break;
     case DIM_Z:
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                selectedLayer[i][j] =
-                    getMiniCubeByLocation(miniCubes, i, j, layer);
+        for (int x = 0; x < 3; ++x) {
+            for (int y = 0; y < 3; ++y) {
+                s_rotatingMiniCubes[x][y] = g_miniCubes[x][y][layer];
+                s_correspondingGlobalPointers[x][y] = &g_miniCubes[x][y][layer];
             }
-        }
-        if (clockwise) {
-            selectedLayer[0][0]->targetPosition =
-                selectedLayer[0][2]->startPosition;
-            selectedLayer[0][1]->targetPosition =
-                selectedLayer[1][2]->startPosition;
-            selectedLayer[0][2]->targetPosition =
-                selectedLayer[2][2]->startPosition;
-            selectedLayer[1][0]->targetPosition =
-                selectedLayer[0][1]->startPosition;
-            selectedLayer[1][1]->targetPosition =
-                selectedLayer[1][1]->startPosition;
-            selectedLayer[1][2]->targetPosition =
-                selectedLayer[2][1]->startPosition;
-            selectedLayer[2][0]->targetPosition =
-                selectedLayer[0][0]->startPosition;
-            selectedLayer[2][1]->targetPosition =
-                selectedLayer[1][0]->startPosition;
-            selectedLayer[2][2]->targetPosition =
-                selectedLayer[2][0]->startPosition;
-        } else {
-            selectedLayer[0][0]->targetPosition =
-                selectedLayer[2][0]->startPosition;
-            selectedLayer[0][1]->targetPosition =
-                selectedLayer[1][0]->startPosition;
-            selectedLayer[0][2]->targetPosition =
-                selectedLayer[0][0]->startPosition;
-            selectedLayer[1][0]->targetPosition =
-                selectedLayer[2][1]->startPosition;
-            selectedLayer[1][1]->targetPosition =
-                selectedLayer[1][1]->startPosition;
-            selectedLayer[1][2]->targetPosition =
-                selectedLayer[0][1]->startPosition;
-            selectedLayer[2][0]->targetPosition =
-                selectedLayer[2][2]->startPosition;
-            selectedLayer[2][1]->targetPosition =
-                selectedLayer[1][2]->startPosition;
-            selectedLayer[2][2]->targetPosition =
-                selectedLayer[0][2]->startPosition;
         }
         break;
     default:
@@ -496,13 +425,15 @@ void setAnimation(MiniCube* miniCubes, int layer, Dimension dimension,
     if (clockwise) {
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
-                setTargetRotation(*selectedLayer[row][col], 90.0f, dimension);
+                setTargetRotation(*s_rotatingMiniCubes[row][col], 90.0f,
+                                  dimension);
             }
         }
     } else {
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
-                setTargetRotation(*selectedLayer[row][col], -90.0f, dimension);
+                setTargetRotation(*s_rotatingMiniCubes[row][col], -90.0f,
+                                  dimension);
             }
         }
     }

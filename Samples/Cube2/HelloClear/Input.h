@@ -75,7 +75,7 @@ inline const Vector3 processBackTouch() {
                    0.0f);
 }
 
-inline void processFrontTouch(MiniCube* miniCubes) {
+inline void processFrontTouch() {
     SceTouchData tdf;
     int returnCode = sceTouchRead(SCE_TOUCH_PORT_FRONT, &tdf, 6);
     SCE_DBG_ALWAYS_ASSERT(returnCode >= 0);
@@ -231,88 +231,88 @@ inline void processFrontTouch(MiniCube* miniCubes) {
                     // Left column
                     if (newTouchMotionDirection == 1) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 0, DIM_X, false);
+                            setAnimation(0, DIM_X, false);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 0, DIM_X, true);
+                            setAnimation(0, DIM_X, true);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 2, DIM_Z, true);
+                            setAnimation(2, DIM_Z, true);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 2, DIM_Z, false);
+                            setAnimation(2, DIM_Z, false);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 0, DIM_X, false);
+                            setAnimation(0, DIM_X, false);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 0, DIM_X, true);
+                            setAnimation(0, DIM_X, true);
                     } else if (newTouchMotionDirection == 2) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 0, DIM_X, true);
+                            setAnimation(0, DIM_X, true);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 0, DIM_X, false);
+                            setAnimation(0, DIM_X, false);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 2, DIM_Z, false);
+                            setAnimation(2, DIM_Z, false);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 2, DIM_Z, true);
+                            setAnimation(2, DIM_Z, true);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 0, DIM_X, true);
+                            setAnimation(0, DIM_X, true);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 0, DIM_X, false);
+                            setAnimation(0, DIM_X, false);
                     }
                 } else if (s_startPosOnCube.getX() > g_miniCubeHalfSize) {
                     // Right column
                     if (newTouchMotionDirection == 1) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 2, DIM_X, false);
+                            setAnimation(2, DIM_X, false);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 2, DIM_X, true);
+                            setAnimation(2, DIM_X, true);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 0, DIM_Z, true);
+                            setAnimation(0, DIM_Z, true);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 0, DIM_Z, false);
+                            setAnimation(0, DIM_Z, false);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 2, DIM_X, false);
+                            setAnimation(2, DIM_X, false);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 2, DIM_X, true);
+                            setAnimation(2, DIM_X, true);
                     } else if (newTouchMotionDirection == 2) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 2, DIM_X, true);
+                            setAnimation(2, DIM_X, true);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 2, DIM_X, false);
+                            setAnimation(2, DIM_X, false);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 0, DIM_Z, false);
+                            setAnimation(0, DIM_Z, false);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 0, DIM_Z, true);
+                            setAnimation(0, DIM_Z, true);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 2, DIM_X, true);
+                            setAnimation(2, DIM_X, true);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 2, DIM_X, false);
+                            setAnimation(2, DIM_X, false);
                     }
                 } else {
                     // Middle column
                     if (newTouchMotionDirection == 1) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 1, DIM_X, false);
+                            setAnimation(1, DIM_X, false);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 1, DIM_X, true);
+                            setAnimation(1, DIM_X, true);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 1, DIM_Z, true);
+                            setAnimation(1, DIM_Z, true);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 1, DIM_Z, false);
+                            setAnimation(1, DIM_Z, false);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 1, DIM_X, false);
+                            setAnimation(1, DIM_X, false);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 1, DIM_X, true);
+                            setAnimation(1, DIM_X, true);
                     } else if (newTouchMotionDirection == 2) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 1, DIM_X, true);
+                            setAnimation(1, DIM_X, true);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 1, DIM_X, false);
+                            setAnimation(1, DIM_X, false);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 1, DIM_Z, false);
+                            setAnimation(1, DIM_Z, false);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 1, DIM_Z, true);
+                            setAnimation(1, DIM_Z, true);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 1, DIM_X, true);
+                            setAnimation(1, DIM_X, true);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 1, DIM_X, false);
+                            setAnimation(1, DIM_X, false);
                     }
                 }
             } else {
@@ -321,88 +321,88 @@ inline void processFrontTouch(MiniCube* miniCubes) {
                     // Top row
                     if (newTouchMotionDirection == 3) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 0, DIM_Y, true);
+                            setAnimation(0, DIM_Y, true);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 0, DIM_Y, false);
+                            setAnimation(0, DIM_Y, false);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 0, DIM_Y, true);
+                            setAnimation(0, DIM_Y, true);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 0, DIM_Y, false);
+                            setAnimation(0, DIM_Y, false);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 2, DIM_Z, false);
+                            setAnimation(2, DIM_Z, false);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 2, DIM_Z, true);
+                            setAnimation(2, DIM_Z, true);
                     } else if (newTouchMotionDirection == 4) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 0, DIM_Y, false);
+                            setAnimation(0, DIM_Y, false);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 0, DIM_Y, true);
+                            setAnimation(0, DIM_Y, true);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 0, DIM_Y, false);
+                            setAnimation(0, DIM_Y, false);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 0, DIM_Y, true);
+                            setAnimation(0, DIM_Y, true);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 2, DIM_Z, true);
+                            setAnimation(2, DIM_Z, true);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 2, DIM_Z, false);
+                            setAnimation(2, DIM_Z, false);
                     }
                 } else if (s_startPosOnCube.getY() > g_miniCubeHalfSize) {
                     // Bottom row
                     if (newTouchMotionDirection == 3) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 2, DIM_Y, true);
+                            setAnimation(2, DIM_Y, true);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 2, DIM_Y, false);
+                            setAnimation(2, DIM_Y, false);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 2, DIM_Y, true);
+                            setAnimation(2, DIM_Y, true);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 2, DIM_Y, false);
+                            setAnimation(2, DIM_Y, false);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 0, DIM_Z, false);
+                            setAnimation(0, DIM_Z, false);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 0, DIM_Z, true);
+                            setAnimation(0, DIM_Z, true);
                     } else if (newTouchMotionDirection == 4) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 2, DIM_Y, false);
+                            setAnimation(2, DIM_Y, false);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 2, DIM_Y, true);
+                            setAnimation(2, DIM_Y, true);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 2, DIM_Y, false);
+                            setAnimation(2, DIM_Y, false);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 2, DIM_Y, true);
+                            setAnimation(2, DIM_Y, true);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 0, DIM_Z, true);
+                            setAnimation(0, DIM_Z, true);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 0, DIM_Z, false);
+                            setAnimation(0, DIM_Z, false);
                     }
                 } else {
                     // Middle row
                     if (newTouchMotionDirection == 3) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 1, DIM_Y, true);
+                            setAnimation(1, DIM_Y, true);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 1, DIM_Y, false);
+                            setAnimation(1, DIM_Y, false);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 1, DIM_Y, true);
+                            setAnimation(1, DIM_Y, true);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 1, DIM_Y, false);
+                            setAnimation(1, DIM_Y, false);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 1, DIM_Z, false);
+                            setAnimation(1, DIM_Z, false);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 1, DIM_Z, true);
+                            setAnimation(1, DIM_Z, true);
                     } else if (newTouchMotionDirection == 4) {
                         if (s_touchedSide == 0)
-                            setAnimation(miniCubes, 1, DIM_Y, false);
+                            setAnimation(1, DIM_Y, false);
                         else if (s_touchedSide == 1)
-                            setAnimation(miniCubes, 1, DIM_Y, true);
+                            setAnimation(1, DIM_Y, true);
                         else if (s_touchedSide == 2)
-                            setAnimation(miniCubes, 1, DIM_Y, false);
+                            setAnimation(1, DIM_Y, false);
                         else if (s_touchedSide == 3)
-                            setAnimation(miniCubes, 1, DIM_Y, true);
+                            setAnimation(1, DIM_Y, true);
                         else if (s_touchedSide == 4)
-                            setAnimation(miniCubes, 1, DIM_Z, true);
+                            setAnimation(1, DIM_Z, true);
                         else if (s_touchedSide == 5)
-                            setAnimation(miniCubes, 1, DIM_Z, false);
+                            setAnimation(1, DIM_Z, false);
                     }
                 }
             }

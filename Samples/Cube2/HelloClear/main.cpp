@@ -12,6 +12,7 @@ extern const SceGxmProgramParameter* g_wvpParam;
 extern const SceGxmProgramParameter* g_localToWorldParam;
 extern AnimationState g_animationState;
 extern const float g_miniCubeHalfSize;
+extern MiniCube* g_miniCubes[3][3][3];
 
 static MiniCube* s_miniCubes;
 
@@ -48,7 +49,7 @@ int main(void) {
     /* 6. main loop */
     while (true) {
         update();
-        render(s_miniCubes);
+        render();
         sceDbgFontPrint(20, 20, 0xffffffff, "Hello World");
         cycleDisplayBuffers();
     }
@@ -98,7 +99,7 @@ static void initCube() {
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
                 int cubeLocation[3] = {x, y, z};
-                s_miniCubes[i++] = createMiniCube(
+                s_miniCubes[i] = createMiniCube(
                     Vector3(static_cast<float>(x - 1) *
                                 (g_miniCubeHalfSize * 2 + 0.01f),
                             static_cast<float>(y - 1) *
@@ -106,6 +107,8 @@ static void initCube() {
                             static_cast<float>(z - 1) *
                                 (g_miniCubeHalfSize * 2 + 0.01f)),
                     cubeLocation);
+                g_miniCubes[x][y][z] = &s_miniCubes[i];
+                ++i;
             }
         }
     }

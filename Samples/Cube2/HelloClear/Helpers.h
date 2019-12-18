@@ -12,4 +12,4 @@ using namespace sce::Vectormath::Simd::Aos;
 void* graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
                     uint32_t alignment, uint32_t attribs, SceUID* uid);
 
-bool isEqual(Vector3& v1, Vector3& v2);
+bool isEqual(Quat& v1, Quat& v2);

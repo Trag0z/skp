@@ -647,7 +647,7 @@ inline void createGxmData(void) {
 }
 
 /* render gxm scenes */
-inline void render(const MiniCube* miniCubes) {
+inline void render() {
     /* -----------------------------------------------------------------
             8. Rendering step
 
@@ -688,9 +688,7 @@ inline void render(const MiniCube* miniCubes) {
 
     /* set the vertex program constants */
 
-    for (int i = 0; i < 27; ++i) {
-        renderMiniCube(miniCubes[i], s_context, s_basicIndices);
-    }
+    renderMiniCubes(s_context, s_basicIndices);
 
     /* stop rendering to the render target */
     sceGxmEndScene(s_context, NULL, NULL);

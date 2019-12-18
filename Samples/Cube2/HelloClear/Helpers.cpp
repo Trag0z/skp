@@ -4,7 +4,7 @@
 
 /* Alloc used by libgxm */
 void* graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
-                    uint32_t alignment, uint32_t attribs, SceUID *uid) {
+                    uint32_t alignment, uint32_t attribs, SceUID* uid) {
     /*	Since we are using sceKernelAllocMemBlock directly, we cannot directly
             use the alignment parameter.  Instead, we must allocate the size to
        the minimum for this memblock type, and just SCE_DBG_ALWAYS_ASSERT that
@@ -29,7 +29,7 @@ void* graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
     SCE_DBG_ALWAYS_ASSERT(*uid >= SCE_OK);
 
     /* grab the base address */
-    void *mem = NULL;
+    void* mem = NULL;
     int err = sceKernelGetMemBlockBase(*uid, &mem);
     SCE_DBG_ALWAYS_ASSERT(err == SCE_OK);
 
@@ -41,7 +41,7 @@ void* graphicsAlloc(SceKernelMemBlockType type, uint32_t size,
     return mem;
 }
 
-bool isEqual(Vector3& v1, Vector3& v2) {
-	return (v1.getX() == v2.getX() && v1.getY() == v2.getY() &&
-		v1.getZ() == v2.getZ());
+bool isEqual(Vector3& q1, Vector3& q2) {
+    return (q1.getX() == q2.getX() && q1.getY() == q2.getY() &&
+            q1.getZ() == q2.getZ() && q1.getW() == q2.getW());
 }
