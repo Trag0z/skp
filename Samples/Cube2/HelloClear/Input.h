@@ -31,7 +31,7 @@ static Vector2 s_startPosOnCube = Vector2(0.0f, 0.0f);
 static float s_accumulatedTurningAngle[2] = {0.0f, 0.0f};
 
 static const float c_cubeHalfSize = g_miniCubeHalfSize * 3.0f;
-static const float c_touchThreshold = 0.3f;
+static const float c_touchThreshold = 0.15f;
 static const float c_touchSensitivity = 0.5f;
 
 static const Plane s_planes[] = {

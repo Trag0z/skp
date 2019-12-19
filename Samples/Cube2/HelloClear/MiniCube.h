@@ -29,7 +29,7 @@ extern MiniCube* g_miniCubes[3][3][3];
 extern AnimationState g_animationState;
 
 static SceRtcTick s_lastTick;
-const static float c_animationSpeed = 2e-4;
+const static float c_animationSpeed = 2e-6;
 static float s_interpolationValue;
 static bool s_rotatingClockwise;
 static int s_rotatingLayer;
@@ -146,7 +146,7 @@ const static Vertex s_defaultVertices[24] = {
 
 inline static void getLocalToWorldTransform(const MiniCube& mc, Matrix4& out) {
     // translate first, then rotate
-    out = Matrix4::rotation(normalize(mc.rotation)) *
+    out = Matrix4::rotation(normalize(mc.rotation * Quat::identity())) *
           Matrix4::translation(mc.position);
 }
 
@@ -286,10 +286,13 @@ inline void setAnimationInterpolationValue(float t) {
 }
 
 inline void progressAnimations() {
+    SceRtcTick currentTick;
+    sceRtcGetCurrentTick(&currentTick);
     if (g_animationState == ANIMSTATE_TOUCH) {
         // TODO: remove this hack
         if (!**s_rotatingMiniCubes)
             return;
+        s_lastTick = currentTick;
         for (int x = 0; x < 3; ++x) {
             for (int y = 0; y < 3; ++y) {
                 MiniCube& mc = *s_rotatingMiniCubes[x][y];
@@ -305,8 +308,6 @@ inline void progressAnimations() {
     if (g_animationState != ANIMSTATE_ANIMATING)
         return;
 
-    SceRtcTick currentTick;
-    sceRtcGetCurrentTick(&currentTick);
     float interpolationStep =
         static_cast<float>(currentTick.tick - s_lastTick.tick) *
         c_animationSpeed;
@@ -361,21 +362,21 @@ inline void progressAnimations() {
                     s_rotatingMiniCubes[2][0];
             } else {
                 *s_correspondingGlobalPointers[0][0] =
-                    s_rotatingMiniCubes[0][2];
-                *s_correspondingGlobalPointers[0][1] =
-                    s_rotatingMiniCubes[1][2];
-                *s_correspondingGlobalPointers[0][2] =
-                    s_rotatingMiniCubes[2][2];
-                *s_correspondingGlobalPointers[1][0] =
-                    s_rotatingMiniCubes[0][1];
-                *s_correspondingGlobalPointers[1][2] =
-                    s_rotatingMiniCubes[2][1];
-                *s_correspondingGlobalPointers[2][0] =
-                    s_rotatingMiniCubes[0][0];
-                *s_correspondingGlobalPointers[2][1] =
-                    s_rotatingMiniCubes[1][0];
-                *s_correspondingGlobalPointers[2][2] =
                     s_rotatingMiniCubes[2][0];
+                *s_correspondingGlobalPointers[0][1] =
+                    s_rotatingMiniCubes[1][0];
+                *s_correspondingGlobalPointers[0][2] =
+                    s_rotatingMiniCubes[0][0];
+                *s_correspondingGlobalPointers[1][0] =
+                    s_rotatingMiniCubes[2][1];
+                *s_correspondingGlobalPointers[1][2] =
+                    s_rotatingMiniCubes[0][1];
+                *s_correspondingGlobalPointers[2][0] =
+                    s_rotatingMiniCubes[2][2];
+                *s_correspondingGlobalPointers[2][1] =
+                    s_rotatingMiniCubes[1][2];
+                *s_correspondingGlobalPointers[2][2] =
+                    s_rotatingMiniCubes[0][2];
             }
         }
         s_interpolationValue = 0.0f;
@@ -392,13 +393,13 @@ static inline void setTargetRotation(MiniCube& mc, float degrees,
     // NOTE: is normalization needed here?
     if (dim == DIM_X) {
         mc.targetRotation =
-            normalize(mc.startRotation * Quat::rotationX(toRad(degrees)));
+            normalize(Quat::rotationX(toRad(degrees)) * mc.startRotation);
     } else if (dim == DIM_Y) {
         mc.targetRotation =
-            normalize(mc.startRotation * Quat::rotationY(toRad(degrees)));
+            normalize(Quat::rotationY(toRad(degrees)) * mc.startRotation);
     } else {
         mc.targetRotation =
-            normalize(mc.startRotation * Quat::rotationY(toRad(degrees)));
+            normalize(Quat::rotationZ(toRad(degrees)) * mc.startRotation);
     }
     normalize(mc.targetRotation);
 }
