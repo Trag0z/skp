@@ -1,19 +1,22 @@
-﻿Der Buildvorgang wurde am 12.12.2019 14:55:55 gestartet.
+﻿Der Buildvorgang wurde am 19.12.2019 15:38:14 gestartet.
      1>Projekt "H:\SKP\Samples\Cube1\HelloClear\HelloClear.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
          main.cpp
          psp2snc.exe -D_DEBUG -o PSVita_Debug\main.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\Cube1\HelloClear\main.cpp
-     1>H:\SKP\Samples\Cube1\HelloClear\main.cpp(160,20): warning 178: variable "s_basicVertices" was declared but never referenced
+     1>H:\SKP\Samples\Cube1\HelloClear\Input.h(271,4): warning 548: transfer of control bypasses initialization of:
+                     variable "inverseFinalTransform" (declared at line 281)
+                     variable "p1" (declared at line 282)
+                     variable "p2" (declared at line 285)
+                     variable "ray" (declared at line 292)
+                     variable "intersection" (declared at line 294)
          
-     1>H:\SKP\Samples\Cube1\HelloClear\main.cpp(945,5): warning 178: function "destroyGxmData" was declared but never referenced
-         
-     1>H:\SKP\Samples\Cube1\HelloClear\main.cpp(978,4): warning 178: function "shutdownGxm" was declared but never referenced
+     1>H:\SKP\Samples\Cube1\HelloClear\Helpers.h(12,6): warning 115: function "graphicsAlloc" was referenced but not defined
          
        Link:
-         C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\bin\psp2ld.exe -o "H:\SKP\Samples\Cube1\PSVita_Debug\HelloClear.self" -L"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\lib" --start-group PSVita_Debug\clear_f_gxp.obj PSVita_Debug\clear_v_gxp.obj PSVita_Debug\basic_f_gxp.obj "PSVita_Debug\basic_v _gxp.obj" PSVita_Debug\main.o "-lSceGxm_stub" "-lSceCtrl_stub" "-lSceDisplay_stub" "-lSceDbg_stub" "-lSceDbgFont" --end-group
+         C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\bin\psp2ld.exe -o "H:\SKP\Samples\Cube1\PSVita_Debug\HelloClear.self" -L"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\lib" --start-group PSVita_Debug\clear_f_gxp.obj PSVita_Debug\clear_v_gxp.obj PSVita_Debug\basic_f_gxp.obj "PSVita_Debug\basic_v _gxp.obj" PSVita_Debug\Globals.o PSVita_Debug\Helpers.o PSVita_Debug\main.o PSVita_Debug\System.o "-lSceGxm_stub" "-lSceCtrl_stub" "-lSceDisplay_stub" "-lSceDbg_stub" "-lSceDbgFont" "-lSceRtc_stub" "-lSceTouch_stub" --end-group
          HelloClear.vcxproj -> H:\SKP\Samples\Cube1\PSVita_Debug\HelloClear.self
      1>Die Erstellung des Projekts "H:\SKP\Samples\Cube1\HelloClear\HelloClear.vcxproj" ist abgeschlossen, Build Ziel(e).
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:01.31
+Verstrichene Zeit 00:00:01.77
