@@ -3,6 +3,9 @@ TODO:
 - reversing swipe direction is weird because of abs()
 - add anmstate touch started 
 
+- source code hochladen bis ende der weihnachtsferien!
+- schiftliche abgabe bis ende der reading week!
+
 NOTES:
 
 EXTRAS: 

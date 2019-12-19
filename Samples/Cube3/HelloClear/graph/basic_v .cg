@@ -14,6 +14,6 @@ void main(
 {
 	
 	vPosition = mul(mul(float4(aPosition, 1.f), localToWorld), wvp);
-	vTexCoord.x = 0.5f;
-	vTexCoord.y = 0.5f;
+	vTexCoord.x = 0.5f; // vPosition.x * 2.f;
+	vTexCoord.y = 0.5f; // vPosition.y * 2.f;
 }

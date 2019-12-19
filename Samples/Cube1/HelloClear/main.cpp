@@ -15,6 +15,7 @@ extern const float g_miniCubeHalfSize;
 extern MiniCube* g_miniCubes[3][3][3];
 
 static MiniCube* s_miniCubes;
+static Quat s_cameraOrientation = Quat::identity();
 
 static void initCube();
 
@@ -68,12 +69,22 @@ float makeFloat(unsigned char input) {
     return (((float)(input)) / 255.0f * 2.0f) - 1.0f;
 }
 
+static Quat m_orientationQuaternion(0.0f, 0.0f, 0.0f, 1.0f);
+
 void update(void) {
 
     processFrontTouch();
     progressAnimations();
 
-    g_finalRotation = Matrix4::rotationZYX(processBackTouch());
+    Vector2 backTouchMove = processBackTouch();
+
+    Quat rotationVelocity(backTouchMove.getX().getAsFloat(),
+                          backTouchMove.getY().getAsFloat(), 0.0f, 0.0f);
+
+    m_orientationQuaternion +=
+        0.5f * rotationVelocity * m_orientationQuaternion;
+    m_orientationQuaternion = normalize(m_orientationQuaternion);
+
     Matrix4 lookAt =
         Matrix4::lookAt(Point3(0.0f, 0.0f, -7.0f), Point3(0.0f, 0.0f, 0.0f),
                         Vector3(0.0f, -1.0f, 0.0f));
@@ -81,7 +92,9 @@ void update(void) {
         3.141592f / 4.0f, (float)DISPLAY_WIDTH / (float)DISPLAY_HEIGHT, 0.1f,
         10.0f);
 
-    g_finalTransformation = perspective * lookAt * g_finalRotation;
+    g_finalTransformation =
+        perspective * lookAt * Matrix4::rotation(m_orientationQuaternion);
+    ;
 }
 
 static void initCube() {
