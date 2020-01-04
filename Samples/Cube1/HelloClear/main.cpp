@@ -69,7 +69,7 @@ float makeFloat(unsigned char input) {
     return (((float)(input)) / 255.0f * 2.0f) - 1.0f;
 }
 
-static Quat m_orientationQuaternion(0.0f, 0.0f, 0.0f, 1.0f);
+static Quat s_orientation = Quat::identity();
 
 void update(void) {
 
@@ -78,12 +78,13 @@ void update(void) {
 
     Vector2 backTouchMove = processBackTouch();
 
-    Quat rotationVelocity(backTouchMove.getX().getAsFloat(),
-                          backTouchMove.getY().getAsFloat(), 0.0f, 0.0f);
+    Quat addedRotation =
+        Quat::rotation(Vector3(backTouchMove.getY().getAsFloat() * 0.01f,
+                               backTouchMove.getX().getAsFloat() * 0.01f, 0.0f),
+                       sce::Vectormath::Simd::kXYZ);
 
-    m_orientationQuaternion +=
-        0.5f * rotationVelocity * m_orientationQuaternion;
-    m_orientationQuaternion = normalize(m_orientationQuaternion);
+    s_orientation = addedRotation * s_orientation;
+    s_orientation = normalize(s_orientation);
 
     Matrix4 lookAt =
         Matrix4::lookAt(Point3(0.0f, 0.0f, -7.0f), Point3(0.0f, 0.0f, 0.0f),
@@ -93,8 +94,7 @@ void update(void) {
         10.0f);
 
     g_finalTransformation =
-        perspective * lookAt * Matrix4::rotation(m_orientationQuaternion);
-    ;
+        perspective * lookAt * Matrix4::rotation(s_orientation);
 }
 
 static void initCube() {
