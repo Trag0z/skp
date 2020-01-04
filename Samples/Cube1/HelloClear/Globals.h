@@ -14,11 +14,7 @@ extern const SceGxmProgramParameter* g_localToWorldParam;
 extern const float g_miniCubeHalfSize;
 extern MiniCube* g_miniCubes[3][3][3];
 
-enum AnimationState {
-    ANIMSTATE_NO_ANIM,
-    ANIMSTATE_ANIMATING,
-    ANIMSTATE_TOUCH_START,
-    ANIMSTATE_TOUCH
-};
+enum AnimationState { ANIMSTATE_NO_ANIM, ANIMSTATE_ANIMATING, ANIMSTATE_TOUCH };
 
 extern AnimationState g_animationState;
+extern bool g_animationStarted;

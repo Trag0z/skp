@@ -12,6 +12,7 @@ using namespace sce::Geometry::Aos;
 extern AnimationState g_animationState;
 extern Matrix4 g_finalTransformation;
 extern const float g_miniCubeHalfSize;
+extern bool g_animationStarted;
 
 struct TouchData {
     float x;
@@ -28,7 +29,6 @@ static int s_touchedSide;
 static TouchDirection s_touchMotionDirection = DIR_NO;
 
 static Vector2 s_startPosOnCube = Vector2(0.0f, 0.0f);
-static float s_accumulatedTurningAngle[2] = {0.0f, 0.0f};
 
 static const float c_cubeHalfSize = g_miniCubeHalfSize * 3.0f;
 static const float c_touchThreshold = 0.15f;
@@ -263,7 +263,6 @@ inline void processFrontTouch() {
     SCE_DBG_ALWAYS_ASSERT(returnCode >= 0);
     bool touchReleased = true;
 
-    // Cast ray
     switch (g_animationState) {
     case ANIMSTATE_NO_ANIM:
         // Set up animation start
@@ -308,7 +307,7 @@ inline void processFrontTouch() {
             }
 
             s_touchedSide = i;
-            // startPosOnCube always from top right of first mentioned side
+            // startPosOnCube always from top left of first mentioned side
             if (s_touchedSide == 0 || s_touchedSide == 1) {
                 s_startPosOnCube = Vector2(x, y);
             } else if (s_touchedSide == 2 || s_touchedSide == 3) {
@@ -316,89 +315,14 @@ inline void processFrontTouch() {
             } else {
                 s_startPosOnCube = Vector2(x, -z);
             }
-            g_animationState = ANIMSTATE_TOUCH_START;
+            g_animationState = ANIMSTATE_TOUCH;
             break;
         }
         break;
-    case ANIMSTATE_TOUCH_START:
-        // Start animation
-        for (int i = 0; i < tdf.reportNum; ++i) {
-            if (tdf.report[i].id != s_lastFrontTouch.id) {
-                continue;
-            }
-
-            float newTouchPos[2];
-            newTouchPos[0] = 2.0f * tdf.report[0].x / 1919.0f - 1.0f;
-            newTouchPos[1] = -2.0f * tdf.report[0].y / 1087.0f + 1.0f;
-
-            Matrix4 inverseFinalTransform = inverse(g_finalTransformation);
-            Vector4 p1 = inverseFinalTransform *
-                         Vector4(newTouchPos[0], newTouchPos[1], 0.1f, 1.0f);
-            Vector4 p2 = inverseFinalTransform *
-                         Vector4(newTouchPos[0], newTouchPos[1], 1.0f, 1.0f);
-
-            p1 /= p1.getW();
-            p2 /= p2.getW();
-
-            Ray ray = Ray(Point3(p1.getXYZ()), Point3(p2.getXYZ()));
-
-            Point3 intersection;
-            if (!intersectionPoint(ray, s_planes[s_touchedSide],
-                                   &intersection)) {
-                // Touch is not on the same side of the cube anymore
-                continue;
-            }
-            touchReleased = false;
-
-            Vector2 newTouchPosOnCube;
-
-            if (s_touchedSide == 0 || s_touchedSide == 1) {
-                newTouchPosOnCube =
-                    Vector2(intersection.getX(), intersection.getY());
-            } else if (s_touchedSide == 2 || s_touchedSide == 3) {
-                newTouchPosOnCube =
-                    Vector2(-intersection.getZ(), intersection.getY());
-            } else {
-                newTouchPosOnCube =
-                    Vector2(intersection.getX(), -intersection.getZ());
-            }
-
-            Vector2 touchMotion = newTouchPosOnCube - s_startPosOnCube;
-
-            float touchMotionLength;
-
-            TouchDirection newTouchMotionDirection;
-            if (fabsf(touchMotion.getX()) > fabsf(touchMotion.getY())) {
-                if (touchMotion.getX() < 0.0f) {
-                    newTouchMotionDirection = DIR_LEFT;
-                } else {
-                    newTouchMotionDirection = DIR_RIGHT;
-                }
-                touchMotionLength = touchMotion.getX().getAsFloat();
-            } else {
-                if (touchMotion.getY() < 0.0f) {
-                    newTouchMotionDirection = DIR_UP;
-                } else {
-                    newTouchMotionDirection = DIR_DOWN;
-                }
-                touchMotionLength = touchMotion.getY().getAsFloat();
-            }
-
-            if (std::abs(touchMotionLength) < c_touchThreshold) {
-                continue;
-            }
-
-            s_touchMotionDirection = newTouchMotionDirection;
-            determineNewAnimation();
-            g_animationState = ANIMSTATE_TOUCH;
-        }
-
-        if (touchReleased) {
-            g_animationState = ANIMSTATE_ANIMATING;
-            s_touchMotionDirection = DIR_NO;
-        }
-        break;
     case ANIMSTATE_TOUCH:
+        // Start animation
+        // Cast ray, find position on cube. Set s_touchStarted if the vector on
+        // cube is longer than c_touchThreshold.
         for (int i = 0; i < tdf.reportNum; ++i) {
             if (tdf.report[i].id != s_lastFrontTouch.id) {
                 continue;
@@ -442,50 +366,51 @@ inline void processFrontTouch() {
 
             Vector2 touchMotion = newTouchPosOnCube - s_startPosOnCube;
 
-            float touchMotionLength;
+            if (!g_animationStarted) {
+                if (std::abs(length(touchMotion).getAsFloat()) <
+                    c_touchThreshold) {
+                    continue;
+                }
 
-            TouchDirection newTouchMotionDirection;
-            if (fabsf(touchMotion.getX()) > fabsf(touchMotion.getY())) {
-                if (touchMotion.getX() < 0.0f) {
-                    newTouchMotionDirection = DIR_LEFT;
+                g_animationStarted = true;
+                // Set s_touchMotionDirection
+                if (fabsf(touchMotion.getX()) > fabsf(touchMotion.getY())) {
+                    if (touchMotion.getX() < 0.0f) {
+                        s_touchMotionDirection = DIR_LEFT;
+                    } else {
+                        s_touchMotionDirection = DIR_RIGHT;
+                    }
                 } else {
-                    newTouchMotionDirection = DIR_RIGHT;
+                    if (touchMotion.getY() < 0.0f) {
+                        s_touchMotionDirection = DIR_UP;
+                    } else {
+                        s_touchMotionDirection = DIR_DOWN;
+                    }
                 }
+                    determineNewAnimation();
+            }
+
+            float touchMotionLength;
+            if (s_touchMotionDirection == DIR_LEFT ||
+                s_touchMotionDirection == DIR_RIGHT) {
                 touchMotionLength = touchMotion.getX().getAsFloat();
-            } else {
-                if (touchMotion.getY() < 0.0f) {
-                    newTouchMotionDirection = DIR_UP;
-                } else {
-                    newTouchMotionDirection = DIR_DOWN;
-                }
+            }
+            if (s_touchMotionDirection == DIR_UP ||
+                s_touchMotionDirection == DIR_DOWN) {
                 touchMotionLength = touchMotion.getY().getAsFloat();
             }
 
-            if ((s_touchMotionDirection == DIR_LEFT &&
-                 newTouchMotionDirection == DIR_RIGHT) ||
-                (s_touchMotionDirection == DIR_RIGHT &&
-                 newTouchMotionDirection == DIR_LEFT) ||
-                (s_touchMotionDirection == DIR_UP &&
-                 newTouchMotionDirection == DIR_DOWN) ||
-                (s_touchMotionDirection == DIR_DOWN &&
-                 newTouchMotionDirection == DIR_UP)) {
-                s_touchMotionDirection =
-                    newTouchMotionDirection; // NOTE: This is unnecessary as
-                                             // case ANIMSTATE_TOUHC_START
-                                             // doesn't care
-                determineNewAnimation();
-                break;
-            }
-
-            float interpolationValue =
-                abs(touchMotionLength) * c_touchSensitivity;
-            setAnimationInterpolationValue(interpolationValue);
+            setAnimationInterpolationValue(touchMotionLength *
+                                           c_touchSensitivity);
         }
+
         if (touchReleased) {
             g_animationState = ANIMSTATE_ANIMATING;
             s_touchMotionDirection = DIR_NO;
+            g_animationStarted = false;
         }
         break;
+   
     case ANIMSTATE_ANIMATING:
         break;
     default:

@@ -16,6 +16,7 @@ extern const SceGxmProgramParameter* g_wvpParam;
 // extern const SceGxmProgramParameter* g_rotParam;
 extern const SceGxmProgramParameter* g_localToWorldParam;
 extern const float g_miniCubeHalfSize;
+extern bool g_animationStarted;
 
 // NOTE: Why does this have to bere up here?
 enum Dimension { DIM_X = 0, DIM_Y = 1, DIM_Z = 2 };
@@ -288,11 +289,8 @@ inline void setAnimationInterpolationValue(float t) {
 inline void progressAnimations() {
     SceRtcTick currentTick;
     sceRtcGetCurrentTick(&currentTick);
-    if (g_animationState == ANIMSTATE_TOUCH) {
-        // TODO: remove this hack
-        if (!**s_rotatingMiniCubes)
-            return;
-        s_lastTick = currentTick;
+    if (g_animationState == ANIMSTATE_TOUCH && g_animationStarted) {
+        s_lastTick = currentTick; // TODO: why?
         for (int x = 0; x < 3; ++x) {
             for (int y = 0; y < 3; ++y) {
                 MiniCube& mc = *s_rotatingMiniCubes[x][y];

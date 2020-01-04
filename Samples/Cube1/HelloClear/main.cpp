@@ -83,8 +83,7 @@ void update(void) {
                                backTouchMove.getX().getAsFloat() * 0.01f, 0.0f),
                        sce::Vectormath::Simd::kXYZ);
 
-    s_orientation = addedRotation * s_orientation;
-    s_orientation = normalize(s_orientation);
+	s_orientation = normalize(addedRotation * s_orientation);
 
     Matrix4 lookAt =
         Matrix4::lookAt(Point3(0.0f, 0.0f, -7.0f), Point3(0.0f, 0.0f, 0.0f),

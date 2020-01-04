@@ -10,3 +10,4 @@ const float g_miniCubeHalfSize = 0.5f;
 MiniCube* g_miniCubes[3][3][3];
 
 AnimationState g_animationState = ANIMSTATE_NO_ANIM;
+extern bool g_animationStarted = false;
