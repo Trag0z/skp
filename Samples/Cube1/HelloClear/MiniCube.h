@@ -11,6 +11,8 @@
 #include <vectormath.h>
 using namespace sce::Vectormath::Simd::Aos;
 
+#define PI 3.14159265359f
+
 extern Matrix4 g_finalTransformation;
 extern Matrix4 g_finalRotation;
 extern const SceGxmProgramParameter* g_wvpParam;
@@ -31,11 +33,9 @@ extern MiniCube* g_miniCubes[3][3][3];
 extern AnimationState g_animationState;
 
 static SceRtcTick s_lastTick;
-const static float c_animationSpeed = 2e-6;
+const static float c_animationSpeed = 2e-7;
 static float s_interpolationValue;
 static float s_targetInterpolation = std::numeric_limits<float>::max();
-static bool s_rotatingClockwise;
-static int s_rotatingLayer;
 static Dimension s_rotatingDimension;
 static MiniCube* s_rotatingMiniCubes[3][3];
 static MiniCube** s_correspondingGlobalPointers[3][3];
@@ -59,9 +59,9 @@ struct Vertex {
 struct MiniCube {
     Vertex* vertices;
     Vector3 position;
-    Quat rotation;
+    Quat orientation;
 
-    Quat startRotation, targetRotation;
+    float startRotation, targetRotation;
 
     int32_t verticesUId;
 };
@@ -149,7 +149,7 @@ const static Vertex s_defaultVertices[24] = {
 
 inline static void getLocalToWorldTransform(const MiniCube& mc, Matrix4& out) {
     // translate first, then rotate
-    out = Matrix4::rotation(normalize(mc.rotation * Quat::identity())) *
+    out = Matrix4::rotation(normalize(mc.orientation * Quat::identity())) *
           Matrix4::translation(mc.position);
 }
 
@@ -192,7 +192,8 @@ static void setColors(MiniCube& mc, Color front, Color back, Color left,
 inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     MiniCube mc;
     mc.position = pos;
-    mc.rotation = mc.startRotation = mc.targetRotation = Quat::identity();
+    mc.orientation = Quat::identity();
+    mc.startRotation = mc.targetRotation = 0.0f;
 
     mc.vertices = (Vertex*)graphicsAlloc(
         SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE, 4 * 6 * sizeof(Vertex), 4,
@@ -285,20 +286,34 @@ inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
 }
 
 inline void setAnimationInterpolationValue(float t) {
+    if (t < 0.0f) {
+        t += 1.0f;
+    }
     s_interpolationValue = t;
 }
 
-inline void progressAnimations() {
+inline Quat lerpOrientation(float t, float a, float b) {
+    Quat result;
+    if (s_rotatingDimension == DIM_X) {
+        result = normalize(Quat::rotationX(a + (t * (b - a))));
+    } else if (s_rotatingDimension == DIM_Y) {
+        result = normalize(Quat::rotationY(a + (t * (b - a))));
+    } else {
+        result = normalize(Quat::rotationZ(a + (t * (b - a))));
+    }
+    return result;
+}
 
+inline void progressAnimations() {
     SceRtcTick currentTick;
     sceRtcGetCurrentTick(&currentTick);
-    if (g_animationState == ANIMSTATE_TOUCH && g_animationStarted) {
+    if (g_animationState == ANIMSTATE_TOUCHING && g_animationStarted) {
         s_lastTick = currentTick;
         for (int x = 0; x < 3; ++x) {
             for (int y = 0; y < 3; ++y) {
                 MiniCube& mc = *s_rotatingMiniCubes[x][y];
-                mc.rotation = lerp(s_interpolationValue, mc.startRotation,
-                                   mc.targetRotation);
+                mc.orientation = lerpOrientation(
+                    s_interpolationValue, mc.startRotation, mc.targetRotation);
             }
         }
         return;
@@ -309,7 +324,7 @@ inline void progressAnimations() {
     }
 
     if (s_targetInterpolation == std::numeric_limits<float>::max()) {
-        s_targetInterpolation = round(s_interpolationValue);
+        s_targetInterpolation = round(s_interpolationValue * 4.0f) / 4.0f;
     }
 
     float interpolationStep =
@@ -324,16 +339,16 @@ inline void progressAnimations() {
             s_interpolationValue + interpolationStep, s_targetInterpolation);
     }
 
-    // NOTE: negative interpolation values are bad!
-    if (s_interpolationValue != s_targetInterpolation) {
-        // Progress the animations
-        for (int x = 0; x < 3; ++x) {
-            for (int y = 0; y < 3; ++y) {
-                MiniCube& mc = *s_rotatingMiniCubes[x][y];
-                mc.rotation = lerp(s_interpolationValue, mc.startRotation,
-                                   mc.targetRotation);
-            }
+    // Progress the animations
+    for (int x = 0; x < 3; ++x) {
+        for (int y = 0; y < 3; ++y) {
+            MiniCube& mc = *s_rotatingMiniCubes[x][y];
+            mc.orientation = lerpOrientation(
+                s_interpolationValue, mc.startRotation, mc.targetRotation);
         }
+    }
+
+    if (s_interpolationValue != s_targetInterpolation) {
         s_lastTick = currentTick;
         return;
     }
@@ -344,34 +359,19 @@ inline void progressAnimations() {
     for (int x = 0; x < 3; ++x) {
         for (int y = 0; y < 3; ++y) {
             MiniCube& mc = *s_rotatingMiniCubes[x][y];
-            if (s_rotatingDimension == DIM_X) {
-                mc.rotation = normalize(Quat::rotationX(s_targetInterpolation /
-                                                        2.0f * 3.14159265359f) *
-                                        mc.startRotation);
-            } else if (s_rotatingDimension == DIM_Y) {
-                mc.rotation = normalize(Quat::rotationY(-s_targetInterpolation /
-                                                        2.0f * 3.14159265359f) *
-                                        mc.startRotation);
-            } else {
-                mc.rotation = normalize(Quat::rotationZ(s_targetInterpolation /
-                                                        2.0f * 3.14159265359f) *
-                                        mc.startRotation);
-            }
+            mc.startRotation += s_targetInterpolation * 2.0f * PI;
         }
     }
 
     // Put the pointer to the rotated miniCubes into the correct
     // positions of the global array
-    if (s_interpolationValue == 0.0f) {
-        // Just reset
+    if (s_interpolationValue == 0.0f || s_interpolationValue == 1.0f) {
+        // Just reset, no rotation
         s_targetInterpolation = std::numeric_limits<float>::max();
-		return;
+        return;
     }
-    float clockwiseRotations = s_interpolationValue;
-    if (!s_rotatingClockwise) {
-        clockwiseRotations *= -1;
-    }
-    if (clockwiseRotations == 1.0f) {
+    if (s_targetInterpolation == 0.25f) {
+        // Rotate the layer clockwise
         *s_correspondingGlobalPointers[0][0] = s_rotatingMiniCubes[0][2];
         *s_correspondingGlobalPointers[0][1] = s_rotatingMiniCubes[1][2];
         *s_correspondingGlobalPointers[0][2] = s_rotatingMiniCubes[2][2];
@@ -380,7 +380,8 @@ inline void progressAnimations() {
         *s_correspondingGlobalPointers[2][0] = s_rotatingMiniCubes[0][0];
         *s_correspondingGlobalPointers[2][1] = s_rotatingMiniCubes[1][0];
         *s_correspondingGlobalPointers[2][2] = s_rotatingMiniCubes[2][0];
-    } else if (clockwiseRotations == -1.0f) {
+    } else if (s_targetInterpolation == 0.75f) {
+        // Rotate the layer counter clockwise
         *s_correspondingGlobalPointers[0][0] = s_rotatingMiniCubes[2][0];
         *s_correspondingGlobalPointers[0][1] = s_rotatingMiniCubes[1][0];
         *s_correspondingGlobalPointers[0][2] = s_rotatingMiniCubes[0][0];
@@ -404,34 +405,14 @@ inline void progressAnimations() {
     s_targetInterpolation = std::numeric_limits<float>::max();
 }
 
-static inline float toRad(float degrees) {
-    return degrees * 3.14159265359f / 180.0f;
+static inline void setTargetRotation(MiniCube& mc, Dimension dim) {
+    mc.targetRotation = mc.startRotation + 2.0f * PI;
 }
 
-static inline void setTargetRotation(MiniCube& mc, float degrees,
-                                     Dimension dim) {
-    // TODO: remove degrees since we only ever rotate by 90 degrees
-    // NOTE: is normalization needed here?
-    mc.startRotation = mc.rotation;
-    if (dim == DIM_X) {
-        mc.targetRotation =
-            normalize(Quat::rotationX(toRad(degrees)) * mc.startRotation);
-    } else if (dim == DIM_Y) {
-        mc.targetRotation =
-            normalize(Quat::rotationY(toRad(degrees)) * mc.startRotation);
-    } else {
-        mc.targetRotation =
-            normalize(Quat::rotationZ(toRad(degrees)) * mc.startRotation);
-    }
-    // normalize(mc.targetRotation);
-}
-
-inline void setAnimation(int layer, Dimension dimension, bool clockwise) {
+inline void setAnimation(int layer, Dimension dimension) {
     SCE_DBG_ALWAYS_ASSERT(layer < 3);
 
-    s_rotatingLayer = layer;
     s_rotatingDimension = dimension;
-    s_rotatingClockwise = clockwise;
 
     // Origin of x/y always in top left corner of the slice, viewed from
     // front/top/left depending on dimension
@@ -466,19 +447,9 @@ inline void setAnimation(int layer, Dimension dimension, bool clockwise) {
         break;
     }
 
-    if (clockwise) {
-        for (int row = 0; row < 3; ++row) {
-            for (int col = 0; col < 3; ++col) {
-                setTargetRotation(*s_rotatingMiniCubes[row][col], 90.0f,
-                                  dimension);
-            }
-        }
-    } else {
-        for (int row = 0; row < 3; ++row) {
-            for (int col = 0; col < 3; ++col) {
-                setTargetRotation(*s_rotatingMiniCubes[row][col], -90.0f,
-                                  dimension);
-            }
+    for (int row = 0; row < 3; ++row) {
+        for (int col = 0; col < 3; ++col) {
+            setTargetRotation(*s_rotatingMiniCubes[row][col], dimension);
         }
     }
 

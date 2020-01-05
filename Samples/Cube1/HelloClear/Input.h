@@ -77,91 +77,50 @@ void determineNewAnimation() {
         // Vertical motion
         if (s_startPosOnCube.getX() < -g_miniCubeHalfSize) {
             // Left column
-            if (s_touchedSide == 0)
-                setAnimation(0, DIM_X, true);
-            else if (s_touchedSide == 1)
-                setAnimation(0, DIM_X, false);
-            else if (s_touchedSide == 2)
-                setAnimation(2, DIM_Z, false);
-            else if (s_touchedSide == 3)
-                setAnimation(2, DIM_Z, true);
-            else if (s_touchedSide == 4)
-                setAnimation(0, DIM_X, true);
-            else if (s_touchedSide == 5)
-                setAnimation(0, DIM_X, false);
+            if (s_touchedSide == 0 || s_touchedSide == 1)
+                setAnimation(0, DIM_X);
+            else if (s_touchedSide == 2 || s_touchedSide == 3)
+                setAnimation(2, DIM_Z);
+            else if (s_touchedSide == 4 || s_touchedSide == 5)
+                setAnimation(0, DIM_X);
         } else if (s_startPosOnCube.getX() > g_miniCubeHalfSize) {
             // Right column
-            if (s_touchedSide == 0)
-                setAnimation(2, DIM_X, true);
-            else if (s_touchedSide == 1)
-                setAnimation(2, DIM_X, false);
-            else if (s_touchedSide == 2)
-                setAnimation(0, DIM_Z, false);
-            else if (s_touchedSide == 3)
-                setAnimation(0, DIM_Z, true);
-            else if (s_touchedSide == 4)
-                setAnimation(2, DIM_X, true);
-            else if (s_touchedSide == 5)
-                setAnimation(2, DIM_X, false);
+            if (s_touchedSide == 0 || s_touchedSide == 1 ||
+                s_touchedSide == 4 || s_touchedSide == 5)
+                setAnimation(2, DIM_X);
+            else if (s_touchedSide == 2 || s_touchedSide == 3)
+                setAnimation(0, DIM_Z);
         } else {
             // Middle column
-            if (s_touchedSide == 0)
-                setAnimation(1, DIM_X, true);
-            else if (s_touchedSide == 1)
-                setAnimation(1, DIM_X, false);
-            else if (s_touchedSide == 2)
-                setAnimation(1, DIM_Z, false);
-            else if (s_touchedSide == 3)
-                setAnimation(1, DIM_Z, true);
-            else if (s_touchedSide == 4)
-                setAnimation(1, DIM_X, true);
-            else if (s_touchedSide == 5)
-                setAnimation(1, DIM_X, false);
+            if (s_touchedSide == 0 || s_touchedSide == 1 ||
+                s_touchedSide == 4 || s_touchedSide == 5)
+                setAnimation(1, DIM_X);
+            else if (s_touchedSide == 2 || s_touchedSide == 3)
+                setAnimation(1, DIM_Z);
         }
     } else {
         // Horizontal motion
         if (s_startPosOnCube.getY() < -g_miniCubeHalfSize) {
             // Top row
-            if (s_touchedSide == 0)
-                setAnimation(0, DIM_Y, false);
-            else if (s_touchedSide == 1)
-                setAnimation(0, DIM_Y, true);
-            else if (s_touchedSide == 2)
-                setAnimation(0, DIM_Y, false);
-            else if (s_touchedSide == 3)
-                setAnimation(0, DIM_Y, true);
-            else if (s_touchedSide == 4)
-                setAnimation(2, DIM_Z, true);
-            else if (s_touchedSide == 5)
-                setAnimation(2, DIM_Z, false);
+            if (s_touchedSide == 0 || s_touchedSide == 1 ||
+                s_touchedSide == 2 || s_touchedSide == 3)
+                setAnimation(0, DIM_Y);
+            else if (s_touchedSide == 4 || s_touchedSide == 5)
+                setAnimation(2, DIM_Z);
         } else if (s_startPosOnCube.getY() > g_miniCubeHalfSize) {
             // Bottom row
-            if (s_touchedSide == 0)
-                setAnimation(2, DIM_Y, false);
-            else if (s_touchedSide == 1)
-                setAnimation(2, DIM_Y, true);
-            else if (s_touchedSide == 2)
-                setAnimation(2, DIM_Y, false);
-            else if (s_touchedSide == 3)
-                setAnimation(2, DIM_Y, true);
-            else if (s_touchedSide == 4)
-                setAnimation(0, DIM_Z, true);
-            else if (s_touchedSide == 5)
-                setAnimation(0, DIM_Z, false);
+            if (s_touchedSide == 0 || s_touchedSide == 1 ||
+                s_touchedSide == 2 || s_touchedSide == 3)
+                setAnimation(2, DIM_Y);
+            else if (s_touchedSide == 4 || s_touchedSide == 5)
+                setAnimation(0, DIM_Z);
         } else {
             // Middle row
-            if (s_touchedSide == 0)
-                setAnimation(1, DIM_Y, false);
-            else if (s_touchedSide == 1)
-                setAnimation(1, DIM_Y, true);
-            else if (s_touchedSide == 2)
-                setAnimation(1, DIM_Y, false);
-            else if (s_touchedSide == 3)
-                setAnimation(1, DIM_Y, true);
-            else if (s_touchedSide == 4)
-                setAnimation(1, DIM_Z, true);
-            else if (s_touchedSide == 5)
-                setAnimation(1, DIM_Z, false);
+            if (s_touchedSide == 0 || s_touchedSide == 1 | s_touchedSide == 2 ||
+                s_touchedSide == 3)
+                setAnimation(1, DIM_Y);
+            else if (s_touchedSide == 4 || s_touchedSide == 5)
+                setAnimation(1, DIM_Z);
         }
     }
 }
@@ -188,7 +147,7 @@ inline void processFrontTouch() {
             Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 0.1f, 1.0f);
         Vector4 p2 =
             inverseFinalTransform *
-            Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 0.9f, 1.0f);
+            Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 1.0f, 1.0f);
 
         p1 /= p1.getW();
         p2 /= p2.getW();
@@ -208,15 +167,18 @@ inline void processFrontTouch() {
             const float x = intersection.getX();
             const float y = intersection.getY();
             const float z = intersection.getZ();
+            // NOTE: Only on cubeSide 4, the intersection point is sometimes
+            // outside of the cube dimensions even though the physical touch
+            // point is not
             if (x < -c_cubeHalfSize || x > c_cubeHalfSize ||
                 y < -c_cubeHalfSize || y > c_cubeHalfSize ||
                 z < -c_cubeHalfSize || z > c_cubeHalfSize) {
-                // We didn't hit the cube, or we hit its back side
+                // The ray didn't hit the cube
                 continue;
             }
 
             s_touchedSide = i;
-            // startPosOnCube always from top left of first mentioned side
+            // s_startPosOnCube always from top left of first mentioned side
             if (s_touchedSide == 0 || s_touchedSide == 1) {
                 s_startPosOnCube = Vector2(x, y);
             } else if (s_touchedSide == 2 || s_touchedSide == 3) {
@@ -224,14 +186,11 @@ inline void processFrontTouch() {
             } else {
                 s_startPosOnCube = Vector2(x, -z);
             }
-            g_animationState = ANIMSTATE_TOUCH;
+            g_animationState = ANIMSTATE_TOUCHING;
             break;
         }
         break;
-    case ANIMSTATE_TOUCH:
-        // Start animation
-        // Cast ray, find position on cube. Set s_touchStarted if the vector on
-        // cube is longer than c_touchThreshold.
+    case ANIMSTATE_TOUCHING:
         for (int i = 0; i < tdf.reportNum; ++i) {
             if (tdf.report[i].id != s_lastFrontTouch.id) {
                 continue;
@@ -281,8 +240,9 @@ inline void processFrontTouch() {
                     continue;
                 }
 
+                // Set s_touchMotionDirection, animate in following
+                // frames
                 g_animationStarted = true;
-                // Set s_touchMotionDirection
                 if (fabsf(touchMotion.getX()) > fabsf(touchMotion.getY())) {
                     s_touchMotionDirection = DIR_HORIZONTAL;
                 } else {
@@ -299,8 +259,16 @@ inline void processFrontTouch() {
                 touchMotionLength = touchMotion.getY().getAsFloat();
             }
 
-            setAnimationInterpolationValue(touchMotionLength *
-                                           c_touchSensitivity);
+            float interpolation = touchMotionLength * c_touchSensitivity / 4.0f;
+            if ((s_touchMotionDirection == DIR_HORIZONTAL &&
+                 s_touchedSide == 0) ||
+                (s_touchMotionDirection == DIR_VERTICAL &&
+                 s_touchedSide == 1) ||
+                s_touchedSide == 2 || s_touchedSide == 5) {
+                interpolation *= -1.0f;
+            }
+
+            setAnimationInterpolationValue(interpolation);
         }
 
         if (touchReleased) {
