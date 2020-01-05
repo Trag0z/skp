@@ -20,7 +20,7 @@ struct TouchData {
     int id;
 };
 
-enum TouchDirection { DIR_NO, DIR_UP, DIR_DOWN, DIR_LEFT, DIR_RIGHT };
+enum TouchDirection { DIR_NO, DIR_HORIZONTAL, DIR_VERTICAL };
 
 static SceTouchPanelInfo s_touchInfo;
 static TouchData s_lastBackTouch;
@@ -73,186 +73,95 @@ inline const Vector2 processBackTouch() {
 
 void determineNewAnimation() {
     // Determine layer and rotation direction
-    if (s_touchMotionDirection == DIR_UP ||
-        s_touchMotionDirection == DIR_DOWN) {
+    if (s_touchMotionDirection == DIR_VERTICAL) {
         // Vertical motion
         if (s_startPosOnCube.getX() < -g_miniCubeHalfSize) {
             // Left column
-            if (s_touchMotionDirection == 1) {
-                if (s_touchedSide == 0)
-                    setAnimation(0, DIM_X, false);
-                else if (s_touchedSide == 1)
-                    setAnimation(0, DIM_X, true);
-                else if (s_touchedSide == 2)
-                    setAnimation(2, DIM_Z, true);
-                else if (s_touchedSide == 3)
-                    setAnimation(2, DIM_Z, false);
-                else if (s_touchedSide == 4)
-                    setAnimation(0, DIM_X, false);
-                else if (s_touchedSide == 5)
-                    setAnimation(0, DIM_X, true);
-            } else if (s_touchMotionDirection == 2) {
-                if (s_touchedSide == 0)
-                    setAnimation(0, DIM_X, true);
-                else if (s_touchedSide == 1)
-                    setAnimation(0, DIM_X, false);
-                else if (s_touchedSide == 2)
-                    setAnimation(2, DIM_Z, false);
-                else if (s_touchedSide == 3)
-                    setAnimation(2, DIM_Z, true);
-                else if (s_touchedSide == 4)
-                    setAnimation(0, DIM_X, true);
-                else if (s_touchedSide == 5)
-                    setAnimation(0, DIM_X, false);
-            }
+            if (s_touchedSide == 0)
+                setAnimation(0, DIM_X, true);
+            else if (s_touchedSide == 1)
+                setAnimation(0, DIM_X, false);
+            else if (s_touchedSide == 2)
+                setAnimation(2, DIM_Z, false);
+            else if (s_touchedSide == 3)
+                setAnimation(2, DIM_Z, true);
+            else if (s_touchedSide == 4)
+                setAnimation(0, DIM_X, true);
+            else if (s_touchedSide == 5)
+                setAnimation(0, DIM_X, false);
         } else if (s_startPosOnCube.getX() > g_miniCubeHalfSize) {
             // Right column
-            if (s_touchMotionDirection == 1) {
-                if (s_touchedSide == 0)
-                    setAnimation(2, DIM_X, false);
-                else if (s_touchedSide == 1)
-                    setAnimation(2, DIM_X, true);
-                else if (s_touchedSide == 2)
-                    setAnimation(0, DIM_Z, true);
-                else if (s_touchedSide == 3)
-                    setAnimation(0, DIM_Z, false);
-                else if (s_touchedSide == 4)
-                    setAnimation(2, DIM_X, false);
-                else if (s_touchedSide == 5)
-                    setAnimation(2, DIM_X, true);
-            } else if (s_touchMotionDirection == 2) {
-                if (s_touchedSide == 0)
-                    setAnimation(2, DIM_X, true);
-                else if (s_touchedSide == 1)
-                    setAnimation(2, DIM_X, false);
-                else if (s_touchedSide == 2)
-                    setAnimation(0, DIM_Z, false);
-                else if (s_touchedSide == 3)
-                    setAnimation(0, DIM_Z, true);
-                else if (s_touchedSide == 4)
-                    setAnimation(2, DIM_X, true);
-                else if (s_touchedSide == 5)
-                    setAnimation(2, DIM_X, false);
-            }
+            if (s_touchedSide == 0)
+                setAnimation(2, DIM_X, true);
+            else if (s_touchedSide == 1)
+                setAnimation(2, DIM_X, false);
+            else if (s_touchedSide == 2)
+                setAnimation(0, DIM_Z, false);
+            else if (s_touchedSide == 3)
+                setAnimation(0, DIM_Z, true);
+            else if (s_touchedSide == 4)
+                setAnimation(2, DIM_X, true);
+            else if (s_touchedSide == 5)
+                setAnimation(2, DIM_X, false);
         } else {
             // Middle column
-            if (s_touchMotionDirection == 1) {
-                if (s_touchedSide == 0)
-                    setAnimation(1, DIM_X, false);
-                else if (s_touchedSide == 1)
-                    setAnimation(1, DIM_X, true);
-                else if (s_touchedSide == 2)
-                    setAnimation(1, DIM_Z, true);
-                else if (s_touchedSide == 3)
-                    setAnimation(1, DIM_Z, false);
-                else if (s_touchedSide == 4)
-                    setAnimation(1, DIM_X, false);
-                else if (s_touchedSide == 5)
-                    setAnimation(1, DIM_X, true);
-            } else if (s_touchMotionDirection == 2) {
-                if (s_touchedSide == 0)
-                    setAnimation(1, DIM_X, true);
-                else if (s_touchedSide == 1)
-                    setAnimation(1, DIM_X, false);
-                else if (s_touchedSide == 2)
-                    setAnimation(1, DIM_Z, false);
-                else if (s_touchedSide == 3)
-                    setAnimation(1, DIM_Z, true);
-                else if (s_touchedSide == 4)
-                    setAnimation(1, DIM_X, true);
-                else if (s_touchedSide == 5)
-                    setAnimation(1, DIM_X, false);
-            }
+            if (s_touchedSide == 0)
+                setAnimation(1, DIM_X, true);
+            else if (s_touchedSide == 1)
+                setAnimation(1, DIM_X, false);
+            else if (s_touchedSide == 2)
+                setAnimation(1, DIM_Z, false);
+            else if (s_touchedSide == 3)
+                setAnimation(1, DIM_Z, true);
+            else if (s_touchedSide == 4)
+                setAnimation(1, DIM_X, true);
+            else if (s_touchedSide == 5)
+                setAnimation(1, DIM_X, false);
         }
     } else {
         // Horizontal motion
         if (s_startPosOnCube.getY() < -g_miniCubeHalfSize) {
             // Top row
-            if (s_touchMotionDirection == 3) {
-                if (s_touchedSide == 0)
-                    setAnimation(0, DIM_Y, true);
-                else if (s_touchedSide == 1)
-                    setAnimation(0, DIM_Y, false);
-                else if (s_touchedSide == 2)
-                    setAnimation(0, DIM_Y, true);
-                else if (s_touchedSide == 3)
-                    setAnimation(0, DIM_Y, false);
-                else if (s_touchedSide == 4)
-                    setAnimation(2, DIM_Z, false);
-                else if (s_touchedSide == 5)
-                    setAnimation(2, DIM_Z, true);
-            } else if (s_touchMotionDirection == 4) {
-                if (s_touchedSide == 0)
-                    setAnimation(0, DIM_Y, false);
-                else if (s_touchedSide == 1)
-                    setAnimation(0, DIM_Y, true);
-                else if (s_touchedSide == 2)
-                    setAnimation(0, DIM_Y, false);
-                else if (s_touchedSide == 3)
-                    setAnimation(0, DIM_Y, true);
-                else if (s_touchedSide == 4)
-                    setAnimation(2, DIM_Z, true);
-                else if (s_touchedSide == 5)
-                    setAnimation(2, DIM_Z, false);
-            }
+            if (s_touchedSide == 0)
+                setAnimation(0, DIM_Y, false);
+            else if (s_touchedSide == 1)
+                setAnimation(0, DIM_Y, true);
+            else if (s_touchedSide == 2)
+                setAnimation(0, DIM_Y, false);
+            else if (s_touchedSide == 3)
+                setAnimation(0, DIM_Y, true);
+            else if (s_touchedSide == 4)
+                setAnimation(2, DIM_Z, true);
+            else if (s_touchedSide == 5)
+                setAnimation(2, DIM_Z, false);
         } else if (s_startPosOnCube.getY() > g_miniCubeHalfSize) {
             // Bottom row
-            if (s_touchMotionDirection == 3) {
-                if (s_touchedSide == 0)
-                    setAnimation(2, DIM_Y, true);
-                else if (s_touchedSide == 1)
-                    setAnimation(2, DIM_Y, false);
-                else if (s_touchedSide == 2)
-                    setAnimation(2, DIM_Y, true);
-                else if (s_touchedSide == 3)
-                    setAnimation(2, DIM_Y, false);
-                else if (s_touchedSide == 4)
-                    setAnimation(0, DIM_Z, false);
-                else if (s_touchedSide == 5)
-                    setAnimation(0, DIM_Z, true);
-            } else if (s_touchMotionDirection == 4) {
-                if (s_touchedSide == 0)
-                    setAnimation(2, DIM_Y, false);
-                else if (s_touchedSide == 1)
-                    setAnimation(2, DIM_Y, true);
-                else if (s_touchedSide == 2)
-                    setAnimation(2, DIM_Y, false);
-                else if (s_touchedSide == 3)
-                    setAnimation(2, DIM_Y, true);
-                else if (s_touchedSide == 4)
-                    setAnimation(0, DIM_Z, true);
-                else if (s_touchedSide == 5)
-                    setAnimation(0, DIM_Z, false);
-            }
+            if (s_touchedSide == 0)
+                setAnimation(2, DIM_Y, false);
+            else if (s_touchedSide == 1)
+                setAnimation(2, DIM_Y, true);
+            else if (s_touchedSide == 2)
+                setAnimation(2, DIM_Y, false);
+            else if (s_touchedSide == 3)
+                setAnimation(2, DIM_Y, true);
+            else if (s_touchedSide == 4)
+                setAnimation(0, DIM_Z, true);
+            else if (s_touchedSide == 5)
+                setAnimation(0, DIM_Z, false);
         } else {
             // Middle row
-            if (s_touchMotionDirection == 3) {
-                if (s_touchedSide == 0)
-                    setAnimation(1, DIM_Y, true);
-                else if (s_touchedSide == 1)
-                    setAnimation(1, DIM_Y, false);
-                else if (s_touchedSide == 2)
-                    setAnimation(1, DIM_Y, true);
-                else if (s_touchedSide == 3)
-                    setAnimation(1, DIM_Y, false);
-                else if (s_touchedSide == 4)
-                    setAnimation(1, DIM_Z, false);
-                else if (s_touchedSide == 5)
-                    setAnimation(1, DIM_Z, true);
-            } else if (s_touchMotionDirection == 4) {
-                if (s_touchedSide == 0)
-                    setAnimation(1, DIM_Y, false);
-                else if (s_touchedSide == 1)
-                    setAnimation(1, DIM_Y, true);
-                else if (s_touchedSide == 2)
-                    setAnimation(1, DIM_Y, false);
-                else if (s_touchedSide == 3)
-                    setAnimation(1, DIM_Y, true);
-                else if (s_touchedSide == 4)
-                    setAnimation(1, DIM_Z, true);
-                else if (s_touchedSide == 5)
-                    setAnimation(1, DIM_Z, false);
-            }
+            if (s_touchedSide == 0)
+                setAnimation(1, DIM_Y, false);
+            else if (s_touchedSide == 1)
+                setAnimation(1, DIM_Y, true);
+            else if (s_touchedSide == 2)
+                setAnimation(1, DIM_Y, false);
+            else if (s_touchedSide == 3)
+                setAnimation(1, DIM_Y, true);
+            else if (s_touchedSide == 4)
+                setAnimation(1, DIM_Z, true);
+            else if (s_touchedSide == 5)
+                setAnimation(1, DIM_Z, false);
         }
     }
 }
@@ -375,28 +284,18 @@ inline void processFrontTouch() {
                 g_animationStarted = true;
                 // Set s_touchMotionDirection
                 if (fabsf(touchMotion.getX()) > fabsf(touchMotion.getY())) {
-                    if (touchMotion.getX() < 0.0f) {
-                        s_touchMotionDirection = DIR_LEFT;
-                    } else {
-                        s_touchMotionDirection = DIR_RIGHT;
-                    }
+                    s_touchMotionDirection = DIR_HORIZONTAL;
                 } else {
-                    if (touchMotion.getY() < 0.0f) {
-                        s_touchMotionDirection = DIR_UP;
-                    } else {
-                        s_touchMotionDirection = DIR_DOWN;
-                    }
+                    s_touchMotionDirection = DIR_VERTICAL;
                 }
-                    determineNewAnimation();
+                determineNewAnimation();
             }
 
             float touchMotionLength;
-            if (s_touchMotionDirection == DIR_LEFT ||
-                s_touchMotionDirection == DIR_RIGHT) {
+            if (s_touchMotionDirection == DIR_HORIZONTAL) {
                 touchMotionLength = touchMotion.getX().getAsFloat();
             }
-            if (s_touchMotionDirection == DIR_UP ||
-                s_touchMotionDirection == DIR_DOWN) {
+            if (s_touchMotionDirection == DIR_VERTICAL) {
                 touchMotionLength = touchMotion.getY().getAsFloat();
             }
 
@@ -410,7 +309,7 @@ inline void processFrontTouch() {
             g_animationStarted = false;
         }
         break;
-   
+
     case ANIMSTATE_ANIMATING:
         break;
     default:
