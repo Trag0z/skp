@@ -1,7 +1,6 @@
 #pragma once
 #include "Globals.h"
 #include "MiniCube.h"
-#include <cstdio>
 #include <libdbg.h>
 #include <sce_geometry.h>
 #include <touch.h>
@@ -10,7 +9,7 @@ using namespace sce::Vectormath::Simd::Aos;
 using namespace sce::Geometry::Aos;
 
 extern AnimationState g_animationState;
-extern Matrix4 g_finalTransformation;
+extern Matrix4 g_cameraTransformation;
 extern const float g_miniCubeHalfSize;
 extern bool g_animationStarted;
 
@@ -141,7 +140,7 @@ inline void processFrontTouch() {
         s_lastFrontTouch.x = 2.0f * tdf.report[0].x / 1919.0f - 1.0f;
         s_lastFrontTouch.y = -2.0f * tdf.report[0].y / 1087.0f + 1.0f;
 
-        Matrix4 inverseFinalTransform = inverse(g_finalTransformation);
+        Matrix4 inverseFinalTransform = inverse(g_cameraTransformation);
         Vector4 p1 =
             inverseFinalTransform *
             Vector4(s_lastFrontTouch.x, s_lastFrontTouch.y, 0.1f, 1.0f);
@@ -178,7 +177,8 @@ inline void processFrontTouch() {
             }
 
             s_touchedSide = i;
-            // s_startPosOnCube always from top left of first mentioned side
+            // Origin of s_startPosOnCube in top left corner of the slice,
+            // viewed from front/top/left depending on dimension
             if (s_touchedSide == 0 || s_touchedSide == 1) {
                 s_startPosOnCube = Vector2(x, y);
             } else if (s_touchedSide == 2 || s_touchedSide == 3) {
@@ -200,7 +200,7 @@ inline void processFrontTouch() {
             newTouchPos[0] = 2.0f * tdf.report[0].x / 1919.0f - 1.0f;
             newTouchPos[1] = -2.0f * tdf.report[0].y / 1087.0f + 1.0f;
 
-            Matrix4 inverseFinalTransform = inverse(g_finalTransformation);
+            Matrix4 inverseFinalTransform = inverse(g_cameraTransformation);
             Vector4 p1 = inverseFinalTransform *
                          Vector4(newTouchPos[0], newTouchPos[1], 0.1f, 1.0f);
             Vector4 p2 = inverseFinalTransform *

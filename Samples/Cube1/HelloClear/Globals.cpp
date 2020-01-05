@@ -1,7 +1,7 @@
 #pragma once
 #include "Globals.h"
 
-Matrix4 g_finalTransformation = Matrix4();
+Matrix4 g_cameraTransformation = Matrix4();
 Matrix4 g_finalRotation = Matrix4();
 const SceGxmProgramParameter* g_wvpParam = 0;
 const SceGxmProgramParameter* g_rotParam = 0;

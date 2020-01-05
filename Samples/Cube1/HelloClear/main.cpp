@@ -6,7 +6,7 @@
 #include <sce_geometry.h>
 #include <touch.h>
 
-extern Matrix4 g_finalTransformation;
+extern Matrix4 g_cameraTransformation;
 extern Matrix4 g_finalRotation;
 extern const SceGxmProgramParameter* g_wvpParam;
 extern const SceGxmProgramParameter* g_localToWorldParam;
@@ -83,7 +83,7 @@ void update(void) {
                                backTouchMove.getX().getAsFloat() * 0.01f, 0.0f),
                        sce::Vectormath::Simd::kXYZ);
 
-	s_orientation = normalize(addedRotation * s_orientation);
+    s_orientation = normalize(addedRotation * s_orientation);
 
     Matrix4 lookAt =
         Matrix4::lookAt(Point3(0.0f, 0.0f, -7.0f), Point3(0.0f, 0.0f, 0.0f),
@@ -92,7 +92,7 @@ void update(void) {
         3.141592f / 4.0f, (float)DISPLAY_WIDTH / (float)DISPLAY_HEIGHT, 0.1f,
         10.0f);
 
-    g_finalTransformation =
+    g_cameraTransformation =
         perspective * lookAt * Matrix4::rotation(s_orientation);
 }
 

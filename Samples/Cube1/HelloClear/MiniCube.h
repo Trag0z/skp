@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "Helpers.h"
 #include <algorithm>
+#include <cstdio>
 #include <cstring>
 #include <gxm.h>
 #include <kernel.h>
@@ -13,21 +14,18 @@ using namespace sce::Vectormath::Simd::Aos;
 
 #define PI 3.14159265359f
 
-extern Matrix4 g_finalTransformation;
+extern Matrix4 g_cameraTransformation;
 extern Matrix4 g_finalRotation;
 extern const SceGxmProgramParameter* g_wvpParam;
-// extern const SceGxmProgramParameter* g_rotParam;
 extern const SceGxmProgramParameter* g_localToWorldParam;
 extern const float g_miniCubeHalfSize;
 extern bool g_animationStarted;
 
-// NOTE: Why does this have to bere up here?
 enum Dimension { DIM_X = 0, DIM_Y = 1, DIM_Z = 2 };
 
 struct MiniCube;
 enum AnimationState;
 
-// TODO: make the declaration consistent across files
 extern MiniCube* g_miniCubes[3][3][3];
 
 extern AnimationState g_animationState;
@@ -36,7 +34,7 @@ static SceRtcTick s_lastTick;
 const static float c_animationSpeed = 2e-7;
 static float s_interpolationValue;
 static float s_targetInterpolation = std::numeric_limits<float>::max();
-static Dimension s_rotatingDimension;
+static Dimension s_rotationDimension;
 static MiniCube* s_rotatingMiniCubes[3][3];
 static MiniCube** s_correspondingGlobalPointers[3][3];
 
@@ -60,6 +58,8 @@ struct MiniCube {
     Vertex* vertices;
     Vector3 position;
     Quat orientation;
+
+    Quat animationRotation;
 
     float startRotation, targetRotation;
 
@@ -148,8 +148,8 @@ const static Vertex s_defaultVertices[24] = {
 };
 
 inline static void getLocalToWorldTransform(const MiniCube& mc, Matrix4& out) {
-    // translate first, then rotate
-    out = Matrix4::rotation(normalize(mc.orientation * Quat::identity())) *
+    out = Matrix4::rotation(normalize(Quat::identity() * mc.animationRotation *
+                                      mc.orientation)) *
           Matrix4::translation(mc.position);
 }
 
@@ -161,9 +161,7 @@ inline void renderMiniCubes(SceGxmContext* context, const uint16_t* indices) {
                 sceGxmReserveVertexDefaultUniformBuffer(context,
                                                         &vertexDefaultBuffer);
                 sceGxmSetUniformDataF(vertexDefaultBuffer, g_wvpParam, 0, 16,
-                                      (float*)&g_finalTransformation);
-                // sceGxmSetUniformDataF(vertexDefaultBuffer, g_rotParam, 0, 16,
-                //                       (float*)&g_finalRotation);
+                                      (float*)&g_cameraTransformation);
 
                 Matrix4 localToWorld;
                 getLocalToWorldTransform(*g_miniCubes[x][y][z], localToWorld);
@@ -192,14 +190,12 @@ static void setColors(MiniCube& mc, Color front, Color back, Color left,
 inline MiniCube createMiniCube(Vector3 pos, int cubeLocation[3]) {
     MiniCube mc;
     mc.position = pos;
-    mc.orientation = Quat::identity();
-    mc.startRotation = mc.targetRotation = 0.0f;
+    mc.orientation = mc.animationRotation = Quat::identity();
 
     mc.vertices = (Vertex*)graphicsAlloc(
         SCE_KERNEL_MEMBLOCK_TYPE_USER_RWDATA_UNCACHE, 4 * 6 * sizeof(Vertex), 4,
         SCE_GXM_MEMORY_ATTRIB_READ, &mc.verticesUId);
 
-    // TODO: Vertices can store position, so position attribute is obsolete
     std::memcpy(mc.vertices, s_defaultVertices, sizeof(Vertex) * 24);
 
     if (cubeLocation[0] == 0) {     // X Left
@@ -294,9 +290,9 @@ inline void setAnimationInterpolationValue(float t) {
 
 inline Quat lerpOrientation(float t, float a, float b) {
     Quat result;
-    if (s_rotatingDimension == DIM_X) {
+    if (s_rotationDimension == DIM_X) {
         result = normalize(Quat::rotationX(a + (t * (b - a))));
-    } else if (s_rotatingDimension == DIM_Y) {
+    } else if (s_rotationDimension == DIM_Y) {
         result = normalize(Quat::rotationY(a + (t * (b - a))));
     } else {
         result = normalize(Quat::rotationZ(a + (t * (b - a))));
@@ -312,7 +308,7 @@ inline void progressAnimations() {
         for (int x = 0; x < 3; ++x) {
             for (int y = 0; y < 3; ++y) {
                 MiniCube& mc = *s_rotatingMiniCubes[x][y];
-                mc.orientation = lerpOrientation(
+                mc.animationRotation = lerpOrientation(
                     s_interpolationValue, mc.startRotation, mc.targetRotation);
             }
         }
@@ -343,7 +339,7 @@ inline void progressAnimations() {
     for (int x = 0; x < 3; ++x) {
         for (int y = 0; y < 3; ++y) {
             MiniCube& mc = *s_rotatingMiniCubes[x][y];
-            mc.orientation = lerpOrientation(
+            mc.animationRotation = lerpOrientation(
                 s_interpolationValue, mc.startRotation, mc.targetRotation);
         }
     }
@@ -359,7 +355,10 @@ inline void progressAnimations() {
     for (int x = 0; x < 3; ++x) {
         for (int y = 0; y < 3; ++y) {
             MiniCube& mc = *s_rotatingMiniCubes[x][y];
-            mc.startRotation += s_targetInterpolation * 2.0f * PI;
+            mc.startRotation = 0.0f;
+            mc.orientation =
+                Quat::identity() * mc.animationRotation * mc.orientation;
+            mc.animationRotation = Quat::identity();
         }
     }
 
@@ -390,7 +389,7 @@ inline void progressAnimations() {
         *s_correspondingGlobalPointers[2][0] = s_rotatingMiniCubes[2][2];
         *s_correspondingGlobalPointers[2][1] = s_rotatingMiniCubes[1][2];
         *s_correspondingGlobalPointers[2][2] = s_rotatingMiniCubes[0][2];
-    } else { // Rotate by 180 degrees, more should not be possible
+    } else { // Rotate by 180 degrees
         *s_correspondingGlobalPointers[0][0] = s_rotatingMiniCubes[2][2];
         *s_correspondingGlobalPointers[0][1] = s_rotatingMiniCubes[2][1];
         *s_correspondingGlobalPointers[0][2] = s_rotatingMiniCubes[2][0];
@@ -405,16 +404,16 @@ inline void progressAnimations() {
     s_targetInterpolation = std::numeric_limits<float>::max();
 }
 
-static inline void setTargetRotation(MiniCube& mc, Dimension dim) {
-    mc.targetRotation = mc.startRotation + 2.0f * PI;
+static inline void setTargetRotation(MiniCube& mc) {
+    mc.targetRotation = 2.0f * PI;
 }
 
 inline void setAnimation(int layer, Dimension dimension) {
     SCE_DBG_ALWAYS_ASSERT(layer < 3);
 
-    s_rotatingDimension = dimension;
+    s_rotationDimension = dimension;
 
-    // Origin of x/y always in top left corner of the slice, viewed from
+    // Origin always in top left corner of the slice, viewed from
     // front/top/left depending on dimension
     switch (dimension) {
     case DIM_X:
@@ -449,7 +448,7 @@ inline void setAnimation(int layer, Dimension dimension) {
 
     for (int row = 0; row < 3; ++row) {
         for (int col = 0; col < 3; ++col) {
-            setTargetRotation(*s_rotatingMiniCubes[row][col], dimension);
+            setTargetRotation(*s_rotatingMiniCubes[row][col]);
         }
     }
 

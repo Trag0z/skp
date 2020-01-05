@@ -55,7 +55,6 @@ using namespace sce::Vectormath::Simd::Aos;
 extern Matrix4 g_finalTransformation;
 extern Matrix4 g_finalRotation;
 extern const SceGxmProgramParameter* g_wvpParam;
-extern const SceGxmProgramParameter* g_rotParam;
 extern const SceGxmProgramParameter* g_localToWorldParam;
 
 /*	Define the width and height to render at the native resolution */
@@ -612,10 +611,6 @@ inline void createGxmData(void) {
     SCE_DBG_ALWAYS_ASSERT(g_wvpParam &&
                           (sceGxmProgramParameterGetCategory(g_wvpParam) ==
                            SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
-    // g_rotParam = sceGxmProgramFindParameterByName(basicProgram, "rot");
-    // SCE_DBG_ALWAYS_ASSERT(g_rotParam &&
-    //                       (sceGxmProgramParameterGetCategory(g_rotParam) ==
-    //                        SCE_GXM_PARAMETER_CATEGORY_UNIFORM));
 
     g_localToWorldParam =
         sceGxmProgramFindParameterByName(basicProgram, "localToWorld");
