@@ -38,7 +38,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>-lSceGxm_stub;-lSceCtrl_stub;-lSceDisplay_stub;-lSceDbg_stub;-lSceDbgFont;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>-lSceGxm_stub;-lSceCtrl_stub;-lSceDisplay_stub;-lSceDbg_stub;-lSceDbgFont;-lSceRtc_stub;-lSceTouch_stub;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|PSVita'">
@@ -78,10 +78,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MiniCube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="graph\basic_f.cg">
@@ -110,9 +109,11 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cube.h" />
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="Helpers.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="MiniCube.h" />
+    <ClInclude Include="System.h" />
   </ItemGroup>
   <Import Condition="'$(ConfigurationType)' == 'Makefile' and Exists('$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets')" Project="$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

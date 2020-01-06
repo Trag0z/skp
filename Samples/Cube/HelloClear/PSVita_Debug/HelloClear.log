@@ -1,25 +1,26 @@
-﻿Der Buildvorgang wurde am 11.12.2019 20:37:43 gestartet.
-     1>Projekt "H:\SKP\Samples\Cube\HelloClear\HelloClear.vcxproj" auf Knoten "2", Build Ziel(e).
-     1>ClCompile:
+﻿Der Buildvorgang wurde am 05.01.2020 20:36:27 gestartet.
+     1>Projekt "H:\SKP\Samples\Cube1\HelloClear\HelloClear.vcxproj" auf Knoten "2", Build Ziel(e).
+     1>CustomBuild:
+         Compiling Vertex Shader: "H:\SKP\Samples\Cube1\HelloClear\graph\basic_v .cg"
+       ClCompile:
+         Helpers.cpp
+         psp2snc.exe -D_DEBUG -o PSVita_Debug\Helpers.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\Cube1\HelloClear\Helpers.cpp
          main.cpp
-         psp2snc.exe -D_DEBUG -o PSVita_Debug\main.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\Cube\HelloClear\main.cpp
-     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(164,20): warning 178: variable "s_basicVertices" was declared but never referenced
+         psp2snc.exe -D_DEBUG -o PSVita_Debug\main.o -c -Xdepmode=1 -MD -Xmserrors -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include" -I"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\include_common" -g -O0 H:\SKP\Samples\Cube1\HelloClear\main.cpp
+     1>H:\SKP\Samples\Cube1\HelloClear\Input.h(133,4): warning 548: transfer of control bypasses initialization of:
+                     variable "inverseFinalTransform" (declared at line 143)
+                     variable "p1" (declared at line 144)
+                     variable "p2" (declared at line 147)
+                     variable "ray" (declared at line 154)
+                     variable "intersection" (declared at line 156)
          
-     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(165,17): warning 178: variable "s_basicIndices" was declared but never referenced
-         
-     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(166,15): warning 178: variable "s_basicVerticesUId" was declared but never referenced
-         
-     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(167,15): warning 178: variable "s_basicIndiceUId" was declared but never referenced
-         
-     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(893,5): warning 178: function "destroyGxmData" was declared but never referenced
-         
-     1>H:\SKP\Samples\Cube\HelloClear\main.cpp(926,4): warning 178: function "shutdownGxm" was declared but never referenced
+     1>H:\SKP\Samples\Cube1\HelloClear\Helpers.h(12,6): warning 115: function "graphicsAlloc" was referenced but not defined
          
        Link:
-         C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\bin\psp2ld.exe -o "H:\SKP\Samples\Cube\PSVita_Debug\HelloClear.self" -L"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\lib" --start-group PSVita_Debug\clear_f_gxp.obj PSVita_Debug\clear_v_gxp.obj PSVita_Debug\basic_f_gxp.obj "PSVita_Debug\basic_v _gxp.obj" PSVita_Debug\Cube.o PSVita_Debug\Helpers.o PSVita_Debug\main.o PSVita_Debug\MiniCube.o "-lSceGxm_stub" "-lSceCtrl_stub" "-lSceDisplay_stub" "-lSceDbg_stub" "-lSceDbgFont" --end-group
-         HelloClear.vcxproj -> H:\SKP\Samples\Cube\PSVita_Debug\HelloClear.self
-     1>Die Erstellung des Projekts "H:\SKP\Samples\Cube\HelloClear\HelloClear.vcxproj" ist abgeschlossen, Build Ziel(e).
+         C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\host_tools\build\bin\psp2ld.exe -o "H:\SKP\Samples\Cube1\PSVita_Debug\HelloClear.self" -L"C:\Program Files (x86)\SCE\PSP2 SDKs\3.500\target\lib" --start-group PSVita_Debug\clear_f_gxp.obj PSVita_Debug\clear_v_gxp.obj PSVita_Debug\basic_f_gxp.obj "PSVita_Debug\basic_v _gxp.obj" PSVita_Debug\Globals.o PSVita_Debug\Helpers.o PSVita_Debug\main.o "-lSceGxm_stub" "-lSceCtrl_stub" "-lSceDisplay_stub" "-lSceDbg_stub" "-lSceDbgFont" "-lSceRtc_stub" "-lSceTouch_stub" --end-group
+         HelloClear.vcxproj -> H:\SKP\Samples\Cube1\PSVita_Debug\HelloClear.self
+     1>Die Erstellung des Projekts "H:\SKP\Samples\Cube1\HelloClear\HelloClear.vcxproj" ist abgeschlossen, Build Ziel(e).
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:01.79
+Verstrichene Zeit 00:00:03.30
